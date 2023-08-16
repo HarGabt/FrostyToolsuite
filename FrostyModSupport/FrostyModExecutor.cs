@@ -1494,10 +1494,20 @@ namespace Frosty.ModSupport
                         int casIndex = 1;
                         string path = m_fs.BasePath + m_patchPath + "\\" + catalog + "\\cas_" + casIndex.ToString("D2") + ".cas";
 
-                        while (File.Exists(path) || (ProfilesLibrary.IsLoaded(ProfileVersion.NeedForSpeedUnbound) && casIndex == 173))
+                        while (File.Exists(path))
                         {
-                            casIndex++;
+                            casIndex++;                           
                             path = m_fs.BasePath + m_patchPath + "\\" + catalog + "\\cas_" + casIndex.ToString("D2") + ".cas";
+
+                            // check if it skips 1 and do a double jump this iteration
+                            if(!File.Exists(path))
+                            {
+                                path = m_fs.BasePath + m_patchPath + "\\" + catalog + "\\cas_" + (casIndex + 1).ToString("D2") + ".cas";
+                                if (File.Exists(path))
+                                {
+                                    casIndex++;
+                                }
+                            }
                         }
 
                         CasBundleAction.CasFiles.Add(catalog, casIndex);
@@ -2077,11 +2087,21 @@ namespace Frosty.ModSupport
 
             try
             {
-                //KillEADesktop();
-                //ModifyInstallerData($"-dataPath \"{modDataPath.Trim('\\')}\" {additionalArgs}");
-                ExecuteProcess($"{m_fs.BasePath + ProfilesLibrary.ProfileName}.exe", $"-dataPath \"{modDataPath.Trim('\\')}\" {additionalArgs}");
-                //WaitForGame();
-                //CleanUpInstalledData();
+                // ExecuteProcess($"{m_fs.BasePath + ProfilesLibrary.ProfileName}.exe", $"-dataPath \"{modDataPath.Trim('\\')}\" {additionalArgs}");
+                string steamAppIdPath = $"{m_fs.BasePath}steam_appid.txt";
+                if (File.Exists(steamAppIdPath))
+                {
+                    string steamAppId = File.ReadAllLines(steamAppIdPath).First();
+                    string arguments = $"-dataPath \"{m_modDirName.Replace('\\', '/')}\" {additionalArgs}";
+                    string url = Uri.EscapeDataString(arguments);
+                    App.Logger.Log($"Launch: {arguments}");
+                    App.Logger.Log($"Encoded: {url}");
+                    Process.Start($"steam://run/{steamAppId}//{url}/");
+                }
+                else
+                {
+                    ExecuteProcess($"{m_fs.BasePath + ProfilesLibrary.ProfileName}.exe", $"-dataPath \"{modDataPath.Trim('\\')}\" {additionalArgs}");
+                }
             }
             catch (Exception ex)
             {
