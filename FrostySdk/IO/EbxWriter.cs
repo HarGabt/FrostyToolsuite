@@ -120,20 +120,24 @@ namespace FrostySdk.IO
     public class EbxWriter : EbxBaseWriter
     {
         public List<object> Objects => sortedObjs;
-        public List<Guid> Dependencies => dependencies;
+        public HashSet<Guid> Dependencies => dependencies;
 
-        private List<object> objsToProcess = new List<object>();
+        private HashSet<int> objsToProcessSet = new HashSet<int>();
+		private List<object> objsToProcess = new List<object>();
         private List<Type> typesToProcess = new List<Type>();
         private List<EbxFieldMetaAttribute> arrayTypes = new List<EbxFieldMetaAttribute>();
 
         private List<object> objs = new List<object>();
         private List<object> sortedObjs = new List<object>();
-        private List<Guid> dependencies = new List<Guid>();
+        private HashSet<Guid> dependencies = new HashSet<Guid>();
 
         private List<EbxClass> classTypes = new List<EbxClass>();
         private List<EbxField> fieldTypes = new List<EbxField>();
         private List<string> typeNames = new List<string>();
-        private List<EbxImportReference> imports = new List<EbxImportReference>();
+        
+        private HashSet<EbxImportReference> imports = new HashSet<EbxImportReference>();
+        private Dictionary<EbxImportReference, int> importOrderFw = new Dictionary<EbxImportReference, int>();
+        private Dictionary<int, EbxImportReference> importOrderBw = new Dictionary<int, EbxImportReference>();
         
         private byte[] data = null;
         private List<EbxInstance> instances = new List<EbxInstance>();
@@ -174,8 +178,7 @@ namespace FrostySdk.IO
 
         public void WriteEbxObjects(List<object> inObjects, Guid fileGuid)
         {
-            List<object> subObjs = new List<object>();
-            subObjs.AddRange(inObjects);
+            List<object> subObjs = new List<object>(inObjects);
 
             while (subObjs.Count > 0)
             {
@@ -197,7 +200,9 @@ namespace FrostySdk.IO
             ushort typeNamesLen = 0;
             uint dataLen = 0;
 
-            //objsToProcess.Reverse();
+            GenerateImportOrder();
+			
+			//objsToProcess.Reverse();
             foreach (object obj in objsToProcess)
                 ProcessClass(obj.GetType());
             for (int i = 0; i < typesToProcess.Count; i++)
@@ -387,10 +392,12 @@ namespace FrostySdk.IO
         {
             if (add)
             {
-                if (objsToProcess.Contains(obj))
+                int hashCode = obj.GetHashCode();
+                if (objsToProcessSet.Contains(hashCode))
                     return new List<object>();
 
-                objsToProcess.Add(obj);
+                objsToProcessSet.Add(hashCode);
+				objsToProcess.Add(obj);
                 objs.Add(obj);
             }
 
@@ -410,8 +417,7 @@ namespace FrostySdk.IO
                     //ExtractClass(value.Internal.GetType(), value.Internal);
                     else if (value.Type == PointerRefType.External)
                     {
-                        if (!imports.Contains(value.External))
-                            imports.Add(value.External);
+                        imports.Add(value.External);
                     }
                 }
                 else if (pi.PropertyType.Namespace == "FrostySdk.Ebx" && pi.PropertyType.BaseType != typeof(Enum))
@@ -436,8 +442,7 @@ namespace FrostySdk.IO
                                 //ExtractClass(value.Internal.GetType(), value.Internal);
                                 else if (value.Type == PointerRefType.External)
                                 {
-                                    if (!imports.Contains(value.External))
-                                        imports.Add(value.External);
+                                    imports.Add(value.External);
                                 }
                             }
                         }
@@ -639,10 +644,21 @@ namespace FrostySdk.IO
 
             AddField(pi.Name, fta.Flags, classRef, fta.Offset, 0);
         }
+		
+		private void GenerateImportOrder()
+        {
+            int i = 0;
+            foreach (EbxImportReference import in imports)
+            {
+                importOrderFw[import] = i;
+                importOrderBw[i] = import;
+                i++;
+            }
+        }
 
         private void ProcessData()
         {
-            List<Type> uniqueTypes = new List<Type>();
+            HashSet<Type> uniqueTypes = new HashSet<Type>();
             List<object> exportedObjs = new List<object>();
             List<object> otherObjs = new List<object>();
 
@@ -704,8 +720,7 @@ namespace FrostySdk.IO
                     classIdx = FindExistingClass(type);
                     classType = classTypes[classIdx];
 
-                    if (!uniqueTypes.Contains(type))
-                        uniqueTypes.Add(type);
+                    uniqueTypes.Add(type);
 
                     //instances.Add(new EbxInstance()
                     //{
@@ -807,14 +822,17 @@ namespace FrostySdk.IO
 
                         if (pointer.Type == PointerRefType.External)
                         {
-                            int importIdx = imports.FindIndex((EbxImportReference value) => value == pointer.External);
+                            int importIdx = importOrderFw[pointer.External];
                             pointerIndex = (uint)(importIdx | 0x80000000);
 
-                            if (isReference && !dependencies.Contains(imports[importIdx].FileGuid))
-                                dependencies.Add(imports[importIdx].FileGuid);
+                            if (isReference)
+                            {
+                                Guid importGuid = importOrderBw[importIdx].FileGuid;
+                                dependencies.Add(importGuid);
+                            }
                         }
                         else if (pointer.Type == PointerRefType.Internal)
-                            pointerIndex = (uint)(sortedObjs.FindIndex((object value) => value == pointer.Internal) + 1);
+                            pointerIndex = (uint)(sortedObjs.IndexOf(pointer.Internal) + 1);
 
                         writer.Write(pointerIndex);
                     }
@@ -1004,7 +1022,7 @@ namespace FrostySdk.IO
     public class EbxWriterV2 : EbxBaseWriter
     {
         public List<object> Objects => sortedObjs;
-        public List<Guid> Dependencies => dependencies;
+        public HashSet<Guid> Dependencies => dependencies;
 
         private List<object> objsToProcess = new List<object>();
         private List<Type> typesToProcess = new List<Type>();
@@ -1012,14 +1030,14 @@ namespace FrostySdk.IO
 
         private List<object> objs = new List<object>();
         private List<object> sortedObjs = new List<object>();
-        private List<Guid> dependencies = new List<Guid>();
+        private HashSet<Guid> dependencies = new HashSet<Guid>();
 
         private List<EbxClass> classTypes = new List<EbxClass>();
         private List<Guid> classGuids = new List<Guid>();
         private List<EbxField> fieldTypes = new List<EbxField>();
         private List<string> typeNames = new List<string>();
         private List<EbxImportReference> imports = new List<EbxImportReference>();
-        private List<string> strings = new List<string>();
+        private new List<string> strings = new List<string>();
         private byte[] data = null;
         private List<EbxInstance> instances = new List<EbxInstance>();
         private List<EbxArray> arrays = new List<EbxArray>();
