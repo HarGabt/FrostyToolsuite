@@ -486,7 +486,7 @@ namespace LocalizedStringPlugin
             {
                 FrostyTaskWindow.Show("Exporting Localized Strings", "", (task) =>
                 {
-                    using (NativeWriter writer = new NativeWriter(new FileStream(sfd.FileName, FileMode.Create), false, true))
+                    using (StreamWriter writer = new StreamWriter(sfd.FileName))
                     {
                         int index = 0;
                         foreach (uint stringId in stringIds)
@@ -516,11 +516,11 @@ namespace LocalizedStringPlugin
                 int added = 0;
                 FrostyTaskWindow.Show("Importing Localized Strings", "", (task) =>
                 {
-                    using (NativeReader reader = new NativeReader(new FileStream(ofd.FileName, FileMode.Open)))
+                    using (StreamReader reader = new StreamReader(ofd.FileName))
                     {
-                        while (reader.Position < reader.Length)
+                        while (!reader.EndOfStream)
                         {
-                            string line = reader.ReadWideLine();
+                            string line = reader.ReadLine();
                             uint hash = uint.Parse(line.Substring(0, 8), System.Globalization.NumberStyles.HexNumber);
                             string s = line.Substring(10, line.Length - 11);
                             if (stringIds.Contains(hash) && s != db.GetString(hash))
@@ -619,7 +619,7 @@ namespace LocalizedStringPlugin
                         }
                     }
 
-                    using (NativeWriter writer = new NativeWriter(new FileStream(sfd.FileName, FileMode.Create), false, true))
+                    using (StreamWriter writer = new StreamWriter(sfd.FileName))
                     {
                         foreach (StringBuilder stringData in StringInfo.Values)
                         {
