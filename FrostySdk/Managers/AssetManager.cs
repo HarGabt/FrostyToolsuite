@@ -675,6 +675,7 @@ namespace FrostySdk.Managers
             entry.ModifiedEntry.IsInline = false;
             entry.IsDirty = true;
             entry.IsAdded = true;
+			entry.AddedBundles.AddRange(bundles);
 
             m_ebxList.Add(keyName, entry);
             m_ebxGuidList.Add(entry.Guid, entry);
@@ -721,6 +722,7 @@ namespace FrostySdk.Managers
             };
 
             entry.ModifiedEntry.Sha1 = GenerateSha1(entry.ModifiedEntry.Data);
+			entry.AddedBundles.AddRange(bundles);
 
             m_resList.Add(entry.Name, entry);
             m_resRidList.Add(entry.ResRid, entry);
