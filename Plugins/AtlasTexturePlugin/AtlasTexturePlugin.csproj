@@ -12,35 +12,35 @@
     <OutputType>Library</OutputType>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
-  
+
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Developer - Debug|x64' ">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\Developer\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
   </PropertyGroup>
-  
+
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release - Alpha|x64' ">
     <OutputPath>bin\Release\Alpha\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <Optimize>true</Optimize>
   </PropertyGroup>
-  
+
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release - Beta|x64'">
     <OutputPath>bin\Release\Beta\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <Optimize>true</Optimize>
   </PropertyGroup>
-  
+
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release - Final|x64'">
     <OutputPath>bin\Release\Final\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <Optimize>true</Optimize>
   </PropertyGroup>
-  
+
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="xcopy /Y &quot;$(TargetPath)&quot; &quot;$(SolutionDir)$(OutDir)Plugins\&quot;" />
+    <Exec Command="xcopy /Y $(TargetPath) $(SolutionDir)$(OutDir)Plugins\" />
   </Target>
-  
+
   <ItemGroup>
     <Reference Include="SharpDX">
       <HintPath>..\..\FrostyEditor\ThirdParty\SharpDX.dll</HintPath>
@@ -63,7 +63,7 @@
       <Private>False</Private>
     </Reference>
   </ItemGroup>
-  
+
   <ItemGroup>
     <ProjectReference Include="..\..\FrostyControls\FrostyControls.csproj">
       <Private>false</Private>

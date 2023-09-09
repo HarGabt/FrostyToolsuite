@@ -65,7 +65,7 @@ namespace AtlasTexturePlugin
         public override void Read(NativeReader reader, AssetManager am, ResAssetEntry entry, ModifiedResource modifiedData)
         {
             base.Read(reader, am, entry, modifiedData);
-            
+
             m_version = BitConverter.ToInt32(resMeta, 0);
             m_nameHash = BitConverter.ToUInt32(resMeta, 4);
 
