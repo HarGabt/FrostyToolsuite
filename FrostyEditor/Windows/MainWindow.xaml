@@ -36,7 +36,7 @@
             <RowDefinition Height="26"/>
             <RowDefinition Height="24"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="22"/>
+            <RowDefinition Height="0"/>
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0">
@@ -527,7 +527,7 @@
 
                                                     <Grid>
                                                         <Grid.ColumnDefinitions>
-                                                            <ColumnDefinition Width="14"/>
+                                                            <ColumnDefinition Width="2"/>
                                                             <ColumnDefinition Width="*"/>
                                                             <ColumnDefinition Width="Auto"/>
                                                             <ColumnDefinition Width="Auto"/>
@@ -745,7 +745,7 @@
 
                                                         <Grid>
                                                             <Grid.ColumnDefinitions>
-                                                                <ColumnDefinition Width="14"/>
+                                                                <ColumnDefinition Width="2"/>
                                                                 <ColumnDefinition Width="*"/>
                                                                 <ColumnDefinition Width="Auto"/>
                                                                 <ColumnDefinition Width="Auto"/>
