@@ -199,7 +199,7 @@ namespace ChunkResEditorPlugin
                 {
                     chunksBundleBox.Items.Add("Selected chunk is a Manifest chunk.");
                 }
-                else if (SelectedChk.SuperBundles.Count != 0)
+                else if (SelectedChk.Bundles.Count == 0 && SelectedChk.AddedBundles.Count == 0)
                 {
                     chunksBundleBox.Items.Add("Selected chunk is in SuperBundles:");
                     foreach (int superbundle in SelectedChk.SuperBundles)

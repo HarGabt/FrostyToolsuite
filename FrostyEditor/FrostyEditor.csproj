@@ -283,7 +283,6 @@
     <Resource Include="Images\Ice.png" />
     <Resource Include="Images\NormalMap.png" />
     <Resource Include="Images\Noise.png" />
-    <Resource Include="BuildDate.txt" />
     <Resource Include="ChangeLog.txt" />
     <Resource Include="Credits.txt" />
   </ItemGroup>

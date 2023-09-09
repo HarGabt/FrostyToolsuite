@@ -202,6 +202,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
@@ -272,7 +273,6 @@
     <Resource Include="Images\AddAction.png" />
     <Resource Include="Images\Cross.png" />
     <Resource Include="Images\Tick.png" />
-    <Resource Include="BuildDate.txt" />
     <Resource Include="Images\Merge.png" />
     <Resource Include="Images\PrimaryActionModify.png" />
     <Resource Include="Images\PrimaryActionReplace.png" />
