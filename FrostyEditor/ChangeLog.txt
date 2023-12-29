@@ -1,4 +1,8 @@
-﻿v1.0.6
+﻿v1.0.7 (selphea's fork)
+--------
+This fork was designed for Need for Speed: Unbound, and is discontinued in favour of 1.0.6.3 and 2.0.0 WIP project, which has no estimated time of release.
+
+v1.0.6
 --------
 - Added plugin support
 - Added Sound Import functionality
