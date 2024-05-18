@@ -367,7 +367,7 @@
                                         <StackPanel Orientation="Vertical">
                                             <TextBlock Text="Convenient Links" Foreground="{StaticResource FontColor}" Margin="8" FontWeight="Bold"/>
                                             <StackPanel Orientation="Horizontal" Margin="8,8,0,0">
-                                                <TextBlock Text="Frosty Website:" Foreground="{StaticResource FontColor}" Margin="0,0,20,0"/>
+                                                <TextBlock Text="Frosty Website (non-functional):" Foreground="{StaticResource FontColor}" Margin="0,0,20,0"/>
                                                 <TextBlock>
                                                     <Hyperlink NavigateUri="http://www.frostytoolsuite.com" Foreground="{StaticResource FontColor}" RequestNavigate="hyperlink_RequestNavigate">
                                                         http://www.frostytoolsuite.com
@@ -387,6 +387,14 @@
                                                 <TextBlock>
                                                     <Hyperlink NavigateUri="https://github.com/CadeEvs/FrostyToolsuite" Foreground="{StaticResource FontColor}" RequestNavigate="hyperlink_RequestNavigate">
                                                         https://github.com/CadeEvs/FrostyToolsuite
+                                                    </Hyperlink>
+                                                </TextBlock>
+                                            </StackPanel>
+                                            <StackPanel Orientation="Horizontal" Margin="8,8,0,0">
+                                                <TextBlock Text="Frosty Fork:" Foreground="{StaticResource FontColor}" Margin="0,0,20,0"/>
+                                                <TextBlock>
+                                                    <Hyperlink NavigateUri="https://github.com/selphea/FrostyToolsuite" Foreground="{StaticResource FontColor}" RequestNavigate="hyperlink_RequestNavigate">
+                                                        https://github.com/selphea/FrostyToolsuite
                                                     </Hyperlink>
                                                 </TextBlock>
                                             </StackPanel>
