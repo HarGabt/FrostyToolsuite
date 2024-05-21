@@ -2055,9 +2055,7 @@ namespace Frosty.ModSupport
             if (!ProfilesLibrary.IsLoaded(ProfileVersion.DragonAgeInquisition,
                 ProfileVersion.Battlefield4,
                 ProfileVersion.NeedForSpeed,
-                ProfileVersion.NeedForSpeedRivals,
-                ProfileVersion.PlantsVsZombiesGardenWarfare2,
-                ProfileVersion.Battlefield5))
+                ProfileVersion.NeedForSpeedRivals))
             {
                 // delete old useless bcrypt
                 if (File.Exists(m_fs.BasePath + "bcrypt.dll"))
@@ -2067,10 +2065,6 @@ namespace Frosty.ModSupport
                 CopyFileIfRequired("ThirdParty/CryptBase.dll", m_fs.BasePath + "CryptBase.dll");
             }
             CopyFileIfRequired(m_fs.BasePath + "user.cfg", modDataPath + "user.cfg");
-			
-            // GW2 will crash if bcrypt exists
-            if ((ProfilesLibrary.DataVersion == (int)ProfileVersion.PlantsVsZombiesGardenWarfare2 || ProfilesLibrary.DataVersion != (int)ProfileVersion.Battlefield5) && File.Exists(m_fs.BasePath + "CryptBase.dll"))
-                File.Delete(m_fs.BasePath + "CryptBase.dll");
 
             // FIFA games require a fifaconfig workaround
             if (ProfilesLibrary.IsLoaded(ProfileVersion.Fifa17,
