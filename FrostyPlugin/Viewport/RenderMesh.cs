@@ -812,7 +812,7 @@ namespace Frosty.Core.Viewport
                 else if (ProfilesLibrary.IsLoaded(ProfileVersion.Fifa17, ProfileVersion.Fifa18,
                     ProfileVersion.Fifa19, ProfileVersion.Fifa20,
                     ProfileVersion.NeedForSpeedHeat, ProfileVersion.Fifa21,
-                    ProfileVersion.Fifa22, ProfileVersion.NeedForSpeedUnbound, ProfileVersion.DeadSpace))
+                    ProfileVersion.Fifa22, ProfileVersion.NeedForSpeedUnbound, ProfileVersion.DeadSpace, ProfileVersion.DragonAgeVeilguard))
                 {
                     paramName = paramName.ToLower();
                     if (paramName.StartsWith("colortexture") || paramName.StartsWith("diffuse") || paramName.Contains("basecolor"))
@@ -2051,7 +2051,7 @@ namespace Frosty.Core.Viewport
                 if (idx != -1) material.TextureParameters[idx] = param;
                 else material.TextureParameters.Add(param);
             }
-            if (ProfilesLibrary.IsLoaded(ProfileVersion.StarWarsBattlefrontII, ProfileVersion.Anthem, ProfileVersion.StarWarsSquadrons, ProfileVersion.Battlefield2042, ProfileVersion.NeedForSpeedUnbound, ProfileVersion.DeadSpace))
+            if (ProfilesLibrary.IsLoaded(ProfileVersion.StarWarsBattlefrontII, ProfileVersion.Anthem, ProfileVersion.StarWarsSquadrons, ProfileVersion.Battlefield2042, ProfileVersion.NeedForSpeedUnbound, ProfileVersion.DeadSpace, ProfileVersion.DragonAgeVeilguard))
             {
                 foreach (dynamic param in shader.ConditionalParameters)
                 {

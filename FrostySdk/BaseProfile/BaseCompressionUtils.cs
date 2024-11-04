@@ -42,7 +42,7 @@ namespace FrostySdk.BaseProfile
             {
                 return "thirdparty/libzstd.0.0.6.dll";
             }
-            else if (ProfilesLibrary.IsLoaded(ProfileVersion.Fifa19, ProfileVersion.Fifa20, ProfileVersion.Fifa21, ProfileVersion.Fifa22, ProfileVersion.DeadSpace))
+            else if (ProfilesLibrary.IsLoaded(ProfileVersion.Fifa19, ProfileVersion.Fifa20, ProfileVersion.Fifa21, ProfileVersion.Fifa22, ProfileVersion.DeadSpace, ProfileVersion.DragonAgeVeilguard))
             {
                 return "thirdparty/libzstd.1.3.4.dll";
             }
