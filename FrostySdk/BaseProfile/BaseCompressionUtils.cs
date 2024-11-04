@@ -26,7 +26,7 @@ namespace FrostySdk.BaseProfile
             {
                 return basePath + "oo2core_8_win64.dll";
             }
-            else if (ProfilesLibrary.IsLoaded(ProfileVersion.Fifa23, ProfileVersion.NeedForSpeedUnbound))
+            else if (ProfilesLibrary.IsLoaded(ProfileVersion.Fifa23, ProfileVersion.NeedForSpeedUnbound, ProfileVersion.DragonAgeVeilguard))
             {
                 return basePath + "oo2core_9_win64.dll";
             }
@@ -61,7 +61,7 @@ namespace FrostySdk.BaseProfile
             ProfileVersion.StarWarsBattlefrontII, ProfileVersion.Madden19, ProfileVersion.Fifa19,
             ProfileVersion.Battlefield5, ProfileVersion.Fifa20, ProfileVersion.StarWarsSquadrons,
             ProfileVersion.Fifa21, ProfileVersion.Madden22, ProfileVersion.Fifa22,
-            ProfileVersion.Madden23, ProfileVersion.DeadSpace);
+            ProfileVersion.Madden23, ProfileVersion.DeadSpace, ProfileVersion.DragonAgeVeilguard);
 
         public int OodleCompressionLevel => ProfilesLibrary.IsLoaded(ProfileVersion.StarWarsBattlefrontII, ProfileVersion.Battlefield5, ProfileVersion.StarWarsSquadrons) ? 18 : 16;
     }

@@ -1187,6 +1187,34 @@ namespace FrostyCmd
                 blobs.Add(key, writer.ToByteArray());
             }
         }
+		
+		private void CreateDAVProfile()
+        {
+            string key = "DragonAgeVeilguard";
+            using (NativeWriter writer = new NativeWriter(new MemoryStream()))
+            {
+                writer.WriteObfuscatedString("Dragon Age™: Veilguard");
+                writer.Write((int)ProfileVersion.DragonAgeVeilguard);
+                writer.WriteObfuscatedString("dragonage4");
+                writer.WriteObfuscatedString(typeof(NullDeobfuscator).Name);
+                writer.WriteObfuscatedString(AssetManager.GetLoaderName("CasAssetLoader"));
+                writer.Write(CreateSources("Patch;false", "Data;false"));
+                writer.WriteObfuscatedString("DragonAgeVeilguardSDK");
+                writer.Write(CreateBanner("DAV"));
+                writer.WriteObfuscatedString("DA4/Actors/BaseMaterials/Patterns/Fabric/generic_cloth_swatch_d"); // these four obfuscated strings must be replaced
+                writer.WriteObfuscatedString("DA4/shaders/Textures/NormalmapDefault_N");                         // with their actual counterparts in Veilguard assets
+                writer.WriteObfuscatedString("DA4/Actors/BaseMaterials/Patterns/Fabric/generic_cloth_swatch_s");
+                writer.WriteObfuscatedString("DA4/Actors/BaseMaterials/Patterns/Fabric/generic_cloth_swatch_t");
+                writer.Write(0); // shared bundle names
+                writer.Write(0); // ignored res types
+
+                // Flags (MustAddChunks, EbxVersion, RequiresKey)
+                ProfileFlags pf = new ProfileFlags(0, 6, 1);
+                pf.Write(writer);
+
+                blobs.Add(key, writer.ToByteArray());
+            }
+        }
         #endregion
 
         public ProfileCreator()
@@ -1220,6 +1248,7 @@ namespace FrostyCmd
             CreateBFHProfile();
             CreateSWSProfile();
             CreateNFSUnboundProfile();
+            CreateDAVProfile();
 
 #if FROSTY_DEVELOPER
 
@@ -1231,6 +1260,7 @@ namespace FrostyCmd
             CreateMadden23Profile();
             CreateFifa23Profile();
             CreateDeadSpaceProfile();
+            CreateDAVProfile();
 
 #endif
 
