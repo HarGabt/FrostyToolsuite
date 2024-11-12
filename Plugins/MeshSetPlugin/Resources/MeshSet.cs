@@ -1859,7 +1859,7 @@ namespace MeshSetPlugin.Resources
                     case (int)ProfileVersion.Battlefield2042:
                     case (int)ProfileVersion.NeedForSpeedUnbound:
                     case (int)ProfileVersion.DeadSpace:
-					case (int)ProfileVersion.DragonAgeVeilguard:
+                    case (int)ProfileVersion.DragonAgeVeilguard:
                         return true;
                     default:
                         return false;

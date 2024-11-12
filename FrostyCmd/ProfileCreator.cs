@@ -1188,23 +1188,23 @@ namespace FrostyCmd
             }
         }
 		
-		private void CreateDAVProfile()
+        private void CreateDAVProfile()
         {
-            string key = "DragonAgeVeilguard";
+            string key = "Dragon Age The Veilguard";
             using (NativeWriter writer = new NativeWriter(new MemoryStream()))
             {
-                writer.WriteObfuscatedString("Dragon Age™: Veilguard");
+                writer.WriteObfuscatedString("Dragon Age The Veilguard");
                 writer.Write((int)ProfileVersion.DragonAgeVeilguard);
-                writer.WriteObfuscatedString("dragonage4");
+                writer.WriteObfuscatedString("DragonAgeTheVeilguard");
                 writer.WriteObfuscatedString(typeof(NullDeobfuscator).Name);
                 writer.WriteObfuscatedString(AssetManager.GetLoaderName("CasAssetLoader"));
                 writer.Write(CreateSources("Patch;false", "Data;false"));
                 writer.WriteObfuscatedString("DragonAgeVeilguardSDK");
-                writer.Write(CreateBanner("DAV"));
-                writer.WriteObfuscatedString("DA4/Actors/BaseMaterials/Patterns/Fabric/generic_cloth_swatch_d"); // these four obfuscated strings must be replaced
-                writer.WriteObfuscatedString("DA4/shaders/Textures/NormalmapDefault_N");                         // with their actual counterparts in Veilguard assets
-                writer.WriteObfuscatedString("DA4/Actors/BaseMaterials/Patterns/Fabric/generic_cloth_swatch_s");
-                writer.WriteObfuscatedString("DA4/Actors/BaseMaterials/Patterns/Fabric/generic_cloth_swatch_t");
+                writer.Write(CreateBanner("dragonagetheveilguard"));
+                writer.WriteObfuscatedString("Game/_Shared/Textures/T_Default_Color_White_BC");
+                writer.WriteObfuscatedString("Game/_Shared/Textures/T_Default_N");
+                writer.WriteObfuscatedString("Game/_Shared/Textures/T_Default_Color_Black_BC");
+                writer.WriteObfuscatedString("Game/_Shared/Textures/T_Default_Color_White_BC");
                 writer.Write(0); // shared bundle names
                 writer.Write(0); // ignored res types
 

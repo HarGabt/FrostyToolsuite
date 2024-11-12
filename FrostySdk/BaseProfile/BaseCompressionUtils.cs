@@ -55,13 +55,13 @@ namespace FrostySdk.BaseProfile
         public bool LoadOodle => ProfilesLibrary.IsLoaded(ProfileVersion.Fifa18, ProfileVersion.Fifa19, ProfileVersion.Anthem,
             ProfileVersion.Fifa20, ProfileVersion.PlantsVsZombiesBattleforNeighborville, ProfileVersion.NeedForSpeedHeat,
             ProfileVersion.Fifa21, ProfileVersion.Madden22, ProfileVersion.Fifa22,
-            ProfileVersion.Battlefield2042, ProfileVersion.Madden23, ProfileVersion.Fifa23, ProfileVersion.NeedForSpeedUnbound);
+            ProfileVersion.Battlefield2042, ProfileVersion.Madden23, ProfileVersion.Fifa23, ProfileVersion.NeedForSpeedUnbound, ProfileVersion.DragonAgeVeilguard);
 
         public bool LoadZStd => ProfilesLibrary.IsLoaded(ProfileVersion.MassEffectAndromeda, ProfileVersion.Fifa17, ProfileVersion.Fifa18,
             ProfileVersion.StarWarsBattlefrontII, ProfileVersion.Madden19, ProfileVersion.Fifa19,
             ProfileVersion.Battlefield5, ProfileVersion.Fifa20, ProfileVersion.StarWarsSquadrons,
             ProfileVersion.Fifa21, ProfileVersion.Madden22, ProfileVersion.Fifa22,
-            ProfileVersion.Madden23, ProfileVersion.DeadSpace, ProfileVersion.DragonAgeVeilguard);
+            ProfileVersion.Madden23, ProfileVersion.DeadSpace);
 
         public int OodleCompressionLevel => ProfilesLibrary.IsLoaded(ProfileVersion.StarWarsBattlefrontII, ProfileVersion.Battlefield5, ProfileVersion.StarWarsSquadrons) ? 18 : 16;
     }

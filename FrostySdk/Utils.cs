@@ -391,7 +391,7 @@ namespace FrostySdk
                     case (int)ProfileVersion.Fifa23:
                     case (int)ProfileVersion.NeedForSpeedUnbound:
                     case (int)ProfileVersion.DeadSpace:
-					case (int)ProfileVersion.DragonAgeVeilguard:
+                    case (int)ProfileVersion.DragonAgeVeilguard:
                         return 16;
                     default:
                         return 8;
