@@ -29,12 +29,22 @@ namespace Frosty.Core.Managers
                 notifications.Add(notification);
                 notification.Show();
             }
+            else
+            {
+                notification.Close();
+            }
         }
 
         public void RemoveNotification(FrostyNotification notification)
         {
             notifications.Remove(notification);
             notification.Close();
+        }
+
+        public void RemoveAllNotifications()
+        {
+            notifications.ForEach(notification => notification.Close());
+            notifications.Clear();
         }
 
         public async void Show(string text, int duration = 3)

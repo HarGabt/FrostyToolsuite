@@ -307,6 +307,8 @@ namespace FrostyModManager
                     Close();
                     return;
                 }
+            
+                App.NotificationManager.RemoveAllNotifications();
             }
             else
             {
