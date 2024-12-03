@@ -393,8 +393,8 @@
                                             <StackPanel Orientation="Horizontal" Margin="8,8,0,0">
                                                 <TextBlock Text="Frosty Fork:" Foreground="{StaticResource FontColor}" Margin="0,0,20,0"/>
                                                 <TextBlock>
-                                                    <Hyperlink NavigateUri="https://github.com/selphea/FrostyToolsuite" Foreground="{StaticResource FontColor}" RequestNavigate="hyperlink_RequestNavigate">
-                                                        https://github.com/selphea/FrostyToolsuite
+                                                    <Hyperlink NavigateUri="https://github.com/HarGabt/FrostyToolsuite" Foreground="{StaticResource FontColor}" RequestNavigate="hyperlink_RequestNavigate">
+                                                        https://github.com/HarGabt/FrostyToolsuite
                                                     </Hyperlink>
                                                 </TextBlock>
                                             </StackPanel>

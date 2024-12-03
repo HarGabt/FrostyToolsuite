@@ -1,6 +1,16 @@
-﻿v1.0.7 (selphea's fork)
+﻿v1.0.7 (HarGabt's fork)
 --------
-This fork was designed for Need for Speed: Unbound, and is discontinued in favour of 1.0.6.3 and 2.0.0 WIP project, which has no estimated time of release.
+This fork is based on selphea's fork and was designed for the most part around Need for Speed: Unbound support, and will be discontinued in favour of an upcoming 2.0.0 version of Tool Suite, which as of now is still a WIP, and which has no estimated time of release.
+
+selphea's changes:
+- Implemented workaround for NFS Unbound updates and hotfixes that kept breaking Frosty Tool Suite's modding functionality since Volume 3.
+- Fixed launching via Steam, meaning DatapathFix is not required to use with this fork
+
+Changes in my fork:
+- Implemented several backports from 1.0.6.2, 1.0.6.3 and potentially, 1.0.6.4 (as long as those are commited into the branch and this fork successfully compiles with them)
+- Added experimental support of Dragon Age: Veilguard (credits to wavebend and CosmicCode, but for Veilguard modding I'd recommend you using their fork instead of mine)
+- Fixed Exporting String Usage List for Localization Plugin that previously resulted in "No overload for method 'ToString' takes '1' arguments" error when attempted to do so
+- Fixed Mod Manager not exiting properly (credits to wavebend)
 
 v1.0.6
 --------
