@@ -576,46 +576,69 @@ namespace LocalizedStringPlugin
                         task.Update("Checking: " + refEntry.Name, (idx++ / (double)totalCount) * 100.0d);
                         EbxAsset refAsset = App.AssetManager.GetEbx(refEntry);
                         ISet<string> alreadyDone = new HashSet<string>();
-                        foreach (dynamic obj in refAsset.Objects)
+                        try
                         {
-                            if (HasProperty(obj, "StringHash"))
+                            foreach (dynamic obj in refAsset.Objects)
                             {
-                                string tempString = obj.StringHash.ToString("X").ToLower();
-                                RecordStringUsage(StringInfo, tempString, alreadyDone, refEntry.Name);
-                            }
-
-                            if (HasProperty(obj, "StringId"))
-                            {
-                                string tempString = obj.StringId.ToString("X").ToLower();
-                                RecordStringUsage(StringInfo, tempString, alreadyDone, refEntry.Name);
-                            }
-
-                            foreach (PropertyInfo pi in obj.GetType().GetProperties())
-                            {
-                                if (pi.PropertyType == typeof(CString))
+                                if (HasProperty(obj, "StringHash"))
                                 {
-                                    RecordDefaultCString(StringInfo, alreadyDone, refEntry.Name, pi.GetValue(obj));
+                                    string tempString = obj.StringHash.ToString("X").ToLower();
+                                    RecordStringUsage(StringInfo, tempString, alreadyDone, refEntry.Name);
                                 }
-                                else if (pi.PropertyType == typeof(List<CString>))
+                                
+								if (HasProperty(obj, "StringId"))
                                 {
-                                    RecordStringList(StringInfo, alreadyDone, refEntry.Name, pi.GetValue(obj));
-                                }
-                                else if ("LocalizedStringReference".Equals(pi.PropertyType.Name))
-                                {
-                                    // used in DA:I and ME:A
-                                    dynamic stringReference = pi.GetValue(obj);
-                                    RecordLocalizedStringReference(StringInfo, alreadyDone, refEntry.Name, stringReference.StringId);
-                                }
-                                else if (typeof(IList).IsAssignableFrom(pi.PropertyType))
-                                {
-                                    // still does not find ui menu entries
-                                    Type[] genericArguments = pi.PropertyType.GetGenericArguments();
-                                    if (genericArguments.Length > 0 && "LocalizedStringReference".Equals(genericArguments[0].Name))
+                                    if (obj.StringId != null)
                                     {
-                                        RecordLocalizedStringReferenceList(StringInfo, alreadyDone, refEntry.Name, pi.GetValue(obj));
+                                        if (obj.StringId is CString cString)
+                                        {
+                                            RecordDefaultCString(StringInfo, alreadyDone, refEntry.Name, cString);
+                                        }
+                                        else
+                                        {
+                                            string tempString = obj.StringId.ToString("X").ToLower();
+                                            RecordStringUsage(StringInfo, tempString, alreadyDone, refEntry.Name);
+                                        }
+                                    }
+                                }
+                                
+								foreach (PropertyInfo pi in obj.GetType().GetProperties())
+                                {
+                                    if (pi.PropertyType == typeof(CString))
+                                    {
+                                        RecordDefaultCString(StringInfo, alreadyDone, refEntry.Name, pi.GetValue(obj));
+                                    }
+                                    else if (pi.PropertyType == typeof(List<CString>))
+                                    {
+                                    RecordStringList(StringInfo, alreadyDone, refEntry.Name, pi.GetValue(obj));
+                                    }
+                                    else if ("BWLocalizedStringReference".Equals(pi.PropertyType.Name))
+                                    {
+                                        // used in DA:V
+                                        dynamic stringReference = pi.GetValue(obj);
+                                        RecordLocalizedStringReference(StringInfo, alreadyDone, refEntry.Name, stringReference.StringId);
+                                    }
+                                    else if ("LocalizedStringReference".Equals(pi.PropertyType.Name))
+                                    {
+                                        // used in DA:I and ME:A
+                                        dynamic stringReference = pi.GetValue(obj);
+                                        RecordLocalizedStringReference(StringInfo, alreadyDone, refEntry.Name, stringReference.StringId);
+                                    }
+                                    else if (typeof(IList).IsAssignableFrom(pi.PropertyType))
+                                    {
+                                        // still does not find ui menu entries
+                                        Type[] genericArguments = pi.PropertyType.GetGenericArguments();
+                                        if (genericArguments.Length > 0 && "LocalizedStringReference".Equals(genericArguments[0].Name))
+                                        {
+                                            RecordLocalizedStringReferenceList(StringInfo, alreadyDone, refEntry.Name, pi.GetValue(obj));
+                                        }
                                     }
                                 }
                             }
+                        }
+						catch
+                        {
+                            App.Logger.Log("Skipping ebx asset '{0}' due to an error recording strings.", refEntry.Name);
                         }
                     }
 
