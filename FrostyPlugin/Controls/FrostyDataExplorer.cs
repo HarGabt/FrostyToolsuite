@@ -13,6 +13,7 @@ using Frosty.Hash;
 using Frosty.Core.Commands;
 using System.Windows.Data;
 using FrostySdk.Managers.Entries;
+using System.Runtime.CompilerServices;
 
 namespace Frosty.Core.Controls
 {
@@ -58,7 +59,7 @@ namespace Frosty.Core.Controls
         //}
     }
 
-    internal class AssetPath
+    public class AssetPath : INotifyPropertyChanged
     {
         private static readonly ImageSource ClosedImage = new ImageSourceConverter().ConvertFromString("pack://application:,,,/FrostyEditor;component/Images/CloseFolder.png") as ImageSource;
         private static readonly ImageSource OpenImage = new ImageSourceConverter().ConvertFromString("pack://application:,,,/FrostyEditor;component/Images/OpenFolder.png") as ImageSource;
@@ -67,16 +68,37 @@ namespace Frosty.Core.Controls
         public string PathName { get; private set; }
         public string FullPath { get; }
         public AssetPath Parent { get; }
-        public List<AssetPath> Children { get; } = new List<AssetPath>();
-        public bool IsSelected { get; set; }
+        public List<AssetPath> Children { get; private set; } = new List<AssetPath>();
+        public bool IsSelected {
+            get => selected;
+            set {
+                selected = value;
+                OnPropertyChanged();
+            }
+        }
+        private bool selected;
         public bool IsRoot { get; }
 
         public bool IsExpanded 
         { 
             get => expanded && Children.Count != 0;
-            set => expanded = value;
+            set {
+                expanded = value;
+                OnPropertyChanged();
+            }
         }
         private bool expanded;
+
+        public List<AssetEntry> Entries { get; set; } = new List<AssetEntry>();
+
+        public AssetPath Clone;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged([CallerMemberName] string name = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
 
         public AssetPath(string inName, string path, AssetPath inParent, bool bInRoot = false)
         {
@@ -86,9 +108,80 @@ namespace Frosty.Core.Controls
             Parent = inParent;
         }
 
+        public AssetPath Copy(bool keepVisualState = false)
+        {
+            AssetPath path = (AssetPath)MemberwiseClone();
+            path.Children = new List<AssetPath>();
+            path.Entries = new List<AssetEntry>();
+
+            if (keepVisualState && Clone != null)
+            {
+                // The base object will never have expanded/selected set to true.
+                // The clone object is displayed on the UI & bound to the treeview
+                // so if we keep visual state, we need to take it from the previous clone.
+                path.IsExpanded = Clone.IsExpanded;
+                path.IsSelected = Clone.IsSelected;
+            }
+
+            Clone = path;
+
+            return path;
+        }
+
         public void UpdatePathName(string newName)
         {
             PathName = newName;
+        }
+		
+        public AssetPath Search(Func<AssetEntry, bool> entryFilterFunction, bool keepVisualState = false)
+        {
+            // Recursively search the Children and Entries of each node.
+            // Make a copy of the node so that the original data is never modified.
+            // The copied nodes are then displayed on the UI.
+            List<AssetPath> filteredChildNodes = null;
+            List<AssetEntry> filteredEntries = null;
+
+
+            // If the node has children, recursively call each child to filter
+            if (Children != null && Children.Count > 0)
+            {
+                filteredChildNodes = Children
+                    .Select(i => i.Search(entryFilterFunction, keepVisualState))
+                    .Where(i => i != null).ToList();
+            }
+
+            if (Entries != null && Entries.Count > 0)
+            {
+                filteredEntries = Entries.Where(entry => entryFilterFunction(entry)).ToList();
+            }
+
+            // If any of this node's entries pass the filter, or if any child of this node's entries pass the filter,
+            // then this node must pass the filter. Make a copy of this node and add all children & entries that passed the filter
+            bool hasChildNodes = filteredChildNodes != null && filteredChildNodes.Any();
+            bool hasEntries = filteredEntries != null && filteredEntries.Any();
+
+            if (hasChildNodes || hasEntries)
+            {
+                AssetPath result = Copy(keepVisualState);
+
+                if (hasChildNodes)
+                    result.Children.AddRange(filteredChildNodes);
+
+                if (hasEntries)
+                    result.Entries.AddRange(filteredEntries);
+
+                return result;
+            }
+            else
+            {
+                // If nothing passes the filter, return null to ensure it doesn't display
+                return null;
+            }
+        }
+
+        public int GetEntryCount()
+        {
+            return Entries.Count + Children.Aggregate(0, (acc, i) => acc + i.GetEntryCount());
         }
     }
 
@@ -109,6 +202,8 @@ namespace Frosty.Core.Controls
     public class FrostyDataExplorer : Control
     {
         public string FilteredText { get => m_filterTextBox.Text; }
+
+        public Func<AssetEntry, bool> EntryFilterFunction { get; set; } = null;
 
         private const string PART_ShowOnlyModifiedCheckBox = "PART_ShowOnlyModifiedCheckBox";
         private const string PART_FilterTextBox = "PART_FilterTextBox";
@@ -154,6 +249,7 @@ namespace Frosty.Core.Controls
             FrostyDataExplorer ctrl = o as FrostyDataExplorer;
             ctrl.m_assetPathMapping.Clear();
             ctrl.SelectedAsset = null;
+            ctrl.CreateAssetPathMapping();
             ctrl.UpdateTreeView();
         }
         #endregion
@@ -391,7 +487,11 @@ namespace Frosty.Core.Controls
             if (MultiSelect)
                 m_assetListView.SelectionMode = SelectionMode.Extended;
 
-            UpdateTreeView();
+            if (m_assetPathMapping.Count == 0 && ItemsSource != null)
+            {
+                CreateAssetPathMapping();
+                UpdateTreeView();
+            }
 
             if (IsVisible && m_bookmarkContext != null)
             {
@@ -468,8 +568,8 @@ namespace Frosty.Core.Controls
                     }
 
                     tvi = (tvi == null)
-                        ? (TreeViewItem)m_assetTreeView.ItemContainerGenerator.ContainerFromItem(path)
-                        : (TreeViewItem)tvi.ItemContainerGenerator.ContainerFromItem(path);
+                        ? (TreeViewItem)m_assetTreeView.ItemContainerGenerator.ContainerFromItem(path?.Clone)
+                        : (TreeViewItem)tvi.ItemContainerGenerator.ContainerFromItem(path?.Clone);
                 }
                 if (tvi != null)
                 {
@@ -479,8 +579,8 @@ namespace Frosty.Core.Controls
             }
             else
             {
-                TreeViewItem tvi = m_assetTreeView.ItemContainerGenerator.ContainerFromItem(selectedPath) as TreeViewItem;
-                if(tvi != null)
+                TreeViewItem tvi = m_assetTreeView.ItemContainerGenerator.ContainerFromItem(selectedPath?.Clone) as TreeViewItem;
+                if (tvi != null)
                 {
                     tvi.BringIntoView();
                     tvi.IsSelected = true;
@@ -508,9 +608,16 @@ namespace Frosty.Core.Controls
 
         }
 
-        public void RefreshAll()
+        public void RefreshAll(bool keepVisualState = false)
         {
-            UpdateTreeView();
+            UpdateTreeView(keepVisualState);
+            if (SelectedAssets != null)
+            {
+                foreach (var item in SelectedAssets)
+                {
+                    m_assetListView.SelectedItems.Add(item);
+                }
+            }
         }
 
         public void FocusFilter()
@@ -521,7 +628,7 @@ namespace Frosty.Core.Controls
         private void assetTreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             m_selectedPath = m_assetTreeView.SelectedItem as AssetPath;
-            SelectedPath = string.IsNullOrEmpty(m_selectedPath.FullPath) ? "" : m_selectedPath.FullPath.Remove(0, 1);
+            SelectedPath = string.IsNullOrEmpty(m_selectedPath?.FullPath) ? "" : m_selectedPath.FullPath.Remove(0, 1);
 
             UpdateListView(m_selectedPath);
         }
@@ -579,78 +686,80 @@ namespace Frosty.Core.Controls
             m_lastSortDirection = sortDir;
         }
 
-        private void UpdateTreeView()
+        private void CreateAssetPathMapping()
+        {
+            if (m_assetTreeView == null) return;
+
+            if (ItemsSource == null) return;
+
+            AssetPath parent = new AssetPath("", "", null);
+            AssetPath root = new AssetPath("![root]", "", null, true);
+            parent.Children.Add(root);
+			
+            m_assetPathMapping.Add("__root__", parent);
+            m_assetPathMapping.Add("/", root);
+
+            foreach (AssetEntry entry in ItemsSource)
+            {
+                if (EntryFilterFunction != null && !EntryFilterFunction(entry)) { continue; }
+
+                string[] arr = entry.Path.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
+                AssetPath next = arr.Length > 0 ? parent : root;
+
+                foreach (string path in arr)
+                {
+                    string fullPath = next.FullPath + "/" + path;
+                    AssetPath newPath = null;
+
+
+                    if (!m_assetPathMapping.ContainsKey(fullPath))
+                    {
+                        newPath = new AssetPath(path, fullPath, next);
+                        m_assetPathMapping.Add(fullPath, newPath);
+                        next.Children.Add(newPath);
+                    }
+                    else
+
+                    {
+                        newPath = m_assetPathMapping[fullPath];
+
+                        if (newPath == m_selectedPath)
+                            m_selectedPath.IsSelected = true;
+                    }
+
+                    next = newPath;
+                }
+
+                next.Entries.Add(entry);
+            }
+
+            m_assetTreeView.ItemsSource = parent.Children;
+            m_assetTreeView.Items.SortDescriptions.Add(new SortDescription("PathName", ListSortDirection.Ascending));
+        }
+
+        private bool ShouldDisplayAsset(AssetEntry entry)
+        {
+            return entry != null &&
+                (!ShowOnlyModified || entry.IsModified) && FilterText(entry.Name, entry);
+        }
+
+        private void UpdateTreeView(bool keepVisualState = true)
         {
             if (m_assetTreeView == null)
                 return;
 
-            if (m_selectedPath != null)
+            if (!keepVisualState && m_selectedPath != null)
                 m_selectedPath.IsSelected = false;
 
             if (ItemsSource == null)
                 return;
 
-            AssetPath root = new AssetPath("", "", null);
-            foreach (AssetEntry entry in ItemsSource)
-            {
-                if (ShowOnlyModified && !entry.IsModified)
-                    continue;
+            AssetPath root = m_assetPathMapping["__root__"];
+            AssetPath newRoot = root.Search(ShouldDisplayAsset, keepVisualState);
 
-                if (!FilterText(entry.Name, entry))
-                    continue;
-
-                string[] arr = entry.Path.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
-                AssetPath next = root;
-
-                foreach (string path in arr)
-                {
-                    bool bFound = false;
-                    foreach (AssetPath child in next.Children)
-                    {
-                        if (child.PathName.Equals(path, StringComparison.OrdinalIgnoreCase))
-                        {
-                            if (path.ToCharArray().Any(char.IsUpper))
-                                child.UpdatePathName(path);
-
-                            next = child;
-                            bFound = true;
-                            break;
-                        }
-                    }
-
-                    if (!bFound)
-                    {
-                        string fullPath = next.FullPath + "/" + path;
-                        AssetPath newPath = null;
-
-                        if (!m_assetPathMapping.ContainsKey(fullPath))
-                        {
-                            newPath = new AssetPath(path, fullPath, next);
-                            m_assetPathMapping.Add(fullPath, newPath);
-                        }
-                        else
-                        {
-                            newPath = m_assetPathMapping[fullPath];
-                            newPath.Children.Clear();
-
-                            if (newPath == m_selectedPath)
-                                m_selectedPath.IsSelected = true;
-                        }
-
-                        next.Children.Add(newPath);
-                        next = newPath;
-                    }
-                }
-            }
-
-            if(!m_assetPathMapping.ContainsKey("/"))
-                m_assetPathMapping.Add("/", new AssetPath("![root]", "", null, true));           
-            root.Children.Insert(0, m_assetPathMapping["/"]);
-
-            m_assetTreeView.ItemsSource = root.Children;
-            m_assetTreeView.Items.SortDescriptions.Add(new SortDescription("PathName", ListSortDirection.Ascending));
-
-            UpdateListView(m_selectedPath);
+            m_assetTreeView.SelectedValuePath = String.Empty;
+            m_assetTreeView.ItemsSource = newRoot?.Children;
+            m_assetTreeView.Items.Refresh();
         }
 
         private void UpdateListView(AssetPath path = null)
@@ -661,26 +770,18 @@ namespace Frosty.Core.Controls
                 return;
             }
 
-            List<AssetEntry> items = new List<AssetEntry>();
-            string fullPath = path.FullPath.Trim('/');
-
-            foreach (AssetEntry entry in ItemsSource)
-            {
-                if (ShowOnlyModified && !entry.IsModified)
-                    continue;
-                if (entry.Path.Equals(fullPath, StringComparison.OrdinalIgnoreCase))
-                {
-                    if (!FilterText(entry.Name, entry))
-                        continue;
-                    items.Add(entry);
-                }
-            }
-
-            m_assetListView.ItemsSource = items;
+            m_assetListView.ItemsSource = path.Entries;
 
             if (SelectedAsset != null)
             {
                 m_assetListView.SelectedItem = SelectedAsset;
+            }
+            else if (SelectedAssets != null)
+            {
+                foreach (var item in SelectedAssets)
+                {
+                    m_assetListView.SelectedItems.Add(item);
+                }
             }
         }
 

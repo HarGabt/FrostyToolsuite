@@ -334,7 +334,7 @@ namespace FrostyEditor.Windows
                 {
                     NewProject();
                     
-                    UpdateUI(true);
+                    InitialUILoad();
                 }
             }
         }
@@ -474,29 +474,32 @@ namespace FrostyEditor.Windows
             return result;
         }
 
-        private void UpdateUI(bool newProject = false)
+        private void InitialUILoad()
         {
-            if (m_project.RequiresNewProfile || newProject)
-            {
-                LoadedPluginsList.ItemsSource = App.PluginManager.LoadedPlugins;
+            LoadedPluginsList.ItemsSource = App.PluginManager.LoadedPlugins;
 
-                LoadPluginExtensions();
+            LoadPluginExtensions();
 
-                dataExplorer.ItemsSource = App.AssetManager.EnumerateEbx();
-                legacyExplorer.ItemsSource = App.AssetManager.EnumerateCustomAssets("legacy");
-            }
-            else
-            {
-                dataExplorer.RefreshItems();
-                legacyExplorer.RefreshItems();
-            }
+
+            dataExplorer.ItemsSource = App.AssetManager.EnumerateEbx();
+            legacyExplorer.ItemsSource = App.AssetManager.EnumerateCustomAssets("legacy");
             
             if(ProfilesLibrary.EnableExecution)
             {
                 LaunchButton.IsEnabled = true;
             }
         }
-        
+		
+        private void ResetItemsSources()
+        {
+            if (dataExplorer.ItemsSource != null)
+                dataExplorer.ItemsSource = null;
+            if (legacyExplorer.ItemsSource != null)
+                legacyExplorer.ItemsSource = null;
+            dataExplorer.ItemsSource = App.AssetManager.EnumerateEbx();
+            legacyExplorer.ItemsSource = App.AssetManager.EnumerateCustomAssets("legacy");
+        }
+
         private void NewProject()
         {
             m_autoSaveTimer?.Stop();
@@ -522,8 +525,7 @@ namespace FrostyEditor.Windows
 
             // clear all modifications
             App.AssetManager.Reset();
-            dataExplorer.RefreshAll();
-            legacyExplorer.RefreshAll();
+            ResetItemsSources();
 
             // create a new blank project
             m_project = new FrostyProject();
@@ -644,7 +646,7 @@ namespace FrostyEditor.Windows
                 
                 m_project = newProject;
 
-                UpdateUI();
+                ResetItemsSources();
 
                 legacyExplorer.ShowOnlyModified = false;
                 legacyExplorer.ShowOnlyModified = true;
@@ -967,8 +969,7 @@ namespace FrostyEditor.Windows
 
             FrostyTaskWindow.Show("Reverting Asset", "", (task) => { App.AssetManager.RevertAsset(entry, suppressOnModify: false); });
 
-            dataExplorer.RefreshAll();
-            legacyExplorer.RefreshAll();
+            ResetItemsSources();
         }
 
         private void contextMenuImportAsset_Click(object sender, RoutedEventArgs e)

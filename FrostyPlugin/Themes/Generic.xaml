@@ -238,7 +238,7 @@
 
                         <GridSplitter x:Name="gs" Grid.Row="2" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Height="3" Background="{StaticResource ControlBackground}" ResizeDirection="Rows"/>
 
-                        <ListView x:Name="PART_AssetListView" Grid.Row="3" HorizontalContentAlignment="Stretch" SelectionMode="Single" />
+                        <ListView x:Name="PART_AssetListView" Grid.Row="3" HorizontalContentAlignment="Stretch" SelectionMode="Extended" ScrollViewer.CanContentScroll="True" VirtualizingPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling" />
                         <Grid Grid.Row="2" Visibility="Hidden">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="3*"/>
@@ -1224,7 +1224,7 @@
                         <conv:AssetEntryToBitmapSourceConverter x:Key="AssetEntryToBitmapSourceConverter"/>
                     </ControlTemplate.Resources>
                     <Grid>
-                        <ListView x:Name="PART_AssetListView" Grid.Row="3" HorizontalContentAlignment="Stretch" SelectionMode="Single" ItemsSource="{TemplateBinding ItemsSource}">
+                        <ListView x:Name="PART_AssetListView" Grid.Row="3" HorizontalContentAlignment="Stretch" SelectionMode="Extended" ItemsSource="{TemplateBinding ItemsSource}" VirtualizingPanel.IsVirtualizing="True" VirtualizingStackPanel.VirtualizationMode="Recycling">
                             <ListView.ItemContainerStyle>
                                 <Style TargetType="ListViewItem" BasedOn="{StaticResource baseListViewItemStyle}">
                                     <Setter Property="ContextMenu" Value="{Binding Path=AssetContextMenu, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:FrostyAssetListView}}}"/>
@@ -1251,6 +1251,11 @@
                                     </Setter>
                                 </Style>
                             </ListView.ItemContainerStyle>
+                            <ListView.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <VirtualizingStackPanel />
+                                </ItemsPanelTemplate>
+                            </ListView.ItemsPanel>
                             <ListView.View>
                                 <GridView>
                                     <GridViewColumn Width="{Binding Path=ActualWidth, ElementName=gridHelper1}" HeaderTemplate="{StaticResource assetListViewAscendingSorting}">

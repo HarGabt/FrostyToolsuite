@@ -612,6 +612,7 @@ namespace DuplicationPlugin
             {
                 EbxAssetEntry entry = App.SelectedAsset as EbxAssetEntry;
                 EbxAsset asset = App.AssetManager.GetEbx(entry);
+				EbxAsset newAsset = null;
                 DuplicateAssetWindow win = new DuplicateAssetWindow(entry);
                 if (win.ShowDialog() == false)
                     return;
@@ -634,14 +635,19 @@ namespace DuplicationPlugin
                             }
                         }
                         task.Update("Duplicating asset...");
-                        extensions[key].DuplicateAsset(entry, newName, newType != null, newType);
+                    EbxAssetEntry newEntry = extensions[key].DuplicateAsset(entry, newName, newType != null, newType);
+                    newAsset = App.AssetManager.GetEbx(newEntry);
                     }
                     catch (Exception e)
                     {
                         App.Logger.Log($"Failed to duplicate {entry.Name}");
                     }
                 });
-                App.EditorWindow.DataExplorer.RefreshAll();
+                if (newAsset != null)
+                {
+                    App.EditorWindow.DataExplorer.ItemsSource = App.AssetManager.EnumerateEbx();
+                    App.EditorWindow.DataExplorer.SelectAsset(App.AssetManager.GetEbxEntry(newAsset.FileGuid));
+                }
             });
         }
     }
