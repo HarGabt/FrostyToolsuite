@@ -136,6 +136,7 @@
     <Compile Include="Attributes\RegisterUserShaderAttribute.cs" />
     <Compile Include="CodingStandards\FrostyCodingStandards.cs" />
     <Compile Include="Controls\FrostyBaseAssetEditor.cs" />
+    <Compile Include="Controls\FrostyHandledExceptionBox.cs" />
     <Compile Include="Controls\FrostyExceptionBox.cs" />
     <Compile Include="Controls\FrostyNotification.cs" />
     <Compile Include="Controls\VirtualizingTilePanel.cs" />

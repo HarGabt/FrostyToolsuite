@@ -1419,4 +1419,34 @@
         </Setter>
     </Style>
 
+    <!-- FrostyHandledExceptionBox -->
+    <Style TargetType="{x:Type local:FrostyHandledExceptionBox}">
+        <Setter Property="ContentTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <DataTemplate.Resources>
+                        <ctrl:WindowCloseCommand x:Key="CloseCommand"/>
+                    </DataTemplate.Resources>
+                    <Grid Background="{StaticResource ListBackground}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="26"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="38"/>
+                        </Grid.RowDefinitions>
+                        <!-- Warning text -->
+                        <TextBlock Grid.Row="0" Text="Warning" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="{StaticResource FontColor}" FontFamily="Global User Interface" FontSize="14" FontWeight="Bold"/>
+                        <!-- Crash text -->
+                        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Margin="8,0,8,0" BorderThickness="1" Padding="4">
+                            <TextBlock Text="{Binding WarningText, RelativeSource={RelativeSource AncestorType={x:Type local:FrostyHandledExceptionBox}}}" TextWrapping="Wrap" Foreground="White" FontFamily="Global User Interface" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </ScrollViewer>
+                        <!-- Ok button -->
+                        <StackPanel Grid.Row="2" Margin="8" FlowDirection="RightToLeft" Orientation="Horizontal">
+                            <Button Content="Ok" Width="75" Command="{StaticResource CloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"/>
+                        </StackPanel>
+                    </Grid>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
 </ResourceDictionary>

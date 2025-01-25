@@ -1181,7 +1181,7 @@ namespace FrostyCmd
                 writer.Write(0); // ignored res types
 
                 // Flags (MustAddChunks, EbxVersion, RequiresKey)
-                ProfileFlags pf = new ProfileFlags(0, 6, 1, 1);
+                ProfileFlags pf = new ProfileFlags(0, 6, 1);
                 pf.Write(writer);
 
                 blobs.Add(key, writer.ToByteArray());
@@ -1201,10 +1201,10 @@ namespace FrostyCmd
                 writer.Write(CreateSources("Patch;false", "Data;false"));
                 writer.WriteObfuscatedString("DragonAgeVeilguardSDK");
                 writer.Write(CreateBanner("dragonagetheveilguard"));
-                writer.WriteObfuscatedString("Game/_Shared/Textures/T_Default_Color_White_BC");
-                writer.WriteObfuscatedString("Game/_Shared/Textures/T_Default_N");
-                writer.WriteObfuscatedString("Game/_Shared/Textures/T_Default_Color_Black_BC");
-                writer.WriteObfuscatedString("Game/_Shared/Textures/T_Default_Color_White_BC");
+                writer.WriteObfuscatedString("Shaders/Common/UtilTextures/defaultbasecolor_c");
+                writer.WriteObfuscatedString("Shaders/Common/UtilTextures/defaultnormal_n");
+                writer.WriteObfuscatedString("Shaders/Common/UtilTextures/defaultbasecolor_c");
+                writer.WriteObfuscatedString("Shaders/Common/UtilTextures/defaultbasecolor_c");
                 writer.Write(0); // shared bundle names
                 writer.Write(0); // ignored res types
 

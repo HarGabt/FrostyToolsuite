@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Threading;
 using Frosty.Controls;
+using Frosty.Core.Controls;
 using FrostySdk;
 using Microsoft.Win32;
 
@@ -13,7 +15,7 @@ namespace Frosty.Core.Windows
 {
     public partial class FrostyProfileSelectWindow
     {
-        private readonly List<FrostyConfiguration> configurations = new List<FrostyConfiguration>();
+        private  List<FrostyConfiguration> configurations = new List<FrostyConfiguration>();
         private string selectedProfileName;
         
         public FrostyProfileSelectWindow()
@@ -21,34 +23,44 @@ namespace Frosty.Core.Windows
             InitializeComponent();
         }
 
-        private void ProfileSelectWindow_Loaded(object sender, RoutedEventArgs e)
+        private async void ProfileSelectWindow_Loaded(object sender, RoutedEventArgs e)
         {
             RefreshConfigurationList();
             
-            // TODO: @techdebt only call this once or when needed
-            ScanGames();
+            try
+            {
+                // TODO: @techdebt only call this once or when needed
+                await ScanGames();
+            }
+            catch
+            {
+                FrostyHandledExceptionBox.Show("An error occurred while scanning for games.\n\nPlease manually set the game executable(s).");
+            }
 
             RefreshConfigurationList();
         }
         
         private void RefreshConfigurationList()
         {
-            configurations.Clear();
-
-            foreach (string profile in Config.GameProfiles)
+            Dispatcher.Invoke(() =>
             {
-                try
-                {
-                    configurations.Add(new FrostyConfiguration(profile));
-                }
-                catch (System.IO.FileNotFoundException)
-                {
-                    Config.RemoveGame(profile); // couldn't find the exe, so remove it from the profile list
-                    Config.Save();
-                }
-            }
+                configurations.Clear();
 
-            ConfigurationListView.ItemsSource = configurations;
+                foreach (string profile in Config.GameProfiles)
+                {
+                    try
+                    {
+                        configurations.Add(new FrostyConfiguration(profile));
+                    }
+                    catch (System.IO.FileNotFoundException)
+                    {
+                        Config.RemoveGame(profile); // couldn't find the exe, so remove it from the profile list
+                        Config.Save();
+                    }
+                }
+
+                ConfigurationListView.ItemsSource = configurations;
+            });
         }
 
         private void SelectConfiguration()
@@ -63,7 +75,7 @@ namespace Frosty.Core.Windows
             }
         }
         
-        private async void ScanGames()
+        private async Task ScanGames()
         {
             await Task.Run((() =>
             {
@@ -137,7 +149,11 @@ namespace Frosty.Core.Windows
 
         private void RefreshButton_OnClicked(object sender, RoutedEventArgs e)
         {
-            ScanGames();
+            ScanGames().ContinueWith(t =>
+            {
+                // Refresh the configuration list after scanning is done
+                RefreshConfigurationList();
+            });
         }
         
         private void AddConfigurationButton_OnClick(object sender, RoutedEventArgs e)

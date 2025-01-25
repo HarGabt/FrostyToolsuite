@@ -4,6 +4,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using FrostySdk.Managers.Entries;
+using System.Runtime.Remoting.Messaging;
 
 namespace FrostySdk.Resources
 {
@@ -83,6 +84,12 @@ namespace FrostySdk.Resources
         public uint RangeStart { get; set; }
         public uint RangeEnd { get; set; }
         public uint[] Unknown3 { get; } = new uint[4];
+        public uint Unknown4 { get; set; } // unkn veilguard
+        public byte Unknown5 { get; set; } // mipmapcount2
+        public byte b3 { get; set; } // b3
+        public byte b4 { get; set; } // b4
+        public bool flag { get; set; } // flag
+        public uint Unknown9 { get; set; } // another int
         public Guid ChunkId
         {
             get => m_chunkId;
@@ -105,6 +112,12 @@ namespace FrostySdk.Resources
         public override void Read(NativeReader reader, AssetManager am, ResAssetEntry entry, ModifiedResource modifiedData)
         {
             base.Read(reader, am, entry, modifiedData);
+            
+            //using (FileStream fileStream = new FileStream(@"E:/" + entry.Filename, FileMode.Create, FileAccess.Write))
+            //{
+            //    reader.BaseStream.CopyTo(fileStream);
+            //    reader.BaseStream.Position = 0;
+            //}
 
             /* Texture Versions:
              * 10 - Unknown
@@ -160,19 +173,25 @@ namespace FrostySdk.Resources
 
             MipCount = reader.ReadByte();
             FirstMip = reader.ReadByte();
-            if (ProfilesLibrary.IsLoaded(ProfileVersion.NeedForSpeedUnbound, ProfileVersion.DeadSpace, ProfileVersion.DragonAgeVeilguard))
+            if (ProfilesLibrary.IsLoaded(ProfileVersion.NeedForSpeedUnbound, ProfileVersion.DeadSpace))
             {
                 reader.ReadByte();
             }
 
-            if (ProfilesLibrary.IsLoaded(ProfileVersion.Battlefield2042, ProfileVersion.NeedForSpeedUnbound, ProfileVersion.DeadSpace, ProfileVersion.DragonAgeVeilguard))
+            if (ProfilesLibrary.IsLoaded(ProfileVersion.Battlefield2042, ProfileVersion.NeedForSpeedUnbound, ProfileVersion.DeadSpace))
             {
                 Unknown3[0] = reader.ReadUInt();
             }
 
             if (ProfilesLibrary.IsLoaded(ProfileVersion.DragonAgeVeilguard))
             {
-                reader.ReadBytes(7); //idk
+                Unknown4 = reader.ReadUInt();
+                Unknown5 = reader.ReadByte(); //mipmap2
+                b3 = reader.ReadByte();
+                b4 = reader.ReadByte();
+                flag = reader.ReadBoolean();
+                Unknown9 = reader.ReadUInt();
+
             }
 
             m_chunkId = reader.ReadGuid();
@@ -217,7 +236,7 @@ namespace FrostySdk.Resources
             }
 
 #if FROSTY_DEVELOPER
-            Debug.Assert(reader.Position == reader.Length);
+            //Debug.Assert(reader.Position == reader.Length);
 #endif
 
             Data = am.GetChunk(am.GetChunkEntry(m_chunkId));
@@ -280,9 +299,19 @@ namespace FrostySdk.Resources
                     writer.Write(MipCount);
                 }
 
-                if (ProfilesLibrary.IsLoaded(ProfileVersion.Battlefield2042, ProfileVersion.NeedForSpeedUnbound, ProfileVersion.DeadSpace, ProfileVersion.DragonAgeVeilguard))
+                if (ProfilesLibrary.IsLoaded(ProfileVersion.Battlefield2042, ProfileVersion.NeedForSpeedUnbound, ProfileVersion.DeadSpace))
                 {
                     writer.Write(Unknown3[0]);
+                }
+				
+                if (ProfilesLibrary.IsLoaded(ProfileVersion.DragonAgeVeilguard))
+                {
+                    writer.Write(Unknown4);
+                    writer.Write(MipCount); // mip count #2
+                    writer.Write(b3);
+                    writer.Write(b4);
+                    writer.Write(flag);
+                    writer.Write(Unknown9);
                 }
 
                 writer.Write(m_chunkId);
@@ -339,7 +368,9 @@ namespace FrostySdk.Resources
                     }
                 }
 
-                return writer.ToByteArray();
+                byte[] result = writer.ToByteArray();
+                //File.WriteAllBytes(@"E:\writeOutput.bin", result);
+                return result;
             }
         }
 

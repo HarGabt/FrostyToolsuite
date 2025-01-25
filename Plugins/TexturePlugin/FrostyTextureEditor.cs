@@ -436,6 +436,14 @@ namespace TexturePlugin
                                 // just copy old flags (minus gamma) to new texture
                                 TextureFlags oldFlags = m_textureAsset.Flags & ~(TextureFlags.SrgbGamma);
                                 newTextureAsset.Flags |= oldFlags;
+								
+                                // Veilguard
+                                newTextureAsset.Unknown4 = m_textureAsset.Unknown4;
+                                newTextureAsset.Unknown5 = m_textureAsset.Unknown5;
+                                newTextureAsset.b3 = m_textureAsset.b3;
+                                newTextureAsset.b4 = m_textureAsset.b4;
+                                newTextureAsset.flag = m_textureAsset.flag;
+                                newTextureAsset.Unknown9 = m_textureAsset.Unknown9;
 
                                 // rejig mips/slices
                                 if (newTextureAsset.Type == TextureType.TT_Cube || newTextureAsset.Type == TextureType.TT_2dArray)
