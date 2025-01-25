@@ -532,7 +532,7 @@ namespace Frosty.ModSupport
                                 if (!tocFlags.HasFlag(InternalFlags.HasInlineBundle))
                                 {
                                     MemoryStream ms = new MemoryStream();
-                                    using (BinarySbWriter subWriter = new BinarySbWriter(ms, true))
+                                    using (BinarySbWriter subWriter = new BinarySbWriter(ms, true, endian))
                                         subWriter.Write(bundleObj);
 
                                     byte[] bundleBuffer = ms.ToArray();
