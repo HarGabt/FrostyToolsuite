@@ -6,6 +6,15 @@ selphea's changes:
 - Implemented workaround for NFS Unbound updates and hotfixes that kept breaking Frosty Tool Suite's modding functionality since Volume 3.
 - Fixed launching via Steam, meaning DatapathFix is not required to use with this fork
 
+(25.12.03)
+--------
+- Shadercache symlinking
+- Some changes in mesh preview, dunno how this will affect NFS Unbound
+- Attempt to fix some issues with Profile Selection
+- Enable initfs modding for NFS Unbound
+
+(24.12.03)
+--------
 Changes in my fork:
 - Implemented several backports from 1.0.6.2, 1.0.6.3 and potentially, 1.0.6.4 (as long as those are commited into the branch and this fork successfully compiles with them)
 - Added experimental support of Dragon Age: Veilguard (credits to wavebend and CosmicCode, but for Veilguard modding I'd recommend you using their fork instead of mine)

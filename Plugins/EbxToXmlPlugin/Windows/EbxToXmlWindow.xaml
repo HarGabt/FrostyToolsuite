@@ -1,0 +1,62 @@
+﻿<ctrl:FrostyDockableWindow x:Class="EbxToXmlPlugin.Windows.EbxToXmlWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:EbxToXmlPlugin.Windows"
+        xmlns:ctrl="clr-namespace:Frosty.Controls;assembly=FrostyControls"
+        xmlns:core="clr-namespace:Frosty.Core.Controls;assembly=FrostyCore"
+        mc:Ignorable="d"
+        Title="Export Ebx to Xml" Height="300" Width="350" ResizeMode="NoResize" FrostyLoaded="FrostyDockableWindow_FrostyLoaded" WindowStartupLocation="CenterScreen">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/FrostyControls;component/Themes/Generic.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Grid Background="{StaticResource ListBackground}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+            <RowDefinition Height="38"/>
+        </Grid.RowDefinitions>
+
+        <!-- Warning message -->
+        <Border Grid.Row="0" Background="{StaticResource ListBackground}" Padding="8" BorderBrush="White" BorderThickness="1" Margin="5">
+            <TextBlock Text="⚠ This will export all Ebx files from the game to disk. This process can take a considerable amount of time."
+                       TextWrapping="Wrap" Foreground="White" HorizontalAlignment="Center"/>
+        </Border>
+
+        <!-- Main content -->
+        <Grid x:Name="PageOne" Grid.Row="1" Visibility="Visible" Background="{StaticResource ListBackground}" Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <!-- Export as YAML Section -->
+            <StackPanel Grid.Row="0" Margin="0,0,0,10">
+                <CheckBox x:Name="exportAsYamlCheckBox" Content="Export as Yaml" Padding="4, 0, 0, 4" Foreground="White"/>
+            </StackPanel>
+
+            <!-- Skip Folders Section -->
+            <StackPanel Grid.Row="1" Margin="0,0,0,10">
+                <TextBlock Text="Skip the following folders?" Margin="0,0,0,5" Foreground="White"/>
+                <CheckBox x:Name="skipConversationsCheckBox" Content="Conversations" Padding="4, 0, 0, 4" Foreground="White"/>
+                <CheckBox x:Name="skipVirtualCheckBox" Content="Virtual" Padding="4, 0, 0, 4" Foreground="White"/>
+            </StackPanel>
+        </Grid>
+
+        <!-- Buttons -->
+        <Border Grid.Row="2">
+            <Grid Margin="8">
+                <Button x:Name="cancelButton" Content="Cancel" HorizontalAlignment="Left" Width="75" Click="CancelButton_Click"/>
+                <Button x:Name="exportButton" Content="Export" HorizontalAlignment="Right" Width="75" Click="ExportButton_Click"/>
+            </Grid>
+        </Border>
+    </Grid>
+</ctrl:FrostyDockableWindow>

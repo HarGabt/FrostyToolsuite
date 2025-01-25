@@ -99,6 +99,7 @@ namespace Frosty.Core
         public virtual void GetSupportedExportTypes(List<AssetExportType> exportTypes)
         {
             exportTypes.Add(new AssetExportType("bin", "Binary File"));
+            exportTypes.Add(new AssetExportType("yaml", "YAML File"));
 			exportTypes.Add(new AssetExportType("xml", "XML File"));
         }
 
@@ -158,6 +159,12 @@ namespace Frosty.Core
                 ExportToXml(entry, path);
                 return true;
             }
+			
+            if (filterType == "yaml")
+            {
+                ExportToYaml(entry, path);
+                return true;
+            }
             
             if (filterType == "bin")
             {
@@ -188,8 +195,19 @@ namespace Frosty.Core
         private void ExportToXml(EbxAssetEntry entry, string path)
         {
             EbxAsset asset = App.AssetManager.GetEbx(entry);
-            using (EbxXmlWriter writer = new EbxXmlWriter(new FileStream(path, FileMode.Create), App.AssetManager))
-                writer.WriteObjects(asset.Objects);
+            int tabSize = Config.Get<int>("ExportTabSize", 2);
+            bool exportOffsets = Config.Get<bool>("ExportWithOffsets", false);
+            using (EbxXmlWriter writer = new EbxXmlWriter(asset, new FileStream(path, FileMode.Create), App.AssetManager, tabSize, exportOffsets))
+                writer.WriteObjects();
+        }
+        // exports the asset to yaml
+        private void ExportToYaml(EbxAssetEntry entry, string path)
+        {
+            EbxAsset asset = App.AssetManager.GetEbx(entry);
+            int tabSize = Config.Get<int>("ExportTabSize", 2);
+            bool exportOffsets = Config.Get<bool>("ExportWithOffsets", false);
+            using (EbxYamlWriter writer = new EbxYamlWriter(asset, new FileStream(path, FileMode.Create), App.AssetManager, tabSize, exportOffsets))
+                writer.WriteObjects();
         }
 
         // exports the asset as raw ebx

@@ -118,12 +118,14 @@ namespace Frosty.Core.Windows
         [Description("Enables autosaving for projects.")]
         [EbxFieldMeta(EbxFieldType.Boolean)]
         public bool AutosaveEnabled { get; set; } = true;
+		
         [Category("Autosave")]
         [DisplayName("Period")]
         [Description("How often to autosave the project. Value is defined in minutes.")]
         [EbxFieldMeta(EbxFieldType.Int32)]
         [DependsOn("AutosaveEnabled")]
         public int AutosavePeriod { get; set; } = 5;
+		
         [Category("Autosave")]
         [DisplayName("Max Saves")]
         [Description("Maximum number of autosave files to generate per project.")]
@@ -136,11 +138,23 @@ namespace Frosty.Core.Windows
         [Description("Size of opened tabs in the Editor.")]
         [EbxFieldMeta(EbxFieldType.Int32)]
         public int TextEditorTabSize { get; set; } = 4;
+		
         [Category("Text Editor")]
         [DisplayName("Indent on Enter")]
         [Description("Indents text upon pressing the Enter key.")]
         [EbxFieldMeta(EbxFieldType.Boolean)]
         public bool TextEditorIndentOnEnter { get; set; } = false;
+
+        [Category("Export to XML")]
+        [DisplayName("Tab Size")]
+        [Description("Tab size indentation to use for XML or YAML export and related plugins.")]
+        [EbxFieldMeta(EbxFieldType.Int32)]
+        public int ExportTabSize { get; set; } = 2;
+        [Category("Export to XML")]
+        [DisplayName("Export debug offsets")]
+        [Description("Adds hexadecimal offset tags to the exported XML or YAML.")]
+        [EbxFieldMeta(EbxFieldType.Boolean)]
+        public bool ExportWithOffsets { get; set; } = false;
 
         [Category("Discord RPC")]
         [DisplayName("Enabled")]
@@ -197,6 +211,10 @@ namespace Frosty.Core.Windows
             DiscordEnabled = Config.Get<bool>("DiscordRPCEnabled", false);
             ModSettingsAuthor = Config.Get<string>("ModAuthor", "");
 
+
+            ExportTabSize = Config.Get<int>("ExportTabSize", 2);
+            ExportWithOffsets = Config.Get<bool>("ExportWithOffsets", false);
+
             AssetDisplayModuleInId = Config.Get<bool>("DisplayModuleInId", false);
             RememberChoice = Config.Get<bool>("UseDefaultProfile", false);
 
@@ -223,6 +241,10 @@ namespace Frosty.Core.Windows
 
             Config.Add("DiscordRPCEnabled", DiscordEnabled);
             Config.Add("ModAuthor", ModSettingsAuthor);
+			
+            Config.Add("ExportTabSize", ExportTabSize);
+            Config.Add("ExportWithOffsets", ExportWithOffsets);
+
             Config.Add("DisplayModuleInId", AssetDisplayModuleInId);
             Config.Add("UseDefaultProfile", RememberChoice);
 
