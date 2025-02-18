@@ -29,6 +29,7 @@ using FrostySdk;
 [assembly: PluginNotValidForProfile((int)ProfileVersion.DragonAgeInquisition)]
 [assembly: PluginNotValidForProfile((int)ProfileVersion.MassEffectAndromeda)]
 [assembly: PluginNotValidForProfile((int)ProfileVersion.Anthem)]
+[assembly: PluginNotValidForProfile((int)ProfileVersion.DeadSpace)]
 [assembly: PluginNotValidForProfile((int)ProfileVersion.Fifa17)]
 [assembly: PluginNotValidForProfile((int)ProfileVersion.Fifa18)]
 [assembly: PluginNotValidForProfile((int)ProfileVersion.Fifa19)]

@@ -25,6 +25,7 @@ using System.Windows;
 [assembly: PluginDisplayName("Bioware Localization Plugin")]
 [assembly: PluginAuthor("GalaxyMan2015 and KrrKs")]
 [assembly: PluginVersion("1.1.1.1")]
+[assembly: PluginValidForProfile((int)ProfileVersion.DeadSpace)]
 [assembly: PluginValidForProfile((int)ProfileVersion.DragonAgeInquisition)]
 [assembly: PluginValidForProfile((int)ProfileVersion.MassEffectAndromeda)]
 [assembly: PluginValidForProfile((int)ProfileVersion.Anthem)]

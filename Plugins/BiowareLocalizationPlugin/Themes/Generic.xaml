@@ -89,6 +89,7 @@
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
                                 <Button Grid.Column="0" Name="PART_AddEdit" ClickMode="Press" Margin="1,1,2,1" Padding="10,0,10,0"
                                         ToolTip="Edit a selected Text or add a new one">Add / Edit</Button>
@@ -100,9 +101,13 @@
                                 <Button Grid.Column="3" Name="PART_ShowTextInfo" ClickMode="Press" Margin="1,1,2,1" Padding="10,0,10,0"
                                         ToolTip="Show some miscellaneous information about the selected text in the vanilla resource(s)"
                                         ToolTipService.ShowOnDisabled="True">Show Text Info</Button>
-                                <Button Grid.Column="5" Name="PART_Export" ClickMode="Press" Margin="1,1,2,1" Padding="10,0,10,0"
+                                <CheckBox Grid.Column="5" Name="PART_ExportSelection" IsThreeState="False" Margin="6,2,2,1">
+                                    <Label Content="Export selection only" Margin="0,-5,0,0"
+                                                       ToolTip="Only export the currently selected text."/>
+                                </CheckBox>
+                                <Button Grid.Column="6" Name="PART_Export" ClickMode="Press" Margin="1,1,2,1" Padding="10,0,10,0"
                                         ToolTip="Exports the modified text from the currently selected language into an .xml file">Export</Button>
-                                <Button Grid.Column="6" Name="PART_Import" ClickMode="Press" Margin="1,1,2,1" Padding="10,0,10,0"
+                                <Button Grid.Column="7" Name="PART_Import" ClickMode="Press" Margin="1,1,2,1" Padding="10,0,10,0"
                                         ToolTip="Imports texts from an .xml file">Import</Button>
                             </Grid>
                             

@@ -13,7 +13,7 @@ using System;
 namespace BiowareLocalizationPlugin.LocalizedResources
 {
 
-    public class LocalizedStringResource : Resource
+    public partial class LocalizedStringResource : Resource
     {
 
         /// <summary>
@@ -81,7 +81,7 @@ namespace BiowareLocalizationPlugin.LocalizedResources
         /// <summary>
         /// The header information of the localization resource.
         /// </summary>
-        private ResourceHeader m_headerData;
+        private object m_headerData;
 
         /// <summary>
         /// The default encoding's root node. Note that the rootNode itself is not part of the serialized data!
@@ -92,6 +92,12 @@ namespace BiowareLocalizationPlugin.LocalizedResources
         /// Byte array of currently unknown data packed between the header list of string positions, and the actual text entries.
         /// </summary>
         private List<byte[]> m_unknownData;
+
+
+        /// <summary>
+        /// Applicable for DA:Veilguard+ (and should be applicable to Dead Space Remake), represents the (optional) section between the hashes and the strings
+        /// </summary>
+        private List<uint> m_optionalSection;
 
         /// <summary>
         /// Ids and texts of Declinated adjectives for creafted items in DA:I
@@ -111,12 +117,22 @@ namespace BiowareLocalizationPlugin.LocalizedResources
 
             base.Read(reader, am, entry, modifiedData);
 
+            //using (FileStream fileStream = new FileStream(@"E:/" + entry.Filename, FileMode.Create, FileAccess.Write))
+            //{
+            //    reader.BaseStream.CopyTo(fileStream);
+            //    reader.BaseStream.Position = 0;
+            //}
+
             Name = new StringBuilder(entry.Filename)
                 .Append(" - ")
                 .Append(entry.Name)
                 .ToString();
 
-            if (ProfilesLibrary.DataVersion == (int)ProfileVersion.Anthem)
+            if (ProfilesLibrary.DataVersion == (int)ProfileVersion.DeadSpace)
+            {
+                ReadVeilguardStrings(reader, entry);
+            }
+            else if (ProfilesLibrary.DataVersion == (int)ProfileVersion.Anthem)
             {
                 ReadAnthemStrings(reader, entry);
             }
@@ -139,6 +155,75 @@ namespace BiowareLocalizationPlugin.LocalizedResources
 
         public override byte[] SaveBytes()
         {
+            if (ProfilesLibrary.DataVersion == (int)ProfileVersion.DeadSpace)
+            {
+                return SaveBytesV2();
+            }
+            else
+            {
+                return SaveBytesV1();
+            }
+        }
+        private byte[] SaveBytesV2()
+        {
+            if (!(m_headerData is ResourceHeaderV2 header))
+            {
+                App.Logger.Log("Wrong header");
+                return null;
+            }
+            SortedDictionary<uint, string> primaryTextsToWrite = new SortedDictionary<uint, string>();
+            foreach (var entry in GetAllPrimaryTexts())
+            {
+                primaryTextsToWrite[entry.Item1] = entry.Item2;
+            }
+            using (NativeWriter writer = new NativeWriter(new MemoryStream()))
+            {
+                writer.Write(header.Unknown1);
+                writer.Write(header.Unknown2);
+                writer.Write(header.UnkHash);
+                writer.Write((uint)primaryTextsToWrite.Count);
+                writer.Write(header.Unknown3);
+                writer.Write(header.UnkCount);
+                writer.Write((uint)primaryTextsToWrite.Count);
+                writer.Write(new byte[0x10]);
+                int index = 0;
+                foreach (var kvp in primaryTextsToWrite)
+                {
+                    uint hash = kvp.Key;
+                    writer.Write((uint)index);
+                    writer.Write(hash);
+                    writer.Write(0);
+                    writer.Write(0);
+                    index++;
+                }
+                for (int i = 0; i < header.UnkCount; i++)
+                {
+                    writer.Write(m_optionalSection[i]);
+                    writer.Write(0);
+                    writer.Write(0);
+                }
+                index = 0; 
+                foreach (var kvp in primaryTextsToWrite)
+                {
+                    byte[] utf8BinaryStr = Encoding.UTF8.GetBytes(kvp.Value);
+                    writer.Write(index);
+                    writer.Write(utf8BinaryStr.Length + 1); // +1 for null termination
+                    writer.Write(utf8BinaryStr);
+                    writer.Write((byte)0x00);
+                    index++;
+                }
+                byte[] result = writer.ToByteArray();
+                //File.WriteAllBytes(@"E:\globalmaster_m.bin", result);
+                return result;
+            }
+        }
+        private byte[] SaveBytesV1()
+        {
+            if (!(m_headerData is ResourceHeaderV1 header))
+            {
+                App.Logger.Log("Wrong header");
+                return null;
+            }
 
             // remove these logs
             if (m_printVerificationTexts) { App.Logger.Log("Writing Texts for <{0}>", Name); }
@@ -158,7 +243,7 @@ namespace BiowareLocalizationPlugin.LocalizedResources
             List<SortedDictionary<uint, string>> allTexts = GetAllSortedTextsToWrite();
             HuffmanNode newRootNode = GetEncodingRootNode(allTexts);
 
-            uint nodeOffset = m_headerData.NodeOffset;
+            uint nodeOffset = header.NodeOffset;
 
             // flatten the tree, we need to list representation again...
             List<HuffmanNode> nodeList = ResourceUtils.GetNodeListToWrite(newRootNode);
@@ -177,7 +262,7 @@ namespace BiowareLocalizationPlugin.LocalizedResources
             List<DataCountAndOffsets> recalculatedAdditionalOffsets = new List<DataCountAndOffsets>();
 
             // one for the money: No idea what this is
-            foreach (DataCountAndOffsets unknownDef in m_headerData.FirstUnknownDataDefSegments)
+            foreach (DataCountAndOffsets unknownDef in header.FirstUnknownDataDefSegments)
             {
                 uint byteBlockCount8 = unknownDef.Count;
                 blockOffset += lastBlockSize;
@@ -213,15 +298,15 @@ namespace BiowareLocalizationPlugin.LocalizedResources
             {
 
                 // Then write the type dependent header data
-                writer.Write(ResourceHeader.Magic);
+                writer.Write(ResourceHeaderV1.Magic);
 
-                writer.Write(m_headerData.Unknown1);
+                writer.Write(header.Unknown1);
 
                 writer.Write(newDataOffset);
 
-                writer.Write(m_headerData.Unknown2);
-                writer.Write(m_headerData.Unknown3);
-                writer.Write(m_headerData.Unknown4);
+                writer.Write(header.Unknown2);
+                writer.Write(header.Unknown3);
+                writer.Write(header.Unknown4);
 
                 writer.Write(newNodeCount);
                 writer.Write(nodeOffset);
@@ -484,7 +569,6 @@ namespace BiowareLocalizationPlugin.LocalizedResources
         /// <returns></returns>
         public bool ContainsDeclinatedAdjectives()
         {
-
             bool modifiedAdjectivesExist = ContainsModifiedDeclinatedAdjectives();
             return DragonAgeDeclinatedCraftingNames.ContainsAdjectives || modifiedAdjectivesExist;
         }
@@ -656,7 +740,58 @@ namespace BiowareLocalizationPlugin.LocalizedResources
             }
 
             // revert the metadata just in case
-            ReplaceMetaData(m_headerData.DataOffset);
+            if (m_headerData is ResourceHeaderV1 header)
+            {
+                ReplaceMetaData(header.DataOffset);
+            }
+        }
+        /// <summary>
+        /// Fills the String list for Dragon Age The Veilguard.
+        /// </summary>
+        /// <param name="reader">the data reader.</param>
+        /// <param name="entry">the res asset.</param>
+        private void ReadVeilguardStrings(NativeReader reader, ResAssetEntry entry)
+        {
+            // prevent crash for these two
+            DragonAgeDeclinatedCraftingNames = new DragonAgeDeclinatedAdjectiveTuples(0);
+            m_unknownData = new List<byte[]>();
+            m_headerData = ResourceUtils.ReadHeaderV2(reader);
+            if (!(m_headerData is ResourceHeaderV2 header))
+            {
+                return;
+            }
+            reader.Position += 0x10;
+            var idToHashMapping = new Dictionary<uint, uint>();
+            for (int i = 0; i < header.StringCount; i++)
+            {
+                uint stringId = reader.ReadUInt();
+                uint hash = reader.ReadUInt();
+                reader.Position += 8;
+                if (!idToHashMapping.ContainsKey(stringId))
+                    idToHashMapping[stringId] = hash;
+            }
+            m_optionalSection = new List<uint>();
+            for (int i = 0; i < header.UnkCount; i++)
+            {
+                m_optionalSection.Add(reader.ReadUInt());
+                reader.Position += 8;
+            }
+            while (reader.Position < reader.Length)
+            {
+                uint stringId = reader.ReadUInt();
+                int stringLen = reader.ReadInt();
+                byte[] nullTerminatedStringBytes = reader.ReadBytes(stringLen);
+                string str = Encoding.UTF8.GetString(nullTerminatedStringBytes, 0, stringLen - 1);
+                if (idToHashMapping.ContainsKey(stringId))
+                {
+                    var hash = idToHashMapping[stringId];
+                    m_localizedStrings.Add(new LocalizedStringWithId(hash, (int)reader.Position, str));
+                }
+                else
+                {
+                    App.Logger.Log("Cannot find id {0} in {1}", stringId, entry.Name);
+                }
+            }
         }
 
         /// <summary>
@@ -671,7 +806,7 @@ namespace BiowareLocalizationPlugin.LocalizedResources
             _ = reader.ReadUInt();
 
             // initialize these, so there is no accidental crash in anthem
-            m_headerData = new ResourceHeader();
+            m_headerData = new ResourceHeaderV1();
             m_unknownData = new List<byte[]>();
             DragonAgeDeclinatedCraftingNames = new DragonAgeDeclinatedAdjectiveTuples(0);
 
@@ -717,36 +852,40 @@ namespace BiowareLocalizationPlugin.LocalizedResources
         /// <param name="reader"></param>
         private void Read_MassEffect_DragonAge_Strings(NativeReader reader)
         {
+			m_headerData = ResourceUtils.ReadHeaderV1(reader);
 
-            m_headerData = ResourceUtils.ReadHeader(reader);
+            if (!(m_headerData is ResourceHeaderV1 header))
+            {
+                return;
+            }
 
             if (m_printVerificationTexts)
             {
-                App.Logger.Log("Read header data for <{0}>: {1}", Name, m_headerData.ToString());
+                App.Logger.Log("Read header data for <{0}>: {1}", Name, header.ToString());
             }
 
             // position of huffman nodes is header.nodeOffset
-            PositionSanityCheck(reader, m_headerData.NodeOffset, "Header");
-            m_encodingRootNode = ResourceUtils.ReadNodes(reader, m_headerData.NodeCount, out List<char> leafCharacters);
+            PositionSanityCheck(reader, header.NodeOffset, "Header");
+            m_encodingRootNode = ResourceUtils.ReadNodes(reader, header.NodeCount, out List<char> leafCharacters);
             m_supportedCharacters = leafCharacters;
 
             // position of string id and position is right after huffman nodes: header.stringsOffset
-            PositionSanityCheck(reader, m_headerData.StringsOffset, "HuffmanCoding");
-            ReadStringData(reader, m_headerData.StringsCount);
+            PositionSanityCheck(reader, header.StringsOffset, "HuffmanCoding");
+            ReadStringData(reader, header.StringsCount);
 
             // position after string data is the start of header.unknownDataDef[0].offset
-            PositionSanityCheck(reader, m_headerData.FirstUnknownDataDefSegments[0].Offset, "StringData");
+            PositionSanityCheck(reader, header.FirstUnknownDataDefSegments[0].Offset, "StringData");
             m_unknownData = new List<byte[]>();
-            foreach (DataCountAndOffsets dataCountAndOffset in m_headerData.FirstUnknownDataDefSegments)
+            foreach (DataCountAndOffsets dataCountAndOffset in header.FirstUnknownDataDefSegments)
             {
                 m_unknownData.Add(ResourceUtils.ReadUnkownSegment(reader, dataCountAndOffset));
             }
 
-            DragonAgeDeclinatedCraftingNames = new DragonAgeDeclinatedAdjectiveTuples(m_headerData.MaxDeclinations);
+            DragonAgeDeclinatedCraftingNames = new DragonAgeDeclinatedAdjectiveTuples(header.MaxDeclinations);
 
-            for (int i = 0; i < m_headerData.DragonAgeDeclinatedCraftingNamePartsCountAndOffset.Count; i++)
+            for (int i = 0; i < header.DragonAgeDeclinatedCraftingNamePartsCountAndOffset.Count; i++)
             {
-                DataCountAndOffsets dataCountAndOffset = m_headerData.DragonAgeDeclinatedCraftingNamePartsCountAndOffset[i];
+                DataCountAndOffsets dataCountAndOffset = header.DragonAgeDeclinatedCraftingNamePartsCountAndOffset[i];
 
                 List<LocalizedStringWithId> declinatedAdjectives = ReadDragonAgeDeclinatedItemNamePartIdsAndOffsets(reader, dataCountAndOffset);
 
@@ -830,16 +969,16 @@ namespace BiowareLocalizationPlugin.LocalizedResources
         /// <param name="reader"></param>
         private void DataOffsetReaderPositionSanityCheck(NativeReader reader)
         {
-
+            var header = m_headerData as ResourceHeaderV1;
             uint currentPosition = (uint)reader.Position;
-            uint dataOffsetFromHeader = m_headerData.DataOffset;
+            uint dataOffsetFromHeader = header.DataOffset;
             if (currentPosition != dataOffsetFromHeader)
             {
 
                 uint dataOffsetFromMeta = BitConverter.ToUInt32(resMeta, 0);
                 if (currentPosition == dataOffsetFromMeta)
                 {
-                    App.Logger.LogWarning("Header data for for resource <{0}> is incorrect. 8ByteBlockData is stated to end at <{1}>, instead current reader position is <{2}>, as stated in the metadata!", Name, m_headerData.DataOffset, currentPosition);
+                    App.Logger.LogWarning("Header data for for resource <{0}> is incorrect. 8ByteBlockData is stated to end at <{1}>, instead current reader position is <{2}>, as stated in the metadata!", Name, header.DataOffset, currentPosition);
                     return;
                 }
 

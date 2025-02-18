@@ -1,11 +1,15 @@
 ﻿using BiowareLocalizationPlugin.Controls;
 using Frosty.Core;
 using FrostySdk;
+using System.Windows.Media;
 
 namespace BiowareLocalizationPlugin
 {
     public class BioWareLocalizedStringEditorMenuExtension : MenuExtension
     {
+
+        internal static ImageSource imageSource = new ImageSourceConverter().ConvertFromString("pack://application:,,,/BiowareLocalizationPlugin;component/Images/LocalizedStringViewer.png") as ImageSource;
+        public override ImageSource Icon => imageSource;
 
         private const string ITEM_NAME = "Bioware Localized String Editor";
 

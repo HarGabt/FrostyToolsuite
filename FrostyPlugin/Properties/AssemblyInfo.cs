@@ -49,6 +49,7 @@ using System.Windows;
 
 [assembly: RegisterGlobalTypeEditor("LocalizedStringHash", typeof(FrostyLocalizedStringHashEditor))]
 [assembly: RegisterGlobalTypeEditor("LocalizedStringReference", typeof(FrostyLocalizedStringReferenceEditor))]
+[assembly: RegisterGlobalTypeEditor("BWLocalizedStringReference", typeof(FrostyLocalizedStringReferenceEditor))]
 [assembly: RegisterGlobalTypeEditor("Vec2", typeof(FrostyVec2Editor))]
 [assembly: RegisterGlobalTypeEditor("Vec3", typeof(FrostyVec3Editor))]
 [assembly: RegisterGlobalTypeEditor("Vec4", typeof(FrostyVec4Editor))]

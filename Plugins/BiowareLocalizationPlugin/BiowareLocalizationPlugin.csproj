@@ -38,7 +38,12 @@
   
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="xcopy /Y &quot;$(TargetPath)&quot; &quot;$(SolutionDir)$(OutDir)Plugins\&quot;" />
+    <Exec Command="xcopy /Y &quot;$(TargetPath)&quot; &quot;$(SolutionDir)..\FrostyModManager\$(OutDir)Plugins\&quot;" />
   </Target>
+  
+  <ItemGroup>
+    <None Remove="Images\LocalizedStringViewer.png" />
+  </ItemGroup>
   
   <ItemGroup>
     <ProjectReference Include="..\..\FrostyControls\FrostyControls.csproj">
@@ -57,5 +62,9 @@
       <Private>false</Private>
     </ProjectReference>
 	<Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Resource Include="Images\LocalizedStringViewer.png" />
   </ItemGroup>
 </Project>
