@@ -16,15 +16,10 @@ namespace BiowareLocalizationPlugin.ExportImport
 {
     public class XmlExporter
     {
-        public static void Export(BiowareLocalizedStringDatabase textDB, string languageFormat)
+        public static void Export(BiowareLocalizedStringDatabase textDB, string languageFormat, bool exportSelectionOnly)
         {
 
-            bool exportAll = false;
-            if (Config.Get(BiowareLocalizationPluginOptions.ASK_XML_EXPORT_OPTIONS, false, ConfigScope.Global))
-            {
-                var result = FrostyMessageBox.Show("Export All Texts?\r\nSelecting 'no' will export modified texts only.", "Export Options", MessageBoxButton.YesNo);
-                exportAll = MessageBoxResult.Yes == result;
-            }
+            bool exportAll = !exportSelectionOnly;
 
             FrostySaveFileDialog saveDialog = new FrostySaveFileDialog("Save Custom Texts", "*.xml (XML File)|*.xml", "LocalizedTexts_", languageFormat+"_texts");
             if (saveDialog.ShowDialog())

@@ -11,9 +11,22 @@ namespace BiowareLocalizationPlugin.LocalizedResources
     }
 
     /// <summary>
-    /// A class containing header information from a resource.
+    /// A class containing header information from a resource. (Dead Space)
     /// </summary>
-    public class ResourceHeader
+    public class ResourceHeaderV2
+    {
+        public uint Unknown1;       // zero
+        public uint Unknown2;       // non-null
+        public uint UnkHash;        // hash?
+        public uint StringCount;    // string count #1  
+        public uint Unknown3;       // zero
+        public uint UnkCount;       // # of strings in the optional section
+        public uint StringCount2;   // string count #2, = same as #1
+    }
+    /// <summary>
+    /// A class containing header information from a resource. (DA:I, ME:A)
+    /// </summary>
+    public class ResourceHeaderV1
     {
         public const uint Magic = 0xd78b40eb;
 

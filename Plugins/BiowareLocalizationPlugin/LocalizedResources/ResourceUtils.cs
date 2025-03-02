@@ -21,18 +21,38 @@ namespace BiowareLocalizationPlugin.LocalizedResources
         }
 
         /// <summary>
+        /// Reads the header information from the given reader and asset entry. (Dead Space Remake)
+        /// </summary>
+        /// <param name="reader"></param>
+        /// <returns></returns>
+        public static ResourceHeaderV2 ReadHeaderV2(NativeReader reader)
+        {
+            ResourceHeaderV2 header = new ResourceHeaderV2
+            {
+                Unknown1 = reader.ReadUInt(),
+                Unknown2 = reader.ReadUInt(),
+                UnkHash = reader.ReadUInt(),
+                StringCount = reader.ReadUInt(),
+                Unknown3 = reader.ReadUInt(),
+                UnkCount = reader.ReadUInt(),
+                StringCount2 = reader.ReadUInt()
+            };
+            return header;
+        }
+
+        /// <summary>
         /// Reads the header information from the given reader and asset entry.
         /// </summary>
         /// <param name="reader"></param>
         /// <returns></returns>
-        public static ResourceHeader ReadHeader(NativeReader reader)
+        public static ResourceHeaderV1 ReadHeaderV1(NativeReader reader)
         {
                  
             uint magic = reader.ReadUInt();
-            if (magic != ResourceHeader.Magic)
+            if (magic != ResourceHeaderV1.Magic)
                 throw new InvalidDataException();
 
-            ResourceHeader header = new ResourceHeader
+            ResourceHeaderV1 header = new ResourceHeaderV1
             {
                 Unknown1 = reader.ReadUInt(),
                 DataOffset = reader.ReadUInt(),

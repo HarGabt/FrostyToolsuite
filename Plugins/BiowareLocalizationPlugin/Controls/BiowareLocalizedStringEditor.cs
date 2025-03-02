@@ -2,6 +2,7 @@
 using Frosty.Core;
 using Frosty.Core.Controls;
 using Frosty.Core.Windows;
+using FrostySdk;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -34,6 +35,7 @@ namespace BiowareLocalizationPlugin.Controls
     [TemplatePart(Name = PART_Remove, Type = typeof(Button))]
     [TemplatePart(Name = PART_LanguageSelector, Type = typeof(ComboBox))]
     [TemplatePart(Name = PART_RefreshButton, Type = typeof(Button))]
+    [TemplatePart(Name = PART_ExportSelection, Type = typeof(CheckBox))]
     [TemplatePart(Name = PART_Export, Type = typeof(Button))]
     [TemplatePart(Name = PART_Import, Type = typeof(Button))]
     [TemplatePart(Name = PART_ResourceSelector, Type = typeof(ComboBox))]
@@ -61,6 +63,7 @@ namespace BiowareLocalizationPlugin.Controls
         private const string PART_LanguageSelector = "PART_LanguageSelector";
         private const string PART_RefreshButton = "PART_RefreshButton";
 
+        private const string PART_ExportSelection = "PART_ExportSelection";
         private const string PART_Export = "PART_Export";
         private const string PART_Import = "PART_Import";
 
@@ -120,6 +123,8 @@ namespace BiowareLocalizationPlugin.Controls
         private bool m_isFirstTimeInitialization = true;
 
         private ComboBox m_resourceSelectorCb;
+
+        private CheckBox m_exportSelectionCB;
 
         /// <summary>
         /// Enum for the types of strings to display.
@@ -181,6 +186,11 @@ namespace BiowareLocalizationPlugin.Controls
             m_toggleTextsOrAdjectivesButton.ToolTip = m_toggleDisplayButtonTooltipTextsString;
             m_toggleTextsOrAdjectivesButton.Click += ToggleTextsOrAdjectives;
 
+            if (ProfilesLibrary.DataVersion == (int)ProfileVersion.DeadSpace)
+            {
+                m_toggleTextsOrAdjectivesButton.Visibility = Visibility.Collapsed;
+            }
+
             m_searchHexIdCB = GetTemplateChild(PART_hexSearchCB) as CheckBox;
             m_searchHexIdCB.Checked += SearchFieldFormatChangedToHex;
             m_searchHexIdCB.Unchecked += SearchFieldFormatChangedToDecimal;
@@ -214,6 +224,8 @@ namespace BiowareLocalizationPlugin.Controls
 
             Button refreshButton = GetTemplateChild(PART_RefreshButton) as Button;
             refreshButton.Click += ReLoadStrings;
+
+            m_exportSelectionCB = GetTemplateChild(PART_ExportSelection) as CheckBox;
 
             Button exportButton = GetTemplateChild(PART_Export) as Button;
             exportButton.Click += Export;
@@ -892,7 +904,7 @@ namespace BiowareLocalizationPlugin.Controls
 
         private void Export(object sender, RoutedEventArgs e)
         {
-            XmlExporter.Export(m_textDB, m_selectedLanguageFormat);
+            XmlExporter.Export(m_textDB, m_selectedLanguageFormat, (bool)m_exportSelectionCB.IsChecked);
         }
 
         private void Import(object sender, RoutedEventArgs e)
