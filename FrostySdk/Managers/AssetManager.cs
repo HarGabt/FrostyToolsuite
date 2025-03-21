@@ -160,7 +160,11 @@ namespace FrostySdk.Managers
         #endregion
 
         private const ulong CacheMagic = 0x02005954534F5246;
-        private const uint CacheVersion = 3;
+       /*
+          Cache Versions:
+            4 - Nothing changed in the format just bumped up that the cache gets regenerated, bc bundled chunks did not always had their logical offset/size stored
+        */
+        private const uint CacheVersion = 4;
 
         private FileSystemManager m_fileSystem;
         private ResourceManager m_resourceManager;
@@ -1444,6 +1448,14 @@ namespace FrostySdk.Managers
                     entry.RangeEnd = chunk.GetValue<uint>("rangeEnd");
                     entry.BundledSize = chunk.GetValue<uint>("bundledSize");
                     entry.IsInline = chunk.HasValue("idata");
+                }
+                else if (entry.LogicalSize == 0)
+                {
+                    entry.LogicalOffset = chunk.GetValue<uint>("logicalOffset");
+                    entry.LogicalSize = chunk.GetValue<uint>("logicalSize");
+                    entry.RangeStart = chunk.GetValue<uint>("rangeStart");
+                    entry.RangeEnd = chunk.GetValue<uint>("rangeEnd");
+                    entry.BundledSize = chunk.GetValue<uint>("bundledSize");
                 }
 
                 // Add to bundle

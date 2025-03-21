@@ -126,9 +126,9 @@ namespace BundleEditPlugin
         }
     }
 
-    public class RemoveTextureExtension : RemoveFromBundleExtension
+    public class RemoveTextureBaseExtension : RemoveFromBundleExtension
     {
-        public override string AssetType => "TextureAsset";
+        public override string AssetType => "TextureBaseAsset";
         public override void RemoveFromBundle(EbxAssetEntry entry, BundleEntry bentry)
         {
             base.RemoveFromBundle(entry, bentry);
@@ -150,9 +150,9 @@ namespace BundleEditPlugin
         }
     }
 
-    public class RemoveMovieTexture2Extension : RemoveFromBundleExtension
+    public class RemoveMovieTextureExtension : RemoveFromBundleExtension
     {
-        public override string AssetType => "MovieTexture2Asset";
+        public override string AssetType => "MovieTextureBaseAsset";
 
         public override void RemoveFromBundle(EbxAssetEntry entry, BundleEntry bentry)
         {
