@@ -44,7 +44,7 @@ namespace BundleEditPlugin
                     if (lod.ChunkId != Guid.Empty)
                     {
                         ChunkAssetEntry chunkEntry = App.AssetManager.GetChunkEntry(lod.ChunkId);
-                        if (chunkEntry != null && chunkEntry.SuperBundles.Count == 0)
+                        if (chunkEntry != null && chunkEntry.SuperBundles.Count == 0 && chunkEntry.AddedSuperBundles.Count == 0)
                         {
                             chunkEntry.AddedBundles.Remove(App.AssetManager.GetBundleId(bentry));
                             resEntry.LinkAsset(chunkEntry);
@@ -232,7 +232,7 @@ namespace BundleEditPlugin
                     if (lod.ChunkId != Guid.Empty)
                     {
                         ChunkAssetEntry chunkEntry = App.AssetManager.GetChunkEntry(lod.ChunkId);
-                        if (chunkEntry != null && chunkEntry.SuperBundles.Count == 0)
+                        if (chunkEntry != null && chunkEntry.SuperBundles.Count == 0 && chunkEntry.AddedSuperBundles.Count == 0)
                         {
                             chunkEntry.AddToBundle(App.AssetManager.GetBundleId(bentry));
                             resEntry.LinkAsset(chunkEntry);
@@ -314,9 +314,9 @@ namespace BundleEditPlugin
         }
     }
 
-    public class TextureExtension : AddToBundleExtension
+    public class TextureBaseExtension : AddToBundleExtension
     {
-        public override string AssetType => "TextureAsset";
+        public override string AssetType => "TextureBaseAsset";
         public override void AddToBundle(EbxAssetEntry entry, BundleEntry bentry)
         {
             base.AddToBundle(entry, bentry);
@@ -338,9 +338,9 @@ namespace BundleEditPlugin
         }
     }
 
-    public class MovieTexture2Extension : AddToBundleExtension
+    public class MovieTextureExtension : AddToBundleExtension
     {
-        public override string AssetType => "MovieTexture2Asset";
+        public override string AssetType => "MovieTextureBaseAsset";
         public override void AddToBundle(EbxAssetEntry entry, BundleEntry bentry)
         {
             base.AddToBundle(entry, bentry);
