@@ -3,6 +3,7 @@ using Frosty.Core.Controls;
 using FrostySdk.IO;
 using FrostySdk.Managers;
 using FrostySdk.Resources;
+using MeshSetPlugin.Resources;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -11,9 +12,291 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using FrostySdk.Managers.Entries;
+using FrostySdk;
 
 namespace BundleEditPlugin
 {
+    #region RemoveFromBundleExtension
+    public class RemoveMeshExtension : RemoveFromBundleExtension
+    {
+        public override string AssetType => "MeshAsset";
+        public override void RemoveFromBundle(EbxAssetEntry entry, BundleEntry bentry)
+        {
+            base.RemoveFromBundle(entry, bentry);
+
+            EbxAsset asset = App.AssetManager.GetEbx(entry);
+            dynamic meshAsset = asset.RootObject;
+
+            //Add res to BUNDLES AND LINK
+            ResAssetEntry resEntry = App.AssetManager.GetResEntry(meshAsset.MeshSetResource);
+            resEntry.AddedBundles.Remove(App.AssetManager.GetBundleId(bentry));
+
+            entry.LinkAsset(resEntry);
+
+            MeshSet meshSetRes = App.AssetManager.GetResAs<MeshSet>(resEntry);
+
+            //Double check if there are any LODs the mesh, if there are, bundle and link them
+            // J-Lyt | If chunk is in SuperBundle, do not add to bundle.
+            if (meshSetRes.Lods.Count > 0)
+            {
+                foreach (MeshSetLod lod in meshSetRes.Lods)
+                {
+                    if (lod.ChunkId != Guid.Empty)
+                    {
+                        ChunkAssetEntry chunkEntry = App.AssetManager.GetChunkEntry(lod.ChunkId);
+                        if (chunkEntry != null && chunkEntry.SuperBundles.Count == 0)
+                        {
+                            chunkEntry.AddedBundles.Remove(App.AssetManager.GetBundleId(bentry));
+                            resEntry.LinkAsset(chunkEntry);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // J-Lyt | Remove ClothWrappingAsset from Bundle
+    public class RemoveClothWrappingExtension : RemoveFromBundleExtension
+    {
+        public override string AssetType => "ClothWrappingAsset";
+        public override void RemoveFromBundle(EbxAssetEntry entry, BundleEntry bentry)
+        {
+            base.RemoveFromBundle(entry, bentry);
+
+            EbxAsset asset = App.AssetManager.GetEbx(entry);
+            dynamic clothWrappingAsset = asset.RootObject;
+
+            ResAssetEntry resEntry = App.AssetManager.GetResEntry(clothWrappingAsset.ClothWrappingAssetResource);
+            resEntry.AddedBundles.Remove(App.AssetManager.GetBundleId(bentry));
+
+            entry.LinkAsset(resEntry);
+        }
+    }
+
+    // J-Lyt | Remove ClothAsset from Bundle
+    public class RemoveClothExtension : RemoveFromBundleExtension
+    {
+        public override string AssetType => "ClothAsset";
+        public override void RemoveFromBundle(EbxAssetEntry entry, BundleEntry bentry)
+        {
+            base.RemoveFromBundle(entry, bentry);
+
+            EbxAsset asset = App.AssetManager.GetEbx(entry);
+            dynamic clothAsset = asset.RootObject;
+
+            ResAssetEntry resEntry = App.AssetManager.GetResEntry(clothAsset.ClothAssetResource);
+            resEntry.AddedBundles.Remove(App.AssetManager.GetBundleId(bentry));
+
+            entry.LinkAsset(resEntry);
+        }
+    }
+
+    // J-Lyt | Remove ClothColliderSetAsset from Bundle
+    public class RemoveClothColliderSetExtension : RemoveFromBundleExtension
+    {
+        public override string AssetType => "ClothColliderSetAsset";
+        public override void RemoveFromBundle(EbxAssetEntry entry, BundleEntry bentry)
+        {
+            base.RemoveFromBundle(entry, bentry);
+
+            EbxAsset asset = App.AssetManager.GetEbx(entry);
+            dynamic clothColliderSetAsset = asset.RootObject;
+
+            ResAssetEntry resEntry = App.AssetManager.GetResEntry(clothColliderSetAsset.ClothColliderSetAssetResource);
+            resEntry.AddedBundles.Remove(App.AssetManager.GetBundleId(bentry));
+
+            entry.LinkAsset(resEntry);
+        }
+    }
+
+    public class RemoveSvgImageExtension : RemoveFromBundleExtension
+    {
+        public override string AssetType => "SvgImage";
+        public override void RemoveFromBundle(EbxAssetEntry entry, BundleEntry bentry)
+        {
+            base.RemoveFromBundle(entry, bentry);
+
+            EbxAsset asset = App.AssetManager.GetEbx(entry);
+            dynamic svgAsset = asset.RootObject;
+
+            ResAssetEntry resEntry = App.AssetManager.GetResEntry(svgAsset.Resource);
+            resEntry.AddedBundles.Remove(App.AssetManager.GetBundleId(bentry));
+
+            entry.LinkAsset(resEntry);
+        }
+    }
+
+    public class RemoveTextureExtension : RemoveFromBundleExtension
+    {
+        public override string AssetType => "TextureAsset";
+        public override void RemoveFromBundle(EbxAssetEntry entry, BundleEntry bentry)
+        {
+            base.RemoveFromBundle(entry, bentry);
+
+            EbxAsset asset = App.AssetManager.GetEbx(entry);
+            dynamic textureAsset = asset.RootObject;
+
+            ResAssetEntry resEntry = App.AssetManager.GetResEntry(textureAsset.Resource);
+            resEntry.AddedBundles.Remove(App.AssetManager.GetBundleId(bentry));
+
+            Texture texture = App.AssetManager.GetResAs<Texture>(resEntry);
+            ChunkAssetEntry chunkEntry = App.AssetManager.GetChunkEntry(texture.ChunkId);
+
+            chunkEntry.AddedBundles.Remove(App.AssetManager.GetBundleId(bentry));
+            chunkEntry.FirstMip = texture.FirstMip;
+
+            resEntry.LinkAsset(chunkEntry);
+            entry.LinkAsset(resEntry);
+        }
+    }
+
+    public class RemoveMovieTexture2Extension : RemoveFromBundleExtension
+    {
+        public override string AssetType => "MovieTexture2Asset";
+
+        public override void RemoveFromBundle(EbxAssetEntry entry, BundleEntry bentry)
+        {
+            base.RemoveFromBundle(entry, bentry);
+
+            EbxAsset movieasset = App.AssetManager.GetEbx(entry);
+            dynamic movieobject = movieasset.RootObject;
+
+            ChunkAssetEntry MovieChunkEntry = App.AssetManager.GetChunkEntry(movieobject.ChunkGuid);
+            MovieChunkEntry.AddedBundles.Remove(App.AssetManager.GetBundleId(bentry));
+            entry.LinkAsset(MovieChunkEntry);
+
+            ChunkAssetEntry SubtitleChunkEntry = App.AssetManager.GetChunkEntry(movieobject.SubtitleChunkGuid);
+            if (SubtitleChunkEntry != null)
+            {
+                SubtitleChunkEntry.AddedBundles.Remove(App.AssetManager.GetBundleId(bentry));
+                entry.LinkAsset(SubtitleChunkEntry);
+            }
+        }
+    }
+
+    public class RemoveSoundWaveExtension : RemoveFromBundleExtension
+    {
+        public override string AssetType => "SoundWaveAsset";
+
+        public override void RemoveFromBundle(EbxAssetEntry entry, BundleEntry bentry)
+        {
+            base.RemoveFromBundle(entry, bentry);
+
+            EbxAsset soundasset = App.AssetManager.GetEbx(entry);
+            dynamic soundobject = soundasset.RootObject;
+
+            foreach (var soundChunk in soundobject.Chunks)
+            {
+                ChunkAssetEntry ChunkEntry = App.AssetManager.GetChunkEntry(soundChunk.ChunkId);
+                ChunkEntry.AddedBundles.Remove(App.AssetManager.GetBundleId(bentry));
+                entry.LinkAsset(ChunkEntry);
+            }
+        }
+    }
+
+    public class RemoveFromBundleExtension
+    {
+        public virtual string AssetType => null;
+        public virtual void RemoveFromBundle(EbxAssetEntry entry, BundleEntry bentry)
+        {
+            entry.AddedBundles.Remove(App.AssetManager.GetBundleId(bentry));
+        }
+    }
+    #endregion
+
+    #region AddToBundleExtension
+    public class MeshExtension : AddToBundleExtension
+    {
+        public override string AssetType => "MeshAsset";
+        public override void AddToBundle(EbxAssetEntry entry, BundleEntry bentry)
+        {
+            base.AddToBundle(entry, bentry);
+
+            EbxAsset asset = App.AssetManager.GetEbx(entry);
+            dynamic meshAsset = asset.RootObject;
+
+            //Add res to BUNDLES AND LINK
+            ResAssetEntry resEntry = App.AssetManager.GetResEntry(meshAsset.MeshSetResource);
+            resEntry.AddToBundle(App.AssetManager.GetBundleId(bentry));
+
+            entry.LinkAsset(resEntry);
+
+            MeshSet meshSetRes = App.AssetManager.GetResAs<MeshSet>(resEntry);
+
+            //Double check if there are any LODs the mesh, if there are, bundle and link them
+            // J-Lyt | If chunk is in SuperBundle, do not add to bundle.
+            if (meshSetRes.Lods.Count > 0)
+            {
+                foreach (MeshSetLod lod in meshSetRes.Lods)
+                {
+                    if (lod.ChunkId != Guid.Empty)
+                    {
+                        ChunkAssetEntry chunkEntry = App.AssetManager.GetChunkEntry(lod.ChunkId);
+                        if (chunkEntry != null && chunkEntry.SuperBundles.Count == 0)
+                        {
+                            chunkEntry.AddToBundle(App.AssetManager.GetBundleId(bentry));
+                            resEntry.LinkAsset(chunkEntry);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // J-Lyt | Add ClothWrappingAsset to Bundle
+    public class ClothWrappingExtension : AddToBundleExtension
+    {
+        public override string AssetType => "ClothWrappingAsset";
+        public override void AddToBundle(EbxAssetEntry entry, BundleEntry bentry)
+        {
+            base.AddToBundle(entry, bentry);
+
+            EbxAsset asset = App.AssetManager.GetEbx(entry);
+            dynamic clothWrappingAsset = asset.RootObject;
+
+            ResAssetEntry resEntry = App.AssetManager.GetResEntry(clothWrappingAsset.ClothWrappingAssetResource);
+            resEntry.AddToBundle(App.AssetManager.GetBundleId(bentry));
+
+            entry.LinkAsset(resEntry);
+        }
+    }
+
+    // J-Lyt | Add ClothAsset to Bundle
+    public class ClothExtension : AddToBundleExtension
+    {
+        public override string AssetType => "ClothAsset";
+        public override void AddToBundle(EbxAssetEntry entry, BundleEntry bentry)
+        {
+            base.AddToBundle(entry, bentry);
+
+            EbxAsset asset = App.AssetManager.GetEbx(entry);
+            dynamic clothAsset = asset.RootObject;
+
+            ResAssetEntry resEntry = App.AssetManager.GetResEntry(clothAsset.ClothAssetResource);
+            resEntry.AddToBundle(App.AssetManager.GetBundleId(bentry));
+
+            entry.LinkAsset(resEntry);
+        }
+    }
+
+    // J-Lyt | Add ClothColliderSetAsset to Bundle
+    public class ClothColliderSetExtension : AddToBundleExtension
+    {
+        public override string AssetType => "ClothColliderSetAsset";
+        public override void AddToBundle(EbxAssetEntry entry, BundleEntry bentry)
+        {
+            base.AddToBundle(entry, bentry);
+
+            EbxAsset asset = App.AssetManager.GetEbx(entry);
+            dynamic clothColliderSetAsset = asset.RootObject;
+
+            ResAssetEntry resEntry = App.AssetManager.GetResEntry(clothColliderSetAsset.ClothColliderSetAssetResource);
+            resEntry.AddToBundle(App.AssetManager.GetBundleId(bentry));
+
+            entry.LinkAsset(resEntry);
+        }
+    }
+
     public class SvgImageExtension : AddToBundleExtension
     {
         public override string AssetType => "SvgImage";
@@ -105,6 +388,7 @@ namespace BundleEditPlugin
             entry.AddToBundle(App.AssetManager.GetBundleId(bentry));
         }
     }
+#endregion
 
     [TemplatePart(Name = PART_BundleTypeComboBox, Type = typeof(ComboBox))]
     [TemplatePart(Name = PART_BundlesListBox, Type = typeof(ListBox))]
@@ -121,6 +405,7 @@ namespace BundleEditPlugin
 
         public override ImageSource Icon => BundleEditorMenuExtension.iconImageSource;
         public RelayCommand AddToBundleCommand { get; }
+        public RelayCommand RemoveFromBundleCommand { get; }
 
         private ComboBox bundleTypeComboBox;
         private ListBox bundlesListBox;
@@ -129,7 +414,8 @@ namespace BundleEditPlugin
         private TextBox bundleFilterTextBox;
 
         private BundleType selectedBundleType = BundleType.SharedBundle;
-        private Dictionary<string, AddToBundleExtension> extensions = new Dictionary<string, AddToBundleExtension>();
+        private Dictionary<string, AddToBundleExtension> addToBundleExtensions = new Dictionary<string, AddToBundleExtension>();
+        private Dictionary<string, RemoveFromBundleExtension> removeFromBundleExtensions = new Dictionary<string, RemoveFromBundleExtension>();
 
         static BundleEditor()
         {
@@ -143,10 +429,16 @@ namespace BundleEditPlugin
                 if (type.IsSubclassOf(typeof(AddToBundleExtension)))
                 {
                     var extension = (AddToBundleExtension)Activator.CreateInstance(type);
-                    extensions.Add(extension.AssetType, extension);
+                    addToBundleExtensions.Add(extension.AssetType, extension);
+                }
+                else if (type.IsSubclassOf(typeof(RemoveFromBundleExtension)))
+                {
+                    var extension = (RemoveFromBundleExtension)Activator.CreateInstance(type);
+                    removeFromBundleExtensions.Add(extension.AssetType, extension);
                 }
             }
-            extensions.Add("null", new AddToBundleExtension());
+            addToBundleExtensions.Add("null", new AddToBundleExtension());
+            removeFromBundleExtensions.Add("null", new RemoveFromBundleExtension());
 
             AddToBundleCommand = new RelayCommand(
                 (o) =>
@@ -154,15 +446,69 @@ namespace BundleEditPlugin
                     EbxAssetEntry entry = App.EditorWindow.DataExplorer.SelectedAsset as EbxAssetEntry;
                     BundleEntry bentry = bundlesListBox.SelectedItem as BundleEntry;
 
-                    string key = entry.Type;
-                    if (!extensions.ContainsKey(entry.Type))
-                        key = "null";
-                    extensions[key].AddToBundle(entry, bentry);
+                    if (!entry.Bundles.Contains(App.AssetManager.GetBundleId(bentry)) && !entry.AddedBundles.Contains(App.AssetManager.GetBundleId(bentry)))
+                    {
+                        string key = entry.Type;
+                        if (!addToBundleExtensions.ContainsKey(entry.Type))
+                        {
+                            key = "null";
+                            foreach (string typekey in addToBundleExtensions.Keys)
+                            {
+                                if (TypeLibrary.IsSubClassOf(entry.Type, typekey))
+                                {
+                                    key = typekey;
+                                    break;
+                                }
+                            }
+                        }
+                        addToBundleExtensions[key].AddToBundle(entry, bentry);
+                    }
+
+                    else
+                    {
+                        App.Logger.LogError("Asset is already in {0}", bentry.Name);
+                    }
 
                     RefreshExplorer();
                     App.EditorWindow.DataExplorer.RefreshItems();
 
                     dataExplorer.SelectAsset(entry);
+                },
+                (o) =>
+                {
+                    return App.EditorWindow.DataExplorer.SelectedAsset != null && bundlesListBox.SelectedItem != null;
+                });
+            RemoveFromBundleCommand = new RelayCommand(
+                (o) =>
+                {
+                    EbxAssetEntry entry = App.EditorWindow.DataExplorer.SelectedAsset as EbxAssetEntry;
+                    BundleEntry bentry = bundlesListBox.SelectedItem as BundleEntry;
+
+                    if (entry.AddedBundles.Contains(App.AssetManager.GetBundleId(bentry)))
+                    {
+                        string key = entry.Type;
+                        if (!removeFromBundleExtensions.ContainsKey(entry.Type))
+                        {
+                            key = "null";
+                            foreach (string typekey in removeFromBundleExtensions.Keys)
+                            {
+                                if (TypeLibrary.IsSubClassOf(entry.Type, typekey))
+                                {
+                                    key = typekey;
+                                    break;
+                                }
+                            }
+                        }
+                        removeFromBundleExtensions[key].RemoveFromBundle(entry, bentry);
+                    }
+
+                    else
+                    {
+                        App.Logger.LogError("{0} cannot be removed from this asset, are you sure its an added bundle?", bentry.Name);
+                    }
+
+                    RefreshExplorer();
+                    App.EditorWindow.DataExplorer.RefreshItems();
                 },
                 (o) =>
                 {

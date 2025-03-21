@@ -29,6 +29,8 @@ using Frosty.Core.Controls;
 using System.IO.Compression;
 using FrostySdk.Managers.Entries;
 using Newtonsoft.Json;
+using System.Reflection;
+using System.Linq;
 
 namespace FrostyModManager
 {
@@ -190,7 +192,29 @@ namespace FrostyModManager
             throw new NotImplementedException();
         }
     }
+    public class ModAppliedConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            String title = (String)value;
+            MainWindow mainWindow = (MainWindow)parameter;
 
+            if (mainWindow.selectedPack != null)
+            {
+                if (mainWindow.selectedPack.AppliedMods.Exists(x => x.ModName == title))
+                {
+                    return Visibility.Visible;
+                }
+            }
+
+            return Visibility.Hidden;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            throw new NotImplementedException();
+        }
+    }
     public enum ModPrimaryActionType
     {
         None,
@@ -279,7 +303,7 @@ namespace FrostyModManager
     {
         private List<IFrostyMod> availableMods = new List<IFrostyMod>();
         private List<FrostyPack> packs = new List<FrostyPack>();
-        private FrostyPack selectedPack;
+        public FrostyPack selectedPack { get; private set; }
         private FileSystemManager fs => Frosty.Core.App.FileSystemManager;
 
         private static int manifestVersion = 1;
@@ -368,6 +392,9 @@ namespace FrostyModManager
                 }
             });
             availableModsList.ItemsSource = availableMods;
+			
+            // Re-run filter to update the status bar text.
+            RefreshFilter();
 
             CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(availableModsList.ItemsSource);
             PropertyGroupDescription groupDescription = new PropertyGroupDescription("ModDetails.Category", null, StringComparison.OrdinalIgnoreCase);
@@ -449,6 +476,23 @@ namespace FrostyModManager
             }
 
             LoadedPluginsList.ItemsSource = App.PluginManager.LoadedPlugins;
+
+            FrameworkElementFactory factory = new FrameworkElementFactory(typeof(Image));
+            factory.SetValue(Image.SourceProperty, new ImageSourceConverter().ConvertFromString("pack://application:,,,/FrostyModManager;component/Images/CircleCheck.png") as ImageSource);
+            factory.SetValue(Image.HeightProperty, 16.0d);
+            factory.SetValue(Image.WidthProperty, 16.0d);
+            factory.SetValue(Image.HorizontalAlignmentProperty, HorizontalAlignment.Center);
+            factory.SetValue(Image.VerticalAlignmentProperty, VerticalAlignment.Center);
+            factory.SetBinding(Image.VisibilityProperty, new Binding("ModDetails.Title")
+            {
+                Converter = new ModAppliedConverter(),
+                ConverterParameter = this,
+                Mode = BindingMode.OneWay,
+            });
+            DataTemplate dt = new DataTemplate();
+            dt.VisualTree = factory;
+            GridViewColumn appliedBindingColumn = (availableModsList.View as GridView).Columns[2];
+            appliedBindingColumn.CellTemplate = dt;
         }
 
         private void addProfileButton_Click(object sender, RoutedEventArgs e)
@@ -577,6 +621,9 @@ namespace FrostyModManager
 
             appliedModsList.SelectedIndex = selectedIndex;
             updateAppliedModButtons();
+
+            // Re-run filter since we might be filtering on applied mods.
+            RefreshFilter();
         }
 
         private void upButton_Click(object sender, RoutedEventArgs e)
@@ -723,7 +770,8 @@ namespace FrostyModManager
 
         private void uninstallModButton_Click(object sender, RoutedEventArgs e)
         {
-            foreach (IFrostyMod mod in availableModsList.SelectedItems)
+            // Copy the selected items into a separate list to avoid modifying the collection while iterating.
+            foreach (IFrostyMod mod in availableModsList.SelectedItems.OfType<IFrostyMod>().ToList())
             {
                 FileInfo fi = new FileInfo(mod.Path);
 
@@ -748,6 +796,9 @@ namespace FrostyModManager
                         File.Delete(fi.FullName);
                     }
                 }
+
+                // Re-run filter since we might be filtering on applied mods.
+                RefreshFilter();
             }
 
             availableModsList.SelectedItem = null;
@@ -1391,6 +1442,9 @@ namespace FrostyModManager
                     FrostyMessageBox.Show("Pack has been successfully imported", "Frosty Mod Manager");
                 }
             }
+
+            // Re-run filter since we might be filtering on applied mods.
+            RefreshFilter();
         }
 
         private bool IsCompressed(FileInfo fi) => fi.Extension == ".rar" || fi.Extension == ".zip" || fi.Extension == ".7z" || fi.Extension == ".fbpack";
@@ -1442,6 +1496,9 @@ namespace FrostyModManager
 
             // focus on tab item
             appliedModsTabItem.IsSelected = true;
+
+            // Re-run filter since we might be filtering on applied mods.
+            RefreshFilter();
         }
 
         private void addModButton_Click(object sender, RoutedEventArgs e)
@@ -1453,6 +1510,9 @@ namespace FrostyModManager
 
             // focus on tab item
             appliedModsTabItem.IsSelected = true;
+
+            // Re-run filter since we might be filtering on applied mods.
+            RefreshFilter();
         }
 
         private void SelectedProfile_AppliedModsUpdated(object sender, RoutedEventArgs e)
@@ -1690,23 +1750,107 @@ namespace FrostyModManager
         private void availableModsFilter_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
-                availableModsFilter_LostFocus(this, new RoutedEventArgs());
+                RefreshFilter();
         }
 
         private void availableModsFilter_LostFocus(object sender, RoutedEventArgs e)
         {
-            if (availableModsFilterTextBox.Text == "")
+            //RefreshFilter();
+            // J-Lyt | RefreshFilter() is no longer applied on focus loss. If the textbox contains text when focus is lost, the textbox is cleared.
+            if (availableModsFilterTextBox.Text != "")
             {
-                availableModsList.Items.Filter = null;
-                return;
+                availableModsFilterTextBox.Text = string.Format("");
+            }
+        }
+
+        private void RefreshFilter()
+        {
+            Func<IFrostyMod, bool> nameFilter = a =>
+            {
+                if (availableModsFilterTextBox.Text != "")
+                {
+                    return (a).ModDetails.Title.ToLower().Contains(availableModsFilterTextBox.Text.ToLower());
+                }
+                return true;
+            };
+
+            Func<IFrostyMod, bool> appliedOrNotFilter = a =>
+            {
+                if (appliedModsFilterButton.IsChecked.GetValueOrDefault())
+                {
+                    return selectedPack.AppliedMods.Exists(x => x.ModName == ((IFrostyMod)a).ModDetails.Title);
+                }
+                else if (notAppliedModsFilterButton.IsChecked.GetValueOrDefault())
+                {
+                    return !selectedPack.AppliedMods.Exists(x => x.ModName == ((IFrostyMod)a).ModDetails.Title);
+                }
+
+                return true;
+            };
+
+            availableModsList.Items.Filter = new Predicate<object>((object a) => appliedOrNotFilter((IFrostyMod)a) && nameFilter((IFrostyMod)a));
+
+            // J-Lyt | Changed text based on applied filter.
+            if (availableModsFilterTextBox.Text != "")
+            {
+                availableModsStatusBar.Text = string.Format("{0} Filtered Mod(s)", availableModsList.Items.Count);
+            }
+            else if (appliedModsFilterButton.IsChecked.GetValueOrDefault())
+            {
+                availableModsStatusBar.Text = string.Format("{0} Applied Mod(s)", availableModsList.Items.Count);
+            }
+            else if (notAppliedModsFilterButton.IsChecked.GetValueOrDefault())
+            {
+                availableModsStatusBar.Text = string.Format("{0} Mod(s) Not Applied", availableModsList.Items.Count);
+            }
+            else
+            {
+                availableModsStatusBar.Text = string.Format("{0} Available Mod(s)", availableModsList.Items.Count);
+            }
+        }
+
+        private void appliedModsFilterButton_Click(object sender, RoutedEventArgs e)
+        {
+            // NotApplied + Applied both checked makes no sense, same as neither checked.
+            // J-Lyt | Changed text for tooltips and changed text based on checked.
+            if (appliedModsFilterButton.IsChecked.GetValueOrDefault())
+            {
+                notAppliedModsFilterButton.IsChecked = false;
+                appliedModsFilterButton.ToolTip = "Show Available Mod(s)";
+                notAppliedModsFilterButton.ToolTip = "Hide Applied Mod(s)";
+            }
+            else 
+            {
+                appliedModsFilterButton.ToolTip = "Show Applied Mod(s)";
             }
 
-            availableModsList.Items.Filter = new Predicate<object>((object a) => ((IFrostyMod)a).ModDetails.Title.ToLower().Contains(availableModsFilterTextBox.Text.ToLower()));
+            RefreshFilter();
+        }
+
+        private void notAppliedModsFilterButton_Click(object sender, RoutedEventArgs e)
+        {
+            // NotApplied + Applied both checked makes no sense, same as neither checked.
+            // J-Lyt | Changed text for tooltips and changed text based on checked.
+            if (notAppliedModsFilterButton.IsChecked.GetValueOrDefault())
+            {
+                appliedModsFilterButton.IsChecked = false;
+                notAppliedModsFilterButton.ToolTip = "Show Available Mod(s)";
+                appliedModsFilterButton.ToolTip = "Show Applied Mod(s)";
+            }
+            else
+            {
+                notAppliedModsFilterButton.ToolTip = "Hide Applied Mod(s)";
+            }
+
+            RefreshFilter();
         }
 
         private void PART_ShowOnlyReplacementsCheckBox_Checked(object sender, RoutedEventArgs e)
         {
             UpdateConflicts();
+
+            // Re-run filter since we might be filtering on applied mods.
+            RefreshFilter();
         }
 
         private void optionsMenuItem_Click(object sender, RoutedEventArgs e)
