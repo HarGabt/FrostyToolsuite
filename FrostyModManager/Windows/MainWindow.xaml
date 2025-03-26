@@ -371,7 +371,7 @@
                             </ctrl:FrostyTabControl.Style>
 
                             <!-- Available Mods -->
-                            <ctrl:FrostyTabItem Header="Available Mods">
+                            <ctrl:FrostyTabItem Header="Available Mods" x:Name="availableModsTabHeaderThing">
                                 <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="26"/>
@@ -808,6 +808,10 @@
                                         <DockPanel Margin="1">
                                             <Border Background="{StaticResource ControlBackground}" DockPanel.Dock="Left" RenderOptions.EdgeMode="Aliased">
                                                 <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Margin="6,0,6,0">
+                                                    <!-- Uncheck All Button -->
+                                                    <Button x:Name="uncheckAllButton" Margin="4,0,0,0" IsEnabled="True" Click="uncheckAllButton_Click" ToolTip="Deselect all mods">
+                                                        <Image Source="/FrostyModManager;component/Images/Cross.png" Margin="0,0,2,0"/>
+                                                    </Button>
                                                     <!-- Down Button -->
                                                     <Button x:Name="downButton" Margin="4,0,0,0" IsEnabled="False" Click="downButton_Click" ToolTip="Move mod down in list &#x0a;Shift click to move down 5 spaces &#x0a;Ctrl Shift click to move to bottom">
                                                         <Image Source="/FrostyModManager;component/Images/Down.png" Margin="0,0,2,0"/>

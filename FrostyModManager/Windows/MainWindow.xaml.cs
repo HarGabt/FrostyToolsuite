@@ -493,6 +493,8 @@ namespace FrostyModManager
             dt.VisualTree = factory;
             GridViewColumn appliedBindingColumn = (availableModsList.View as GridView).Columns[2];
             appliedBindingColumn.CellTemplate = dt;
+			
+            availableModsTabHeaderThing.Header = "Available Mods (" + availableMods.Count + ")";
         }
 
         private void addProfileButton_Click(object sender, RoutedEventArgs e)
@@ -624,6 +626,13 @@ namespace FrostyModManager
 
             // Re-run filter since we might be filtering on applied mods.
             RefreshFilter();
+        }
+        private void uncheckAllButton_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (FrostyAppliedMod mod in appliedModsList.Items)
+                mod.IsEnabled = false;
+            appliedModsList.Items.Refresh();
+            selectedPack.Refresh();
         }
 
         private void upButton_Click(object sender, RoutedEventArgs e)
@@ -766,6 +775,8 @@ namespace FrostyModManager
 
             ICollectionView view = CollectionViewSource.GetDefaultView(availableModsList.ItemsSource);
             view.Refresh();
+			
+            availableModsTabHeaderThing.Header = "Available Mods (" + availableMods.Count + ")";
         }
 
         private void uninstallModButton_Click(object sender, RoutedEventArgs e)
@@ -804,6 +815,8 @@ namespace FrostyModManager
             availableModsList.SelectedItem = null;
             ICollectionView view = CollectionViewSource.GetDefaultView(availableModsList.ItemsSource);
             view.Refresh();
+			
+            availableModsTabHeaderThing.Header = "Available Mods (" + availableMods.Count + ")";
 
             selectedPack.Refresh();
             appliedModsList.Items.Refresh();
@@ -1438,7 +1451,7 @@ namespace FrostyModManager
 
                     // focus on tab item
                     appliedModsTabItem.IsSelected = true;
-
+                    updateAppliedModButtons();
                     FrostyMessageBox.Show("Pack has been successfully imported", "Frosty Mod Manager");
                 }
             }
@@ -1483,6 +1496,8 @@ namespace FrostyModManager
                 upButton.IsEnabled = false;
                 downButton.IsEnabled = false;
             }
+			
+            appliedModsTabItem.Header = "Applied Mods (" + selectedPack.AppliedMods.Count + ")";
         }
 
         private void availableModsList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
