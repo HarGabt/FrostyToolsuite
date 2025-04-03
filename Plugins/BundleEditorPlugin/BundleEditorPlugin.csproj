@@ -50,6 +50,9 @@
     <ProjectReference Include="..\..\FrostySdk\FrostySdk.csproj">
       <Private>false</Private>
     </ProjectReference>
+    <ProjectReference Include="..\..\Plugins\MeshSetPlugin\MeshSetPlugin.csproj">
+      <Private>false</Private>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\BundleEdit.png" />

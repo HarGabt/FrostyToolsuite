@@ -38,11 +38,14 @@ namespace MeshSetPlugin
         public MeshExportVersion Version { get; set; }
 
         public MeshExportScale Scale { get; set; }
-
+		
+        [DisplayName("Flatten Hierarchy (Blender)")]
         public bool FlattenHierarchy { get; set; }
 
+        [DisplayName("Export Single LOD")]
         public bool ExportSingleLod { get; set; }
 
+        [DisplayName("Export Additional Meshes")]
         public bool ExportAdditionalMeshes { get; set; }
     }
 
