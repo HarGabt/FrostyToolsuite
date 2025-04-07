@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using FrostySdk.Managers.Entries;
+using System.Diagnostics;
 
 namespace Frosty.Core.IO
 {
@@ -122,10 +123,18 @@ namespace Frosty.Core.IO
 
                     using (EbxBaseWriter ebxWriter = EbxBaseWriter.CreateWriter(new MemoryStream(), flags))
                     {
-                        ebxWriter.WriteAsset(entry.ModifiedEntry.DataObject as EbxAsset);
-
-                        size = ebxWriter.Length;
-                        data = Utils.CompressFile(ebxWriter.ToByteArray(), compressionOverride: compressType);
+                        // Prioritize imported bin data over everything for ebx
+                        if (entry.ModifiedEntry.Data != null)
+                        {
+                            size = entry.ModifiedEntry.Data.Length;
+                            data = Utils.CompressFile(entry.ModifiedEntry.Data, compressionOverride: compressType);
+                        } 
+                        else
+                        {
+                            ebxWriter.WriteAsset(entry.ModifiedEntry.DataObject as EbxAsset);
+                            size = ebxWriter.Length;
+                            data = Utils.CompressFile(ebxWriter.ToByteArray(), compressionOverride: compressType);
+                        }
 
                         resourceIndex = manifest.Add(data);
                         sha1 = Utils.GenerateSha1(data);
