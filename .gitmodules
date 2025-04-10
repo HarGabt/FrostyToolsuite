@@ -1,0 +1,3 @@
+[submodule "Plugins/MeshVariationDbPlugin"]
+	path = Plugins/MeshVariationDbPlugin
+	url = https://github.com/J-Lyt/MeshVariationDbPlugin
