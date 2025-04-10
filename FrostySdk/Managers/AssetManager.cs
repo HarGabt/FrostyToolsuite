@@ -937,7 +937,7 @@ namespace FrostySdk.Managers
         /// <summary>
         /// Modify EBX based on name
         /// </summary>
-        public void ModifyEbx(string name, EbxAsset asset)
+        public void ModifyEbx(string name, EbxAsset asset, byte[] rawData = null)
         {
             name = name.ToLower();
             if (!m_ebxList.ContainsKey(name))
@@ -959,6 +959,7 @@ namespace FrostySdk.Managers
             entry.ModifiedEntry.IsTransientModified = asset.TransientEdit;
             entry.ModifiedEntry.DependentAssets.Clear();
             entry.ModifiedEntry.DependentAssets.AddRange(asset.Dependencies);
+            entry.ModifiedEntry.Data = rawData;
             entry.IsDirty = true;
         }
 
