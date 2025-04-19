@@ -252,10 +252,10 @@ namespace Frosty.ModSupport
 
                                 foreach (DbObject ebx in bundleObj.GetValue<DbObject>("ebx"))
                                 {
-                                    int idx = modBundle.Modify.Ebx.FindIndex((string a) => a.Equals(ebx.GetValue<string>("name")));
-                                    if (idx != -1)
+                                    string name = ebx.GetValue<string>("name");
+                                    if (modBundle.Modify.Ebx.Contains(name))
                                     {
-                                        EbxAssetEntry entry = parent.m_modifiedEbx[modBundle.Modify.Ebx[idx]];
+                                        EbxAssetEntry entry = parent.m_modifiedEbx[name];
 
                                         // get next cas (if one hasnt been obtained or the current one will exceed 1gb)
                                         if (casWriter == null || casWriter.Length + parent.m_archiveData[entry.Sha1].Data.Length > 1073741824)
@@ -308,10 +308,10 @@ namespace Frosty.ModSupport
 
                                 foreach (DbObject res in bundleObj.GetValue<DbObject>("res"))
                                 {
-                                    int idx = modBundle.Modify.Res.FindIndex((string a) => a.Equals(res.GetValue<string>("name")));
-                                    if (idx != -1)
+                                    string name = res.GetValue<string>("name");
+                                    if (modBundle.Modify.Res.Contains(name))
                                     {
-                                        ResAssetEntry entry = parent.m_modifiedRes[modBundle.Modify.Res[idx]];
+                                        ResAssetEntry entry = parent.m_modifiedRes[name];
 
                                         // get next cas (if one hasnt been obtained or the current one will exceed 1gb)
                                         if (casWriter == null || casWriter.Length + parent.m_archiveData[entry.Sha1].Data.Length > 1073741824)
@@ -375,17 +375,17 @@ namespace Frosty.ModSupport
                                 // modify chunks
                                 foreach (DbObject chunk in bundleObj.GetValue<DbObject>("chunks"))
                                 {
-                                    int idx = modBundle.Remove.Chunks.FindIndex((Guid a) => a == chunk.GetValue<Guid>("id"));
-                                    if (idx != -1)
+                                    Guid id = chunk.GetValue<Guid>("id");
+                                    if (modBundle.Remove.Chunks.Contains(id))
                                     {
-                                        chunksToRemove.Add((chunkIndex, parent.m_modifiedChunks[modBundle.Remove.Chunks[idx]].H32));
+                                        chunksToRemove.Add((chunkIndex, parent.m_modifiedChunks[id].H32));
                                     }
                                     else
                                     {
-                                        idx = modBundle.Modify.Chunks.FindIndex((Guid a) => a == chunk.GetValue<Guid>("id"));
-                                        if (idx != -1)
+                                        id = chunk.GetValue<Guid>("id");
+                                        if (modBundle.Modify.Chunks.Contains(id))
                                         {
-                                            ChunkAssetEntry entry = parent.m_modifiedChunks[modBundle.Modify.Chunks[idx]];
+                                            ChunkAssetEntry entry = parent.m_modifiedChunks[id];
 
                                             // get next cas (if one hasnt been obtained or the current one will exceed 1gb)
                                             if (casWriter == null || casWriter.Length + parent.m_archiveData[entry.Sha1].Data.Length > 1073741824)
