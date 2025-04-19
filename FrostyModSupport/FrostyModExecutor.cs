@@ -355,7 +355,13 @@ namespace Frosty.ModSupport
             }
         }
 
-        private void ReportProgress(int current, int total) => Logger.Log("progress:" + current / (float)total * 100d);
+        private void ReportProgress(int current, int total)
+        {
+            if (total > 0)
+            {
+                Logger.Log("progress:" + current / (float)total * 100d);
+            }
+        }
 
         private Dictionary<int, Dictionary<uint, CatResourceEntry>> LoadCatalog(FileSystemManager fs, string filename, out int catFileHash)
         {
