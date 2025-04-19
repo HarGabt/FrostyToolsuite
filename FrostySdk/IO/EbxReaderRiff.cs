@@ -264,7 +264,7 @@ namespace FrostySdk.IO
             EbxClass? newClassType = null;
             Guid? guid = null;
 
-            if (!classType.HasValue)
+            if (!classType.HasValue && index < classGuids.Count)
             {
                 guid = classGuids[index];
                 newClassType = patchStd?.GetClass(guid.Value);
