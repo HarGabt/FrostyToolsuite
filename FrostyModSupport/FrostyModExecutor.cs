@@ -1790,13 +1790,6 @@ namespace Frosty.ModSupport
 
                         if (completedAction.DataRefs.Count > 0)
                         {
-                            // add bundle data to archive
-                            for (int i = 0; i < completedAction.BundleRefs.Count; i++)
-                            {
-                                if (!m_archiveData.ContainsKey(completedAction.BundleRefs[i]))
-                                    m_archiveData.TryAdd(completedAction.BundleRefs[i], new ArchiveInfo() { Data = completedAction.BundleBuffers[i] });
-                            }
-
                             // add refs to be added to cas (and manifest)
                             for (int i = 0; i < completedAction.DataRefs.Count; i++)
                                 m_casData.Add(m_fs.GetCatalog(completedAction.FileInfos[i].FileInfo.file), completedAction.DataRefs[i], completedAction.FileInfos[i].Entry, completedAction.FileInfos[i].FileInfo);
@@ -2341,7 +2334,7 @@ namespace Frosty.ModSupport
                 ArchiveInfo info = m_archiveData[sha1];
 
                 int casMaxBytes = 536870912;
-                switch (Config.Get("MaxCasFileSize", "512MB"))
+                switch (Config.Get("MaxCasFileSize", "1GB"))
                 {
                     case "1GB": casMaxBytes = 1073741824; break;
                     case "512MB": casMaxBytes = 536870912; break;
@@ -2464,12 +2457,17 @@ namespace Frosty.ModSupport
                         numEntries++;
                     }
 
-                    int offset = 0;
-                    int index = 0;
+                    int offset = 0, index = 0, currentCasIndex = casEntries.Count > 0 ? casEntries[0] : 1;
 
                     // new entries
                     foreach (Sha1 sha1 in casDataEntry.EnumerateDataRefs())
                     {
+                        if (currentCasIndex != casEntries[index])
+                        {
+                            offset = 0;
+                            currentCasIndex = casEntries[index];
+                        }
+
                         if (ProfilesLibrary.IsLoaded(ProfileVersion.DragonAgeInquisition,
                             ProfileVersion.Battlefield4,
                             ProfileVersion.NeedForSpeed,
