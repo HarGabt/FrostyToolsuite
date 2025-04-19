@@ -52,7 +52,7 @@ namespace FrostyEditor
         public App()
         {
             Assembly entryAssembly = Assembly.GetEntryAssembly();
-            Frosty.Core.App.Version = entryAssembly.GetName().Version.ToString();
+            Frosty.Core.App.Version = entryAssembly.GetName().Version.ToString() + "HarGabt's Fork" + Frosty.Core.App.AlphaVersion;
 
             Environment.CurrentDirectory = System.AppDomain.CurrentDomain.BaseDirectory;
 
