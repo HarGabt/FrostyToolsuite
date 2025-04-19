@@ -2138,7 +2138,14 @@ namespace Frosty.ModSupport
 
                 // stopwatch
                 watch.Stop();
-                App.Logger.Log($"Applied Mods in {watch.Elapsed.Minutes}m {watch.Elapsed.Seconds}s");
+                if (watch.Elapsed.Minutes > 0)
+                {
+                    App.Logger.Log($"Applied Mods in {watch.Elapsed.Minutes}m {watch.Elapsed.Seconds}s");
+                }
+                else
+                {
+                    App.Logger.Log($"Applied Mods in {watch.Elapsed.Seconds}s");
+                }
             }
 
             cancelToken.ThrowIfCancellationRequested();
