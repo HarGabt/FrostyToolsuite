@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29911.84
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.35931.197 d17.13
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FrostyEditor", "FrostyEditor.csproj", "{355B078B-45A5-472D-9CCD-688D8E30BAED}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -100,6 +100,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectMerger", "..\Plugins\FrostyProjectMerger\ProjectMerger.csproj", "{742ADCAE-F062-C8D3-6DCC-E962E85851D7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IncrementalSavePlugin", "..\Plugins\IncrementalSavePlugin\IncrementalSavePlugin.csproj", "{2C14BDEE-6E19-F2A2-A05B-7C885B6FFE0C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MovieTexture2AssetEditorPlugin", "..\Plugins\FrostyMovieTexture2AssetEditor\MovieTexture2AssetEditorPlugin.csproj", "{28E2989C-6532-84A5-B7E9-40B47FCF1F0E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -560,6 +562,16 @@ Global
 		{2C14BDEE-6E19-F2A2-A05B-7C885B6FFE0C}.Release - Final|x64.Build.0 = Release - Final|x64
 		{2C14BDEE-6E19-F2A2-A05B-7C885B6FFE0C}.Release|x64.ActiveCfg = Release - Alpha|x64
 		{2C14BDEE-6E19-F2A2-A05B-7C885B6FFE0C}.Release|x64.Build.0 = Release - Alpha|x64
+		{28E2989C-6532-84A5-B7E9-40B47FCF1F0E}.Developer - Debug|x64.ActiveCfg = Developer - Debug|x64
+		{28E2989C-6532-84A5-B7E9-40B47FCF1F0E}.Developer - Debug|x64.Build.0 = Developer - Debug|x64
+		{28E2989C-6532-84A5-B7E9-40B47FCF1F0E}.Release - Alpha|x64.ActiveCfg = Release - Alpha|x64
+		{28E2989C-6532-84A5-B7E9-40B47FCF1F0E}.Release - Alpha|x64.Build.0 = Release - Alpha|x64
+		{28E2989C-6532-84A5-B7E9-40B47FCF1F0E}.Release - Beta|x64.ActiveCfg = Release - Beta|x64
+		{28E2989C-6532-84A5-B7E9-40B47FCF1F0E}.Release - Beta|x64.Build.0 = Release - Beta|x64
+		{28E2989C-6532-84A5-B7E9-40B47FCF1F0E}.Release - Final|x64.ActiveCfg = Release - Final|x64
+		{28E2989C-6532-84A5-B7E9-40B47FCF1F0E}.Release - Final|x64.Build.0 = Release - Final|x64
+		{28E2989C-6532-84A5-B7E9-40B47FCF1F0E}.Release|x64.ActiveCfg = Release - Alpha|x64
+		{28E2989C-6532-84A5-B7E9-40B47FCF1F0E}.Release|x64.Build.0 = Release - Alpha|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -602,6 +614,7 @@ Global
 		{133F19AD-8B15-0D70-1FCF-F52091C739DF} = {492048B6-848D-4675-A9BF-34A4751303F2}
 		{742ADCAE-F062-C8D3-6DCC-E962E85851D7} = {492048B6-848D-4675-A9BF-34A4751303F2}
 		{2C14BDEE-6E19-F2A2-A05B-7C885B6FFE0C} = {492048B6-848D-4675-A9BF-34A4751303F2}
+		{28E2989C-6532-84A5-B7E9-40B47FCF1F0E} = {492048B6-848D-4675-A9BF-34A4751303F2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C0B22EF1-4C3F-45B9-9F08-9793ED912199}

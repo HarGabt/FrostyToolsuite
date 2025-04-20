@@ -8,6 +8,20 @@ selphea's changes:
 
 Changes in my fork:
 
+(2025.04.20)
+--------
+- Imported new entries from Frosty 2.0
+- Some changes under the hood related to bundles, dunno how this will affect NFS Unbound
+- Added a feature to show only applied mods or hide applied mods in Mod Manager, along with counters showing the number of available and applied mods
+- Added DisplayName to FBX Export Window in Mesh Explorer
+- Added a feature to deselect all applied mods (courtesy of AdamRaichu)
+- Improved the ealayer3.dll fix, now it doesn't require some obscure library. It was that easy, apparently.
+- Implemented wavebend's hack for imported bin files from Veilguard fork. Just for lulz.
+- Added new plugins: MeshVariationDbPlugin, IncrementalSavePlugin, FrostyProjectMerger, and FrostyMovieTexture2AssetEditor. All were ported to 1.0.7 base by J-Lyt and WiiExpertise.
+- Some more of backports from 1.0.6.2 and 1.0.6.3, courtesy of J-Lyt
+- Fixed Mod Manager identifying itself as Editor. Will have to figure out how to fix banners not appearing during profile loading.
+- Added versioning
+
 (2025.03.16)
 --------
 - Fixed Localization Viewer related crash for Dead Space (2023). Still, the profile is read only for some reason.
