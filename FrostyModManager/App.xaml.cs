@@ -53,7 +53,7 @@ namespace FrostyModManager
         public App()
         {
             Assembly entryAssembly = Assembly.GetEntryAssembly();
-            Frosty.Core.App.Version = entryAssembly.GetName().Version.ToString() + "HarGabt's Fork" + Frosty.Core.App.AlphaVersion;
+            Frosty.Core.App.Version = entryAssembly.GetName().Version.ToString() + " — HarGabt's Fork" + Frosty.Core.App.AlphaVersion;
 
             Frosty.Core.App.IsEditor = false;
 
