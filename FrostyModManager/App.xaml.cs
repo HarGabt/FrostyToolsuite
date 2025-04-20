@@ -53,7 +53,7 @@ namespace FrostyModManager
         public App()
         {
             Assembly entryAssembly = Assembly.GetEntryAssembly();
-            Frosty.Core.App.Version = entryAssembly.GetName().Version.ToString();
+            Frosty.Core.App.Version = entryAssembly.GetName().Version.ToString() + " — HarGabt's Fork" + Frosty.Core.App.AlphaVersion;
 
             Frosty.Core.App.IsEditor = false;
 
@@ -132,7 +132,17 @@ namespace FrostyModManager
             {
                 string prof = Config.Get<string>("DefaultProfile", null);
                 if (!string.IsNullOrEmpty(prof))
-                    defaultConfig = new FrostyConfiguration(prof);
+                {
+                    try
+                    {
+                        defaultConfig = new FrostyConfiguration(prof);
+                    }
+                    catch (System.IO.FileNotFoundException)
+                    {
+                        Config.RemoveGame(prof); // couldn't find the exe, so remove it from the profile list
+                        Config.Save();
+                    }
+                }
                 else
                 {
                     Config.Add("UseDefaultProfile", false);

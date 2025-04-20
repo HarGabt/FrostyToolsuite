@@ -19,9 +19,7 @@ namespace Frosty.ModSupport
             private static readonly object resourceLock = new object();
 
             public List<Sha1> DataRefs { get; } = new List<Sha1>();
-            public List<Sha1> BundleRefs { get; } = new List<Sha1>();
             public List<CasFileEntry> FileInfos { get; } = new List<CasFileEntry>();
-            public List<byte[]> BundleBuffers { get; } = new List<byte[]>();
 
             public Exception Exception { get; private set; }
 
@@ -334,10 +332,9 @@ namespace Frosty.ModSupport
                         Sha1 newSha1 = Utils.GenerateSha1(bundleBuffer);
                         ms.Dispose();
 
-                        BundleRefs.Add(newSha1);
                         DataRefs.Add(newSha1);
                         FileInfos.Add(new CasFileEntry{ Entry = null, FileInfo = bundleFile });
-                        BundleBuffers.Add(bundleBuffer);
+                        parent.m_archiveData.TryAdd(newSha1, new ArchiveInfo() { Data = bundleBuffer });
                     }
                 }
                 catch (Exception e)

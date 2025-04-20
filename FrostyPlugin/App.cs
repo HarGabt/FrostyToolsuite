@@ -32,6 +32,7 @@ namespace Frosty.Core
 
         public static string Version = "";
         public static readonly int MinorVersion = 1;
+        public static readonly string AlphaVersion = " v.25.04.20"; // always update on release!
 
         public static string ProfileSettingsPath => Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "/Frosty/" + ProfilesLibrary.ProfileName;
         public static string GlobalSettingsPath => Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "/Frosty";

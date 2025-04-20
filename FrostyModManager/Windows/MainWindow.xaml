@@ -864,7 +864,7 @@
                                         <DockPanel Margin="1">
                                             <Border Background="{StaticResource ControlBackground}" DockPanel.Dock="Left" RenderOptions.EdgeMode="Aliased">
                                                 <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Margin="6,0,6,0">
-                                                    <CheckBox x:Name="showOnlyReplacementsCheckBox" VerticalAlignment="Center" Margin="0,0,0,0" Checked="PART_ShowOnlyReplacementsCheckBox_Checked">
+                                                    <CheckBox x:Name="showOnlyReplacementsCheckBox" VerticalAlignment="Center" Margin="0,0,0,0" Checked="PART_ShowOnlyReplacementsCheckBox_Checked" Unchecked="PART_ShowOnlyReplacementsCheckBox_Unchecked" IsChecked="False" ToolTip="Filter the list so only replacements are shown." Foreground="{StaticResource FontColor}">
                                                         <TextBlock Text="Show only replacements" Margin="4,-1,0,0" VerticalAlignment="Center" Foreground="{StaticResource FontColor}"/>
                                                     </CheckBox>
                                                 </StackPanel>
