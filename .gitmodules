@@ -10,3 +10,6 @@
 [submodule "Plugins/FrostyMovieTexture2AssetEditor"]
 	path = Plugins/FrostyMovieTexture2AssetEditor
 	url = https://github.com/HarGabt/FrostyMovieTexture2AssetEditor
+[submodule "Plugins/FrostyShaderDataPlugin"]
+	path = Plugins/FrostyShaderDataPlugin
+	url = https://github.com/Brawltendo/FrostyShaderDataPlugin
