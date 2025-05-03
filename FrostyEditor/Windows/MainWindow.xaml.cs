@@ -968,8 +968,15 @@ namespace FrostyEditor.Windows
             }
 
             FrostyTaskWindow.Show("Reverting Asset", "", (task) => { App.AssetManager.RevertAsset(entry, suppressOnModify: false); });
-
-            ResetItemsSources();
+            
+            if (entry.IsAdded)
+            {
+                ResetItemsSources();
+            }
+            else
+            {
+                dataExplorer.RefreshItems();
+            }
         }
 
         private void contextMenuImportAsset_Click(object sender, RoutedEventArgs e)
