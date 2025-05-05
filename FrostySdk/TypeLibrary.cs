@@ -1245,6 +1245,13 @@ namespace FrostySdk
                 {
                     foreach (Type subType in m_existingAssembly.GetExportedTypes())
                     {
+                        if (ProfilesLibrary.IsLoaded(ProfileVersion.NeedForSpeedUnbound))
+                        {
+                            foreach (GuidAttribute guidAttr in subType.GetCustomAttributes<GuidAttribute>())
+                            {
+                                m_guidTypeMapping.Add(guidAttr.Guid, subType);
+                            }
+                        }
                         foreach (TypeInfoGuidAttribute guidAttr in subType.GetCustomAttributes<TypeInfoGuidAttribute>())
                         {
                             m_guidTypeMapping.Add(guidAttr.Guid, subType);
