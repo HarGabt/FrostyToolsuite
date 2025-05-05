@@ -435,7 +435,7 @@ namespace Frosty.ModSupport
                             HandlerExtraData extraData;
                             byte[] data = fmod.GetResourceData(resource);
 
-                            if (m_modifiedEbx.TryGetValue(resource.Name, out EbxAssetEntry entry))
+                            if (m_modifiedEbx.TryGetValue(resource.Name, out EbxAssetEntry entry) && entry.ExtraData != null)
                             {
                                 extraData = (HandlerExtraData)entry.ExtraData;
                             }
