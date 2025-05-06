@@ -1,15 +1,3 @@
-[submodule "Plugins/MeshVariationDbPlugin"]
-	path = Plugins/MeshVariationDbPlugin
-	url = https://github.com/J-Lyt/MeshVariationDbPlugin
-[submodule "Plugins/FrostyProjectMerger"]
-	path = Plugins/FrostyProjectMerger
-	url = https://github.com/J-Lyt/FrostyProjectMerger
-[submodule "Plugins/IncrementalSavePlugin"]
-	path = Plugins/IncrementalSavePlugin
-	url = https://github.com/J-Lyt/IncrementalSavePlugin
-[submodule "Plugins/FrostyMovieTexture2AssetEditor"]
-	path = Plugins/FrostyMovieTexture2AssetEditor
-	url = https://github.com/HarGabt/FrostyMovieTexture2AssetEditor
 [submodule "Plugins/FrostyShaderDataPlugin"]
 	path = Plugins/FrostyShaderDataPlugin
 	url = https://github.com/Brawltendo/FrostyShaderDataPlugin

@@ -8,6 +8,18 @@ selphea's changes:
 
 Changes in my fork:
 
+(2025.05.06)
+--------
+- Fixed Data Explorer resetting last location after reverting asset
+- Templates and Blueprints are now moddable in NFS Unbound
+- Removed some unnecessary plugins that may be crippling Editor, added FrostyShaderDataPlugin by Brawltendo
+- Updated NFS Unbound's SDK just in case
+- Updated FrostyMovieTexture2AssetEditor
+- Added new RES entries and updated Bf2042-Strings.txt
+
+Known Issue: duplication is kinda broken for now and has been since 2025.04.20 or even sooner, will have to figure out the fix.
+But for now, enjoy!
+
 (2025.04.20)
 --------
 - Imported new entries from Frosty 2.0
