@@ -1,3 +1,6 @@
 [submodule "Plugins/FrostyShaderDataPlugin"]
 	path = Plugins/FrostyShaderDataPlugin
 	url = https://github.com/Brawltendo/FrostyShaderDataPlugin
+[submodule "Plugins/FrostyMovieTexture2AssetEditor"]
+	path = Plugins/FrostyMovieTexture2AssetEditor
+	url = https://github.com/J-Lyt/FrostyMovieTexture2AssetEditor

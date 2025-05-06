@@ -95,9 +95,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FrostyCmd", "..\FrostyCmd\F
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnimationEditorPlugin", "..\Plugins\AnimationEditorPlugin\AnimationEditorPlugin.csproj", "{CE312C84-2677-433C-B4B1-352BD16E7590}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MovieTexture2AssetEditorPlugin", "..\Plugins\FrostyMovieTexture2AssetEditor\MovieTexture2AssetEditorPlugin.csproj", "{28E2989C-6532-84A5-B7E9-40B47FCF1F0E}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShaderDataPlugin", "..\Plugins\FrostyShaderDataPlugin\ShaderDataPlugin.csproj", "{153A9661-41EF-93BE-AF5D-916505004822}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MovieTexture2AssetEditorPlugin", "..\Plugins\FrostyMovieTexture2AssetEditor\MovieTexture2AssetEditorPlugin.csproj", "{28E2989C-6532-84A5-B7E9-40B47FCF1F0E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -528,16 +528,6 @@ Global
 		{CE312C84-2677-433C-B4B1-352BD16E7590}.Release - Final|x64.Build.0 = Release - Final|x64
 		{CE312C84-2677-433C-B4B1-352BD16E7590}.Release|x64.ActiveCfg = Developer - Debug|x64
 		{CE312C84-2677-433C-B4B1-352BD16E7590}.Release|x64.Build.0 = Developer - Debug|x64
-		{28E2989C-6532-84A5-B7E9-40B47FCF1F0E}.Developer - Debug|x64.ActiveCfg = Developer - Debug|x64
-		{28E2989C-6532-84A5-B7E9-40B47FCF1F0E}.Developer - Debug|x64.Build.0 = Developer - Debug|x64
-		{28E2989C-6532-84A5-B7E9-40B47FCF1F0E}.Release - Alpha|x64.ActiveCfg = Release - Alpha|x64
-		{28E2989C-6532-84A5-B7E9-40B47FCF1F0E}.Release - Alpha|x64.Build.0 = Release - Alpha|x64
-		{28E2989C-6532-84A5-B7E9-40B47FCF1F0E}.Release - Beta|x64.ActiveCfg = Release - Beta|x64
-		{28E2989C-6532-84A5-B7E9-40B47FCF1F0E}.Release - Beta|x64.Build.0 = Release - Beta|x64
-		{28E2989C-6532-84A5-B7E9-40B47FCF1F0E}.Release - Final|x64.ActiveCfg = Release - Final|x64
-		{28E2989C-6532-84A5-B7E9-40B47FCF1F0E}.Release - Final|x64.Build.0 = Release - Final|x64
-		{28E2989C-6532-84A5-B7E9-40B47FCF1F0E}.Release|x64.ActiveCfg = Release - Alpha|x64
-		{28E2989C-6532-84A5-B7E9-40B47FCF1F0E}.Release|x64.Build.0 = Release - Alpha|x64
 		{153A9661-41EF-93BE-AF5D-916505004822}.Developer - Debug|x64.ActiveCfg = Developer - Debug|x64
 		{153A9661-41EF-93BE-AF5D-916505004822}.Developer - Debug|x64.Build.0 = Developer - Debug|x64
 		{153A9661-41EF-93BE-AF5D-916505004822}.Release - Alpha|x64.ActiveCfg = Release - Alpha|x64
@@ -548,6 +538,16 @@ Global
 		{153A9661-41EF-93BE-AF5D-916505004822}.Release - Final|x64.Build.0 = Release - Final|x64
 		{153A9661-41EF-93BE-AF5D-916505004822}.Release|x64.ActiveCfg = Release - Alpha|x64
 		{153A9661-41EF-93BE-AF5D-916505004822}.Release|x64.Build.0 = Release - Alpha|x64
+		{28E2989C-6532-84A5-B7E9-40B47FCF1F0E}.Developer - Debug|x64.ActiveCfg = Developer - Debug|x64
+		{28E2989C-6532-84A5-B7E9-40B47FCF1F0E}.Developer - Debug|x64.Build.0 = Developer - Debug|x64
+		{28E2989C-6532-84A5-B7E9-40B47FCF1F0E}.Release - Alpha|x64.ActiveCfg = Release - Alpha|x64
+		{28E2989C-6532-84A5-B7E9-40B47FCF1F0E}.Release - Alpha|x64.Build.0 = Release - Alpha|x64
+		{28E2989C-6532-84A5-B7E9-40B47FCF1F0E}.Release - Beta|x64.ActiveCfg = Release - Beta|x64
+		{28E2989C-6532-84A5-B7E9-40B47FCF1F0E}.Release - Beta|x64.Build.0 = Release - Beta|x64
+		{28E2989C-6532-84A5-B7E9-40B47FCF1F0E}.Release - Final|x64.ActiveCfg = Release - Final|x64
+		{28E2989C-6532-84A5-B7E9-40B47FCF1F0E}.Release - Final|x64.Build.0 = Release - Final|x64
+		{28E2989C-6532-84A5-B7E9-40B47FCF1F0E}.Release|x64.ActiveCfg = Release - Alpha|x64
+		{28E2989C-6532-84A5-B7E9-40B47FCF1F0E}.Release|x64.Build.0 = Release - Alpha|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -587,8 +587,8 @@ Global
 		{FE2D780C-8FBC-4797-9ACD-05DE2507F1AA} = {492048B6-848D-4675-A9BF-34A4751303F2}
 		{7F280BF3-F794-4715-9D32-770D36454B8C} = {492048B6-848D-4675-A9BF-34A4751303F2}
 		{CE312C84-2677-433C-B4B1-352BD16E7590} = {492048B6-848D-4675-A9BF-34A4751303F2}
-		{28E2989C-6532-84A5-B7E9-40B47FCF1F0E} = {492048B6-848D-4675-A9BF-34A4751303F2}
 		{153A9661-41EF-93BE-AF5D-916505004822} = {492048B6-848D-4675-A9BF-34A4751303F2}
+		{28E2989C-6532-84A5-B7E9-40B47FCF1F0E} = {492048B6-848D-4675-A9BF-34A4751303F2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C0B22EF1-4C3F-45B9-9F08-9793ED912199}
