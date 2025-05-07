@@ -338,6 +338,7 @@ namespace SoundEditorPlugin
                                 if (info.streamIndex == -1)
                                     return;
                                 sampleCount += (uint)data.Length;
+                                channels = info.numChannels;
                                 decodedSoundBuf.AddRange(data);
                             });
                             duration += (sampleCount / channels) / (double)sampleRate;
