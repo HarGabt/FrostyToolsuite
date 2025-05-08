@@ -57,7 +57,12 @@ namespace FrostySdk.Ebx
                     refType = TypeLibrary.GetType(typeGuid);
                     if (refType == null)
                     {
-                        throw new Exception($"Could not find the type {typeName}");
+                        refType = TypeLibrary.GetType(typeName);
+
+                        if (refType == null)
+                        {
+                            throw new Exception($"Could not find the type {typeName}");
+                        }
                     }
                 }
                 return refType;
