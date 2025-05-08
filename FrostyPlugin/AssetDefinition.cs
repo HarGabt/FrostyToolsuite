@@ -251,7 +251,6 @@ namespace Frosty.Core
                 return;
             }
 
-            byte[] binaryData = File.ReadAllBytes(path);
             using (EbxReader reader = EbxReader.CreateReader(new FileStream(path, FileMode.Open, FileAccess.Read), App.FileSystemManager, true))
             {
                 EbxAsset newAsset = reader.ReadAsset<EbxAsset>();
@@ -266,7 +265,7 @@ namespace Frosty.Core
                     rootObj.SetInstanceGuid(new AssetClassGuid(origAsset.RootInstanceGuid, -1));
                 }
 
-                App.AssetManager.ModifyEbx(entry.Name, newAsset, binaryData);
+                App.AssetManager.ModifyEbx(entry.Name, newAsset);
             }
         }
     }
