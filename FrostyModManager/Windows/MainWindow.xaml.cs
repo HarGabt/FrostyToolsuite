@@ -875,8 +875,95 @@ namespace FrostyModManager
                 mod = new FrostyMod(modFilename, modObj);
             }
 
-            if (mod.GameVersion != fs.Head)
+            bool GameVersionHead = mod.GameVersion != fs.Head;
+
+            if (ProfilesLibrary.IsLoaded(ProfileVersion.NeedForSpeedUnbound))
+            {
+                string ForPatch = "This mod was designed for ";
+
+                if (GameVersionHead && mod.GameVersion == 497535)
+                {
+                    mod.AddWarning(ForPatch + "Volume 1 Hotfix 1 Update");
+                }
+                else if (GameVersionHead && mod.GameVersion == 497685)
+                {
+                    mod.AddWarning(ForPatch + "Volume 1 Hotfix 2 Update");
+                }
+                else if (GameVersionHead && mod.GameVersion == 596592)
+                {
+                    mod.AddWarning(ForPatch + "Volume 2 Update");
+                }
+                else if (GameVersionHead && mod.GameVersion == 491756)
+                {
+                    mod.AddWarning(ForPatch + "Volume 3 Update");
+                }
+                else if (GameVersionHead && mod.GameVersion == 497876)
+                {
+                    mod.AddWarning(ForPatch + "Volume 4 Update");
+                }
+                else if (GameVersionHead && mod.GameVersion == 497877)
+                {
+                    mod.AddWarning(ForPatch + "Volume 4 Hotfix Update");
+                }
+                else if (GameVersionHead && mod.GameVersion == 502850)
+                {
+                    mod.AddWarning(ForPatch + "Volume 5 Update");
+                }
+                else if (GameVersionHead && mod.GameVersion == 502852)
+                {
+                    mod.AddWarning(ForPatch + "Volume 5 Hotfix Update");
+                }
+                else if (GameVersionHead && mod.GameVersion == 503116)
+                {
+                    mod.AddWarning(ForPatch + "Volume 5.1.0 Update");
+                }
+                else if (GameVersionHead && mod.GameVersion == 510750)
+                {
+                    mod.AddWarning(ForPatch + "Volume 6.0.1 Update");
+                }
+                else if (GameVersionHead && mod.GameVersion == 510749)
+                {
+                    mod.AddWarning(ForPatch + "Volume 6.1.0 Update");
+                }
+                else if (GameVersionHead && mod.GameVersion == 521529)
+                {
+                    mod.AddWarning(ForPatch + "Volume 7.0.1 Update");
+                }
+                else if (GameVersionHead && mod.GameVersion == 521533)
+                {
+                    mod.AddWarning(ForPatch + "Volume 7.0.2 Update");
+                }
+                else if (GameVersionHead && mod.GameVersion == 521663)
+                {
+                    mod.AddWarning(ForPatch + "Volume 7.1.0 Update");
+                }
+                else if (GameVersionHead && mod.GameVersion == 530988)
+                {
+                    mod.AddWarning(ForPatch + "Volume 8.0.1(.2) Update");
+                }
+                else if (GameVersionHead && mod.GameVersion == 530989)
+                {
+                    mod.AddWarning(ForPatch + "Volume 8.0.1.1 Update");
+                }
+                else if (GameVersionHead && mod.GameVersion == 541601)
+                {
+                    mod.AddWarning(ForPatch + "Volume 9.0.1 Update");
+                }
+                else if (GameVersionHead && mod.GameVersion == 541606)
+                {
+                    mod.AddWarning(ForPatch + "Volume 9.0.2 Update");
+                }
+                else if (GameVersionHead)
+                {
+                    mod.AddWarning("Mod was designed for a different game version");
+                }
+            }
+            else if (GameVersionHead)
+            {
                 mod.AddWarning("Mod was designed for a different game version");
+
+            }
+
             availableMods.Add(mod);
 
             return mod;
