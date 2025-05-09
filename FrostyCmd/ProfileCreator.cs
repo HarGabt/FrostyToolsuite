@@ -1249,6 +1249,7 @@ namespace FrostyCmd
             CreateSWSProfile();
             CreateNFSUnboundProfile();
             CreateDAVProfile();
+            CreateDeadSpaceProfile();
 
 #if FROSTY_DEVELOPER
 
@@ -1259,7 +1260,6 @@ namespace FrostyCmd
             CreateBF2042Profile();
             CreateMadden23Profile();
             CreateFifa23Profile();
-            CreateDeadSpaceProfile();
             CreateDAVProfile();
 
 #endif
