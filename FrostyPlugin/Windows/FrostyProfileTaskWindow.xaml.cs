@@ -73,19 +73,41 @@ namespace Frosty.Core.Windows
 
                 // add primary encryption key
                 byte[] key = new byte[0x10];
-                Array.Copy(keyData, key, 0x10);
-                KeyManager.Instance.AddKey("Key1", key);
+
+                try
+                {
+                    // add primary encryption key
+                    Array.Copy(keyData, key, 0x10);
+                    KeyManager.Instance.AddKey("Key1", key);
+                }
+                catch
+                {
+                    File.Delete(ProfilesLibrary.CacheName + ".key");
+                    FrostyMessageBox.Show("Encryption key is invalid. Unable to load profile.", "Frosty Editor");
+                    Close();
+                    return;
+                }
 
                 if (keyData.Length > 0x10)
                 {
-                    // add additional encryption keys
-                    key = new byte[0x10];
-                    Array.Copy(keyData, 0x10, key, 0, 0x10);
-                    KeyManager.Instance.AddKey("Key2", key);
+                    try
+                    {
+                        // add additional encryption keys
+                        key = new byte[0x10];
+                        Array.Copy(keyData, 0x10, key, 0, 0x10);
+                        KeyManager.Instance.AddKey("Key2", key);
 
-                    key = new byte[0x4000];
-                    Array.Copy(keyData, 0x20, key, 0, 0x4000);
-                    KeyManager.Instance.AddKey("Key3", key);
+                        key = new byte[0x4000];
+                        Array.Copy(keyData, 0x20, key, 0, 0x4000);
+                        KeyManager.Instance.AddKey("Key3", key);
+                    }
+                    catch 
+                    {
+                        File.Delete(ProfilesLibrary.CacheName + ".key");
+                        FrostyMessageBox.Show("Encryption key is invalid. Unable to load profile.", "Frosty Editor");
+                        Close();
+                        return;
+                    }
                 }
             }
 
