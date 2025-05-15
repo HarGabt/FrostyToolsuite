@@ -10,6 +10,7 @@
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <UseWPF>true</UseWPF>
     <OutputType>Library</OutputType>
+    <PathMap>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)'))=$(MSBuildProjectName)</PathMap>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Developer - Debug|x64' ">
@@ -17,19 +18,19 @@
     <OutputPath>bin\Developer\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
   </PropertyGroup>
-
+  
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release - Alpha|x64' ">
     <OutputPath>bin\Release\Alpha\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <Optimize>true</Optimize>
   </PropertyGroup>
-
+  
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release - Beta|x64'">
     <OutputPath>bin\Release\Beta\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <Optimize>true</Optimize>
   </PropertyGroup>
-
+  
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release - Final|x64'">
     <OutputPath>bin\Release\Final\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
@@ -58,7 +59,6 @@
     </ProjectReference>
     <ProjectReference Include="..\AtlasTexturePlugin\AtlasTexturePlugin.csproj" />
     <ProjectReference Include="..\MeshSetPlugin\MeshSetPlugin.csproj" />
-    <ProjectReference Include="..\SvgImagePlugin\SvgImagePlugin.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -74,7 +74,7 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="xcopy /Y $(TargetPath) $(SolutionDir)$(OutDir)Plugins\" />
+    <Exec Command='xcopy /Y "$(TargetPath)" "$(SolutionDir)$(OutDir)Plugins\"' />
   </Target>
 
 </Project>
