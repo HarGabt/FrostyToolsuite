@@ -5,6 +5,20 @@ This fork of Frosty Tool Suite 1.0.7 is based on [selphea's fork of 1.0.7](https
 
 And please, don't ask for help for this fork of 1.0.7 or 1.0.7 as whole at all. [Original developers of Frosty Tool Suite 1.0.7 have discontinued it and no longer provide help for it](https://images2.imgbox.com/a6/a1/CqTQvcGL_o.png), which means you are on your own if something goes wrong.
 
+## What's new in this fork and in what ways it is different?
+
+- It allows InitFS modding (both Heat and Unbound are supported)
+- Blueprint modding (rimewidgetblueprint is somewhat broken, would really like to fix that if I knew how)
+- Mod Manager now closes properly, you don't have to close it manually in Task Manager anymore
+- Shadercache symlinking, meaning it should help with performance when running mods 
+- It has a workaround for those who get `IterateSubKeys` type crash at launch
+- Mod Manager has got filtering functionality: you can show or hide applied mods
+- Fixed `ealayer3.dll` type crash when attempting to open audio assets
+- Some of new plugins that expand Editor functionality
+- Mod Manager doesn't identify itself as Editor anymore
+- Fixed splash screen not showing banner art
+- Mod Manager now shows for what game version (Volume) mod was made
+
 # FrostyToolsuite
 The most advanced modding platform for games running on DICE's Frostbite game engine.
 
