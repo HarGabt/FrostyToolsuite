@@ -1287,6 +1287,17 @@ namespace Frosty.Core.Controls
                 };
                 mi.Click += CopyGuidMenuItem_Click;
                 cm.Items.Add(mi);
+
+                mi = new MenuItem
+                {
+                    Header = "Filter Guid",
+                    Icon = new Image
+                    {
+                        Source = StringToBitmapSourceConverter.CopySource
+                    }
+                };
+                mi.Click += FilterByObjsGuidMenuItem_Click;
+                cm.Items.Add(mi);
             }
 
             if (item.IsArrayChild)
@@ -1328,6 +1339,31 @@ namespace Frosty.Core.Controls
             Clipboard.SetText(guidToCopy);
         }
 
+        /// <summary>
+        /// Copies the PointerRef's guid to the filter bar
+        /// </summary>
+        private void FilterByObjsGuidMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            FrostyPropertyGridItemData item = (FrostyPropertyGridItemData)DataContext;
+
+            string guidToCopy = "";
+
+            PointerRef pointerRef = (PointerRef)item.Value;
+            if (pointerRef.Type == PointerRefType.Null)
+                guidToCopy = "";
+            else if (pointerRef.Type == PointerRefType.External)
+                guidToCopy = pointerRef.External.ClassGuid.ToString();
+            else
+            {
+                dynamic obj = pointerRef.Internal;
+                guidToCopy = obj.GetInstanceGuid().ToString();
+            }
+            FrostyPropertyGrid pg = GetPropertyGrid();
+            pg.filterBox.WatermarkText = "";
+            pg.filterBox.Text = "guid:" + guidToCopy;
+            pg.FilterTextInBox();
+        }
+		
         /// <summary>
         /// Copies the items data to the clipboard
         /// </summary>
@@ -1582,7 +1618,7 @@ namespace Frosty.Core.Controls
         private BaseTypeOverride additionalData;
 
         private TreeView tv;
-        private FrostyWatermarkTextBox filterBox;
+        public FrostyWatermarkTextBox filterBox;
         private Border filterInProgressBorder;
         private ProgressBar filterProgressBar;
         private ObservableCollection<FrostyPropertyGridItemData> items;
@@ -1642,6 +1678,11 @@ namespace Frosty.Core.Controls
         }
 
         private async void FilterBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            FilterTextInBox();
+        }
+
+        public async void FilterTextInBox()
         {            
             string filterText = filterBox.Text;
             if (filterText == FilterText)
