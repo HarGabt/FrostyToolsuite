@@ -1330,48 +1330,37 @@ namespace MeshSetPlugin
                                             {
                                                 if (elem.Format == VertexElementFormat.UInt)
                                                 {
-                                                    // packed as a packed quaternion
-
-                                                    Vector3 b = Vector3.Cross(normal, tangent);
-                                                    Quaternion quat = new Quaternion
-                                                    {
-                                                        X = normal.Y - binormal.Z,
-                                                        Y = tangent.Z - normal.X,
-                                                        Z = binormal.X - tangent.Y,
-                                                        W = 1.0f + tangent.X + binormal.Y + normal.Z
-                                                    };
-                                                    quat.Normalize();
-
-                                                    int idx = FindGreatestComponent(quat);
-                                                    if (idx == 0)
-                                                    {
-                                                        quat = new Quaternion(quat.W, quat.X, quat.Y, quat.Z);
-                                                    }
-                                                    else if (idx == 1)
-                                                    {
-                                                        quat = new Quaternion(quat.X, quat.W, quat.Y, quat.Z);
-                                                    }
-                                                    else if (idx == 2)
-                                                    {
-                                                        quat = new Quaternion(quat.X, quat.Y, quat.W, quat.Z);
-                                                    }
-
-                                                    Vector3 tmpQuat = new Vector3(quat.X, quat.Y, quat.Z) * Math.Sign(quat.W) * (float)Math.Sqrt(0.5f) + 0.5f;
-                                                    Vector4 packedQuat = new Vector4(tmpQuat.X, tmpQuat.Y, tmpQuat.Z, idx / 3.0f);
-
-                                                    uint ts = 0;
-                                                    ts |= ((uint)(packedQuat.X * 1023.0f) << 22);
-                                                    ts |= ((uint)(packedQuat.Y * 511.0f) << 13);
-                                                    ts |= ((uint)(packedQuat.Z * 1023.0f) << 3);
-                                                    ts |= ((uint)(packedQuat.W * 3.0f) << 1);
-                                                    ts |= (uint)((Vector3.Dot(Vector3.Cross(normal, tangent), binormal)) < 0.0f ? 1 : 0);
+                                                    // tangent space packed as a quaternion in a uint
+                                                    uint ts = TangentSpaceCompression.PackQuaternion(tangent, binormal, normal);
 
                                                     chunkWriter.Write(ts);
                                                 }
                                                 else
                                                 {
                                                     // axis angle normals (packed as either UByte4N or UShort4N)
-                                                    // @todo
+                                                    Vector4 axisAngle = TangentSpaceCompression.PackAxisAngle(tangent, binormal, normal);
+
+                                                    // convert to vertex element format
+                                                    if (elem.Format == VertexElementFormat.UByte4N)
+                                                    {
+                                                        axisAngle[0] = MathUtil.Clamp(axisAngle[0], 0f, 1f);
+                                                        axisAngle[1] = MathUtil.Clamp(axisAngle[1], 0f, 1f);
+                                                        axisAngle[2] = MathUtil.Clamp(axisAngle[2], 0f, 1f);
+                                                        axisAngle[3] = MathUtil.Clamp(axisAngle[3], 0f, 1f);
+
+                                                        int iX = (int)(axisAngle.X * 255f + 0.5f);
+                                                        int iY = (int)(axisAngle.Y * 255f + 0.5f);
+                                                        int iZ = (int)(axisAngle.Z * 255f + 0.5f);
+                                                        int iW = (int)(axisAngle.W * 255f + 0.5f);
+                                                        chunkWriter.Write((iX & 0xFF) | ((iY & 0xFF) << 8) | ((iZ & 0xFF) << 16) | ((iW & 0xFF) << 24));
+                                                    }
+                                                    else if (elem.Format == VertexElementFormat.UShort4N)
+                                                    {
+                                                        chunkWriter.Write((ushort)Math.Round(MathUtil.Clamp(axisAngle.X * 65535f, 0f, 65535f)));
+                                                        chunkWriter.Write((ushort)Math.Round(MathUtil.Clamp(axisAngle.Y * 65535f, 0f, 65535f)));
+                                                        chunkWriter.Write((ushort)Math.Round(MathUtil.Clamp(axisAngle.Z * 65535f, 0f, 65535f)));
+                                                        chunkWriter.Write((ushort)Math.Round(MathUtil.Clamp(axisAngle.W * 65535f, 0f, 65535f)));
+                                                    }
                                                 }
                                             }
                                             break;
