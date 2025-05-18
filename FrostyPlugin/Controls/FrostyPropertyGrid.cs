@@ -641,6 +641,28 @@ namespace Frosty.Core.Controls
             return retVal;
         }
 
+        public bool CheckPointerRef(PointerRef pr, string guid)
+        {
+            if (pr.Type == PointerRefType.Internal)
+            {
+                AssetClassGuid instGuid = ((dynamic)pr.Internal).GetInstanceGuid();
+                string instGuidString = instGuid.ToString();
+
+                if (instGuidString.Equals(guid))
+                    return false;
+            }
+            else if (pr.Type == PointerRefType.External)
+            {
+                string fileGuidString = pr.External.FileGuid.ToString();
+                string classGuidString = pr.External.ClassGuid.ToString();
+
+                if (classGuidString.Equals(guid) || fileGuidString.Equals(guid))
+                    return false;
+            }
+            return true;
+        }
+        List<string> connections = new List<string>() { "PropertyConnection", "EventConnection", "LinkConnection" };
+
         public bool FilterGuid(string guid, List<object> refObjects, bool doNotHideSubObjects = false)
         {
             if (_value is PointerRef pRef)
@@ -657,38 +679,67 @@ namespace Frosty.Core.Controls
             }
 
             bool retVal = true;
+
             foreach (var item in Children)
             {
-                item.IsHidden = !doNotHideSubObjects;
-                if (item.Value is PointerRef pr)
+                if (connections.Contains(item.Value.GetType().Name))
                 {
-                    if (pr.Type == PointerRefType.Internal)
+                    item.IsHidden = true;
+                    foreach (PointerRef pr in new List<dynamic> { (PointerRef)((dynamic)item.Value).Source, (PointerRef)((dynamic)item.Value).Target })
                     {
-                        AssetClassGuid instGuid = ((dynamic)pr.Internal).GetInstanceGuid();
-                        string instGuidString = instGuid.ToString();
+                        if (pr.Type == PointerRefType.Internal)
+                        {
+                            AssetClassGuid instGuid = ((dynamic)pr.Internal).GetInstanceGuid();
+                            string instGuidString = instGuid.ToString();
 
                         if (instGuidString.Equals(guid))
-                            item.IsHidden = false;
-                    }
-                    else if (pr.Type == PointerRefType.External)
-                    {
-                        string fileGuidString = pr.External.FileGuid.ToString();
-                        string classGuidString = pr.External.ClassGuid.ToString();
+                                item.IsHidden = false;
+                        }
+                        else if (pr.Type == PointerRefType.External)
+                        {
+                            string fileGuidString = pr.External.FileGuid.ToString();
+                            string classGuidString = pr.External.ClassGuid.ToString();
 
-                        if (classGuidString.Equals(guid) || fileGuidString.Equals(guid))
-                            item.IsHidden = false;
+                            if (classGuidString.Equals(guid) || fileGuidString.Equals(guid))
+                                item.IsHidden = false;
+                        }
                     }
+                    if (retVal && !item.IsHidden)
+                        retVal = false;
                 }
-                if (item.Value is AssetClassGuid acg)
+                else
                 {
-                    string exportedGuidString = acg.ExportedGuid.ToString();
+                    item.IsHidden = !doNotHideSubObjects;
+                    if (item.Value is PointerRef pr)
+                    {
+                        if (pr.Type == PointerRefType.Internal)
+                        {
+                            AssetClassGuid instGuid = ((dynamic)pr.Internal).GetInstanceGuid();
+                            string instGuidString = instGuid.ToString();
 
-                    if (exportedGuidString.Equals(guid))
-                        item.IsHidden = false;
+                        if (instGuidString.Equals(guid))
+                                item.IsHidden = false;
+                        }
+                        else if (pr.Type == PointerRefType.External)
+                        {
+                            string fileGuidString = pr.External.FileGuid.ToString();
+                            string classGuidString = pr.External.ClassGuid.ToString();
+
+                            if (classGuidString.Equals(guid) || fileGuidString.Equals(guid))
+                                item.IsHidden = false;
+                        }
+                    }
+                    if (item.Value is AssetClassGuid acg)
+                    {
+                        string exportedGuidString = acg.ExportedGuid.ToString();
+
+                        if (exportedGuidString.Equals(guid))
+                            item.IsHidden = false;
+                    }
+
+                    if (!item.FilterGuid(guid, refObjects, !item.IsHidden) || !item.IsHidden)
+                        retVal = false;
                 }
-
-                if (!item.FilterGuid(guid, refObjects, !item.IsHidden) || !item.IsHidden)
-                    retVal = false;
             }
 
             if (!retVal)
