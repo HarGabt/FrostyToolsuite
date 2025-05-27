@@ -280,6 +280,21 @@ namespace FrostySdk.IO
             return null;
         }
 
+        /// <summary>
+        /// Enumerates over all objects in an EbxAsset until an object with the specified guid is found
+        /// </summary>
+        /// <param name="guid"></param>
+        /// <returns>An object with a matching AssetClassGuid. Null if none found</returns>
+        public dynamic GetObject(AssetClassGuid guid)
+        {
+            foreach (dynamic obj in Objects)
+            {
+                if (obj.GetInstanceGuid() == guid)
+                    return obj;
+            }
+            return null;
+        }
+
         public bool AddDependency(Guid guid)
         {
             if (dependencies.Contains(guid))
