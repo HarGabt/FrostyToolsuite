@@ -7,3 +7,7 @@
 [submodule "Plugins/FrostyColorPicker"]
 	path = Plugins/FrostyColorPicker
 	url = https://github.com/natv1337/FrostyColorPicker
+[submodule "Plugins/DatapathFixPlugin"]
+	path = Plugins/DatapathFixPlugin
+	url = https://github.com/J-Lyt/DatapathFixPlugin/
+	branch = submodule
