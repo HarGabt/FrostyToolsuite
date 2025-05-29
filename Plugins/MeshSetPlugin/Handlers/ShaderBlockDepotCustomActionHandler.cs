@@ -14,6 +14,8 @@ namespace MeshSetPlugin.Handlers
     {
         public HandlerUsage Usage => HandlerUsage.Merge;
 
+        public bool ModifiesAddedAssets => false;
+
         private class ShaderBlockDepotResource : EditorModResource
         {
             public static uint Hash => 0x89ef2205;
