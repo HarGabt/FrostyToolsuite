@@ -453,12 +453,9 @@ namespace Frosty.ModSupport
 
                                 // add in existing bundles
                                 var ebxEntry = m_am.GetEbxEntry(resource.Name);
-                                if (ebxEntry != null)
+                                foreach (int bid in ebxEntry.Bundles)
                                 {
-                                    foreach (int bid in ebxEntry.Bundles)
-                                    {
-                                        bundles.Add(HashBundle(m_am.GetBundleEntry(bid)));
-                                    }
+                                    bundles.Add(HashBundle(m_am.GetBundleEntry(bid)));
                                 }
 
                                 entry.ExtraData = extraData;

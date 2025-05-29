@@ -19,8 +19,6 @@ namespace FsLocalizationPlugin
     {
         public HandlerUsage Usage => HandlerUsage.Merge;
 
-        public bool ModifiesAddedAssets => false;
-
         private class FsLocalizationResource : EditorModResource
         {
             public override ModResourceType Type => ModResourceType.Ebx;
