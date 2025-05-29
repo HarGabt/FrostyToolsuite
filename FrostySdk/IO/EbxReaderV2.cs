@@ -32,7 +32,7 @@ namespace FrostySdk.IO
         public EbxReaderV2(Stream InStream, FileSystemManager fs, bool inPatched)
             : base(InStream, true)
         {
-            if (std == null && fs.HasFileInMemoryFs("SharedTypeDescriptors.ebx"))
+            if (std == null)
             {
                 std = new EbxSharedTypeDescriptors(fs, "SharedTypeDescriptors.ebx");
                 if (fs.HasFileInMemoryFs("SharedTypeDescriptors_patch.ebx"))
@@ -206,7 +206,6 @@ namespace FrostySdk.IO
         internal EbxClass GetClass(Type objType)
         {
             EbxClass? classType = null;
-
             foreach (TypeInfoGuidAttribute attr in objType.GetCustomAttributes<TypeInfoGuidAttribute>())
             {
                 if (classGuids.Contains(attr.Guid))
@@ -283,14 +282,7 @@ namespace FrostySdk.IO
 
         internal override object CreateObject(EbxClass classType)
         {
-            if (std != null)
-            {
-                return TypeLibrary.CreateObject(classType.SecondSize == 1 ? patchStd.GetGuid(classType).Value : std.GetGuid(classType).Value);
-            }
-            else
-            {
-                return TypeLibrary.CreateObject(classType.Name);
-            }
+            return TypeLibrary.CreateObject(classType.SecondSize == 1 ? patchStd.GetGuid(classType).Value : std.GetGuid(classType).Value);
         }
 
         internal override Type GetType(EbxClass classType)

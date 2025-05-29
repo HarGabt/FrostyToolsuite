@@ -8,17 +8,6 @@ selphea's changes:
 
 Changes in my fork:
 
-(2025.05.15)
---------
-- Fixed broken duplicaton of decals! Now it should work properly. 
-Keep in mind, you will have to redo duplicating decals in your project, otherwise they will still appear broken in your game. It was broken since the first version release and only now it was fixed.
-- Reverted "Hack for imported bin files". Wasn't really worth implementing it.
-- Mod Manager now shows what game version / Volume mod was made for. For example, if you happen to have an outdated mod from, like, Volume 3, the Mod Manager will show you `(WARNING: This mod was designed for Volume 3 Update)`
-- Fixed broken splash window functionality that led to absence of game art banner. Now it shows both NFS Unbound and Dead Space (2023) banners during profile load.
-- Removed `Read Only` flag from Dead Space (2023). Although, mods don't apply for some reason, it's still good to see it removed.
-- Implemented encryption key validation. Now if you happen to enter wrong encryption key or improperly, the Editor won't crash.
-
-
 (2025.05.06)
 --------
 - Fixed Data Explorer resetting last location after reverting asset

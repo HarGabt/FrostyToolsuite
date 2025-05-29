@@ -101,12 +101,6 @@ namespace FrostySdk.IO
             WriteString(str);
         }
 
-        public void WriteSizedNullTerminatedString(string str)
-        {
-            Write7BitEncodedInt(str.Length);
-            WriteNullTerminatedString(str);
-        }
-
         public void WriteFixedSizedString(string str, int size)
         {
             WriteString(str);
