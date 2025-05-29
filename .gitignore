@@ -295,3 +295,4 @@ __pycache__/
 *.lib
 /FrostyEditor/MigrationBackup
 /Plugins/LevelEditorOldPlugin
+/Plugins/zstash
