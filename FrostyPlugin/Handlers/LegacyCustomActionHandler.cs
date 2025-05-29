@@ -16,6 +16,8 @@ namespace Frosty.Core.Handlers
     {
         public HandlerUsage Usage => HandlerUsage.Merge;
 
+        public bool ModifiesAddedAssets => false;
+
         private class ModLegacyFileEntry
         {
             public int Hash { get; set; }

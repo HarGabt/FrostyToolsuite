@@ -16,6 +16,8 @@ namespace TestPlugin.Handlers
     {
         public HandlerUsage Usage => HandlerUsage.Merge;
 
+        public bool ModifiesAddedAssets => false;
+
         public class InitFsresource : EditorModResource
         {
             public override ModResourceType Type => ModResourceType.FsFile;
