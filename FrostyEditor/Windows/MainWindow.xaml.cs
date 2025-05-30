@@ -381,15 +381,28 @@ namespace FrostyEditor.Windows
             // setup ability to cancel the process
             CancellationTokenSource cancelToken = new CancellationTokenSource();
 
-            Random r = new Random();
-            string editorModName = $"EditorMod{r.Next(1000, 9999):D4}.fbmod";
             LaunchButton.IsEnabled = false;
 
             // get all mods
-            List<string> modPaths = Directory.EnumerateFiles($"Mods/{ProfilesLibrary.ProfileName}/", "*.fbmod", SearchOption.AllDirectories).Select(Path.GetFileName).ToList();
+            List<string> modPaths = new List<string>();
+
+            foreach (string modPath in Directory.EnumerateFiles($"Mods/{ProfilesLibrary.ProfileName}/", "*.fbmod", SearchOption.AllDirectories))
+            {
+                if (Path.GetFileName(modPath).Contains("EditorMod"))
+                {
+                    File.Delete(modPath);
+                }
+                else
+                {
+                    modPaths.Add(Path.GetFileName(modPath));
+                }
+            }
+
+            Random r = new Random();
+            string editorModName = $"EditorMod_{r.Next(1000, 9999).ToString("D4")}.fbmod";
 
             // create temporary editor mod
-            ModSettings editorSettings = new ModSettings { Title = "Editor Mod", Author = "Frosty Editor", Version = "1", Category = "Editor" };
+            ModSettings editorSettings = new ModSettings { Title = editorModName, Author = "Frosty Editor", Version = Frosty.Core.App.Version, Category = "Editor" };
 
             // apply mod
             const string additionalArgs = "";
@@ -411,12 +424,26 @@ namespace FrostyEditor.Windows
                         task.Update("Exporting Mod");
                         ExportMod(editorSettings, $"Mods/{ProfilesLibrary.ProfileName}/{editorModName}", true);
                         modPaths.Add(editorModName);
+                        App.Logger.Log("Temporary editor mod saved to {0}", $"Mods/{ProfilesLibrary.ProfileName}/{editorModName}");
 
                         // allow cancelling in case of a big mod (will cancel after processing the mod)
                         // @todo: add cancellation to different stages of mod exportation, to allow cancelling
                         //        at any stage of a large mod
 
                         cancelToken.Token.ThrowIfCancellationRequested();
+
+                        // Remove mods.json
+                        task.Update("Removing mods.json");
+                        string gamePatchPath = "Patch";
+                        if (ProfilesLibrary.DataVersion == (int)ProfileVersion.Fifa17 || ProfilesLibrary.DataVersion == (int)ProfileVersion.DragonAgeInquisition || ProfilesLibrary.DataVersion == (int)ProfileVersion.Battlefield4 || ProfilesLibrary.DataVersion == (int)ProfileVersion.NeedForSpeed || ProfilesLibrary.DataVersion == (int)ProfileVersion.PlantsVsZombiesGardenWarfare2 || ProfilesLibrary.DataVersion == (int)ProfileVersion.NeedForSpeedRivals)
+                            gamePatchPath = "Update\\Patch\\Data";
+                        else if (ProfilesLibrary.DataVersion == (int)ProfileVersion.PlantsVsZombiesBattleforNeighborville || ProfilesLibrary.DataVersion == (int)ProfileVersion.Battlefield5 || ProfilesLibrary.DataVersion == (int)ProfileVersion.NeedForSpeedUnbound || ProfilesLibrary.DataVersion == (int)ProfileVersion.DeadSpace) //bfn and bfv dont have a patch directory
+                            gamePatchPath = "Data";
+                        if (File.Exists(App.FileSystem.BasePath + $"\\ModData\\{App.SelectedPack}\\{gamePatchPath}\\mods.json"))
+                        {
+                            File.Delete(App.FileSystem.BasePath + $"\\ModData\\{App.SelectedPack}\\{gamePatchPath}\\mods.json");
+                            App.Logger.Log("Removed mods.json");
+                        }
 
                         task.Update("");
                         executor.Run(App.FileSystem, cancelToken.Token, task.TaskLogger, $"Mods/{ProfilesLibrary.ProfileName}/", App.SelectedPack, additionalArgs, modPaths.ToArray());
