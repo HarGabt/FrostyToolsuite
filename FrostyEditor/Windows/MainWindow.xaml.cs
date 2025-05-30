@@ -954,13 +954,13 @@ namespace FrostyEditor.Windows
         private void contextMenuRevert_Click(object sender, RoutedEventArgs e)
         {
             AssetEntry entry = m_currentExplorer.SelectedAsset;
-            if (!entry.IsModified)
+            if (entry == null || !entry.IsModified)
                 return;
 
             for (int i = 1; i < TabControl.Items.Count; i++)
             {
                 FrostyTabItem tabItem = TabControl.Items[i] as FrostyTabItem;
-                if (tabItem.TabId == entry.Name)
+                if (tabItem != null && tabItem.TabId == entry.Name)
                 {
                     RemoveTab(tabItem);
                     break;
