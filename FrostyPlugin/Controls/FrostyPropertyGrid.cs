@@ -999,6 +999,8 @@ namespace Frosty.Core.Controls
 
         private void OnModified(object sender, ItemModifiedEventArgs args)
         {
+            additionalData?.Save(args);
+
             if (Parent != null)
             {
                 Parent.OnModified(sender, args);
