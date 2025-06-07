@@ -1,10 +1,13 @@
 ﻿using Frosty.Controls;
 using Frosty.Core.Windows;
+using Microsoft.Win32;
 using SharpDX;
 using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Resources;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
@@ -40,6 +43,14 @@ namespace Frosty.Core.Controls
             {
                 Clipboard.SetText(parentWin.LogText);
                 Clipboard.Flush();
+            }
+            else if (buttonName == "PART_OpenFolder")
+            {
+                try
+                {
+                    System.Diagnostics.Process.Start("explorer.exe", $"{Environment.CurrentDirectory}\\CrashLogs");
+                }
+                catch { }
             }
         }
     }
@@ -163,6 +174,36 @@ namespace Frosty.Core.Controls
                 App.Logger.LogError("Failed to translate exception");
 
                 StringBuilder sb = new StringBuilder();
+
+                sb.Append("OS=");
+
+                try
+                {
+                    string ProductName = (string)Registry.LocalMachine.OpenSubKey("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion").GetValue("ProductName");
+                    string DisplayVersion = (string)Registry.LocalMachine.OpenSubKey("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion").GetValue("DisplayVersion");
+                    string CurrentBuild = (string)Registry.LocalMachine.OpenSubKey("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion").GetValue("CurrentBuild");
+                    int UBR = (int)Registry.LocalMachine.OpenSubKey("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion").GetValue("UBR");
+
+                    if (Int32.Parse(CurrentBuild) >= 22000)
+                    {
+                        ProductName = ProductName.Replace("10", "11");
+                    }
+
+                    sb.AppendLine(ProductName + " " + DisplayVersion + " " + "(OS Build " + CurrentBuild + "." + UBR + ")");
+                }
+                catch
+                {
+                    sb.AppendLine("Failed to retrieve OS Information.");
+                }
+
+                string AppText = "Frosty Editor v";
+
+                if (!App.IsEditor)
+                    AppText = "Frosty Mod Manager v";
+
+                sb.Append("App=");
+                sb.AppendLine(AppText + App.Version.Replace(" (Developer)", ""));
+                sb.AppendLine();
                 sb.Append("Type=");
                 sb.AppendLine(ex.GetType().ToString());
                 sb.Append("HResult=");
@@ -197,6 +238,36 @@ namespace Frosty.Core.Controls
             public void Run()
             {
                 StringBuilder sb = new StringBuilder();
+
+                sb.Append("OS=");
+
+                try
+                {
+                    string ProductName = (string)Registry.LocalMachine.OpenSubKey("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion").GetValue("ProductName");
+                    string DisplayVersion = (string)Registry.LocalMachine.OpenSubKey("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion").GetValue("DisplayVersion");
+                    string CurrentBuild = (string)Registry.LocalMachine.OpenSubKey("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion").GetValue("CurrentBuild");
+                    int UBR = (int)Registry.LocalMachine.OpenSubKey("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion").GetValue("UBR");
+
+                    if (Int32.Parse(CurrentBuild) >= 22000)
+                    {
+                        ProductName = ProductName.Replace("10", "11");
+                    }
+
+                    sb.AppendLine(ProductName + " " + DisplayVersion + " " + "(OS Build " + CurrentBuild + "." + UBR + ")");
+                }
+                catch
+                {
+                    sb.AppendLine("Failed to retrieve OS Information.");
+                }
+
+                string AppText = "Frosty Editor v";
+
+                if (!App.IsEditor)
+                    AppText = "Frosty Mod Manager v";
+
+                sb.Append("App=");
+                sb.AppendLine(AppText + App.Version.Replace(" (Developer)", ""));
+                sb.AppendLine();
                 sb.Append("Type=");
                 sb.AppendLine(_ex.GetType().ToString());
                 sb.Append("HResult=");

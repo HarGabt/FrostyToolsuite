@@ -1431,8 +1431,9 @@
                             <!--<Button x:Name="PART_ReportCrashButton" Content="Report Crash" Width="100" Margin="5,0,0,0"/>-->
                         </StackPanel>
                         <StackPanel Grid.Row="2" Margin="8" FlowDirection="LeftToRight" Orientation="Horizontal">
-                            <Button x:Name="PART_CopyExceptionButton" Content="Copy Exception" Width="100" Margin="0,0,5,0" Command="{StaticResource exceptionBoxClickCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
-                            <Button x:Name="PART_CopyLogButton" Content="Copy Log" Width="70" Margin="0,0,5,0" Command="{StaticResource exceptionBoxClickCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
+                            <Button x:Name="PART_CopyExceptionButton" Content="Copy Exception" Width="95" Margin="0,0,5,0" Command="{StaticResource exceptionBoxClickCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
+                            <Button x:Name="PART_CopyLogButton" Content="Copy Log" Width="64" Margin="0,0,5,0" Command="{StaticResource exceptionBoxClickCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
+                            <Button x:Name="PART_OpenFolder" Content="Open Logs Folder" Width="109" Margin="0,0,5,0" Command="{StaticResource exceptionBoxClickCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Self}}"/>
                         </StackPanel>
                     </Grid>
                 </DataTemplate>
