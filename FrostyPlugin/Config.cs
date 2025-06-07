@@ -5,6 +5,7 @@ using System.Linq;
 using FrostySdk;
 using FrostySdk.IO;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Frosty.Core
 {
@@ -163,7 +164,18 @@ namespace Frosty.Core
         /// <param name="profile">The profile the option belongs to. If null, the currently active profile will be used.</param>
         public static void Add(string option, object value, ConfigScope scope = ConfigScope.Global, string profile = null)
         {
-            Current[option, scope, profile] = value;
+            // check if the provided value implements IConvertible or JToken
+            if (value is IConvertible || value is JToken)
+            {
+                // we can safely store the value without any modifications
+                Current[option, scope, profile] = value;
+            }
+            else
+            {
+                // if the given value does not inherit IConvertible or JToken, it must be wrapped in a JToken
+                // otherwise, types like collections, arrays, etc will cause an exception
+                Current[option, scope, profile] = JToken.FromObject(value);
+            }
         }
 
         /// <summary>
@@ -218,7 +230,25 @@ namespace Frosty.Core
         /// <param name="profile">The profile the option belongs to. If null, the currently active profile will be used.</param>
         public static T Get<T>(string option, T defaultValue, ConfigScope scope = ConfigScope.Global, string profile = null)
         {
-            return Current[option, scope, profile ?? ProfilesLibrary.ProfileName] == null ? defaultValue : (T)Convert.ChangeType(Current[option, scope, profile ?? ProfilesLibrary.ProfileName], typeof(T));
+            object retrievedValue = Current[option, scope, profile ?? ProfilesLibrary.ProfileName];
+
+            if (retrievedValue != null)
+            {
+                // check if the object is or derives from a JToken (i.e raw JSON objects)
+                if (retrievedValue is JToken)
+                {
+                    // utilize the JToken converter rather than the convert class' converter
+                    retrievedValue = ((JToken)retrievedValue).ToObject(typeof(T));
+                }
+                else
+                {
+                    // if the retrieved value inherits IConvertible, use the Convert class for a conversion; otherwise, attempt to cast the value
+                    retrievedValue = Current[option, scope, profile ?? ProfilesLibrary.ProfileName];
+                    retrievedValue = retrievedValue is IConvertible ? (T)Convert.ChangeType(Current[option, scope, profile ?? ProfilesLibrary.ProfileName], typeof(T)) : (T)retrievedValue;
+                }
+            }
+
+            return (T)(retrievedValue != null ? retrievedValue : defaultValue);
         }
 
         // indexer
