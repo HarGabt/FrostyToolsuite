@@ -36,6 +36,20 @@ namespace FrostyEditor.Windows
     /// </summary>
     public partial class MainWindow : IEditorWindow
     {
+        private static ImageSourceConverter m_imageSourceConverter = new ImageSourceConverter();
+
+        private MenuItem m_clearRecentsMenuItem = new MenuItem
+        {
+            Header = "Clear Recents",
+            Height = 22,
+            Icon = new Image
+            {
+                Source = (ImageSource)m_imageSourceConverter.ConvertFromString("pack://application:,,,/FrostyCore;component/Images/Clear.png"),
+            }
+        };
+
+        private List<string> m_recentProjects = Config.Get("RecentProjects", new List<string>(), ConfigScope.Game);
+
         public FrostyDataExplorer DataExplorer => dataExplorer;
         public FrostyDataExplorer LegacyExplorer => legacyExplorer;
         public FrostyDataExplorer VisibleExplorer => m_currentExplorer;
@@ -110,6 +124,17 @@ namespace FrostyEditor.Windows
             }
             BookmarkContextPicker.SelectedItem = Bookmarks.BookmarkDb.CurrentContext;
             TaskbarItemInfo = new System.Windows.Shell.TaskbarItemInfo();
+
+            m_clearRecentsMenuItem.Click += delegate (object sender, RoutedEventArgs e) {
+                m_recentProjects.Clear();
+                recentProjectsMenuItem.Items.Clear();
+                recentProjectsMenuItem.IsEnabled = false;
+
+                Config.Add("RecentProjects", m_recentProjects, ConfigScope.Game);
+                Config.Save();
+            };
+
+            RefreshRecentProjects();
 
             m_currentExplorer = dataExplorer;
         }
@@ -616,6 +641,8 @@ namespace FrostyEditor.Windows
             {
                 FrostyTaskWindow.Show("Saving Project", m_project.Filename, (task) => m_project.Save());
 
+                AddRecentProject(m_project.Filename);
+
                 dataExplorer.RefreshItems();
                 legacyExplorer.RefreshItems();
                 RefreshTabs();
@@ -634,6 +661,8 @@ namespace FrostyEditor.Windows
             if (SaveProject(true))
             {
                 FrostyTaskWindow.Show("Saving Project", m_project.Filename, (task) => m_project.Save());
+
+                AddRecentProject(m_project.Filename);
 
                 dataExplorer.RefreshItems();
                 legacyExplorer.RefreshItems();
@@ -694,6 +723,8 @@ namespace FrostyEditor.Windows
 
                 UpdateWindowTitle();
                 UpdateDiscordState();
+
+                AddRecentProject(m_project.Filename);
             }
 
             m_autoSaveTimer?.Start();
@@ -1461,6 +1492,153 @@ namespace FrostyEditor.Windows
         private void BookmarkTreeView_MouseDown(object sender, MouseButtonEventArgs e) {
             TreeViewItem treeItem = (TreeViewItem)BookmarkTreeView.ItemContainerGenerator.ContainerFromItem(BookmarkTreeView.SelectedItem);
             if (treeItem != null) treeItem.IsSelected = false;
+        }
+        /// <summary>
+        /// Adds a specified project path to the list of recent projects.
+        /// </summary>
+        /// <param name="path">The *.fbproject path to be used.</param>
+        public void AddRecentProject(string path)
+        {
+            // check if the collection of recent projects already contains the loaded project
+            if (m_recentProjects.Contains(path))
+            {
+                // remove the project from the list temporarily, as this will allow for it to be moved to the top
+                m_recentProjects.Remove(path);
+            }
+
+            m_recentProjects.Insert(0, path);
+
+            if (m_recentProjects.Count > 10)
+            {
+                // remove the last project from the list of recent projects, accommodating for the new project
+                m_recentProjects.Remove(m_recentProjects.Last());
+            }
+
+            Config.Add("RecentProjects", m_recentProjects, ConfigScope.Game);
+            Config.Save();
+            RefreshRecentProjects();
+        }
+
+        /// <summary>
+        /// If the project is modified, asks the user if they would like to save it. This is ideal for scenarios in which the project will be automatically switched or unloaded.
+        /// </summary>
+        /// <param name="isSilent">An optional bool determining whether or not the save should be made silently.</param>
+        /// <returns>A <see cref="MessageBoxResult"/> representing the user's choice.</returns>
+        public MessageBoxResult AskIfShouldSaveProject(bool isSilent = false)
+        {
+            // check if the project is modified, which determines whether or not execution should proceed
+            if (!m_project.IsDirty)
+            {
+                return MessageBoxResult.None;
+            }
+
+            MessageBoxResult saveQuestionResult = FrostyMessageBox.Show("Do you wish to save changes to " + m_project.DisplayName + "?", "Frosty Editor", MessageBoxButton.YesNoCancel);
+
+            // check if the user wishes to save the project
+            if (saveQuestionResult == MessageBoxResult.Yes)
+            {
+                // check if the project should be saved
+                if (SaveProject(forceSaveAs: false))
+                {
+                    if (isSilent)
+                    {
+                        m_project.Save();
+                        AddRecentProject(m_project.Filename);
+                        return saveQuestionResult;
+                    }
+
+                    // begin a FrostyTask to indicate the project is being saved
+                    FrostyTaskWindow.Show("Saving Project", m_project.Filename, delegate {
+                        m_project.Save();
+                        AddRecentProject(m_project.Filename);
+                    });
+
+                    App.Logger.Log("Project saved to {0}", m_project.Filename);
+                }
+            }
+
+            return saveQuestionResult;
+        }
+
+        /// <summary>
+        /// Ensures the <see cref="recentProjectsMenuItem"/> and its associated list of recent projects in the config are up-to-date.
+        /// </summary>
+        public void RefreshRecentProjects()
+        {
+            recentProjectsMenuItem.Items.Clear();
+
+            // check if there are no recent projects to display
+            if (m_recentProjects.Count == 0)
+            {
+                recentProjectsMenuItem.IsEnabled = false;
+                return;
+            }
+
+            MenuItem currentMenuItem;
+            int projectIndex = 1;
+
+            // create a new list containing the current recent projects and iterate over that, which avoids any "collection modified" exceptions
+            foreach (string recentProject in new List<string>(m_recentProjects))
+            {
+                // check if the current project does not exist
+                if (!File.Exists(recentProject))
+                {
+                    m_recentProjects.Remove(recentProject);
+
+                    // save the modified list of recent projects to the config
+                    Config.Add("RecentProjects", m_recentProjects, ConfigScope.Game);
+                    Config.Save();
+
+                    continue;
+                }
+
+                currentMenuItem = new MenuItem
+                {
+                    Header = string.Format("{0}: {1}...\\{2}", new object[]
+                    {
+                        projectIndex,
+                        Path.GetPathRoot(recentProject),
+                        Path.GetFileName(recentProject)
+                    }),
+                    Height = 22
+                };
+
+                currentMenuItem.Click += delegate (object sender, RoutedEventArgs e) {
+                    // check if the recent project no longer exists
+                    if (!File.Exists(recentProject))
+                    {
+                        FrostyMessageBox.Show("The selected project does not exist.", "Frosty Editor");
+
+                        // refresh the displayed recent projects to accommodate for the missing project
+                        RefreshRecentProjects();
+                        return;
+                    }
+
+                    // check if the user does not wish to load the selected recent project
+                    if (AskIfShouldSaveProject() == MessageBoxResult.Cancel)
+                    {
+                        return;
+                    }
+
+                    // load the recent project
+                    LoadProject(recentProject, false);
+                };
+
+                recentProjectsMenuItem.Items.Add(currentMenuItem);
+                projectIndex++;
+            }
+
+            // check if all recent projects did not exist by checking if the quantity of projects is zero
+            if (m_recentProjects.Count == 0)
+            {
+                // execute RefreshRecentProjects within itself to handle the lack of projects
+                RefreshRecentProjects();
+                return;
+            }
+
+            recentProjectsMenuItem.Items.Add(new Separator());
+            recentProjectsMenuItem.Items.Add(m_clearRecentsMenuItem);
+            recentProjectsMenuItem.IsEnabled = true;
         }
     }
 }

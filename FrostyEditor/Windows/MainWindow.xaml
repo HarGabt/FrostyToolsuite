@@ -23,7 +23,7 @@
         <ContextMenu x:Key="bookmarksContextMenu">
             <MenuItem Header="Open asset" Click="contextMenuBookmarkItemOpen_Click">
                 <MenuItem.Icon>
-                    <Image Source="/FrostyEditor;component/Images/OpenAsset.png" Opacity="0.5"/>
+                    <Image Source="/FrostyEditor;component/Images/OpenAsset.png" RenderOptions.BitmapScalingMode="Fant"/>
                 </MenuItem.Icon>
             </MenuItem>
             <MenuItem Header="Find in explorer" Click="contextMenuBookmarkItemFind_Click"/>
@@ -48,34 +48,39 @@
                 <MenuItem Header="File" Height="22">
                     <MenuItem x:Name="NewModMenuItem" Header="New" Height="22" InputGestureText="Ctrl+N" Click="newModMenuItem_Click">
                         <MenuItem.Icon>
-                            <Image Source="/FrostyEditor;component/Images/New.png"/>
+                            <Image Source="/FrostyEditor;component/Images/New.png" RenderOptions.BitmapScalingMode="Fant"/>
                         </MenuItem.Icon>
                     </MenuItem>
                     <MenuItem x:Name="OpenModMenuItem" Header="Open" Height="22" InputGestureText="Ctrl+O" Click="openModMenuItem_Click">
                         <MenuItem.Icon>
-                            <Image Source="/FrostyEditor;component/Images/Open.png"/>
+                            <Image Source="/FrostyEditor;component/Images/Open.png" RenderOptions.BitmapScalingMode="Fant"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem x:Name="recentProjectsMenuItem" Header="Recent Projects" Height="22" InputGestureText="Ctrl+R">
+                        <MenuItem.Icon>
+                            <Image Source="/FrostyEditor;component/Images/Recent.png" RenderOptions.BitmapScalingMode="Fant"/>
                         </MenuItem.Icon>
                     </MenuItem>
                     <MenuItem x:Name="SaveModMenuItem" Header="Save" Height="22" InputGestureText="Ctrl+S" Click="saveModMenuItem_Click">
                         <MenuItem.Icon>
-                            <Image Source="/FrostyEditor;component/Images/Save.png"/>
+                            <Image Source="/FrostyEditor;component/Images/Save.png" RenderOptions.BitmapScalingMode="Fant"/>
                         </MenuItem.Icon>
                     </MenuItem>
                     <MenuItem x:Name="SaveAsModMenuItem" Header="Save As" Height="22" InputGestureText="Ctrl+Shift+S" Click="saveAsModMenuItem_Click">
                         <MenuItem.Icon>
-                            <Image Source="/FrostyEditor;component/Images/SaveAs.png"/>
+                            <Image Source="/FrostyEditor;component/Images/SaveAs.png" RenderOptions.BitmapScalingMode="Fant"/>
                         </MenuItem.Icon>
                     </MenuItem>
                     <Separator/>
                     <MenuItem x:Name="ExportModMenuItem" Header="Export to Mod" Height="22" Command="{StaticResource exportModMenuItemCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}">
                         <MenuItem.Icon>
-                            <Image Source="/FrostyEditor;component/Images/Compile.png"/>
+                            <Image Source="/FrostyEditor;component/Images/Compile.png" RenderOptions.BitmapScalingMode="Fant"/>
                         </MenuItem.Icon>
                     </MenuItem>
                     <Separator/>
                     <MenuItem x:Name="ExitMenuItem" Header="Exit" InputGestureText="Alt+F4" Height="22" Click="exitMenuItem_Click">
                         <MenuItem.Icon>
-                            <Image Source="/FrostyEditor;component/Images/Exit.png"/>
+                            <Image Source="/FrostyEditor;component/Images/Exit.png" RenderOptions.BitmapScalingMode="Fant"/>
                         </MenuItem.Icon>
                     </MenuItem>
                 </MenuItem>
@@ -84,7 +89,7 @@
                 <MenuItem Header="Window" Height="22">
                     <MenuItem x:Name="CloseAllDocumentsMenuItem" Header="Close All Documents" InputGestureText="Ctrl + D" Click="closeAllDocumentsMenuItem_Click">
                         <MenuItem.Icon>
-                            <Image Source="/FrostyEditor;component/Images/CloseAll.png"/>
+                            <Image Source="/FrostyEditor;component/Images/CloseAll.png" RenderOptions.BitmapScalingMode="Fant"/>
                         </MenuItem.Icon>
                     </MenuItem>
                 </MenuItem>
@@ -648,23 +653,23 @@
                                         <ContextMenu>
                                             <MenuItem Header="Open" Click="contextMenuOpen_Click">
                                                 <MenuItem.Icon>
-                                                    <Image Source="/FrostyEditor;component/Images/OpenAsset.png"/>
+                                                    <Image Source="/FrostyEditor;component/Images/OpenAsset.png" RenderOptions.BitmapScalingMode="Fant"/>
                                                 </MenuItem.Icon>
                                             </MenuItem>
                                             <MenuItem Header="Revert" Click="contextMenuRevert_Click">
                                                 <MenuItem.Icon>
-                                                    <Image Source="/FrostyEditor;component/Images/Revert.png"/>
+                                                    <Image Source="/FrostyEditor;component/Images/Revert.png" RenderOptions.BitmapScalingMode="Fant"/>
                                                 </MenuItem.Icon>
                                             </MenuItem>
                                             <Separator/>
                                             <MenuItem Header="Export" Click="contextMenuExportEbx_Click">
                                                 <MenuItem.Icon>
-                                                    <Image Source="/FrostyEditor;component/Images/Export.png"/>
+                                                    <Image Source="/FrostyEditor;component/Images/Export.png" RenderOptions.BitmapScalingMode="Fant"/>
                                                 </MenuItem.Icon>
                                             </MenuItem>
                                             <MenuItem Header="Import" Click="contextMenuImportEbx_Click">
                                                 <MenuItem.Icon>
-                                                    <Image Source="/FrostyEditor;component/Images/Import.png"/>
+                                                    <Image Source="/FrostyEditor;component/Images/Import.png" RenderOptions.BitmapScalingMode="Fant"/>
                                                 </MenuItem.Icon>
                                             </MenuItem>
                                         </ContextMenu>
@@ -679,22 +684,22 @@
                                         <ContextMenu>
                                             <MenuItem Header="Open" Click="contextMenuOpen_Click">
                                                 <MenuItem.Icon>
-                                                    <Image Source="/FrostyEditor;component/Images/OpenAsset.png" Opacity="0.5"/>
+                                                    <Image Source="/FrostyEditor;component/Images/OpenAsset.png" Opacity="0.5" RenderOptions.BitmapScalingMode="Fant"/>
                                                 </MenuItem.Icon>
                                             </MenuItem>
                                             <MenuItem Header="Revert" Click="contextMenuRevert_Click">
                                                 <MenuItem.Icon>
-                                                    <Image Source="/FrostyEditor;component/Images/Revert.png" Opacity="0.5"/>
+                                                    <Image Source="/FrostyEditor;component/Images/Revert.png" Opacity="0.5" RenderOptions.BitmapScalingMode="Fant"/>
                                                 </MenuItem.Icon>
                                             </MenuItem>
                                             <MenuItem Header="Export" Click="contextMenuExportAsset_Click">
                                                 <MenuItem.Icon>
-                                                    <Image Source="/FrostyEditor;component/Images/Export.png" Opacity="0.5"/>
+                                                    <Image Source="/FrostyEditor;component/Images/Export.png" Opacity="0.5" RenderOptions.BitmapScalingMode="Fant"/>
                                                 </MenuItem.Icon>
                                             </MenuItem>
                                             <MenuItem Header="Import" Click="contextMenuImportAsset_Click">
                                                 <MenuItem.Icon>
-                                                    <Image Source="/FrostyEditor;component/Images/Import.png" Opacity="0.5"/>
+                                                    <Image Source="/FrostyEditor;component/Images/Import.png" Opacity="0.5" RenderOptions.BitmapScalingMode="Fant"/>
                                                 </MenuItem.Icon>
                                             </MenuItem>
                                         </ContextMenu>
