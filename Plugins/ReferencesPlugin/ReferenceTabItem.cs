@@ -1,6 +1,8 @@
 ﻿using Frosty.Controls;
 using Frosty.Core;
 using Frosty.Core.Controls;
+using Frosty.Core.Attributes;
+using Frosty.Core.Misc;
 using FrostySdk.Managers;
 using System;
 using System.Collections.Generic;
@@ -28,6 +30,10 @@ namespace ReferencesPlugin
 
         private const string PART_RefExplorerToFindItem = "PART_RefExplorerToFindItem";
         private const string PART_RefExplorerFromFindItem = "PART_RefExplorerFromFindItem";
+		
+
+        private const string PART_RefExplorerToOpenBlueprintEditor = "PART_RefExplorerToOpenBlueprintEditor";
+        private const string PART_RefExplorerFromOpenBlueprintEditor = "PART_RefExplorerFromOpenBlueprintEditor";
 
         private FrostyAssetListView refExplorerToList;
         private FrostyAssetListView refExplorerFromList;
@@ -38,6 +44,11 @@ namespace ReferencesPlugin
 
         private MenuItem refExplorerToFindItem;
         private MenuItem refExplorerFromFindItem;
+
+        private MenuItem refExplorerToOpenBlueprintEditor;
+        private MenuItem refExplorerFromOpenBlueprintEditor;
+
+        private IBlueprintEditorHandler blueprintEditorHandler = App.PluginManager.BlueprintEditorOpenAction.Count() == 0 ? new DefaultBlueprintEditorHandler() : App.PluginManager.BlueprintEditorOpenAction.First();
 
         static ReferenceTabItem()
         {
@@ -67,6 +78,10 @@ namespace ReferencesPlugin
             // Bind Find Asset Elements
             refExplorerToFindItem = GetTemplateChild(PART_RefExplorerToFindItem) as MenuItem;
             refExplorerFromFindItem = GetTemplateChild(PART_RefExplorerFromFindItem) as MenuItem;
+			
+            // Bind Open Blueprint Editor Elements
+            refExplorerToOpenBlueprintEditor = GetTemplateChild(PART_RefExplorerToOpenBlueprintEditor) as MenuItem;
+            refExplorerFromOpenBlueprintEditor = GetTemplateChild(PART_RefExplorerFromOpenBlueprintEditor) as MenuItem;
 
             // Double Click Asset to Open
             refExplorerToList.SelectedAssetDoubleClick += ReferenceExplorerList_SelectedAssetDoubleClick;
@@ -79,10 +94,36 @@ namespace ReferencesPlugin
             // Find Item in Data Explorer
             refExplorerToFindItem.Click += contextMenuRefExplorerToFind_Click;
             refExplorerFromFindItem.Click += contextMenuRefExplorerFromFind_Click;
+			
+            // Open Blueprint Editor
+            refExplorerToOpenBlueprintEditor.Click += contextMenuRefExplorerToOpenBlueprintEditor_Click;
+            refExplorerFromOpenBlueprintEditor.Click += contextMenuRefExplorerFromOpenBlueprintEditor_Click;
 
             Loaded += ReferenceTabItem_Loaded;
 
             App.EditorWindow.DataExplorer.SelectionChanged += dataExplorer_SelectionChanged;
+        }
+
+        private void contextMenuRefExplorerToOpenBlueprintEditor_Click(object sender, RoutedEventArgs e)
+        {
+            if (refExplorerToList.SelectedItem == null)
+                return;
+
+            if (refExplorerToList.SelectedItem is EbxAssetEntry) {
+                App.Logger.Log("Opening blueprint editor (debug test)");Add commentMore actions
+                blueprintEditorHandler.OpenAssetAsGraph((EbxAssetEntry)refExplorerToList.SelectedItem);
+            }
+        }
+        private void contextMenuRefExplorerFromOpenBlueprintEditor_Click(object sender, RoutedEventArgs e)
+        {
+            if (refExplorerFromList.SelectedItem == null)
+                return;
+
+            if (refExplorerFromList.SelectedItem is EbxAssetEntry)
+            {
+                App.Logger.Log("Opening blueprint editor (debug test)");
+                blueprintEditorHandler.OpenAssetAsGraph((EbxAssetEntry)refExplorerFromList.SelectedItem);
+            }
         }
 
         private void ReferenceTabItem_Loaded(object sender, RoutedEventArgs e)

@@ -18,6 +18,9 @@ using System.Linq;
 using System.Windows.Input;
 using FrostySdk.Managers.Entries;
 
+using Frosty.Core.Attributes;
+using Frosty.Core.Misc;
+
 //using System.IO;
 
 namespace Frosty.Core.Controls.Editors
@@ -270,6 +273,7 @@ namespace Frosty.Core.Controls.Editors
             Button clearButton = (popupMenu.FindName("PART_ClearButton") as Button);
             Button openButton = (popupMenu.FindName("PART_OpenButton") as Button);
             Button findButton = (popupMenu.FindName("PART_FindButton") as Button);
+            Button blueprintEditorButton = (popupMenu.FindName("PART_BlueprintEditorButton") as Button);
             Button createButton = (popupMenu.FindName("PART_CreateButton") as Button);
             TextBlock textBlock = (popupMenu.FindName("PART_TextBlock") as TextBlock);
             Border separator = (popupMenu.FindName("PART_Separator") as Border);
@@ -278,11 +282,13 @@ namespace Frosty.Core.Controls.Editors
 
             clearButton.Click -= ClearButton_Click;
             findButton.Click -= FindButton_Click;
+            blueprintEditorButton.Click -= BlueprintEditorButton_Click;
             openButton.Click -= OpenButton_Click;
             createButton.Click -= CreateButton_Click;
 
             clearButton.Click += ClearButton_Click;
             findButton.Click += FindButton_Click;
+            blueprintEditorButton.Click += BlueprintEditorButton_Click;
             openButton.Click += OpenButton_Click;
             createButton.Click += CreateButton_Click;
             filter.TextChanged += Filter_TextChanged;
@@ -290,6 +296,7 @@ namespace Frosty.Core.Controls.Editors
             PointerRef ptrRef = (PointerRef)Value;
             clearButton.IsEnabled = ptrRef.Type != PointerRefType.Null;
             findButton.IsEnabled = !(ptrRef.Type == PointerRefType.Internal || ptrRef.Type == PointerRefType.Null);
+            blueprintEditorButton.IsEnabled = !(ptrRef.Type == PointerRefType.Internal || ptrRef.Type == PointerRefType.Null);
             openButton.IsEnabled = !(ptrRef.Type == PointerRefType.Internal || ptrRef.Type == PointerRefType.Null);
             createButton.IsEnabled = canCreate;
             textBlock.Text = "Assign from " + ((isInternal) ? "self" : App.AssetManager.GetEbxEntry(assignFileGuid).Name);
@@ -379,6 +386,23 @@ namespace Frosty.Core.Controls.Editors
             if (ptrRef.Type == PointerRefType.External)
             {
                 App.EditorWindow.DataExplorer.SelectAsset(App.AssetManager.GetEbxEntry(ptrRef.External.FileGuid));
+            }
+            popup.IsDropDownOpen = false;
+        }
+
+        private void BlueprintEditorButton_Click(object sender, RoutedEventArgs e)
+        {
+            IEnumerable<IBlueprintEditorHandler> handlerEnumerable = App.PluginManager.BlueprintEditorOpenAction;
+            IBlueprintEditorHandler handlerClass = handlerEnumerable.Count() == 0 ? new DefaultBlueprintEditorHandler() : handlerEnumerable.First();
+            PointerRef ptr = (PointerRef)Value;
+            if (ptr.Type == PointerRefType.External)
+            {
+                EbxAssetEntry asset = App.AssetManager.GetEbxEntry(ptr.External.FileGuid);
+                if (asset == null)
+                {
+                    return;
+                }
+                handlerClass.OpenAssetAsGraph(asset);
             }
             popup.IsDropDownOpen = false;
         }

@@ -44,6 +44,7 @@
                                         </MenuItem.Icon>
                                     </MenuItem>
                                     <MenuItem x:Name="PART_RefExplorerToFindItem" Header="Find in data explorer"/>
+                                    <MenuItem x:Name="PART_RefExplorerToOpenBlueprintEditor" Header="Open in Blueprint Editor"/>
                                 </ContextMenu>
                             </core:FrostyAssetListView.AssetContextMenu>
                         </core:FrostyAssetListView>
@@ -56,6 +57,7 @@
                                         </MenuItem.Icon>
                                     </MenuItem>
                                     <MenuItem x:Name="PART_RefExplorerFromFindItem" Header="Find in data explorer"/>
+                                    <MenuItem x:Name="PART_RefExplorerFromOpenBlueprintEditor" Header="Open in Blueprint Editor"/>
                                 </ContextMenu>
                             </core:FrostyAssetListView.AssetContextMenu>
                         </core:FrostyAssetListView>

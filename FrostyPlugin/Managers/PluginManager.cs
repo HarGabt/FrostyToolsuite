@@ -170,6 +170,10 @@ namespace Frosty.Core
         public PluginManagerType ManagerType => m_managerType;
 
         public IEnumerable<string> CustomAssetHandlers => m_customAssetHandlers.Keys;
+		
+        private List<IBlueprintEditorHandler> m_blueprintEditorOpenAction = new List<IBlueprintEditorHandler>();
+
+        public IEnumerable<IBlueprintEditorHandler> BlueprintEditorOpenAction => m_blueprintEditorOpenAction;
 
         private readonly Dictionary<string, AssetDefinition> m_definitions = new Dictionary<string, AssetDefinition>();
         private readonly List<MenuExtension> m_menuExtensions = new List<MenuExtension>();
@@ -669,6 +673,11 @@ namespace Frosty.Core
                     else if (tmpAttr is RegisterCustomAssetManagerAttribute attr12)
                     {
                         App.AssetManager.RegisterCustomAssetManager(attr12.CustomAssetManagerType, attr12.CustomAssetManagerClassType);
+                    }
+
+                    else if (tmpAttr is RegisterBlueprintEditorHandlerAttribute attr13)
+                    {
+                        m_blueprintEditorOpenAction.Add((IBlueprintEditorHandler)Activator.CreateInstance(attr13.classToHandle));
                     }
                 }
             }
