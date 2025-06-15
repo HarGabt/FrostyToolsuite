@@ -60,7 +60,12 @@
                                             <Image Source="/FrostyCore;component/Images/Copy.png" Opacity="0.5"/>
                                         </MenuItem.Icon>
                                     </MenuItem>
-                                    <MenuItem x:Name="PART_RefExplorerToDisplayInfo" Header="Display Reference Details">
+                                    <MenuItem x:Name="PART_RefExplorerToCopyFilePath" Header="Copy file path">
+                                        <MenuItem.Icon>
+                                            <Image Source="/FrostyCore;component/Images/Copy.png" Opacity="0.5"/>
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                    <MenuItem x:Name="PART_RefExplorerToDisplayInfo" Header="Display reference details">
                                         <MenuItem.Icon>
                                             <Image Source="/FrostyEditor;component/Images/Key.png" Opacity="0.5"/>
                                         </MenuItem.Icon>
@@ -91,7 +96,12 @@
                                             <Image Source="/FrostyCore;component/Images/Copy.png" Opacity="0.5"/>
                                         </MenuItem.Icon>
                                     </MenuItem>
-                                    <MenuItem x:Name="PART_RefExplorerFromDisplayInfo" Header="Display Reference Details">
+                                    <MenuItem x:Name="PART_RefExplorerFromCopyFilePath" Header="Copy file path">
+                                        <MenuItem.Icon>
+                                            <Image Source="/FrostyCore;component/Images/Copy.png" Opacity="0.5"/>
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                    <MenuItem x:Name="PART_RefExplorerFromDisplayInfo" Header="Display reference details">
                                         <MenuItem.Icon>
                                             <Image Source="/FrostyEditor;component/Images/Key.png" Opacity="0.5"/>
                                         </MenuItem.Icon>

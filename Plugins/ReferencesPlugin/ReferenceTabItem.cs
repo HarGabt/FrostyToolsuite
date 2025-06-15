@@ -42,6 +42,8 @@ namespace ReferencesPlugin
         private const string PART_RefExplorerFromOpenBlueprintEditor = "PART_RefExplorerFromOpenBlueprintEditor";
         private const string PART_RefExplorerToCopyGUID = "PART_RefExplorerToCopyGUID";
         private const string PART_RefExplorerFromCopyGUID = "PART_RefExplorerFromCopyGUID";
+        private const string PART_RefExplorerToCopyFilePath = "PART_RefExplorerToCopyFilePath";
+        private const string PART_RefExplorerFromCopyFilePath = "PART_RefExplorerFromCopyFilePath";
 
         // Mophead
         private const string PART_RefExplorerToDisplayInfo = "PART_RefExplorerToDisplayInfo";
@@ -64,6 +66,8 @@ namespace ReferencesPlugin
         private MenuItem refExplorerFromOpenBlueprintEditor;
         private MenuItem refExplorerToCopyGUID;
         private MenuItem refExplorerFromCopyGUID;
+        private MenuItem refExplorerToCopyFilePath;
+        private MenuItem refExplorerFromCopyFilePath;
 
         // Mophead
         private MenuItem refExplorerToDisplayInfo;
@@ -114,6 +118,10 @@ namespace ReferencesPlugin
             refExplorerToCopyGUID = GetTemplateChild(PART_RefExplorerToCopyGUID) as MenuItem;
             refExplorerFromCopyGUID = GetTemplateChild(PART_RefExplorerFromCopyGUID) as MenuItem;
 
+            // Bind Copy File Path Elements
+            refExplorerToCopyFilePath = GetTemplateChild(PART_RefExplorerToCopyFilePath) as MenuItem;
+            refExplorerFromCopyFilePath = GetTemplateChild(PART_RefExplorerFromCopyFilePath) as MenuItem;
+
             // Bind Display Asset Info Elements
             refExplorerToDisplayInfo = GetTemplateChild(PART_RefExplorerToDisplayInfo) as MenuItem;
             refExplorerFromDisplayInfo = GetTemplateChild(PART_RefExplorerFromDisplayInfo) as MenuItem;
@@ -138,6 +146,10 @@ namespace ReferencesPlugin
             refExplorerToCopyGUID.Click += contextMenuRefExplorerToCopyGUID_Click;
             refExplorerFromCopyGUID.Click += contextMenuRefExplorerFromCopyGUID_Click;
 
+            // Copy file path
+            refExplorerToCopyFilePath.Click += RefExplorerToCopyFilePath_Click;
+            refExplorerFromCopyFilePath.Click += RefExplorerFromCopyFilePath_Click;
+
             // Display Asset Info
             refExplorerToDisplayInfo.Click += RefExplorerToDisplayInfo_Click;
             refExplorerFromDisplayInfo.Click += RefExplorerFromDisplayInfo_Click;
@@ -149,6 +161,22 @@ namespace ReferencesPlugin
 
         private Dictionary<EbxAssetEntry, string> SpecialInfoTo = new Dictionary<EbxAssetEntry, string>();
         private Dictionary<EbxAssetEntry, string> SpecialInfoFrom = new Dictionary<EbxAssetEntry, string>();
+
+        private void RefExplorerFromCopyFilePath_Click(object sender, EventArgs e)
+        {
+            EbxAssetEntry entry = refExplorerFromList.SelectedItem as EbxAssetEntry;
+            if (entry == null)
+                return;
+            Clipboard.SetText(entry.Name);
+        }
+
+        private void RefExplorerToCopyFilePath_Click(object sender, EventArgs e)
+        {
+            EbxAssetEntry entry = refExplorerToList.SelectedItem as EbxAssetEntry;
+            if (entry == null)
+                return;
+            Clipboard.SetText(entry.Name);
+        }
 
         private void RefExplorerFromDisplayInfo_Click(object sender, RoutedEventArgs e)
         {
