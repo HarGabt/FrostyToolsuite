@@ -199,7 +199,7 @@ namespace Frosty.Core.Controls
 
         public virtual List<ToolbarItem> RegisterToolbarItems()
         {
-            return new List<ToolbarItem>() { new ToolbarItem("View Instances", "View class instances", null, new RelayCommand(ViewInstances_Click, ViewInstances_CanClick)) };
+            return new List<ToolbarItem>() { new ToolbarItem($"View Instances ({asset.RootObjects.Count()})", "View class instances", null, new RelayCommand(ViewInstances_Click, ViewInstances_CanClick)) };
         }
 
         private void ViewInstances_Click(object state)

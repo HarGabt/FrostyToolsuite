@@ -43,8 +43,21 @@
                                             <Image Source="/FrostyEditor;component/Images/OpenAsset.png" Opacity="0.5"/>
                                         </MenuItem.Icon>
                                     </MenuItem>
-                                    <MenuItem x:Name="PART_RefExplorerToFindItem" Header="Find in data explorer"/>
-                                    <MenuItem x:Name="PART_RefExplorerToOpenBlueprintEditor" Header="Open in Blueprint Editor"/>
+                                    <MenuItem x:Name="PART_RefExplorerToFindItem" Header="Find in data explorer">
+                                        <MenuItem.Icon>
+                                            <Image Source="/FrostyEditor;component/Images/Open.png" Opacity="0.5"/>
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                    <MenuItem x:Name="PART_RefExplorerToOpenBlueprintEditor" Header="Open in Blueprint Editor">
+                                        <MenuItem.Icon>
+                                            <Image Source="/FrostyCore;component/Images/Assets/BlueprintFileType.png" Opacity="0.5"/>
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                    <MenuItem x:Name="PART_RefExplorerToCopyGUID" Header="Copy file GUID">
+                                        <MenuItem.Icon>
+                                            <Image Source="/FrostyCore;component/Images/Copy.png" Opacity="0.5"/>
+                                        </MenuItem.Icon>
+                                    </MenuItem>
                                 </ContextMenu>
                             </core:FrostyAssetListView.AssetContextMenu>
                         </core:FrostyAssetListView>
@@ -56,8 +69,21 @@
                                             <Image Source="/FrostyEditor;component/Images/OpenAsset.png" Opacity="0.5"/>
                                         </MenuItem.Icon>
                                     </MenuItem>
-                                    <MenuItem x:Name="PART_RefExplorerFromFindItem" Header="Find in data explorer"/>
-                                    <MenuItem x:Name="PART_RefExplorerFromOpenBlueprintEditor" Header="Open in Blueprint Editor"/>
+                                    <MenuItem x:Name="PART_RefExplorerFromFindItem" Header="Find in data explorer">
+                                        <MenuItem.Icon>
+                                            <Image Source="/FrostyEditor;component/Images/Open.png" Opacity="0.5"/>
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                    <MenuItem x:Name="PART_RefExplorerFromOpenBlueprintEditor" Header="Open in Blueprint Editor">Add commentMore actions
+                                        <MenuItem.Icon>
+                                            <Image Source="/FrostyCore;component/Images/Assets/BlueprintFileType.png" Opacity="0.5"/>
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                    <MenuItem x:Name="PART_RefExplorerFromCopyGUID" Header="Copy file GUID">
+                                        <MenuItem.Icon>
+                                            <Image Source="/FrostyCore;component/Images/Copy.png" Opacity="0.5"/>
+                                        </MenuItem.Icon>
+                                    </MenuItem>
                                 </ContextMenu>
                             </core:FrostyAssetListView.AssetContextMenu>
                         </core:FrostyAssetListView>
