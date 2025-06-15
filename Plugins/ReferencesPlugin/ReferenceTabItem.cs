@@ -514,7 +514,7 @@ namespace ReferencesPlugin
                     }
                 }
                 else
-                    App.Logger.Log(string.Format("Cannot find cache file {0}, please generate one through \"Tools>Create Reference Cache\"", CacheFileDir));
+                    App.Logger.Log(string.Format("Cannot find cache file {0}, please generate one through \"Tools>Generate Cache>Reference Plugin Cache\"", CacheFileDir));
             }
         }
 		
