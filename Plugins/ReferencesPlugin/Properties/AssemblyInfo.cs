@@ -24,7 +24,8 @@ using System.Windows;
 [assembly: Guid("4b612468-9b6a-4304-88a5-055c3575eb3d")]
 
 [assembly: PluginDisplayName("References Plugin")]
-[assembly: PluginAuthor("Cade")]
-[assembly: PluginVersion("1.0.1.0")]
+[assembly: PluginAuthor("Cade, Mophead, AdamRaichu")]
+[assembly: PluginVersion("1.0.1.6")]
 
 [assembly: RegisterTabExtension(typeof(ReferenceTabExtension))]
+[assembly: RegisterMenuExtension(typeof(CreateCacheMenuExtension))]
