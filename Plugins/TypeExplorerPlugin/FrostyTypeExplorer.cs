@@ -11,6 +11,8 @@ using Frosty.Core.Controls;
 using System.Windows.Media;
 using FrostySdk;
 using FrostySdk.Attributes;
+using Frosty.Controls;
+using Frosty.Core.Windows;
 
 namespace TypeExplorerPlugin
 {
@@ -184,10 +186,34 @@ namespace TypeExplorerPlugin
         }
 
         private void ExportButton_Click(object sender, RoutedEventArgs e) {
-            logger.Log("Button clicked.");
-            FlowDocument doc = getDocForType(TypeItems.First().Type);
-            string text = new TextRange(doc.ContentStart, doc.ContentEnd).Text;
-            logger.Log(text);
+            bool shouldCancel = false;
+            FrostyTaskWindow.Show("Exporting types to clipboard...", "Loading...", (taskWindow) => {
+                TypeItem[] types = TypeItems.ToArray();
+                int length = types.Length;
+                string output = "";
+                taskWindow.Progress = 0;
+                for (var i = 0; i < length; i++)
+                {
+                    taskWindow.Progress = (i + 1) / length;
+                    taskWindow.Status = $"{i}/{length}";
+                    TypeItem _type = types[i];
+                    FlowDocument doc = getDocForType(_type.Type);
+                    string text = new TextRange(doc.ContentStart, doc.ContentEnd).Text;
+                    output += text;
+                    output += "\n";
+                    if (shouldCancel)
+                    {
+                        return;
+                    }
+                }
+                Application.Current.Dispatcher.Invoke(() => {
+                    Clipboard.SetText(output);
+                    FrostyMessageBox.Show("Saved types to clipboard.");
+                });
+            }, true, (taskWindow) => {
+                taskWindow.Status = "Cancelling...";
+                shouldCancel = true;
+            });
         }
 
         private FlowDocument getDocForType(Type type) {
