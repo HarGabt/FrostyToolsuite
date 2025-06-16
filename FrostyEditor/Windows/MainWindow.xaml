@@ -20,13 +20,42 @@
     <ctrl2:FrostyWindow.Resources>
         <conv:BooleanToVisibilityConverter x:Key="booleanToVisibilityConverter"/>
         <cmd:ExportModMenuItemCommand x:Key="exportModMenuItemCommand"/>
+        <cmd:ExportModMenuItemCommand x:Key="exportModMenuItemCommand_dos" />
         <ContextMenu x:Key="bookmarksContextMenu">
             <MenuItem Header="Open asset" Click="contextMenuBookmarkItemOpen_Click">
                 <MenuItem.Icon>
-                    <Image Source="/FrostyEditor;component/Images/OpenAsset.png" Opacity="0.5"/>
+                    <Image Source="/FrostyEditor;component/Images/OpenAsset.png" RenderOptions.BitmapScalingMode="Fant"
+                        Opacity="0.5" />
                 </MenuItem.Icon>
             </MenuItem>
-            <MenuItem Header="Find in explorer" Click="contextMenuBookmarkItemFind_Click"/>
+            <MenuItem Header="Find in explorer" Click="contextMenuBookmarkItemFind_Click">
+                <MenuItem.Icon>
+                    <Image Source="/FrostyEditor;component/Images/Open.png"
+                        RenderOptions.BitmapScalingMode="Fant"
+                        Opacity="0.5" />
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="Open in Blueprint Editor" Click="contextMenuBookmarkItemOpenBlueprintEditor_Click">
+                <MenuItem.Icon>
+                    <Image Source="/FrostyCore;component/Images/Assets/BlueprintFileType.png"
+                        RenderOptions.BitmapScalingMode="Fant"
+                        Opacity="0.5" />
+                </MenuItem.Icon>
+            </MenuItem>
+            <!-- <MenuItem Header="Copy file GUID" Click="contextMenuBookmarkItemCopyGUID_Click">
+                <MenuItem.Icon>
+                    <Image Source="/FrostyCore;component/Images/Copy.png"
+                        RenderOptions.BitmapScalingMode="Fant"
+                        Opacity="0.5" />
+                </MenuItem.Icon>
+            </MenuItem> -->
+            <MenuItem Header="Copy file path" Click="contextMenuBookmarkItemCopyPath_Click">
+                <MenuItem.Icon>
+                    <Image Source="/FrostyCore;component/Images/Copy.png"
+                        RenderOptions.BitmapScalingMode="Fant"
+                        Opacity="0.5" />
+                </MenuItem.Icon>
+            </MenuItem>
         </ContextMenu>
     </ctrl2:FrostyWindow.Resources>
 
@@ -67,7 +96,7 @@
                         </MenuItem.Icon>
                     </MenuItem>
                     <Separator/>
-                    <MenuItem x:Name="ExportModMenuItem" Header="Export to Mod" Height="22" Command="{StaticResource exportModMenuItemCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}">
+                    <MenuItem x:Name="ExportModMenuItem" Header="Export to Mod" Height="22" Command="{StaticResource exportModMenuItemCommand_dos}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}">
                         <MenuItem.Icon>
                             <Image Source="/FrostyEditor;component/Images/Compile.png"/>
                         </MenuItem.Icon>

@@ -24,10 +24,11 @@ using Frosty.ModSupport;
 using FrostyCore;
 using FrostySdk;
 using FrostySdk.IO;
-using FrostySdk.Managers;
 using FrostySdk.Managers.Entries;
 using Microsoft.Win32;
 using Bookmarks = Frosty.Core.Bookmarks;
+using Frosty.Core.Attributes;
+using Frosty.Core.Misc;
 
 namespace FrostyEditor.Windows
 {
@@ -1142,7 +1143,62 @@ namespace FrostyEditor.Windows
             target.Target.NavigateTo(false);
         }
 
-#endregion
+        private IBlueprintEditorHandler blueprintEditorHandler = App.PluginManager.BlueprintEditorOpenAction.Count() == 0 ? new DefaultBlueprintEditorHandler() : App.PluginManager.BlueprintEditorOpenAction.First();
+
+        private void contextMenuBookmarkItemOpenBlueprintEditor_Click(object sender, RoutedEventArgs e)
+        {
+            if (BookmarkTreeView.SelectedItem == null)
+                return;
+            Bookmarks.BookmarkItem target = BookmarkTreeView.SelectedItem as Bookmarks.BookmarkItem;
+            if (target.Target is Bookmarks.AssetBookmarkTarget assetTarget)
+            {
+                if (assetTarget.Asset is EbxAssetEntry entry)
+                {
+                    if (entry != null)
+                    {
+                        blueprintEditorHandler.OpenAssetAsGraph(entry);
+                    }
+                }
+            }
+        }
+
+        private void contextMenuBookmarkItemCopyGUID_Click(object sender, RoutedEventArgs e)
+        {
+            if (BookmarkTreeView.SelectedItem == null)
+                return;
+            Bookmarks.BookmarkItem target = BookmarkTreeView.SelectedItem as Bookmarks.BookmarkItem;
+            if (target.Target is Bookmarks.AssetBookmarkTarget assetTarget)
+            {
+                if (assetTarget.Asset is EbxAssetEntry entry)
+                {
+                    if (entry != null)
+                    {
+                        EbxAsset asset = App.AssetManager.GetEbx(entry.Name);
+                        App.Logger.Log(asset.FileGuid.ToString());
+                        Clipboard.SetText(asset.FileGuid.ToString());
+                    }
+                }
+            }
+        }
+
+        private void contextMenuBookmarkItemCopyPath_Click(object sender, RoutedEventArgs e)
+        {
+            if (BookmarkTreeView.SelectedItem == null)
+                return;
+            Bookmarks.BookmarkItem target = BookmarkTreeView.SelectedItem as Bookmarks.BookmarkItem;
+            if (target.Target is Bookmarks.AssetBookmarkTarget assetTarget)
+            {
+                if (assetTarget.Asset is EbxAssetEntry entry)
+                {
+                    if (entry != null)
+                    {
+                        Clipboard.SetText(entry.Name);
+                    }
+                }
+            }
+        }
+
+        #endregion
 
         #region -- Bookmarks --
 
