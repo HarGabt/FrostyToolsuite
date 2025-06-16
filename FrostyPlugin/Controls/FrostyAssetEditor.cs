@@ -1,13 +1,18 @@
-﻿using Frosty.Core.Windows;
+﻿using Frosty.Core.Attributes;
+using Frosty.Core.Misc;
+using Frosty.Core.Windows;
 using FrostySdk;
+using FrostySdk.Ebx;
 using FrostySdk.Interfaces;
 using FrostySdk.IO;
 using FrostySdk.Managers;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using FrostySdk.Managers.Entries;
 using Frosty.Controls;
@@ -199,7 +204,14 @@ namespace Frosty.Core.Controls
 
         public virtual List<ToolbarItem> RegisterToolbarItems()
         {
-            return new List<ToolbarItem>() { new ToolbarItem($"View Instances ({asset.RootObjects.Count()})", "View class instances", null, new RelayCommand(ViewInstances_Click, ViewInstances_CanClick)) };
+            return new List<ToolbarItem>() {
+                new ToolbarItem($"View Instances ({asset.RootObjects.Count()})", "View class instances", "Images/Database.png", new RelayCommand(ViewInstances_Click, ViewInstances_CanClick)),
+                new ToolbarItem("Open in Blueprint Editor", "Open this file in the graph editor (if available)", "Images/Grid.png", new RelayCommand((_) => {
+                    IEnumerable<IBlueprintEditorHandler> handlerEnumerable = App.PluginManager.BlueprintEditorOpenAction;
+                    IBlueprintEditorHandler handlerClass = handlerEnumerable.Count() == 0 ? new DefaultBlueprintEditorHandler() : handlerEnumerable.First();
+                    handlerClass.OpenAssetAsGraph(AssetEntry as EbxAssetEntry);
+                }, (_) => AssetEntry is EbxAssetEntry))
+            };
         }
 
         private void ViewInstances_Click(object state)
