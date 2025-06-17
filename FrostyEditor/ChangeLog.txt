@@ -11,7 +11,7 @@ Changes in my fork:
 (2025.06.17)
 --------
 - Added support for importing meshes that need tangent space compression (this includes NFS Heat and NFS Unbound), courtesy of @brawltendo.
-- New plugins: Color Picker by @natv1337, GUID Plugin by @dyvnia and FrostyEmitterStack by @brawltendo.
+- New plugins: Color Picker by @natv1337, GUID Plugin by @dyvinia and FrostyEmitterStack by @brawltendo.
 - A couple of attempts to make Dead Space 2023 moddable (and still no avail).
 - More backports from 1.0.6.x and Veilguard fork, I hope they don't break what works.
 - Disabled LaunchPlatformPlugin.
