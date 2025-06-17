@@ -7,3 +7,6 @@
 [submodule "Plugins/FrostyColorPicker"]
 	path = Plugins/FrostyColorPicker
 	url = https://github.com/natv1337/FrostyColorPicker
+[submodule "Plugins/FrostyEmitterStackPlugin"]
+	path = Plugins/FrostyEmitterStackPlugin
+	url = https://github.com/Brawltendo/FrostyEmitterStackPlugin

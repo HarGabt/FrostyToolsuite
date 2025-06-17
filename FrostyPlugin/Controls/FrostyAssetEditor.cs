@@ -10,6 +10,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using FrostySdk.Managers.Entries;
+using Frosty.Controls;
 
 namespace Frosty.Core.Controls
 {
@@ -142,8 +143,19 @@ namespace Frosty.Core.Controls
             asset.RemoveObject(obj);
         }
 
+        public class AssetNullException : Exception
+        {
+            public AssetNullException() : base() { }
+        }
+
+
         public int SetAsset(AssetEntry entry)
         {
+            if (entry.IsAdded == true && entry.HasModifiedData == false)
+            {
+                throw new AssetNullException();
+            }
+
             if (entry is EbxAssetEntry)
             {
                 FrostyTaskWindow.Show("Opening Asset", "", (task) =>

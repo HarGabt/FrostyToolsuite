@@ -1,9 +1,11 @@
 ﻿using Frosty.Controls;
-using System.Windows.Media.Imaging;
-using System.IO;
 using Frosty.Core;
 using Frosty.Core.Mod;
+using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Windows.Media.Imaging;
 
 namespace FrostyEditor.Windows
 {
@@ -23,7 +25,9 @@ namespace FrostyEditor.Windows
             "Gameplay",
             "Graphic",
             "Map",
-            "User Interface"
+            "Miscellaneous",
+            "User Interface",
+            "Visuals"
         };
 
         public ModSettingsWindow(FrostyProject inProject = null)
@@ -70,9 +74,22 @@ namespace FrostyEditor.Windows
 
         private void saveButton_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            if (modTitleTextBox.Text == "" || modAuthorTextBox.Text == "" || modCategoryTextBox.Text == "" || modVersionTextBox.Text == "")
+            string mTTB = modTitleTextBox.Text;
+            string mATB = modAuthorTextBox.Text;
+            string mCTB = modCategoryTextBox.Text;
+            string mVTB = modVersionTextBox.Text;
+
+            if (string.IsNullOrWhiteSpace(mTTB) || string.IsNullOrWhiteSpace(mATB) || string.IsNullOrWhiteSpace(mCTB) || string.IsNullOrWhiteSpace(mVTB))
             {
                 FrostyMessageBox.Show("Title, Author, Category and Version are mandatory fields", "Frosty Editor");
+                return;
+            }
+
+            string[] invalidChars = { "{", "}" };
+
+            if (invalidChars.Any(mTTB.Contains) || invalidChars.Any(mATB.Contains) || invalidChars.Any(mCTB.Contains) || invalidChars.Any(mVTB.Contains))
+            {
+                FrostyMessageBox.Show("Invalid Characters: {, }", "Frosty Editor");
                 return;
             }
 

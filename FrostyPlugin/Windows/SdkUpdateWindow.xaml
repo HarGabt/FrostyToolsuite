@@ -28,7 +28,7 @@
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="4">
                 <TextBlock Foreground="{StaticResource FontColor}" TextAlignment="Center">
                     <TextBlock.Text>
-                        <Binding Path="ProfileName" RelativeSource="{RelativeSource AncestorType={x:Type local:SdkUpdateWindow}}" StringFormat="The SDK for profile '{0}' is out of date"/>
+                        <Binding Path="ProfileName" RelativeSource="{RelativeSource AncestorType={x:Type local:SdkUpdateWindow}}" StringFormat="The SDK for profile '{0}' is either out of date or incompatible"/>
                     </TextBlock.Text>
                 </TextBlock>
                 <TextBlock Text=""/>

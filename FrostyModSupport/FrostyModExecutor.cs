@@ -2155,6 +2155,11 @@ namespace Frosty.ModSupport
                 }
             }
 
+            else
+            {
+                App.Logger.Log("Launching with previously generated data.");
+            }
+
             cancelToken.ThrowIfCancellationRequested();
 
             // DAI and NFS dont require bcrypt

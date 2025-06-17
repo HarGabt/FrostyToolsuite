@@ -99,8 +99,6 @@ namespace FrostyEditor
             }
 
             Exception exp = e.Exception;
-            using (NativeWriter writer = new NativeWriter(new FileStream("crashlog.txt", FileMode.Create)))
-                writer.WriteLine($"{exp.Message}\r\n\r\n{exp.StackTrace}");
 
             FrostyExceptionBox.Show(exp, "Frosty Editor");
             Environment.Exit(0);

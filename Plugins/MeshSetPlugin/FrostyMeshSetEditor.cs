@@ -1596,7 +1596,11 @@ namespace MeshSetPlugin
                             }
                             catch (Exception exp)
                             {
-                                App.AssetManager.RevertAsset(AssetEntry);
+                                if (!localEntry.IsAdded)
+                                {
+                                    App.AssetManager.RevertAsset(localEntry);
+                                }
+                                
                                 logger.LogError(exp.Message);
                             }
                         });
