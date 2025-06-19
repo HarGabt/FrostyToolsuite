@@ -17,8 +17,8 @@ namespace MeshSetPlugin
     #region -- Importer Exceptions --
     public class FBXImportInvalidLodCountException : Exception
     {
-        public FBXImportInvalidLodCountException()
-            : base("There was a mismatch in the amount of LODs defined in the imported file and existing mesh")
+        public FBXImportInvalidLodCountException(int foundCount, int expectedCount)
+            : base(string.Format("There was a mismatch in the amount of LODs defined in the imported file and existing mesh. Found {0}, Expected {1}. Make sure you follow the format of [section]:lod[index]", foundCount, expectedCount))
         {
         }
     }
@@ -82,6 +82,14 @@ namespace MeshSetPlugin
     {
         public FBXImportVertexGroupException()
             : base(string.Format("(LOD 0) Vertex groups must be limited to eight for any given vertex. Blender: Object > Clean-Up > Limit Total Vertex Groups > Limit > 8"))
+        {
+        }
+    }
+
+    public class FBXImportMissingWeightException : Exception
+    {
+        public FBXImportMissingWeightException(string sectionName)
+            : base(string.Format("Encountered face on imported object {0} without any bone assigned. Make sure your model is fully skinned", sectionName))
         {
         }
     }
@@ -191,7 +199,7 @@ namespace MeshSetPlugin
 
                 if (lodCount < m_meshSet.Lods.Count)
                 {
-                    throw new FBXImportInvalidLodCountException();
+                    throw new FBXImportInvalidLodCountException(lodCount, m_meshSet.Lods.Count);
                 }
 
                 // process each lod
@@ -802,6 +810,11 @@ namespace MeshSetPlugin
                                 localBoneIndices.RemoveRange(totalBoneInfluences, localBoneIndices.Count - totalBoneInfluences);
                                 localBoneWeights.RemoveRange(totalBoneInfluences, localBoneWeights.Count - totalBoneInfluences);
                             }
+
+                            if (localBoneIndices.Count == 0)
+                                throw new FBXImportMissingWeightException(sectionNode.Name);
+
+
 
                             int totalWeight = 0;
                             for (int k = 0; k < localBoneWeights.Count; k++)
