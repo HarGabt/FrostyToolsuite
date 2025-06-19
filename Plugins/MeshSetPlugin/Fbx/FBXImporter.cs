@@ -93,6 +93,13 @@ namespace MeshSetPlugin
         {
         }
     }
+    public class FBXImportMissingWeightsException : Exception
+    {
+        public FBXImportMissingWeightsException()
+            : base(string.Format("Mesh must be exported with valid weights"))
+        {
+        }
+    }
     #endregion
 
     public class FBXImporter
@@ -804,11 +811,18 @@ namespace MeshSetPlugin
 
                             foundBoneInfluences = (localBoneIndices.Count > foundBoneInfluences) ? localBoneIndices.Count : foundBoneInfluences;
 
-                            while (localBoneIndices.Count > totalBoneInfluences)
+                            if (localBoneIndices.Count > 0)
                             {
-                                // remove the lowest influence bones
-                                localBoneIndices.RemoveRange(totalBoneInfluences, localBoneIndices.Count - totalBoneInfluences);
-                                localBoneWeights.RemoveRange(totalBoneInfluences, localBoneWeights.Count - totalBoneInfluences);
+                                while (localBoneIndices.Count > totalBoneInfluences)
+                                {
+                                    // remove the lowest influence bones
+                                    localBoneIndices.RemoveRange(totalBoneInfluences, localBoneIndices.Count - totalBoneInfluences);
+                                    localBoneWeights.RemoveRange(totalBoneInfluences, localBoneWeights.Count - totalBoneInfluences);
+                                }
+                            }
+                            else
+                            {
+                                throw new FBXImportMissingWeightsException();
                             }
 
                             if (localBoneIndices.Count == 0)
