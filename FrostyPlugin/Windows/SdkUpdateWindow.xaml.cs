@@ -130,10 +130,20 @@ namespace Frosty.Core.Windows
                             continue;
 
                         FileInfo fi = new FileInfo(processFilename);
-                        if (fi.Name.IndexOf(ProfilesLibrary.ProfileName, StringComparison.OrdinalIgnoreCase) >= 0)
+                        if (ProfilesLibrary.IsLoaded(ProfileVersion.Battlefield2042))
+                        { if (fi.Name.IndexOf("EAAntiCheat.GameServiceLauncher", StringComparison.OrdinalIgnoreCase) >= 0)
+                            {
+                                foundProcess = process;
+                                break;
+                            }
+                        }
+                        else 
                         {
-                            foundProcess = process;
-                            break;
+                            if (fi.Name.IndexOf(ProfilesLibrary.ProfileName, StringComparison.OrdinalIgnoreCase) >= 0)
+                            {
+                                foundProcess = process;
+                                break;
+                            }
                         }
                     }
                     catch (Exception)
