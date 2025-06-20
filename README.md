@@ -7,14 +7,14 @@ And please, don't ask for help for this fork of 1.0.7 or 1.0.7 as whole at all. 
 
 ## What's new in this fork and in what ways it is different?
 
-- It allows InitFS modding (both Heat and Unbound are supported)
-- Blueprint modding (rimewidgetblueprint is somewhat broken, would really like to fix that if I knew how)
-- Mod Manager now closes properly, you don't have to close it manually in Task Manager anymore
-- Shadercache symlinking, meaning it should help with performance when running mods 
-- It has a workaround for those who get `IterateSubKeys` type crash at launch
-- Mod Manager has got filtering functionality: you can show or hide applied mods
+- InitFS modding (both Heat and Unbound are supported)
+- Template and Blueprint modding (RimeWidgetBlueprint modding is somewhat broken, would really like to fix that if I knew how)
+- Fixed Mod Manager exit, meaning you don't have to close it manually in Task Manager anymore
+- Shadercache symlinking, meaning it should help with performance when running mods
+- Fixed `Object reference not set to an instance of an object` `IterateSubKeys` type crash at launch
+- Mod Manager now features more advanced filtering functionality: you can show or hide applied mods in `Available Mod(s)` section
 - Fixed `ealayer3.dll` type crash when attempting to open audio assets
-- Some of new plugins that expand Editor functionality
+- Some of the new plugins that expand Editor functionality
 - Mod Manager doesn't identify itself as Editor anymore
 - Fixed splash screen not showing banner art
 - Mod Manager now shows for what game version (Volume) mod was made
