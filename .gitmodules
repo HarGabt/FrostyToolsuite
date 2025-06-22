@@ -10,3 +10,6 @@
 [submodule "Plugins/FrostyEmitterStackPlugin"]
 	path = Plugins/FrostyEmitterStackPlugin
 	url = https://github.com/Brawltendo/FrostyEmitterStackPlugin
+[submodule "Plugins/CopyFilePathPlugin"]
+	path = Plugins/CopyFilePathPlugin
+	url = https://github.com/HarGabt/CopyFilePathPlugin
