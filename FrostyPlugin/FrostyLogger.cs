@@ -11,8 +11,16 @@ namespace FrostyCore
 {
     public class FrostyLogger : ILogger, INotifyPropertyChanged
     {
-        public string LogText => sb.ToString();
-        private StringBuilder sb = new StringBuilder();
+        public string LogText {
+            get {
+                lock (sbLock)
+                {
+                    return sb.ToString();
+                }
+            }
+        }
+        private readonly StringBuilder sb = new StringBuilder();
+        private readonly object sbLock = new object();
 
         public void Log(string text, params object[] vars)
         {
@@ -23,7 +31,10 @@ namespace FrostyCore
             if (attr != null)
                 category = "[" + attr.DisplayName + "] ";
 
-            sb.AppendLine(string.Format("[" + DateTime.Now.ToLongTimeString() + "]: " + category + text, vars));
+            lock (sbLock)
+            {
+                sb.AppendLine(string.Format("[" + DateTime.Now.ToLongTimeString() + "]: " + category + text, vars));
+            }
             RaisePropertyChanged("LogText");
         }
 
@@ -36,7 +47,10 @@ namespace FrostyCore
             if (attr != null)
                 category = "[" + attr.DisplayName + "] ";
 
-            sb.AppendLine(string.Format("[" + DateTime.Now.ToLongTimeString() + "]: " + category + "(WARNING) " + text, vars));
+            lock (sbLock)
+            {
+                sb.AppendLine(string.Format("[" + DateTime.Now.ToLongTimeString() + "]: " + category + "(WARNING) " + text, vars));
+            }
             RaisePropertyChanged("LogText");
         }
 
@@ -49,7 +63,10 @@ namespace FrostyCore
             if (attr != null)
                 category = "[" + attr.DisplayName + "] ";
 
-            sb.AppendLine(string.Format("[" + DateTime.Now.ToLongTimeString() + "]: " + category + "(ERROR) " + text, vars));
+            lock (sbLock)
+            {
+                sb.AppendLine(string.Format("[" + DateTime.Now.ToLongTimeString() + "]: " + category + "(ERROR) " + text, vars));
+            }
             RaisePropertyChanged("LogText");
         }
 
