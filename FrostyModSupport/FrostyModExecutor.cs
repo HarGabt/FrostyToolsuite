@@ -2070,7 +2070,8 @@ namespace Frosty.ModSupport
                 else if (!ProfilesLibrary.IsLoaded(ProfileVersion.Fifa19, ProfileVersion.Fifa20, ProfileVersion.Madden20))
                 {
                     DbObject layout = null;
-                    using (DbReader reader = new DbReader(new FileStream(m_fs.ResolvePath("layout.toc"), FileMode.Open, FileAccess.Read), m_fs.CreateDeobfuscator()))
+                    var layoutPath = m_fs.ResolvePath("layout.toc");
+                    using (DbReader reader = new DbReader(new FileStream(layoutPath, FileMode.Open, FileAccess.Read), m_fs.CreateDeobfuscator()))
                         layout = reader.ReadDbObject();
 
                     // write out new manifest
@@ -2085,7 +2086,9 @@ namespace Frosty.ModSupport
                         // find the next available cas
                         int casIndex = 1;
                         while (File.Exists(modDataPath + m_patchPath + "/" + (string.Format("{0}\\cas_{1}.cas", catalog, casIndex.ToString("D2")))))
+                        {
                             casIndex++;
+                        }
 
                         Sha1 sha1 = Utils.GenerateSha1(tmpBuf);
 
