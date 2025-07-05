@@ -25,6 +25,11 @@ namespace AnimationEditorPlugin
                     FileInfo srcFi = new FileInfo("AssetBankTmpProfiles/" + ProfilesLibrary.SDKFilename + ".dll");
                     FileInfo dstFi = new FileInfo("AssetBankProfiles/" + ProfilesLibrary.SDKFilename + ".dll");
 
+                    if (!Directory.Exists(dstFi.DirectoryName))
+                    {
+                        Directory.CreateDirectory(dstFi.DirectoryName);
+                    }
+
                     File.Delete(dstFi.FullName);
                     File.Move(srcFi.FullName, dstFi.FullName);
 
