@@ -1,0 +1,65 @@
+name: Build Nightly
+
+on:
+  push:
+    branches: [ "1.0.7" ]
+  pull_request:
+    branches: [ "1.0.7" ]
+
+  workflow_dispatch:
+    inputs:
+      configuration:
+        description: "Build configuration"
+        required: true
+        default: "Release - Final"
+        type: choice
+        options:
+          - "Release - Final"
+          - "Release - Beta"
+          - "Release - Alpha"
+          - "Developer - Debug"
+
+env:
+  SOLUTION_FILE: FrostyEditor/FrostyEditor.sln
+  CONFIGURATION: ${{ github.event.inputs.configuration || 'Release - Final' }}
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        project: [
+          FrostyEditor,
+          FrostyModManager
+        ]
+
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+        with:
+          msbuild-architecture: x64
+
+      - name: Build Solution
+        run: >-
+          msbuild "${{ env.SOLUTION_FILE }}"
+          -t:restore,${{ matrix.project }}
+          -p:Configuration="${{ env.CONFIGURATION }}"
+          -p:OutputPath="${{ matrix.project }}-${{ github.sha }}"
+          -p:RestorePackagesConfig=true
+          -p:BuildProjectReferences=true
+          -maxcpucount
+          -verbosity:normal
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.project }}.${{ env.CONFIGURATION }}.Nightly
+          path: ${{ matrix.project }}/${{ matrix.project }}-${{ github.sha }}
+          retention-days: 90
+          if-no-files-found: error
