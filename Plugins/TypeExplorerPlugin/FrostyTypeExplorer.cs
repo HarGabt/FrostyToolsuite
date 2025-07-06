@@ -11,6 +11,8 @@ using Frosty.Core.Controls;
 using System.Windows.Media;
 using FrostySdk;
 using FrostySdk.Attributes;
+using Frosty.Controls;
+using Frosty.Core.Windows;
 
 namespace TypeExplorerPlugin
 {
@@ -18,6 +20,7 @@ namespace TypeExplorerPlugin
     [TemplatePart(Name = PART_TypeFilter, Type = typeof(TextBox))]
     [TemplatePart(Name = PART_TypeFieldsTextBox, Type = typeof(RichTextBox))]
     [TemplatePart(Name = PART_HideEmptyCheckBox, Type = typeof(CheckBox))]
+    [TemplatePart(Name = PART_ExportButton, Type = typeof(Button))]
     public class FrostyTypeExplorer : FrostyBaseEditor
     {
         public override ImageSource Icon => TypeExplorerMenuExtension.imageSource;
@@ -28,11 +31,13 @@ namespace TypeExplorerPlugin
         private const string PART_TypeFilter = "PART_TypeFilter";
         private const string PART_TypeFieldsTextBox = "PART_TypeFieldsTextBox";
         private const string PART_HideEmptyCheckBox = "PART_HideEmptyCheckBox";
+        private const string PART_ExportButton = "PART_ExportButton";
 
         private ListBox typesListBox;
         private TextBox typeFilterTextBox;
         private RichTextBox typeFieldsTextBox;
         private CheckBox hideEmptyCheckBox;
+        private Button exportButton;
 
         private static readonly SolidColorBrush TextColor = new SolidColorBrush(Color.FromRgb(0xDC, 0xDC, 0xDC));
         private static readonly SolidColorBrush EnumColor = new SolidColorBrush(Color.FromRgb(0xB8, 0xD7, 0xA3));
@@ -74,6 +79,7 @@ namespace TypeExplorerPlugin
             typeFilterTextBox = GetTemplateChild(PART_TypeFilter) as TextBox;
             typeFieldsTextBox = GetTemplateChild(PART_TypeFieldsTextBox) as RichTextBox;
             hideEmptyCheckBox = GetTemplateChild(PART_HideEmptyCheckBox) as CheckBox;
+            exportButton = GetTemplateChild(PART_ExportButton) as Button;
 
             Loaded += FrostyTypeExplorer_Loaded;
             typesListBox.SelectionChanged += TypesListBox_SelectionChanged;
@@ -81,6 +87,7 @@ namespace TypeExplorerPlugin
             typeFilterTextBox.KeyUp += TypeFilterTextBox_KeyUp;
             hideEmptyCheckBox.Checked += HideEmptyCheckBox_Checked;
             hideEmptyCheckBox.Unchecked += HideEmptyCheckBox_Unchecked;
+            exportButton.Click += ExportButton_Click;
         }
 
         private void TypeFilterTextBox_KeyUp(object sender, KeyEventArgs e)
@@ -110,99 +117,7 @@ namespace TypeExplorerPlugin
             {
                 Type type = typeItem.Type;
 
-                FlowDocument document = new FlowDocument();
-                Paragraph paragraph = new Paragraph();
-
-                paragraph.Inlines.Add(new Run(type.Name) { Foreground = GetTypeColor(type) });
-
-                // enums
-                if (type.IsEnum)
-                {
-                    paragraph.Inlines.Add(new Run("\n{\n") { Foreground = TextColor });
-
-                    var underlyingType = Enum.GetUnderlyingType(type);
-                    var values = type.GetEnumValues();
-
-                    // enum members
-                    for (int i = 0; i < values.Length; i++)
-                    {
-                        paragraph.Inlines.Add(new Run($"    {values.GetValue(i)} = ") { Foreground = TextColor });
-                        paragraph.Inlines.Add(new Run(Convert.ChangeType(values.GetValue(i), underlyingType).ToString()) { Foreground = LiteralColor });
-                        paragraph.Inlines.Add(new Run(i != values.Length - 1 ? ",\n" : "\n") { Foreground = TextColor });
-                    }
-
-                    paragraph.Inlines.Add(new Run("}") { Foreground = TextColor });
-                    document.Blocks.Add(paragraph);
-
-                    typeFieldsTextBox.Document = document;
-                    return;
-                }
-
-                // base types
-                if (type.BaseType != null && type.BaseType.Name != "Object")
-                {
-                    paragraph.Inlines.Add(new Run(" : ") { Foreground = TextColor });
-                    paragraph.Inlines.Add(new Run(type.BaseType.Name) { Foreground = ClassColor });
-                }
-
-                paragraph.Inlines.Add(new Run("\n{\n") { Foreground = TextColor });
-
-                var props = type.GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly);
-
-                // class properties
-                foreach (var pi in type.GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly))
-                {
-                    if (pi.Name.StartsWith("_"))
-                        continue;
-                    
-                    string propName = pi.PropertyType.Name;
-                    paragraph.Inlines.Add(new Run("    "));
-
-                    // use ebx field type names
-                    if (propName == "Single")
-                        propName = "Float32";
-                    else if (propName == "Double")
-                        propName = "Float64";
-
-                    // get the generic/ref type
-                    if (propName == "List`1" || propName == "PointerRef")
-                    {
-                        paragraph.Inlines.Add(new Run(propName == "List`1" ? "List" : "PointerRef") { Foreground = ClassColor });
-                        paragraph.Inlines.Add(new Run("<") { Foreground = TextColor });
-
-                        if (propName == "List`1")
-                        {
-                            Type listType = pi.PropertyType.GetGenericArguments()[0];
-
-                            // list of pointerrefs
-                            if (listType.Name == "PointerRef")
-                            {
-                                paragraph.Inlines.Add(new Run("PointerRef") { Foreground = ClassColor });
-                                paragraph.Inlines.Add(new Run("<") { Foreground = TextColor });
-                                paragraph.Inlines.Add(new Run(pi.GetCustomAttribute<EbxFieldMetaAttribute>().BaseType?.Name) { Foreground = ClassColor });
-                                paragraph.Inlines.Add(new Run(">") { Foreground = TextColor });
-                            }
-                            else
-                                paragraph.Inlines.Add(new Run(listType.Name) {Foreground = GetTypeColor(listType) });
-                        }
-                        else
-                        {
-                            paragraph.Inlines.Add(new Run(pi.GetCustomAttribute<EbxFieldMetaAttribute>().BaseType?.Name) {Foreground = ClassColor});
-                        }
-
-                        paragraph.Inlines.Add(new Run(">") { Foreground = TextColor });
-                    }
-                    else
-                    {
-                        paragraph.Inlines.Add(new Run(propName) { Foreground = GetTypeColor(pi.PropertyType) });
-                    }
-
-                    paragraph.Inlines.Add(new Run($" {pi.Name};\n") { Foreground = TextColor });
-                }
-
-                paragraph.Inlines.Add(new Run("}") { Foreground = TextColor });
-                document.Blocks.Add(paragraph);
-                typeFieldsTextBox.Document = document;
+                typeFieldsTextBox.Document = getDocForType(type);
             }
             else
             {
@@ -268,6 +183,132 @@ namespace TypeExplorerPlugin
             typesListBox.ItemsSource = TypeItems;
             typesListBox.Items.SortDescriptions.Add(new System.ComponentModel.SortDescription("Name", System.ComponentModel.ListSortDirection.Ascending));
             typesListBox.Items.Refresh();
+        }
+
+        private void ExportButton_Click(object sender, RoutedEventArgs e) {
+            bool shouldCancel = false;
+            FrostyTaskWindow.Show("Exporting types to clipboard...", "Loading...", (taskWindow) => {
+                TypeItem[] types = TypeItems.ToArray();
+                int length = types.Length;
+                string output = "";
+                taskWindow.Progress = 0;
+                for (var i = 0; i < length; i++)
+                {
+                    taskWindow.Progress = (i + 1) / length;
+                    taskWindow.Status = $"{i}/{length}";
+                    TypeItem _type = types[i];
+                    FlowDocument doc = getDocForType(_type.Type);
+                    string text = new TextRange(doc.ContentStart, doc.ContentEnd).Text;
+                    output += text;
+                    output += "\n";
+                    if (shouldCancel)
+                    {
+                        return;
+                    }
+                }
+                Application.Current.Dispatcher.Invoke(() => {
+                    Clipboard.SetText(output);
+                    FrostyMessageBox.Show("Saved types to clipboard.");
+                });
+            }, true, (taskWindow) => {
+                taskWindow.Status = "Cancelling...";
+                shouldCancel = true;
+            });
+        }
+
+        private FlowDocument getDocForType(Type type) {
+            FlowDocument document = new FlowDocument();
+            Paragraph paragraph = new Paragraph();
+
+            paragraph.Inlines.Add(new Run(type.Name) { Foreground = GetTypeColor(type) });
+
+            // enums
+            if (type.IsEnum)
+            {
+                paragraph.Inlines.Add(new Run("\n{\n") { Foreground = TextColor });
+
+                var underlyingType = Enum.GetUnderlyingType(type);
+                var values = type.GetEnumValues();
+
+                // enum members
+                for (int i = 0; i < values.Length; i++)
+                {
+                    paragraph.Inlines.Add(new Run($"    {values.GetValue(i)} = ") { Foreground = TextColor });
+                    paragraph.Inlines.Add(new Run(Convert.ChangeType(values.GetValue(i), underlyingType).ToString()) { Foreground = LiteralColor });
+                    paragraph.Inlines.Add(new Run(i != values.Length - 1 ? ",\n" : "\n") { Foreground = TextColor });
+                }
+
+                paragraph.Inlines.Add(new Run("}") { Foreground = TextColor });
+                document.Blocks.Add(paragraph);
+
+                return document;
+            }
+
+            // base types
+            if (type.BaseType != null && type.BaseType.Name != "Object")
+            {
+                paragraph.Inlines.Add(new Run(" : ") { Foreground = TextColor });
+                paragraph.Inlines.Add(new Run(type.BaseType.Name) { Foreground = ClassColor });
+            }
+
+            paragraph.Inlines.Add(new Run("\n{\n") { Foreground = TextColor });
+
+            var props = type.GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly);
+
+            // class properties
+            foreach (var pi in type.GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly))
+            {
+                if (pi.Name.StartsWith("_"))
+                    continue;
+
+                string propName = pi.PropertyType.Name;
+                paragraph.Inlines.Add(new Run("    "));
+
+                // use ebx field type names
+                if (propName == "Single")
+                    propName = "Float32";
+                else if (propName == "Double")
+                    propName = "Float64";
+
+                // get the generic/ref type
+                if (propName == "List`1" || propName == "PointerRef")
+                {
+                    paragraph.Inlines.Add(new Run(propName == "List`1" ? "List" : "PointerRef") { Foreground = ClassColor });
+                    paragraph.Inlines.Add(new Run("<") { Foreground = TextColor });
+
+                    if (propName == "List`1")
+                    {
+                        Type listType = pi.PropertyType.GetGenericArguments()[0];
+
+                        // list of pointerrefs
+                        if (listType.Name == "PointerRef")
+                        {
+                            paragraph.Inlines.Add(new Run("PointerRef") { Foreground = ClassColor });
+                            paragraph.Inlines.Add(new Run("<") { Foreground = TextColor });
+                            paragraph.Inlines.Add(new Run(pi.GetCustomAttribute<EbxFieldMetaAttribute>().BaseType?.Name) { Foreground = ClassColor });
+                            paragraph.Inlines.Add(new Run(">") { Foreground = TextColor });
+                        }
+                        else
+                            paragraph.Inlines.Add(new Run(listType.Name) { Foreground = GetTypeColor(listType) });
+                    }
+                    else
+                    {
+                        paragraph.Inlines.Add(new Run(pi.GetCustomAttribute<EbxFieldMetaAttribute>().BaseType?.Name) { Foreground = ClassColor });
+                    }
+
+                    paragraph.Inlines.Add(new Run(">") { Foreground = TextColor });
+                }
+                else
+                {
+                    paragraph.Inlines.Add(new Run(propName) { Foreground = GetTypeColor(pi.PropertyType) });
+                }
+
+                paragraph.Inlines.Add(new Run($" {pi.Name};\n") { Foreground = TextColor });
+            }
+
+            paragraph.Inlines.Add(new Run("}") { Foreground = TextColor });
+            document.Blocks.Add(paragraph);
+            return document;
         }
     }
 }

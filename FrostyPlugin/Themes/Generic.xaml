@@ -808,6 +808,7 @@
                                                         <Button x:Name="PART_ClearButton" Content="Clear assigned object" Style="{StaticResource MenuButtonStyle}" FontFamily="MS Reference Sans Serif" Height="22"/>
                                                         <Button x:Name="PART_OpenButton" Content="Open asset" Style="{StaticResource MenuButtonStyle}" FontFamily="MS Reference Sans Serif" Height="22"/>
                                                         <Button x:Name="PART_FindButton" Content="Find in data explorer" Style="{StaticResource MenuButtonStyle}" FontFamily="MS Reference Sans Serif" Height="22"/>
+                                                        <Button x:Name="PART_BlueprintEditorButton" Content="Open in Blueprint Editor" Style="{StaticResource MenuButtonStyle}" FontFamily="MS Reference Sans Serif" Height="22"/>
                                                         <Button x:Name="PART_CreateButton" Content="Create new ..." Style="{StaticResource MenuButtonStyle}" FontFamily="MS Reference Sans Serif" Height="22"/>
                                                         
                                                         <Border x:Name="PART_Separator" Height="22">

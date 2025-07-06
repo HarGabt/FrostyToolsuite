@@ -122,6 +122,7 @@
     <Compile Include="Attributes\RegisterExecutionAction.cs" />
     <Compile Include="Attributes\RegisterCustomHandlerAttribute.cs" />
     <Compile Include="Attributes\RegisterDataExplorerContextMenuAttribute.cs" />
+    <Compile Include="Attributes\RegisterBlueprintEditorHandlerAttribute.cs" />
     <Compile Include="Attributes\RegisterGlobalTypeEditorAttribute.cs" />
     <Compile Include="Attributes\RegisterLocalizedStringDatabaseAttribute.cs" />
     <Compile Include="Attributes\RegisterMenuExtensionAttribute.cs" />
@@ -150,6 +151,7 @@
     <Compile Include="FrostyLogger.cs" />
     <Compile Include="FrostyProfileTaskWindowLogger.cs" />
     <Compile Include="FrostyTaskLogger.cs" />
+    <Compile Include="Misc\DefaultBlueprintEditorHandler.cs" />
     <Compile Include="Legacy\LegacyFileManagerV2.cs" />
     <Compile Include="Managers\NotificationManager.cs" />
     <Compile Include="Managers\UndoManager.cs" />

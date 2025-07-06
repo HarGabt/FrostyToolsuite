@@ -29,6 +29,7 @@
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
                                     <TextBox Grid.Column="0" x:Name="PART_TypeFilter" Background="{StaticResource WindowBackground}" Margin="1" VerticalContentAlignment="Center" />
                                     <CheckBox Grid.Column="1" x:Name="PART_HideEmptyCheckBox" Foreground="{StaticResource FontColor}" ToolTip="Hide types with no fields" Margin="4,2,4,2" VerticalContentAlignment="Center" >
@@ -36,6 +37,18 @@
                                             <TextBlock Text=" Hide empty types" Foreground="{StaticResource FontColor}" VerticalAlignment="Center" />
                                         </CheckBox.Content>
                                     </CheckBox>
+                                    <Button x:Name="PART_ExportButton" ToolTip="Export all types" Margin="6,0,0,0" Grid.Column="2">
+                                        <Button.Content>
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="22"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Image Grid.Column="0" Width="14" Source="/FrostyEditor;component/Images/Export.png"/>
+                                                <TextBlock Grid.Column="1" Text="Export Types" Margin="0,0,4,0"/>
+                                            </Grid>
+                                        </Button.Content>
+                                    </Button>
                                 </Grid>
 
                                 <ListBox Grid.Row="1" x:Name="PART_TypesListBox" Tag="{Binding RelativeSource={RelativeSource AncestorType={x:Type local:FrostyTypeExplorer}}}">
