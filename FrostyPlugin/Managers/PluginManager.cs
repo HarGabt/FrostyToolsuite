@@ -510,7 +510,8 @@ namespace Frosty.Core
                 if (m_managerType == PluginManagerType.ModManager
                     && !(tmpAttr is RegisterCustomHandlerAttribute)
                     && !(tmpAttr is RegisterExecutionAction)
-                    && !(tmpAttr is RegisterOptionsExtensionAttribute))
+                    && !(tmpAttr is RegisterOptionsExtensionAttribute)
+                    && !(tmpAttr is RegisterMenuExtensionAttribute))
                 {
                     continue;
                 }
@@ -571,9 +572,12 @@ namespace Frosty.Core
                     }
                     else if (tmpAttr is RegisterMenuExtensionAttribute attr2)
                     {
-                        if (!attr2.MenuExtensionType.IsSubclassOf(typeof(MenuExtension)))
-                            throw new Exception("Menu extensions must extend from MenuExtensions base class");
-                        m_menuExtensions.Add((MenuExtension)Activator.CreateInstance(attr2.MenuExtensionType));
+                        if (attr2.ManagerType == m_managerType || attr2.ManagerType == PluginManagerType.Both)
+                        {
+                            if (!attr2.MenuExtensionType.IsSubclassOf(typeof(MenuExtension)))
+                                throw new Exception("Menu extensions must extend from MenuExtensions base class");
+                            m_menuExtensions.Add((MenuExtension)Activator.CreateInstance(attr2.MenuExtensionType));
+                        }
                     }
                     else if (tmpAttr is RegisterToolbarExtensionAttribute attr3)
                     {
