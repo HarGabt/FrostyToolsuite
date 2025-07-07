@@ -152,7 +152,7 @@ namespace FrostyEditor.Windows
         
         private void LoadToolbarExtensions()
         {
-            IEnumerable<ToolbarItem> toolbarItems = App.PluginManager.ToolbarExtensions.Select(toolbarExtension => new ToolbarItem(toolbarExtension.Name, "", null, toolbarExtension.ToolbarItemClicked, true));
+            IEnumerable<ToolbarItem> toolbarItems = App.PluginManager.ToolbarExtensions.Select(toolbarExtension => new ToolbarItem(toolbarExtension.Name, toolbarExtension.Tooltip, toolbarExtension.Icon, toolbarExtension.ToolbarItemClicked, true));
             EditorToolbarItems.ItemsSource = toolbarItems;
         }
         private void LoadMenuExtensions()

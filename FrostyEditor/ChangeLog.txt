@@ -8,6 +8,17 @@ selphea's changes:
 
 Changes in my fork:
 
+(2025.06.17)
+--------
+- Added support for importing meshes that need tangent space compression (this includes NFS Heat and NFS Unbound), courtesy of @brawltendo.
+- New plugins: Color Picker by @natv1337, GUID Plugin by @dyvinia and FrostyEmitterStack by @brawltendo.
+- A couple of attempts to make Dead Space 2023 moddable (and still no avail).
+- More backports from 1.0.6.x and Veilguard fork, I hope they don't break what works.
+- Disabled LaunchPlatformPlugin.
+- Added an alert if user happens to host Frosty in OneDrive folder (aka Windows 11 type shit workaround).
+- Reworked Exception window so now it displays crash error in English so users won't have to translate and guess what kind of error they are dealing with.
+- Added validation for title, author, category and version textboxes.
+
 (2025.05.15)
 --------
 - Fixed broken duplicaton of decals! Now it should work properly. 
