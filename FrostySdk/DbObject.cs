@@ -33,10 +33,21 @@ namespace FrostySdk
         #region -- Object functions --
         public T GetValue<T>(string name, T defaultValue = default(T))
         {
-            if (hash == null || !hash.ContainsKey(name))
+            if (hash == null)
+            {
                 return defaultValue;
+            }
+
+            if (!hash.ContainsKey(name))
+            {
+                return defaultValue;
+            }
+
             if (hash[name] is T)
+            {
                 return (T)hash[name];
+            }
+
             return (T)Convert.ChangeType(hash[name], typeof(T));
         }
 

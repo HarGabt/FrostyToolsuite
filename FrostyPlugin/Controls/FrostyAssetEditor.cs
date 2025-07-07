@@ -28,7 +28,7 @@ namespace Frosty.Core.Controls
             Text = text;
             ToolTip = tooltip;
             if (!string.IsNullOrEmpty(icon))
-                Icon = new ImageSourceConverter().ConvertFromString("pack://application:,,,/FrostyEditor;component/" + icon) as ImageSource;
+                Icon = new ImageSourceConverter().ConvertFromString("pack://application:,,,/" + icon) as ImageSource;
             Command = inCommand;
             IsAddedByPlugin = isAddedByPlugin;
         }
