@@ -463,7 +463,11 @@ namespace Frosty.Core
         public static void Load(string path = "")
         {
             if (path == "")
-                path = App.PluginManager.ManagerType == PluginManagerType.Editor ? $"{App.GlobalSettingsPath}/editor_config.json" : $"{App.GlobalSettingsPath}/manager_config.json";
+            {
+                path = (App.PluginManager == null || App.PluginManager.ManagerType == PluginManagerType.Editor)
+                    ? $"{App.GlobalSettingsPath}/editor_config.json"
+                    : $"{App.GlobalSettingsPath}/manager_config.json";
+            }
 
             using (StreamReader reader = new StreamReader(path))
             {

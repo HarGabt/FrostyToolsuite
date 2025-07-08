@@ -855,17 +855,7 @@ namespace FrostySdk
             return Fnv1.HashString(strToHash);
         }
 
-        private static Dictionary<int, string> strings = new Dictionary<int, string>();
-
-        public static string GetString(int hash)
-        {
-            if (!strings.ContainsKey(hash))
-            {
-                return "0x" + hash.ToString("x8");
-            }
-
-            return strings[hash];
-        }
+        public static string GetString(int hash) => StringsManager.GetString(hash);
 
         public static string ReverseString(string str)
         {
@@ -1303,35 +1293,6 @@ namespace FrostySdk
             }
 
             return (uint)((int)((part1 & 0xFFFF0000) + (part1 << 16)) | ((ushort)part2 + (part2 >> 16)));
-        }
-
-        /// <summary>
-        /// Loads all resolved hashes that are found within the specified file of <paramref name="path"/>.
-        /// </summary>
-        /// <param name="path">The file to be read from for hashes.</param>
-        public static void LoadStringList(string path = "strings.txt", ILogger logger = null)
-        {
-            if (!File.Exists(path))
-            {
-                return;
-            }
-
-            strings.Clear();
-
-            using (NativeReader reader = new NativeReader(new FileStream(path, FileMode.Open, FileAccess.Read)))
-            {
-                while (reader.Position < reader.Length)
-                {
-                    string currentString = reader.ReadLine();
-                    int hash = Fnv1.HashString(currentString);
-                    if (!strings.ContainsKey(hash))
-                    {
-                        strings.Add(hash, currentString);
-                    }
-
-                    logger?.Log("progress:" + (double)reader.Position / (double)reader.Length * 100.0);
-                }
-            }
         }
     }
 }

@@ -32,7 +32,7 @@ namespace FrostyModManager.Windows
         private void LaunchConfig(string profile)
         {
             // load profiles
-            if (!ProfilesLibrary.Initialize(profile))
+            if (!ProfilesLibrary.SelectProfile(profile))
             {
                 FrostyMessageBox.Show("There was an error when trying to load game using specified profile.", "Frosty Mod Manager");
                 Close();

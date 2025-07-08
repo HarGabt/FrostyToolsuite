@@ -146,6 +146,7 @@
     <Compile Include="Resources\Resource.cs" />
     <Compile Include="Resources\Texture.cs" />
     <Compile Include="Sha1.cs" />
+	<Compile Include="StringsManager.cs" />
     <Compile Include="TypeLibrary.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="Utils\HuffmanDecoder.cs" />
