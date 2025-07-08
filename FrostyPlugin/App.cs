@@ -55,7 +55,7 @@ namespace Frosty.Core
         public static bool LoadProfile(string profile)
         {
             // load profiles
-            if (!ProfilesLibrary.Initialize(profile))
+            if (!ProfilesLibrary.SelectProfile(profile))
             {
                 FrostyMessageBox.Show("There was an error when trying to load game using specified profile.", "Frosty Core");
                 return false;
