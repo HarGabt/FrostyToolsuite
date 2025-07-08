@@ -10,6 +10,7 @@ using Frosty.Controls;
 using Frosty.Core.Controls;
 using FrostySdk;
 using Microsoft.Win32;
+using SharpDX;
 
 namespace Frosty.Core.Windows
 {
@@ -25,16 +26,21 @@ namespace Frosty.Core.Windows
 
         private async void ProfileSelectWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            RemoveConfigurationButton.IsEnabled = false;
+            SelectConfigurationButton.IsEnabled = false;
+
             RefreshConfigurationList();
-            
-            try
+
+            if (ConfigurationListView.Items.Count == 0)
             {
-                // TODO: @techdebt only call this once or when needed
-                await ScanGames();
-            }
-            catch
-            {
-                FrostyHandledExceptionBox.Show("An error occurred while scanning for games.\n\nPlease manually set the game executable(s).");
+                try
+                {
+                    await ScanGames();
+                }
+                catch
+                {
+                    FrostyHandledExceptionBox.Show("An error occurred while scanning for games.\n\nPlease manually set the game executable(s).");
+                }
             }
 
             RefreshConfigurationList();
@@ -74,9 +80,28 @@ namespace Frosty.Core.Windows
                 Close();
             }
         }
-        
+
+        private void RemoveConfiguration()
+        {
+            if (FrostyMessageBox.Show("Are you sure you want to remove this profile?", "Remove Profile", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            {
+                FrostyConfiguration selectedItem = ConfigurationListView.SelectedItem as FrostyConfiguration;
+
+                Config.RemoveGame(selectedItem.ProfileName);
+
+                configurations.Remove(selectedItem);
+                ConfigurationListView.Items.Refresh();
+
+                ConfigurationListView.SelectedIndex = -1;
+                Config.Save();
+            }
+        }
+
         private async Task ScanGames()
         {
+            RefreshButton.IsEnabled = false;
+
+
             await Task.Run((() =>
             {
                 using (RegistryKey lmKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\\WOW6432Node"))
@@ -86,6 +111,8 @@ namespace Frosty.Core.Windows
                     IterateSubKeys(lmKey, ref totalCount);
                 }
             }));
+
+            RefreshButton.IsEnabled = true;
         }
         
         private void IterateSubKeys(RegistryKey subKey, ref int totalCount)
@@ -147,7 +174,7 @@ namespace Frosty.Core.Windows
             return profileName;
         }
 
-        private void RefreshButton_OnClicked(object sender, RoutedEventArgs e)
+        private void RefreshButton_OnClick(object sender, RoutedEventArgs e)
         {
             ScanGames().ContinueWith(t =>
             {
@@ -180,11 +207,11 @@ namespace Frosty.Core.Windows
             }
 
             // make sure config doesnt already exist
-            foreach (FrostyConfiguration config in configurations)
+            foreach (FrostyConfiguration configuration in configurations)
             {
-                if (config.ProfileName == fi.Name.Remove(fi.Name.Length - 4))
+                if (configuration.ProfileName == fi.Name.Remove(fi.Name.Length - 4))
                 {
-                    FrostyMessageBox.Show("That game already has a configuration.");
+                    FrostyMessageBox.Show(configuration.GameName + " already has a profile.", "Frosty Core");
                     return;
                 }
             }
@@ -202,9 +229,14 @@ namespace Frosty.Core.Windows
             SelectConfiguration();
         }
 
+        private void RemoveConfigurationButton_OnClick(object sender, RoutedEventArgs e)
+        {
+            RemoveConfiguration();
+        }
+
         private void CancelButton_OnClick(object sender, RoutedEventArgs e)
         {
-            Close();
+            Owner.Close();
         }
 
         private void ConfigurationListView_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -214,6 +246,9 @@ namespace Frosty.Core.Windows
 
         private void ConfigurationListView_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            RemoveConfigurationButton.IsEnabled = true;
+            SelectConfigurationButton.IsEnabled = true;
+
             if (SelectGameTextBlock.IsVisible)
             {
                 SelectGameTextBlock.Visibility = Visibility.Collapsed;
@@ -223,6 +258,15 @@ namespace Frosty.Core.Windows
             {
                 ProfileNameTextBlock.Text = configuration.GameName;
                 ProfilePathTextBlock.Text = configuration.GamePath;
+            }
+            else
+            {
+                ProfileNameTextBlock.Text = "";
+                ProfilePathTextBlock.Text = "";
+                SelectGameTextBlock.Visibility = Visibility.Visible;
+
+                RemoveConfigurationButton.IsEnabled = false;
+                SelectConfigurationButton.IsEnabled = false;
             }
         }
     }

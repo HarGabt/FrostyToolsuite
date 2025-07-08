@@ -6,6 +6,7 @@
                            xmlns:core="clr-namespace:Frosty.Core.Controls;assembly=FrostyCore"
                            xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                            mc:Ignorable="d"
+                           Icon="/FrostyCore;component/AppIcon.ico"
                            Title="Load Profile" Height="250" Width="400" Loaded="ProfileSelectWindow_Loaded"
                            ResizeMode="NoResize" WindowStartupLocation="CenterOwner" SnapsToDevicePixels="True">
     
@@ -56,12 +57,15 @@
 
         <Grid Grid.Row="3" Background="{StaticResource ListBackground}" >
             <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
-                <Button Content="Refresh" Padding="12,0" Margin="6,6,0,6" Click="RefreshButton_OnClicked"/>
                 <Button x:Name="AddConfigurationButton" Content="Add" Padding="12,0" Margin="6,6,0,6" Click="AddConfigurationButton_OnClick"/>
+                <Button x:Name="RemoveConfigurationButton" Content="Remove" Padding="12,0" Margin="6,6,0,6" Click="RemoveConfigurationButton_OnClick"/>
                 <Button x:Name="SelectConfigurationButton" Content="Select" Padding="12,0" Margin="6,6,6,6" Click="SelectConfigurationButton_OnClick"/>
             </StackPanel>
-            
-            <Button x:Name="CancelButton" Content="Cancel" HorizontalAlignment="Left" Padding="12,0" Margin="6,6,0,6" Click="CancelButton_OnClick"/>
+
+            <StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
+                <Button x:Name="CancelButton" Content="Cancel" Padding="12,0" Margin="6,6,0,6" Click="CancelButton_OnClick"/>
+                <Button x:Name="RefreshButton" Content="Scan" Padding="12,0" Margin="6,6,0,6" Click="RefreshButton_OnClick"/>
+            </StackPanel>
         </Grid>
     </Grid>
 </ctrl:FrostyDockableWindow>

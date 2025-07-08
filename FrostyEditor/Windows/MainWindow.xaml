@@ -11,7 +11,7 @@
         xmlns:ext="clr-namespace:FrostyEditor.Extensions"
         xmlns:windows="clr-namespace:FrostyEditor.Windows"
         mc:Ignorable="d" MinWidth="500" MinHeight="250"
-        Icon="/FrostyEditor;component/AppIcon.ico"
+        Icon="/FrostyCore;component/AppIcon.ico"
         Height="720" Width="1280"
         FrostyLoaded="FrostyWindow_Loaded" WindowState="Maximized"
         Title="Frosty Editor"

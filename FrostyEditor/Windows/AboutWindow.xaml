@@ -8,7 +8,7 @@
         xmlns:ext="clr-namespace:FrostyEditor.Extensions"
         mc:Ignorable="d"
         Title="About Frosty Editor" Height="450" Width="350"
-        ResizeMode="NoResize" Icon="/FrostyEditor;component/AppIcon.ico"
+        ResizeMode="NoResize" Icon="/FrostyCore;component/AppIcon.ico"
         WindowStartupLocation="CenterScreen">
     
     <ctrl:FrostyWindow.Resources>
