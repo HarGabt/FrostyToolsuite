@@ -1,59 +1,71 @@
 ﻿<ctrl:FrostyDockableWindow x:Class="FrostyEditor.Windows.PrelaunchWindow2"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:FrostyEditor.Windows"
-      xmlns:ctrl="clr-namespace:Frosty.Controls;assembly=FrostyControls"
-      Icon="/FrostyCore;component/AppIcon.ico"
-      mc:Ignorable="d" 
-      Loaded="Window_Loaded"
-      Height="600" Width="1000"
-      WindowStartupLocation="CenterScreen" ResizeMode="NoResize"
-      Title="Frosty Editor">
-    
-    <Grid Background="{StaticResource ControlBackground}">
-        <Grid Margin="2">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="38"/>
-            </Grid.RowDefinitions>
+                           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                           xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                           xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                           xmlns:local="clr-namespace:FrostyEditor.Windows"
+                           xmlns:ctrl="clr-namespace:Frosty.Controls;assembly=FrostyControls"
+                           Icon="/FrostyCore;component/AppIcon.ico"
+                           mc:Ignorable="d"
+                           Title="Load Profile" Height="250" Width="400" Loaded="Window_Loaded"
+                           ResizeMode="NoResize" WindowStartupLocation="CenterScreen" SnapsToDevicePixels="True">
 
-            <ListView Grid.Row="0" x:Name="ConfigList" SelectionChanged="ConfigList_SelectionChanged" Background="{StaticResource WindowBackground}" MouseDoubleClick="ConfigList_MouseDoubleClick">
-                <ListView.View>
-                    <ctrl:FrostyAutoSizedGridView>
-                        <GridView.Columns>
-                            <GridViewColumn Header="Name">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Horizontal" Height="48">
-                                            <Image Source="{Binding Path=Thumbnail}" Width="32" Margin="0 0 8 0"/>
-                                            <TextBlock Text="{Binding Path=GameName}" VerticalAlignment="Center"/>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                            <GridViewColumn Header="Path">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Horizontal" Height="48">
-                                            <TextBlock Text="{Binding Path=GamePath}" VerticalAlignment="Center"/>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                        </GridView.Columns>
-                    </ctrl:FrostyAutoSizedGridView>
-                </ListView.View>
-            </ListView>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="2"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="38"/>
+        </Grid.RowDefinitions>
 
-            <Grid Grid.Row="1" Background="{StaticResource ListBackground}">
-                <Button x:Name="NewConfigButton" Content="New" HorizontalAlignment="Right" Padding="12,0" Margin="0,6,66,6" Click="NewConfigButton_Click"/>
-                <Button x:Name="RemoveConfigButton" Content="Remove" HorizontalAlignment="Right" Padding="12,0" Margin="0,6,119,6" Click="RemoveConfigButton_Click"/>
-                <Button x:Name="LaunchConfigButton" Content="Select" HorizontalAlignment="Right" Padding="12,0" Margin="0,6,6,6" Click="LaunchConfigButton_Click"/>
+        <Grid Background="{StaticResource ListBackground}">
+            <StackPanel x:Name="GameInfoStackPanel" Margin="8">
+                <TextBlock x:Name="ProfileNameTextBlock" Foreground="{StaticResource FontColor}" FontSize="14" FontWeight="Medium"/>
+                <TextBlock x:Name="ProfilePathTextBlock" Foreground="{StaticResource FontColor}" FontSize="10"/>
+            </StackPanel>
+            <TextBlock x:Name="SelectGameTextBlock" Text="Select Game" Foreground="{StaticResource FontColor}" FontSize="14" FontWeight="Medium" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </Grid>
 
-                <Button Content="Scan for games" HorizontalAlignment="Left" Padding="12,0" Margin="6,6,0,6" Click="ScanForGamesButton_Click"/>
-            </Grid>
+        <Border Grid.Row="1" Background="{StaticResource ControlBackground}"/>
+
+        <Grid Grid.Row="2">
+            <ListBox x:Name="ConfigurationListView" ScrollViewer.HorizontalScrollBarVisibility="Disabled" SelectionChanged="ConfigurationListView_OnSelectionChanged" MouseDoubleClick="ConfigurationListView_OnMouseDoubleClick" Background="{StaticResource WindowBackground}">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel IsItemsHost="true" Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Width="40"
+                              Height="40">
+                            <Image x:Name="ColorImage"
+                                   Source="{Binding Path=Thumbnail}"/>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListBoxItem}" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+                        <Setter Property="Padding" Value="4"/>
+                        <Setter Property="Cursor" Value="Hand"/>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+            </ListBox>
+        </Grid>
+
+        <Grid Grid.Row="3" Background="{StaticResource ListBackground}" >
+            <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                <Button x:Name="AddConfigurationButton" Content="Add" Padding="12,0" Margin="6,6,0,6" Click="AddConfigurationButton_OnClick"/>
+                <Button x:Name="RemoveConfigurationButton" Content="Remove" Padding="12,0" Margin="6,6,0,6" Click="RemoveConfigurationButton_OnClick"/>
+                <Button x:Name="LaunchConfigurationButton" Content="Select" Padding="12,0" Margin="6,6,6,6" Click="LaunchConfigurationButton_OnClick"/>
+            </StackPanel>
+
+            <StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
+                <Button x:Name="CancelButton" Content="Cancel" Padding="12,0" Margin="6,6,0,6" Click="CancelButton_OnClick"/>
+                <Button x:Name="ScanButton" Content="Scan" Padding="12,0" Margin="6,6,0,6" Click="ScanButton_OnClick"/>
+            </StackPanel>
         </Grid>
     </Grid>
 </ctrl:FrostyDockableWindow>
