@@ -83,45 +83,20 @@ namespace ConnectionPlugin.Editors
             else if (pr.Type == PointerRefType.External)
             {
                 EbxAsset asset = GetParentEditor().GetDependentObject(pr.External.FileGuid);
-                if (asset == null)
-                {
-                    return "(type error)";
-                }
-                try
-                {
-                    var ebxEntry = App.AssetManager.GetEbxEntry(pr.External.FileGuid);
-                    string filename = ebxEntry?.Filename;
-                    var retrievedObject = asset.GetObject(pr.External.ClassGuid);
-                    string typeName = retrievedObject?.GetType()?.Name;
-                    if (string.IsNullOrEmpty(filename) || string.IsNullOrEmpty(typeName))
-                    {
-                        return "(type error)";
-                    }
-                    val = $"{filename}/{typeName}";
-                }
-                catch
-                {
-                    return "(type error)";
-                }
+                val = App.AssetManager.GetEbxEntry(pr.External.FileGuid).Filename + "/" + asset.GetObject(pr.External.ClassGuid).GetType().Name;
             }
             else if (pr.Type == PointerRefType.Internal)
                 val = ((dynamic)pr.Internal).__Id;
 
-            string[] suffixes = {
-                "EntityData",
-                "ObjectData",
-                "ComponentData",
-                "DescriptorData",
-                "Data"
-            };
-            foreach (string suffix in suffixes)
-            {
-                if (val.EndsWith(suffix))
-                {
-                    val = val.Substring(0, val.Length - suffix.Length);
-                    break;
-                }
-            }
+            if (val.EndsWith("EntityData") || val.EndsWith("ObjectData"))
+                return val.Remove(val.Length - 10);
+            else if (val.EndsWith("ComponentData"))
+                return val.Remove(val.Length - 13);
+            else if (val.EndsWith("DescriptorData"))
+                return val.Remove(val.Length - 14);
+            else if (val.EndsWith("Data"))
+                return val.Remove(val.Length - 4);
+
             return val;
         }
 

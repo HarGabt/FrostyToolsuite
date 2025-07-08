@@ -129,7 +129,7 @@ namespace FrostySdk
 
         private static readonly List<Profile> m_profiles = new List<Profile>();
 
-        public static void Initialize(IEnumerable<Profile> pluginProfiles = null)
+        public static void Initialize(IEnumerable<Profile> pluginProfiles)
         {
             List<string> keys = new List<string>();
             List<long> offsets = new List<long>();
@@ -201,34 +201,18 @@ namespace FrostySdk
                     m_profiles.Add(profileStruct);
                 }
             }
-            if (pluginProfiles != null)
-            {
-                // Add profiles from plugins
-                foreach (Profile profile in pluginProfiles)
-                    m_profiles.Add(profile);
-            }
+
+            // Add profiles from plugins
+            foreach (Profile profile in pluginProfiles)
+                m_profiles.Add(profile);
         }
 
-        public static bool SelectProfile(string profileKey)
+        public static bool Initialize(string profileKey)
         {
             Profile? profile = m_profiles.Find((Profile a) => a.Name.Equals(profileKey, StringComparison.OrdinalIgnoreCase));
             m_effectiveProfile = profile.Value;
 
             return true;
-        }
-
-        public static bool SelectProfile(ProfileVersion version)
-        {
-            Profile? profile = m_profiles.Find((Profile a) => (ProfileVersion)a.DataVersion == version);
-            m_effectiveProfile = profile.Value;
-
-            return true;
-        }
-
-        public static Profile? GetProfileDefinition(ProfileVersion version)
-        {
-            Profile? profile = m_profiles.Find((Profile a) => (ProfileVersion)a.DataVersion == version);
-            return profile;
         }
 
         public static bool HasProfile(string profileKey)

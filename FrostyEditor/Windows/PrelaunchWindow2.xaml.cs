@@ -30,7 +30,7 @@ namespace FrostyEditor.Windows
         private void LaunchConfiguration(string profile)
         {
             // load profiles
-            if (!ProfilesLibrary.SelectProfile(profile))
+            if (!ProfilesLibrary.Initialize(profile))
             {
                 FrostyMessageBox.Show("There was an error when trying to load game using specified profile.", "Frosty Editor");
                 Close();

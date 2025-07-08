@@ -29,14 +29,16 @@ namespace FrostySdk.IO
         private Stream stream;
 
         private int tabSize = 2;
-        private bool isDebugInformationEnabled;
-        public EbxXmlWriter(EbxAsset inAsset, Stream inStream, AssetManager inAm, int inTabSize, bool InIsDebugInformationEnabled)
+        private bool writeOffsets;
+        private string offsetKey;
+        private readonly Stack<string> offsetKeyStack = new Stack<string>();
+        public EbxXmlWriter(EbxAsset inAsset, Stream inStream, AssetManager inAm, int inTabSize, bool inWriteOffsets)
         {
             asset = inAsset;
             am = inAm;
             stream = inStream;
             tabSize = inTabSize;
-            isDebugInformationEnabled = InIsDebugInformationEnabled;
+            writeOffsets = inWriteOffsets;
         }
 
         public void WriteObjects()
@@ -46,7 +48,7 @@ namespace FrostySdk.IO
 
             StringBuilder sb = new StringBuilder();
 
-            string offsetTag = isDebugInformationEnabled ? " Offset=\"0x" + "".PadLeft(8, '0') + "\"" : "";
+            string offsetTag = writeOffsets ? " Offset=\"0x" + "".PadLeft(8, '0') + "\"" : "";
             sb.AppendLine("<File Guid=\"" + asset.FileGuid.ToString() + "\"" + offsetTag + ">");
 
             foreach (object obj in objs)
@@ -60,20 +62,41 @@ namespace FrostySdk.IO
             stream.Write(valueBuffer, 0, valueBuffer.Length);
         }
 
-        private string GetDebugOffset(string suffix)
+        private string GetXmlOffset(string suffix)
         {
-            if (!isDebugInformationEnabled || asset.DebugInformation == null)
+            if (!writeOffsets || asset.OffsetsMap == null)
                 return string.Empty;
 
-            long offset = asset.DebugInformation.GetDebugOffset(suffix);
-            return " Offset=\"0x" + offset.ToString("X").PadLeft(8, '0') + "\"";
+            offsetKeyStack.Push(suffix);
+            offsetKey += suffix;
+            if (asset.OffsetsMap.TryGetValue(offsetKey, out long value))
+            {
+                string offset = value.ToString("X").PadLeft(8, '0');
+                return " Offset=\"0x" + offset + "\"";
+            }
+            return string.Empty;
         }
 
-         private void PopDebugOffset()
+        private void PopXmlOffset()
         {
-            if (!isDebugInformationEnabled) return;
+            if (!writeOffsets) return;
 
-            asset.DebugInformation.PopDebugOffset();
+            if (offsetKeyStack.Count > 0)
+            {
+                string suffix = offsetKeyStack.Pop();
+                if (offsetKey.EndsWith(suffix))
+                {
+                    offsetKey = offsetKey.Substring(0, offsetKey.Length - suffix.Length);
+                }
+                else
+                {
+                    Trace.WriteLine($"Error: Suffix '{suffix}' does not match the current offsetKey.");
+                }
+            }
+            else
+            {
+                Trace.WriteLine("Error: No suffix to pop from offsetKeyStack.");
+            }
         }
 
         private string ClassToXml(object Obj, Type ObjType, int TabCount = 0)
@@ -98,7 +121,7 @@ namespace FrostySdk.IO
 
             if (TotalCount != 0 && (Properties.Length > 0 || (ObjType.BaseType != typeof(object) && ObjType.BaseType != typeof(ValueType))))
             {
-                SB.AppendLine("".PadLeft(TabCount) + "<" + ObjType.Name + StrGuid + GetDebugOffset(InstanceGuid) + ">");
+                SB.AppendLine("".PadLeft(TabCount) + "<" + ObjType.Name + StrGuid + GetXmlOffset(InstanceGuid) + ">");
                 TabCount += tabSize;
 
                 foreach (PropertyInfo PI in Properties)
@@ -106,7 +129,7 @@ namespace FrostySdk.IO
                     if (PI.GetCustomAttribute<IsTransientAttribute>() != null)
                         continue;
 
-                    SB.Append("".PadLeft(TabCount) + "<" + PI.Name + "[AddInfo]" + GetDebugOffset($"_{PI.Name}") + ">");
+                    SB.Append("".PadLeft(TabCount) + "<" + PI.Name + "[AddInfo]" + GetXmlOffset($"_{PI.Name}") + ">");
 
                     object Value = PI.GetValue(Obj);
                     string Tmp = "";
@@ -115,17 +138,17 @@ namespace FrostySdk.IO
 
                     SB.AppendLine("</" + PI.Name + ">");
                     SB = SB.Replace("[AddInfo]", Tmp);
-                    PopDebugOffset();
+                    PopXmlOffset();
                 }
 
                 TabCount -= tabSize;
                 SB.AppendLine("".PadLeft(TabCount) + "</" + ObjType.Name + ">");
-                PopDebugOffset();
+                PopXmlOffset();
             }
             else
             {
-                SB.AppendLine("".PadLeft(TabCount) + "<" + ObjType.Name + StrGuid + GetDebugOffset(InstanceGuid) + "/>");
-                PopDebugOffset();
+                SB.AppendLine("".PadLeft(TabCount) + "<" + ObjType.Name + StrGuid + GetXmlOffset(InstanceGuid) + "/>");
+                PopXmlOffset();
             }
 
             return SB.ToString();
@@ -148,7 +171,7 @@ namespace FrostySdk.IO
 
                     for (int i = 0; i < Count; i++)
                     {
-                        SB.Append("".PadLeft(TabCount) + "<member Index=\"" + i.ToString() + "\"" + GetDebugOffset($"_{i}") + ">");
+                        SB.Append("".PadLeft(TabCount) + "<member Index=\"" + i.ToString() + "\"" + GetXmlOffset($"_{i}") + ">");
 
                         object SubValue = FieldType.GetMethod("get_Item").Invoke(Value, new object[] { i });
                         string Tmp = "";
@@ -157,7 +180,7 @@ namespace FrostySdk.IO
 
                         SB.AppendLine("</member>");
 
-                        PopDebugOffset();
+                        PopXmlOffset();
                     }
 
                     TabCount -= 4;

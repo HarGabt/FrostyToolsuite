@@ -89,7 +89,6 @@
     <Compile Include="Ebx\AssetClassGuid.cs" />
     <Compile Include="Ebx\BoxedValueRef.cs" />
     <Compile Include="Ebx\CString.cs" />
-    <Compile Include="Ebx\DebugInformation.cs" />
     <Compile Include="Ebx\FileRef.cs" />
     <Compile Include="Ebx\PointerRef.cs" />
     <Compile Include="Ebx\ResourceRef.cs" />
@@ -114,8 +113,6 @@
     <Compile Include="IO\EbxSharedTypeDescriptors.cs" />
     <Compile Include="IO\EbxWriterRiff.cs" />
     <Compile Include="IO\EbxWriter.cs" />
-    <None Include="IO\EbxYamlWriter - Copy.cs" />
-    <None Include="IO\EbxXmlWriter - Copy.cs" />
     <Compile Include="IO\EbxYamlWriter.cs" />
     <Compile Include="IO\EbxXmlWriter.cs" />
     <Compile Include="IO\LegacyBinarySbReader.cs" />
@@ -146,7 +143,6 @@
     <Compile Include="Resources\Resource.cs" />
     <Compile Include="Resources\Texture.cs" />
     <Compile Include="Sha1.cs" />
-	<Compile Include="StringsManager.cs" />
     <Compile Include="TypeLibrary.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="Utils\HuffmanDecoder.cs" />
