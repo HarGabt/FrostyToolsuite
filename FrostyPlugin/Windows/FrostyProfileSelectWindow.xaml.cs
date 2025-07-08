@@ -76,8 +76,18 @@ namespace Frosty.Core.Windows
 
             if (ConfigurationListView.SelectedItem is FrostyConfiguration configuration)
             {
-                selectedProfileName = configuration.ProfileName;
-                Close();
+                string version = App.Version;
+
+                if (configuration.ProfileName == "Dragon Age The Veilguard")
+                {
+                    FrostyMessageBox.Show(configuration.GameName + " is not supported." + "\n\n" + "This release is never meant to support Dragon Age\u2122: The Veilguard. Use J-Lyt's release for that game.", "Unsupported Profile");
+                    return;
+                }
+                else
+                {
+                    selectedProfileName = configuration.ProfileName;
+                    Close();
+                }
             }
         }
 
