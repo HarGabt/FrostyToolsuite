@@ -1,15 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
-using Frosty.Core.Attributes;
+﻿using Frosty.Core.Attributes;
+using Frosty.Core.Mod;
 using Frosty.Hash;
 using FrostySdk;
 using FrostySdk.Interfaces;
 using FrostySdk.IO;
 using FrostySdk.Managers;
-using Frosty.Core.Mod;
 using FrostySdk.Managers.Entries;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
 
 namespace Frosty.Core
 {
@@ -190,7 +191,10 @@ namespace Frosty.Core
         private readonly Dictionary<ResourceType, Type> m_resCustomHandlers = new Dictionary<ResourceType, Type>();
         private readonly Dictionary<string, ShaderDefinition[]> m_shaders = new Dictionary<string, ShaderDefinition[]>();
         private readonly List<string> m_userShaders = new List<string>();
-        
+
+        private Dictionary<(string, int), Type> m_childTypeOverridesPriority = new Dictionary<(string, int), Type>();
+        private Dictionary<string, Type> m_subTypeOverrides = new Dictionary<string, Type>();
+
         private Type m_localizedStringDatabaseType;
         private readonly PluginManagerType m_managerType;
 
@@ -335,12 +339,17 @@ namespace Frosty.Core
         /// <returns>The <see cref="Type"/> of the type override.</returns>
         public Type GetTypeOverride(string lookupName)
         {
-            lookupName = lookupName.ToLower();
-            if (!m_typeOverrides.ContainsKey(lookupName))
+            if (m_typeOverrides.ContainsKey(lookupName.ToLower()))
+                return m_typeOverrides[lookupName.ToLower()];
+
+            foreach (KeyValuePair<string, Type> pair in m_subTypeOverrides)
             {
-                return null;
+                if (TypeLibrary.IsSubClassOf(lookupName, pair.Key))
+                {
+                    return m_typeOverrides[pair.Key.ToLower()];
+                }
             }
-            return m_typeOverrides[lookupName];
+            return null;
         }
 
         /// <summary>
@@ -525,6 +534,11 @@ namespace Frosty.Core
                     else if (tmpAttr is RegisterTypeOverrideAttribute attr4)
                     {
                         m_typeOverrides.Add(attr4.LookupName.ToLower(), attr4.EditorType);
+                        if (attr4.ApplyToChildClasses)
+                        {
+                            m_childTypeOverridesPriority.Add((attr4.LookupName, attr4.Priority), attr4.EditorType);
+                            m_subTypeOverrides = m_childTypeOverridesPriority.OrderByDescending(item => item.Key.Item2).ToDictionary(item => item.Key.Item1, item => item.Value);
+                        }
                     }
                     else if (tmpAttr is RegisterGlobalTypeEditorAttribute attr3)
                     {

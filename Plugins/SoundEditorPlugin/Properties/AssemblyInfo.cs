@@ -28,8 +28,8 @@ using System.Windows;
 
 [assembly: RegisterOptionsExtension(typeof(SoundOptions))]
 
-[assembly: RegisterTypeOverride("LocalizedWaveAsset", typeof(LocalizedWaveAssetOverride))]
-[assembly: RegisterTypeOverride("NewWaveAsset", typeof(NewWaveAssetOverride))]
+[assembly: RegisterTypeOverride("LocalizedWaveAsset", typeof(LocalizedWaveAssetOverride), false, 0)]
+[assembly: RegisterTypeOverride("NewWaveAsset", typeof(NewWaveAssetOverride), false, 0)]
 
 [assembly: RegisterAssetDefinition("SoundWaveAsset", typeof(SoundWaveAssetDefinition))]
 [assembly: RegisterAssetDefinition("NewWaveAsset", typeof(NewWaveAssetDefinition))]

@@ -7,7 +7,9 @@ namespace Frosty.Core.Attributes
     {
         public string LookupName { get; set; }
         public Type EditorType { get; set; }
-        public RegisterTypeOverrideAttribute(string lookupName, Type type)
+        public bool ApplyToChildClasses { get; set; }
+        public int Priority { get; set; }
+        public RegisterTypeOverrideAttribute(string lookupName, Type type, bool applyToChildClasses, int priority)
         {
             LookupName = lookupName;
             EditorType = type;

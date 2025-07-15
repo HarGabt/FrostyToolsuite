@@ -26,5 +26,5 @@ using VersionDataPlugin;
 [assembly: PluginAuthor("GalaxyMan2015")]
 [assembly: PluginVersion("1.0.0.0")]
 
-[assembly: RegisterTypeOverride("VersionData", typeof(VersionDataOverride))]
+[assembly: RegisterTypeOverride("VersionData", typeof(VersionDataOverride), false, 0)]
 [assembly: RegisterAssetDefinition("VersionData", typeof(VersionDataAssetDefinition))]
