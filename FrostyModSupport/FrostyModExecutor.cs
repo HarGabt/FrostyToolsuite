@@ -463,7 +463,10 @@ namespace Frosty.ModSupport
                                 }
 
                                 entry.ExtraData = extraData;
-                                m_modifiedEbx.TryAdd(resource.Name, entry);
+                                if (m_modifiedEbx.ContainsKey(resource.Name))
+                                    m_modifiedEbx[resource.Name] = entry;
+                                else
+                                    m_modifiedEbx.TryAdd(resource.Name, entry);
                             }
 
                             // merge new and old data together
