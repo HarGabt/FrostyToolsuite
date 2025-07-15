@@ -1171,7 +1171,7 @@ namespace FrostySdk.Managers
             => m_bundles.FindIndex((BundleEntry be) => be.Name.Equals(bentry.Name));
 
         public int GetBundleId(string name)
-            => m_bundles.FindIndex((BundleEntry be) => be.Name.Equals(name));
+            => m_bundles.FindIndex((BundleEntry be) => be.Name.ToLower().Equals(name.ToLower()));
 
         public BundleEntry GetBundleEntry(int bundleId)
             => bundleId >= m_bundles.Count ? null : m_bundles[bundleId];

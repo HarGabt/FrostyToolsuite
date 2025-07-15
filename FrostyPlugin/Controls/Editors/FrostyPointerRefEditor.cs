@@ -457,6 +457,10 @@ namespace Frosty.Core.Controls.Editors
 
             popup.ItemsSource = types;
             popup.IsDropDownOpen = true;
+
+            Popup popupMenu = (popup.Template.FindName("PART_PopupMenu", popup) as Popup);
+            TextBox filter = (popupMenu.FindName("PART_FilterTextBox") as TextBox);
+            filter.Focus();
         }
 
         /// <summary>
