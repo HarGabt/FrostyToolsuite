@@ -80,20 +80,6 @@ namespace Frosty.ModSupport
                     if (basePath.Equals(path))
                         isBase = true;
 
-                    if (ProfilesLibrary.DataVersion == (int)ProfileVersion.DragonAgeInquisition || ProfilesLibrary.DataVersion == (int)ProfileVersion.Battlefield4 || ProfilesLibrary.DataVersion == (int)ProfileVersion.NeedForSpeed || ProfilesLibrary.DataVersion == (int)ProfileVersion.PlantsVsZombiesGardenWarfare2 || ProfilesLibrary.DataVersion == (int)ProfileVersion.NeedForSpeedRivals)
-                    {
-                        if (basePath == "")
-                            return;
-
-                        // read base toc to determine binary status
-                        using (DbReader reader = new DbReader(new FileStream(basePath, FileMode.Open, FileAccess.Read), parent.m_fs.CreateDeobfuscator()))
-                            toc = reader.ReadDbObject();
-
-                        // binary superbundle
-                        if (toc.GetValue<bool>("alwaysEmitSuperBundle") || ProfilesLibrary.DataVersion == (int)ProfileVersion.PlantsVsZombiesGardenWarfare2)
-                            isBinary = true;
-                    }
-
                     if (path != "")
                     {
                         if (!File.Exists(path.Replace(".toc", ".sb")))
@@ -118,6 +104,9 @@ namespace Frosty.ModSupport
                         toc.SetValue("alwaysEmitSuperbundle", false);
                         containsBundlesToModify = true;
                     }
+
+                    // binary superbundle
+                    isBinary = !toc.GetValue<bool>("cas");
 
                     bool tocChanged = false;
                     bool sbChanged = false;
@@ -303,6 +292,7 @@ namespace Frosty.ModSupport
 
                                             ChunkAssetEntry entry = parent.m_modifiedChunks[id];
                                             chunkToEdit.SetValue("sha1", entry.Sha1);
+                                            chunkToEdit.RemoveValue("base");
                                             chunkToEdit.SetValue("delta", true);
 
                                             if (!casRefs.Contains(entry.Sha1))
