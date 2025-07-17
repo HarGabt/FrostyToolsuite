@@ -426,6 +426,21 @@ namespace Frosty.ModSupport
                             using (DbReader reader = new DbReader(new FileStream(basePath, FileMode.Open, FileAccess.Read), parent.m_fs.CreateDeobfuscator()))
                                 baseToc = reader.ReadDbObject();
 
+                            // Add new bundles to the TOC
+                            if (parent.m_addedBundles.ContainsKey(sbHash))
+                            {
+                                foreach (string newBundle in parent.m_addedBundles[sbHash])
+                                {
+                                    DbObject newTocBundle = new DbObject();
+                                    newTocBundle.SetValue("id", newBundle);
+                                    newTocBundle.SetValue("offset", (long)0xDEADBEEF);
+                                    newTocBundle.SetValue("size", 0L);
+                                    newTocBundle.SetValue("delta", true);
+                                    toc.GetValue<DbObject>("bundles").Add(newTocBundle);
+                                    tocChanged = true;
+                                }
+                            }
+
                             foreach (DbObject bundle in baseToc.GetValue<DbObject>("bundles"))
                             {
                                 BaseBundleInfo info = new BaseBundleInfo
@@ -461,8 +476,16 @@ namespace Frosty.ModSupport
                                 bool isDelta = bundle.GetValue<bool>("delta");
                                 long baseBundleDataOffset = 0;
                                 bool isModified = false;
+                                bool isAdded = false;
 
-                                if (isDelta)
+                                // Is this a new bundle?
+                                if (bundle.GetValue<long>("offset") == 0xDEADBEEF)
+                                {
+                                    isAdded = true;
+                                    isModified = true;
+                                }
+
+                                if (isDelta && !isAdded)
                                 {
                                     if (parent.m_modifiedBundles.ContainsKey(bundleName))
                                     {
@@ -680,7 +703,7 @@ namespace Frosty.ModSupport
                                 else
                                 {
                                     // only base bundles that have affected assets are modified
-                                    if (parent.m_modifiedBundles.ContainsKey(bundleName))
+                                    if (parent.m_modifiedBundles.ContainsKey(bundleName) && !isAdded)
                                     {
                                         isModified = true;
                                         BaseBundleInfo bi = baseBundles[bundleName];
