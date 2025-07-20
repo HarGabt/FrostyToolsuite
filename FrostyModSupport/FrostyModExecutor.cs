@@ -2138,11 +2138,6 @@ namespace Frosty.ModSupport
                     CopyFileIfRequired(m_fs.BasePath + m_patchPath + "/../package.mft", modDataPath + m_patchPath + "/../package.mft");
                 }
 
-                if (ProfilesLibrary.IsLoaded(ProfileVersion.DeadSpace))
-                {
-                    CopyFileIfRequired(m_fs.BasePath + "Data/chunkmanifest", modDataPath + "Data/chunkmanifest");
-                }
-
                 // swbf2, bfv, sws
                 if (ProfilesLibrary.IsLoaded(ProfileVersion.StarWarsBattlefrontII, ProfileVersion.Battlefield5, ProfileVersion.StarWarsSquadrons))
                 {

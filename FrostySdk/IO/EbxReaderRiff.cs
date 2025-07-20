@@ -353,8 +353,15 @@ namespace FrostySdk.IO
                     obj.SetInstanceGuid(new AssetClassGuid(instanceGuid, index++));
 
                     PushXmlOffset(obj.__InstanceGuid.ToString(), true);
-					
-                    ReadClass(classType, obj, Position);
+
+                    try
+                    {
+                        ReadClass(classType, obj, Position);
+                    }
+                    catch
+                    {
+
+                    }
 
                     Position = classPos + classType.Size;
                 }
