@@ -287,6 +287,7 @@
     <Resource Include="Credits.txt" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Images\Recent.png" />
     <Content Include="Resources\Meshes\Flag.bin">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

@@ -466,5 +466,8 @@
   <ItemGroup>
     <EmbeddedResource Include="Sdk\Bf2042-Strings.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="AppIcon.ico" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

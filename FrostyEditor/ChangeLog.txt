@@ -8,6 +8,16 @@ selphea's changes:
 
 Changes in my fork:
 
+(2025.07.19)
+--------
+- Recent Projects feature ported from 1.0.6.3! (NOTE: due to the nature of the feature port, some configurations may reset)
+- Profile selection in Editor now occurs before the main window is loaded
+- More detailed exceptions during Mesh import (LODs mismatch, missing weights, non-fully skinned model)
+- Added CopyFilePath plugin - now you can copy file's path without opening it. Courtesy of @AdamRaichu, ported by me
+- Frosty can now kill the game process if you forgot to do so before running the game with new changes
+- Nightly builds are now available on my GitHub repository, but without vital plugins yet
+- Some other backend changes, refer to commits history in the repository
+
 (2025.06.17)
 --------
 - Added support for importing meshes that need tangent space compression (this includes NFS Heat and NFS Unbound), courtesy of @brawltendo.
