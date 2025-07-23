@@ -683,7 +683,7 @@ namespace Frosty.ModSupport
                             HandlerExtraData extraData;
                             byte[] data = fmod.GetResourceData(resource);
 
-                            if (m_modifiedChunks.TryGetValue(guid, out ChunkAssetEntry entry))
+                            if (m_modifiedChunks.TryGetValue(guid, out ChunkAssetEntry entry) && entry?.ExtraData != null)
                             {
                                 extraData = (HandlerExtraData)entry.ExtraData;
                             }
@@ -2189,11 +2189,6 @@ namespace Frosty.ModSupport
                 {
                     // copy additional files
                     CopyFileIfRequired(m_fs.BasePath + m_patchPath + "/../package.mft", modDataPath + m_patchPath + "/../package.mft");
-                }
-
-                if (ProfilesLibrary.IsLoaded(ProfileVersion.DeadSpace))
-                {
-                    CopyFileIfRequired(m_fs.BasePath + "Data/chunkmanifest", modDataPath + "Data/chunkmanifest");
                 }
 
                 // swbf2, bfv, sws

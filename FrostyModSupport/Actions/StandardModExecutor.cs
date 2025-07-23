@@ -80,20 +80,6 @@ namespace Frosty.ModSupport
                     if (basePath.Equals(path))
                         isBase = true;
 
-                    if (ProfilesLibrary.DataVersion == (int)ProfileVersion.DragonAgeInquisition || ProfilesLibrary.DataVersion == (int)ProfileVersion.Battlefield4 || ProfilesLibrary.DataVersion == (int)ProfileVersion.NeedForSpeed || ProfilesLibrary.DataVersion == (int)ProfileVersion.PlantsVsZombiesGardenWarfare2 || ProfilesLibrary.DataVersion == (int)ProfileVersion.NeedForSpeedRivals)
-                    {
-                        if (basePath == "")
-                            return;
-
-                        // read base toc to determine binary status
-                        using (DbReader reader = new DbReader(new FileStream(basePath, FileMode.Open, FileAccess.Read), parent.m_fs.CreateDeobfuscator()))
-                            toc = reader.ReadDbObject();
-
-                        // binary superbundle
-                        if (toc.GetValue<bool>("alwaysEmitSuperBundle") || ProfilesLibrary.DataVersion == (int)ProfileVersion.PlantsVsZombiesGardenWarfare2)
-                            isBinary = true;
-                    }
-
                     if (path != "")
                     {
                         if (!File.Exists(path.Replace(".toc", ".sb")))
@@ -118,6 +104,9 @@ namespace Frosty.ModSupport
                         toc.SetValue("alwaysEmitSuperbundle", false);
                         containsBundlesToModify = true;
                     }
+
+                    // binary superbundle
+                    isBinary = !toc.GetValue<bool>("cas");
 
                     bool tocChanged = false;
                     bool sbChanged = false;
@@ -303,6 +292,7 @@ namespace Frosty.ModSupport
 
                                             ChunkAssetEntry entry = parent.m_modifiedChunks[id];
                                             chunkToEdit.SetValue("sha1", entry.Sha1);
+                                            chunkToEdit.RemoveValue("base");
                                             chunkToEdit.SetValue("delta", true);
 
                                             if (!casRefs.Contains(entry.Sha1))
@@ -426,6 +416,21 @@ namespace Frosty.ModSupport
                             using (DbReader reader = new DbReader(new FileStream(basePath, FileMode.Open, FileAccess.Read), parent.m_fs.CreateDeobfuscator()))
                                 baseToc = reader.ReadDbObject();
 
+                            // Add new bundles to the TOC
+                            if (parent.m_addedBundles.ContainsKey(sbHash))
+                            {
+                                foreach (string newBundle in parent.m_addedBundles[sbHash])
+                                {
+                                    DbObject newTocBundle = new DbObject();
+                                    newTocBundle.SetValue("id", newBundle);
+                                    newTocBundle.SetValue("offset", (long)0xDEADBEEF);
+                                    newTocBundle.SetValue("size", 0L);
+                                    newTocBundle.SetValue("delta", true);
+                                    toc.GetValue<DbObject>("bundles").Add(newTocBundle);
+                                    tocChanged = true;
+                                }
+                            }
+
                             foreach (DbObject bundle in baseToc.GetValue<DbObject>("bundles"))
                             {
                                 BaseBundleInfo info = new BaseBundleInfo
@@ -461,8 +466,16 @@ namespace Frosty.ModSupport
                                 bool isDelta = bundle.GetValue<bool>("delta");
                                 long baseBundleDataOffset = 0;
                                 bool isModified = false;
+                                bool isAdded = false;
 
-                                if (isDelta)
+                                // Is this a new bundle?
+                                if (bundle.GetValue<long>("offset") == 0xDEADBEEF)
+                                {
+                                    isAdded = true;
+                                    isModified = true;
+                                }
+
+                                if (isDelta && !isAdded)
                                 {
                                     if (parent.m_modifiedBundles.ContainsKey(bundleName))
                                     {
@@ -680,7 +693,7 @@ namespace Frosty.ModSupport
                                 else
                                 {
                                     // only base bundles that have affected assets are modified
-                                    if (parent.m_modifiedBundles.ContainsKey(bundleName))
+                                    if (parent.m_modifiedBundles.ContainsKey(bundleName) && !isAdded)
                                     {
                                         isModified = true;
                                         BaseBundleInfo bi = baseBundles[bundleName];

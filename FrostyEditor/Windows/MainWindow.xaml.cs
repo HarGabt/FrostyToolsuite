@@ -1094,6 +1094,11 @@ namespace FrostyEditor.Windows
         {
             EbxAssetEntry entry = dataExplorer.SelectedAsset as EbxAssetEntry;
 
+            if (entry == null)
+            {
+                return;
+            }
+
             AssetDefinition assetDefinition = App.PluginManager.GetAssetDefinition(entry.Type) ?? new AssetDefinition();
 
             List<AssetImportType> filters = new List<AssetImportType>();
