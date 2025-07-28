@@ -1878,7 +1878,7 @@ namespace FrostySdk.Managers
                         }
                         if (m_ebxList.ContainsKey(entry.Name))
                         {
-                            SdkFileLogger.Info($"Replacing '{entry.Name}' in ebxList.");
+                            SdkFileLogger.Info($"Replacing '{entry.Name}' with display '{entry.DisplayName}' in ebxList.");
                             m_ebxList[entry.Name] = entry;
                         }
                         else
@@ -1930,7 +1930,7 @@ namespace FrostySdk.Managers
                     {
                         if (m_resList.ContainsKey(entry.Name))
                         {
-                            SdkFileLogger.Info($"Replacing '{entry.Name}' in resList.");
+                            SdkFileLogger.Info($"Replacing '{entry.Name}' with display '{entry.DisplayName}' in resList.");
                             m_resList[entry.Name] = entry;
                         }
                         else
@@ -1942,7 +1942,7 @@ namespace FrostySdk.Managers
                         {
                             if (m_resRidList.ContainsKey(entry.ResRid))
                             {
-                                SdkFileLogger.Info($"Replacing '{entry.ResRid}' with name '{entry.Name}' in resRidList.");
+                                SdkFileLogger.Info($"Replacing '{entry.ResRid}' with name '{entry.Name}' and display '{entry.DisplayName}' in resRidList.");
                                 m_resRidList[entry.ResRid] = entry;
                             }
                             else
@@ -2013,7 +2013,17 @@ namespace FrostySdk.Managers
                         entry.Bundles.Add(reader.ReadInt());
 
                     if (!isPatched)
-                        m_chunkList.Add(entry.Id, entry);
+                    {
+                        if (m_chunkList.ContainsKey(entry.Id))
+                        {
+                            SdkFileLogger.Info($"Replacing '{entry.Id}' with name '{entry.Name}' and display '{entry.DisplayName}' in chunkList.");
+                            m_chunkList[entry.Id] = entry;
+                        }
+                        else
+                        {
+                            m_chunkList.Add(entry.Id, entry);
+                        }
+                    }
                 }
             }
 
