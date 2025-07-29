@@ -162,7 +162,7 @@ namespace FrostySdk
 #endif
 
             if (filename.StartsWith("native_patch/") && paths.Count == 1)
-                return "";
+                return string.Empty;
 
             int startCount = 0;
             int endCount = paths.Count;
@@ -172,16 +172,24 @@ namespace FrostySdk
             else if (filename.StartsWith("native_patch/"))
                 endCount = 1;
 
-            filename = filename.Replace("native_data/", "");
-            filename = filename.Replace("native_patch/", "");
+            filename = filename.Replace("native_data/", string.Empty);
+            filename = filename.Replace("native_patch/", string.Empty);
             filename = filename.Trim('/');
 
             for (int i = startCount; i < endCount; i++)
             {
                 if (File.Exists(BasePath + paths[i] + filename) || Directory.Exists(BasePath + paths[i] + filename))
+                {
                     return (BasePath + paths[i] + filename).Replace("\\\\", "\\");
+                }
+                else
+                {
+                    SdkFileLogger.Info($"Could not find file or directory '{Path.Combine(BasePath, paths[i], filename)}'.");
+                }
             }
-            return "";
+            SdkFileLogger.Info($"Could not find matching path for'{BasePath}' and '{filename}'.");
+
+            return string.Empty;
         }
 
         public string ResolvePath(ManifestFileRef fileRef)
@@ -882,6 +890,12 @@ namespace FrostySdk
                 string manifestFilePath = (file.IsInPatch ? "native_patch/" : "native_data/") + catalogs[file.CatalogIndex].Name + "/cas_" + file.CasIndex.ToString("D2") + ".cas";
 
                 string manifestPath = ResolvePath(file);
+
+                if (string.IsNullOrEmpty(manifestPath))
+                {
+                    throw new ArgumentException($"Could not resolve manifest path for '{file}'.");
+                }
+
                 using (NativeReader reader = new NativeReader(new FileStream(manifestPath, FileMode.Open, FileAccess.Read)))
                 {
                     long manifestOffset = manifest.GetValue<int>("offset");
