@@ -1812,7 +1812,7 @@ namespace FrostySdk.Managers
                     };
 
                     // SWBF2: patch weapon bundles with incorrect start
-                    if (bentry.Name.StartsWith("win32/Win32"))
+                    if (bentry.Name.StartsWith("win32/Win32", StringComparison.InvariantCultureIgnoreCase))
                         bentry.Name = bentry.Name.Remove(0, 6);
 
                     if (!isPatched)
@@ -1870,10 +1870,21 @@ namespace FrostySdk.Managers
                         {
                             entry.Guid = ebxGuid;
                             if (m_ebxGuidList.ContainsKey(entry.Guid))
+                            {
                                 continue;
+                            }
+
                             m_ebxGuidList.Add(ebxGuid, entry);
                         }
-                        m_ebxList.Add(entry.Name, entry);
+                        if (m_ebxList.ContainsKey(entry.Name))
+                        {
+                            SdkFileLogger.Info($"Replacing '{entry.Name}' with display '{entry.DisplayName}' in ebxList.");
+                            m_ebxList[entry.Name] = entry;
+                        }
+                        else
+                        {
+                            m_ebxList.Add(entry.Name, entry);
+                        }
                     }
                 }
 
@@ -1917,9 +1928,28 @@ namespace FrostySdk.Managers
 
                     if (!isPatched)
                     {
-                        m_resList.Add(entry.Name, entry);
+                        if (m_resList.ContainsKey(entry.Name))
+                        {
+                            SdkFileLogger.Info($"Replacing '{entry.Name}' with display '{entry.DisplayName}' in resList.");
+                            m_resList[entry.Name] = entry;
+                        }
+                        else
+                        {
+                            m_resList.Add(entry.Name, entry);
+                        }
+
                         if (entry.ResRid != 0)
-                            m_resRidList.Add(entry.ResRid, entry);
+                        {
+                            if (m_resRidList.ContainsKey(entry.ResRid))
+                            {
+                                SdkFileLogger.Info($"Replacing '{entry.ResRid}' with name '{entry.Name}' and display '{entry.DisplayName}' in resRidList.");
+                                m_resRidList[entry.ResRid] = entry;
+                            }
+                            else
+                            {
+                                m_resRidList.Add(entry.ResRid, entry);
+                            }
+                        }
                     }
                 }
 
@@ -1983,7 +2013,17 @@ namespace FrostySdk.Managers
                         entry.Bundles.Add(reader.ReadInt());
 
                     if (!isPatched)
-                        m_chunkList.Add(entry.Id, entry);
+                    {
+                        if (m_chunkList.ContainsKey(entry.Id))
+                        {
+                            SdkFileLogger.Info($"Replacing '{entry.Id}' with name '{entry.Name}' and display '{entry.DisplayName}' in chunkList.");
+                            m_chunkList[entry.Id] = entry;
+                        }
+                        else
+                        {
+                            m_chunkList.Add(entry.Id, entry);
+                        }
+                    }
                 }
             }
 

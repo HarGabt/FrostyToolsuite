@@ -176,7 +176,7 @@ namespace FrostyModManager.Windows
             ConfigList.SelectedIndex = -1;
         }
 
-        private void ScanForGamesButton_Click(object sender, RoutedEventArgs e)
+        private async void ScanForGamesButton_Click(object sender, RoutedEventArgs e)
         {
             using (RegistryKey lmKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\\WOW6432Node"))
             {

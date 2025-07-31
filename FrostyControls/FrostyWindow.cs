@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -366,6 +367,7 @@ namespace Frosty.Controls
         public event EventHandler FrostyLoaded;
         private DpiScale winDpiScale = new DpiScale(1, 1);
         private Grid windowBorder;
+        private bool isRefreshed = false;
 
         static FrostyWindow()
         {
@@ -386,6 +388,23 @@ namespace Frosty.Controls
             
             Loaded += FrostyWindow_Initialized;
             ContentRendered += (sender, e) => FrostyLoaded?.Invoke(sender, e);
+            ContentRendered += RefreshFix;
+        }
+
+        private void RefreshFix(object sender, EventArgs e)
+        {
+            if (isRefreshed || Application.Current.MainWindow != this)
+            {
+                return;
+            }
+
+            isRefreshed = true;
+
+            Application.Current.MainWindow.Height += 2;
+
+            Thread.Sleep(150);
+
+            Application.Current.MainWindow.Height -= 2;
         }
 
         public override void OnApplyTemplate()
@@ -449,7 +468,9 @@ namespace Frosty.Controls
             }
 
             if (WindowState == WindowState.Maximized)
+            {
                 OnStateChanged(new EventArgs());
+            }
         }
 
         protected override void OnStateChanged(EventArgs e)
