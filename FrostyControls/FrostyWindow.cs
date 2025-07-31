@@ -393,7 +393,7 @@ namespace Frosty.Controls
 
         private void RefreshFix(object sender, EventArgs e)
         {
-            if (isRefreshed)
+            if (isRefreshed || Application.Current.MainWindow != this)
             {
                 return;
             }
