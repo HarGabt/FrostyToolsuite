@@ -1792,7 +1792,7 @@ namespace Frosty.Core.Sdk
                     fieldObj.AddValue("flags", (int)field.Type);
                     if (ProfilesLibrary.IsLoaded(ProfileVersion.Anthem, ProfileVersion.PlantsVsZombiesBattleforNeighborville,
                         ProfileVersion.Fifa20, ProfileVersion.Fifa21, ProfileVersion.Madden22,
-                        ProfileVersion.Fifa22, ProfileVersion.Battlefield2042, ProfileVersion.Madden23, ProfileVersion.NeedForSpeedUnbound, ProfileVersion.DeadSpace, ProfileVersion.DragonAgeVeilguard))
+                        ProfileVersion.Fifa22, ProfileVersion.Battlefield2042, ProfileVersion.Madden23, ProfileVersion.NeedForSpeedUnbound, ProfileVersion.DeadSpace, ProfileVersion.DragonAgeVeilguard, ProfileVersion.Battlefield6))
                     {
                         fieldObj.AddValue("offset", (int)field.DataOffset);
                         fieldObj.AddValue("nameHash", field.NameHash);
@@ -1997,7 +1997,7 @@ namespace Frosty.Core.Sdk
             // Bf2042
             else if (ProfilesLibrary.IsLoaded(ProfileVersion.Fifa21, ProfileVersion.Madden22,
                 ProfileVersion.Fifa22, ProfileVersion.Battlefield2042,
-                ProfileVersion.Madden23, ProfileVersion.NeedForSpeedUnbound, ProfileVersion.DeadSpace, ProfileVersion.DragonAgeVeilguard))
+                ProfileVersion.Madden23, ProfileVersion.NeedForSpeedUnbound, ProfileVersion.DeadSpace, ProfileVersion.DragonAgeVeilguard, ProfileVersion.Battlefield6))
             {
                 Namespace = "Frosty.Core.Sdk.Bf2042.";
             }

@@ -1215,6 +1215,34 @@ namespace FrostyCmd
                 blobs.Add(key, writer.ToByteArray());
             }
         }
+
+        private void CreateBF6Profile()
+        {
+            string key = "bf6";
+            using (NativeWriter writer = new NativeWriter(new MemoryStream()))
+            {
+                writer.WriteObfuscatedString("Battlefield™ 6 Open Beta");
+                writer.Write((int)ProfileVersion.Battlefield6);
+                writer.WriteObfuscatedString("bf6");
+                writer.WriteObfuscatedString(typeof(NullDeobfuscator).Name);
+                writer.WriteObfuscatedString(AssetManager.GetLoaderName("CasAssetLoader"));
+                writer.Write(CreateSources("Patch;false", "Data;false"));
+                writer.WriteObfuscatedString("BF6SDK");
+            //  writer.Write(CreateBanner("battlefield6"));
+                writer.WriteObfuscatedString("Shaders/Common/UtilTextures/defaultbasecolor_c"); // placeholders
+                writer.WriteObfuscatedString("Shaders/Common/UtilTextures/defaultnormal_n");    // placeholders
+                writer.WriteObfuscatedString("Shaders/Common/UtilTextures/defaultbasecolor_c"); // placeholders
+                writer.WriteObfuscatedString("Shaders/Common/UtilTextures/defaultbasecolor_c"); // placeholders
+                writer.Write(0); // shared bundle names
+                writer.Write(0); // ignored res types
+
+                // Flags (MustAddChunks, EbxVersion, RequiresKey, ReadOnly, EAAC)
+                ProfileFlags pf = new ProfileFlags(0, 6, 1, 1, 1);
+                pf.Write(writer);
+
+                blobs.Add(key, writer.ToByteArray());
+            }
+        }
         #endregion
 
         public ProfileCreator()
@@ -1250,6 +1278,7 @@ namespace FrostyCmd
             CreateNFSUnboundProfile();
             CreateDAVProfile();
             CreateDeadSpaceProfile();
+            CreateBF6Profile();
 
 #if FROSTY_DEVELOPER
 
@@ -1260,7 +1289,7 @@ namespace FrostyCmd
             CreateBF2042Profile();
             CreateMadden23Profile();
             CreateFifa23Profile();
-            CreateDAVProfile();
+            // CreateDAVProfile();
 
 #endif
 

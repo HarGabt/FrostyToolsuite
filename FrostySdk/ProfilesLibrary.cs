@@ -50,7 +50,8 @@ namespace FrostySdk
         Fifa23 = 20220930,
         NeedForSpeedUnbound = 20221129,
         DeadSpace = 20230127,
-        DragonAgeVeilguard = 20241031
+        DragonAgeVeilguard = 20241031,
+        Battlefield6 = 20250809
     }
 
     public struct Profile

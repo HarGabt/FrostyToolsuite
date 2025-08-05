@@ -323,7 +323,8 @@ namespace FrostySdk.Managers
                         ProfileVersion.Madden23,
                         ProfileVersion.NeedForSpeedUnbound,
                         ProfileVersion.DeadSpace,
-                        ProfileVersion.DragonAgeVeilguard))
+                        ProfileVersion.DragonAgeVeilguard,
+                        ProfileVersion.Battlefield6))
                 {
                     // load class infos
                     WriteToLog("Loading type info");
