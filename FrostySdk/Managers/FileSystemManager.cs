@@ -8,6 +8,7 @@ using FrostySdk.Managers;
 using Frosty.Hash;
 using FrostySdk.Managers.Entries;
 using System.Collections.Concurrent;
+using System.Linq;
 
 namespace FrostySdk
 {
@@ -67,8 +68,23 @@ namespace FrostySdk
     {
         public Guid Id;
         public string Name;
+        public string LayoutName;
         public bool AlwaysInstalled;
         public Dictionary<string, Tuple<bool, bool>> SuperBundles = new Dictionary<string, Tuple<bool, bool>>();
+
+        public uint HashedLayoutName
+        {
+            get {
+                // Found in BF6 Beta
+                uint hash = 5381;
+                foreach (char c in LayoutName)
+                {
+                    hash = c ^ (33 * hash);
+                }
+
+                return hash;
+            }
+        }
     }
 
     public class FileSystemManager
@@ -289,6 +305,16 @@ namespace FrostySdk
         {
             CatalogInfo ci = catalogs[catalog];
             return ((patch) ? "native_patch/" : "native_data/") + ci.Name + "/cas_" + cas.ToString("D2") + ".cas";
+        }
+        
+        public string GetFilePathByHash(uint catalogHash, int cas, bool patch)
+        {
+            return GetFilePath(GetCatalogIndexByHash(catalogHash), cas, patch);
+        }
+
+        public int GetCatalogIndexByHash(uint catalogHash)
+        {
+            return catalogs.FindIndex(c => c.HashedLayoutName == catalogHash);
         }
 
         private void LoadInitfs(byte[] key, bool patched = true)
@@ -624,6 +650,7 @@ namespace FrostySdk
                         {
                             Id = installChunk.GetValue<Guid>("id"),
                             Name = path,
+                            LayoutName = installChunk.GetValue<string>("name"),
                             AlwaysInstalled = alwaysInstalled
                         };
 
@@ -631,7 +658,8 @@ namespace FrostySdk
                             info.SuperBundles.Add(superBundle.ToLower(), new Tuple<bool, bool>(true, false));
                     }
 
-                    if (installChunk.HasValue("persistentIndex"))
+                    // BF6 uses a hashmap instead of an array
+                    if (installChunk.HasValue("persistentIndex") && !ProfilesLibrary.IsLoaded(ProfileVersion.Battlefield6))
                     {
                         if (catalogs.Count == 0)
                         {
