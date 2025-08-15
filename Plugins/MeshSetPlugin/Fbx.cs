@@ -1232,6 +1232,27 @@ namespace MeshSetPlugin.Fbx
         }
     }
 
+    internal class FbxLODGroup : FbxNodeAttribute
+    {
+        [DllImport("thirdparty/libfbxsdk", EntryPoint = "?Create@FbxLODGroup@fbxsdk@@SAPEAV12@PEAVFbxManager@2@PEBD@Z")]
+        private static extern IntPtr CreateFromManager(IntPtr pManager, [MarshalAs(UnmanagedType.LPStr)] string pName);
+        [DllImport("thirdparty/libfbxsdk", EntryPoint = "?Create@FbxLODGroup@fbxsdk@@SAPEAV12@PEAVFbxObject@2@PEBD@Z")]
+        private static extern IntPtr CreateFromObject(IntPtr pObject, [MarshalAs(UnmanagedType.LPStr)] string pName);
+
+        public FbxLODGroup(FbxManager Manager, string pName)
+            : base(CreateFromManager(Manager.Handle, pName))
+        {
+        }
+        public FbxLODGroup(IntPtr InHandle)
+            : base(InHandle)
+        {
+        }
+        public FbxLODGroup(FbxObject Object, string pName)
+            : base(CreateFromObject(Object.Handle, pName))
+        {
+        }
+    }
+
     internal class FbxLayerContainer : FbxNodeAttribute
     {
         [DllImport("thirdparty/libfbxsdk", EntryPoint = "?GetLayer@FbxLayerContainer@fbxsdk@@QEBAPEBVFbxLayer@2@H@Z", CallingConvention = CallingConvention.ThisCall)]

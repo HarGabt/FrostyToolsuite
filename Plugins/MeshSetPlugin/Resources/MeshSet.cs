@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 using FrostySdk;
 using FrostySdk.Managers.Entries;
 using FrostySdk.Resources;
+using System.Linq;
 
 namespace MeshSetPlugin.Resources
 {
@@ -1223,6 +1224,8 @@ namespace MeshSetPlugin.Resources
                 }
             }
         }
+        public int LodIndex => m_lodIndex;
+
 
         private MeshType m_meshType;
         private uint m_maxInstances;
@@ -1252,6 +1255,8 @@ namespace MeshSetPlugin.Resources
         private uint m_inlineDataOffset;
         private byte[] m_adjacencyData;
         private bool m_hasBoneShortNames;
+
+        private int m_lodIndex;
 
         public MeshSetLod(NativeReader reader, AssetManager am, ref int sectionIndex)
         {
@@ -1461,6 +1466,8 @@ namespace MeshSetPlugin.Resources
             reader.Position = curPos;
 
             m_hasBoneShortNames = m_boneShortNameArray.Count > 0;
+
+            m_lodIndex = m_shortName.Last() - '0';
         }
 
         public void SetIndexBufferFormatSize(int newSize)
