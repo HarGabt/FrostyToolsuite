@@ -1229,10 +1229,10 @@ namespace FrostyCmd
                 writer.Write(CreateSources("Patch;false", "Data;false"));
                 writer.WriteObfuscatedString("BF6SDK");
                 writer.Write(CreateBanner("bf6"));
-                writer.WriteObfuscatedString("Shaders/Common/UtilTextures/defaultbasecolor_c"); // placeholders
-                writer.WriteObfuscatedString("Shaders/Common/UtilTextures/defaultnormal_n");    // placeholders
-                writer.WriteObfuscatedString("Shaders/Common/UtilTextures/defaultbasecolor_c"); // placeholders
-                writer.WriteObfuscatedString("Shaders/Common/UtilTextures/defaultbasecolor_c"); // placeholders
+                writer.WriteObfuscatedString("Common/Shaders/Textures/Debug/T_Debug_Black");
+                writer.WriteObfuscatedString("Common/Shaders/Textures/Debug/T_Debug_D");
+                writer.WriteObfuscatedString("Common/Shaders/Textures/Debug/T_Debug_N");
+                writer.WriteObfuscatedString("Common/Shaders/Textures/Debug/T_Debug_R");
                 writer.Write(0); // shared bundle names
                 writer.Write(0); // ignored res types
 
