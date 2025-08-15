@@ -198,8 +198,14 @@ namespace FrostySdk.Managers
                         chunkHashMap[i] = reader.ReadInt(Endian.Big);
                     }
 
+                    int divisor = 3;
+                    if (ProfilesLibrary.IsLoaded(ProfileVersion.Battlefield6))
+                    {
+                        divisor = 4;
+                    }
+                    
                     reader.Position = chunkGuidOffset;
-                    Guid[] chunkGuids = new Guid[dataCount / 3];
+                    Guid[] chunkGuids = new Guid[dataCount / divisor];
                     for (int i = 0; i < chunksCount; i++)
                     {
                         byte[] b = reader.ReadBytes(16);
@@ -216,11 +222,12 @@ namespace FrostySdk.Managers
                             // im guessing the unknown offsets are connected to this
                             byte flag = (byte)((index & 0xFF000000) >> 24);
 #if FROSTY_DEVELOPER
-                            Debug.Assert(flag == 1);
+                            Debug.Assert(flag == 1 || flag == 128);
+                            // 128 most likely indicates that hashes are used instead of indexes
 #endif
-                            index = (index & 0xFFFFFF) / 3;
 
-
+                            index = (index & 0xFFFFFF) / divisor;
+                            
                             chunkGuids[index] = guid;
                         }
                         else
@@ -233,12 +240,25 @@ namespace FrostySdk.Managers
                     }
 
                     reader.Position = chunkDataOffset;
-                    for (int i = 0; i < (dataCount / 3); i++)
+                    for (int i = 0; i < (dataCount / divisor); i++)
                     {
                         byte unk = reader.ReadByte();
                         bool isPatch = reader.ReadBoolean();
-                        byte catalogIndex = reader.ReadByte();
-                        byte casIndex = reader.ReadByte();
+                        string casPath;
+
+                        if (ProfilesLibrary.IsLoaded(ProfileVersion.Battlefield6))
+                        {
+                            uint catalogHash = reader.ReadUInt(Endian.Big);
+                            ushort casIndex = reader.ReadUShort(Endian.Big);
+                            casPath = parent.m_fileSystem.GetFilePathByHash(catalogHash, casIndex, isPatch);
+                        }
+                        else
+                        {
+                            byte catalogIndex = reader.ReadByte();
+                            byte casIndex = reader.ReadByte();
+                            casPath = parent.m_fileSystem.GetFilePath(catalogIndex, casIndex, isPatch);
+                        }
+                         
                         uint offset = reader.ReadUInt(Endian.Big);
                         uint size = reader.ReadUInt(Endian.Big);
 
@@ -249,7 +269,7 @@ namespace FrostySdk.Managers
                             Location = AssetDataLocation.CasNonIndexed,
                             ExtraData = new AssetExtraData
                             {
-                                CasPath = parent.m_fileSystem.GetFilePath(catalogIndex, casIndex, isPatch),
+                                CasPath = casPath,
                                 DataOffset = offset
                             },
                             SuperBundles = new List<int>() { parent.m_superBundles.Count - 1 }
@@ -360,9 +380,9 @@ namespace FrostySdk.Managers
 #endif
                         bundleReader.Position = locationOffset;
 
-                        bool[] flags = new bool[totalCount];
+                        byte[] flags = new byte[totalCount];
                         for (uint i = 0; i < totalCount; i++)
-                            flags[i] = bundleReader.ReadBoolean();
+                            flags[i] = bundleReader.ReadByte();
 
                         byte unused = 0;
                         bool isPatch = false;
@@ -386,7 +406,7 @@ namespace FrostySdk.Managers
                         {
                             bundleReader.Position = dataOffset;
 
-                            if (flags[z++])
+                            if (flags[z] == 1)
                             {
                                 unused = bundleReader.ReadByte();
 #if FROSTY_DEVELOPER
@@ -396,10 +416,21 @@ namespace FrostySdk.Managers
                                 catalogIndex = bundleReader.ReadByte();
                                 casIndex = bundleReader.ReadByte();
                             }
-                            offset = bundleReader.ReadInt(Endian.Big);
-                            size = bundleReader.ReadInt(Endian.Big);
+                            else if (flags[z] == 128)
+                            {
+                                unused = bundleReader.ReadByte();
+                                unused = bundleReader.ReadByte();
+                                
+                                catalogIndex = parent.m_fileSystem.GetCatalogIndexByHash(bundleReader.ReadUInt(Endian.Big));
+                                casIndex = bundleReader.ReadUShort(Endian.Big);
+                            }
+
+                            z++;
 
                             string path = parent.m_fileSystem.GetFilePath(catalogIndex, casIndex, isPatch);
+                            
+                            offset = bundleReader.ReadInt(Endian.Big);
+                            size = bundleReader.ReadInt(Endian.Big);
 
                             using (Stream casStream = new FileStream(parent.m_fileSystem.ResolvePath(path), FileMode.Open, FileAccess.Read))
                             {
@@ -419,13 +450,23 @@ namespace FrostySdk.Managers
 
                         for (int i = 0; i < bundle.GetValue<DbObject>("ebx").Count; i++)
                         {
-                            if (flags[z++])
+                            if (flags[z] == 1)
                             {
                                 unused = bundleReader.ReadByte();
                                 isPatch = bundleReader.ReadBoolean();
                                 catalogIndex = bundleReader.ReadByte();
                                 casIndex = bundleReader.ReadByte();
                             }
+                            else if (flags[z] == 128)
+                            {
+                                unused = bundleReader.ReadByte();
+                                unused = bundleReader.ReadByte();
+                                
+                                catalogIndex = parent.m_fileSystem.GetCatalogIndexByHash(bundleReader.ReadUInt(Endian.Big));
+                                casIndex = bundleReader.ReadUShort(Endian.Big);
+                            }
+
+                            z++;
 
                             DbObject ebx = bundle.GetValue<DbObject>("ebx")[i] as DbObject;
                             offset = bundleReader.ReadInt(Endian.Big);
@@ -441,13 +482,23 @@ namespace FrostySdk.Managers
 
                         for (int i = 0; i < bundle.GetValue<DbObject>("res").Count; i++)
                         {
-                            if (flags[z++])
+                            if (flags[z] == 1)
                             {
                                 unused = bundleReader.ReadByte();
                                 isPatch = bundleReader.ReadBoolean();
                                 catalogIndex = bundleReader.ReadByte();
                                 casIndex = bundleReader.ReadByte();
                             }
+                            else if (flags[z] == 128)
+                            {
+                                unused = bundleReader.ReadByte();
+                                unused = bundleReader.ReadByte();
+                                
+                                catalogIndex = parent.m_fileSystem.GetCatalogIndexByHash(bundleReader.ReadUInt(Endian.Big));
+                                casIndex = bundleReader.ReadUShort(Endian.Big);
+                            }
+
+                            z++;
 
                             DbObject res = bundle.GetValue<DbObject>("res")[i] as DbObject;
                             offset = bundleReader.ReadInt(Endian.Big);
@@ -463,13 +514,23 @@ namespace FrostySdk.Managers
 
                         for (int i = 0; i < bundle.GetValue<DbObject>("chunks").Count; i++)
                         {
-                            if (flags[z++])
+                            if (flags[z] == 1)
                             {
                                 unused = bundleReader.ReadByte();
                                 isPatch = bundleReader.ReadBoolean();
                                 catalogIndex = bundleReader.ReadByte();
                                 casIndex = bundleReader.ReadByte();
                             }
+                            else if (flags[z] == 128)
+                            {
+                                unused = bundleReader.ReadByte();
+                                unused = bundleReader.ReadByte();
+                                
+                                catalogIndex = parent.m_fileSystem.GetCatalogIndexByHash(bundleReader.ReadUInt(Endian.Big));
+                                casIndex = bundleReader.ReadUShort(Endian.Big);
+                            }
+
+                            z++;
 
                             DbObject chunk = bundle.GetValue<DbObject>("chunks")[i] as DbObject;
                             offset = bundleReader.ReadInt(Endian.Big);

@@ -111,10 +111,11 @@ namespace FrostySdk.IO
             if (reader.ReadUInt(Endian.Big) != 0x45425854)
                 throw new InvalidDataException("Not valid EBXT.");
 
-            if (reader.ReadUInt(Endian.Big) != 0x5245464C)
-                throw new InvalidDataException("Not valid REFL chunk.");
+            uint reflMagic = reader.ReadUInt(Endian.Big);
+            if (reflMagic != 0x5245464C && reflMagic != 0x52464C32)
+                throw new InvalidDataException("Not valid REFL or RFL2 chunk.");
             uint reflSize = reader.ReadUInt();
-
+            
             int classGuidCount = reader.ReadInt();
 
             for (int i = 0; i < classGuidCount; i++)
@@ -159,6 +160,8 @@ namespace FrostySdk.IO
                     ClassRef = reader.ReadUShort()
                 });
             }
+            
+            // TODO: More RFL2 data
         }
 
         public bool HasClass(Guid guid) => mapping.ContainsKey(guid);

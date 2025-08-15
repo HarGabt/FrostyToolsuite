@@ -1218,7 +1218,7 @@ namespace FrostyCmd
 
         private void CreateBF6Profile()
         {
-            string key = "bf6";
+            string key = "bf6event";
             using (NativeWriter writer = new NativeWriter(new MemoryStream()))
             {
                 writer.WriteObfuscatedString("Battlefield™ 6 Open Beta");
@@ -1228,7 +1228,7 @@ namespace FrostyCmd
                 writer.WriteObfuscatedString(AssetManager.GetLoaderName("CasAssetLoader"));
                 writer.Write(CreateSources("Patch;false", "Data;false"));
                 writer.WriteObfuscatedString("BF6SDK");
-            //  writer.Write(CreateBanner("battlefield6"));
+                writer.Write(CreateBanner("bf6"));
                 writer.WriteObfuscatedString("Shaders/Common/UtilTextures/defaultbasecolor_c"); // placeholders
                 writer.WriteObfuscatedString("Shaders/Common/UtilTextures/defaultnormal_n");    // placeholders
                 writer.WriteObfuscatedString("Shaders/Common/UtilTextures/defaultbasecolor_c"); // placeholders
