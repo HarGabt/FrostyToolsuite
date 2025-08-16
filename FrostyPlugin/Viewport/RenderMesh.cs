@@ -2051,7 +2051,7 @@ namespace Frosty.Core.Viewport
                 if (idx != -1) material.TextureParameters[idx] = param;
                 else material.TextureParameters.Add(param);
             }
-            if (ProfilesLibrary.IsLoaded(ProfileVersion.StarWarsBattlefrontII, ProfileVersion.Anthem, ProfileVersion.StarWarsSquadrons, ProfileVersion.Battlefield2042, ProfileVersion.NeedForSpeedUnbound, ProfileVersion.DeadSpace, ProfileVersion.DragonAgeVeilguard))
+            if (ProfilesLibrary.IsLoaded(ProfileVersion.StarWarsBattlefrontII, ProfileVersion.Anthem, ProfileVersion.StarWarsSquadrons, ProfileVersion.Battlefield2042, ProfileVersion.NeedForSpeedUnbound, ProfileVersion.DeadSpace, ProfileVersion.DragonAgeVeilguard, ProfileVersion.Battlefield6))
             {
                 foreach (dynamic param in shader.ConditionalParameters)
                 {

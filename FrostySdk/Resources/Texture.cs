@@ -178,7 +178,7 @@ namespace FrostySdk.Resources
                 reader.ReadByte();
             }
 
-            if (ProfilesLibrary.IsLoaded(ProfileVersion.Battlefield2042, ProfileVersion.NeedForSpeedUnbound, ProfileVersion.DeadSpace))
+            if (ProfilesLibrary.IsLoaded(ProfileVersion.Battlefield2042, ProfileVersion.NeedForSpeedUnbound, ProfileVersion.DeadSpace, ProfileVersion.Battlefield6))
             {
                 Unknown3[0] = reader.ReadUInt();
             }
@@ -299,7 +299,7 @@ namespace FrostySdk.Resources
                     writer.Write(MipCount);
                 }
 
-                if (ProfilesLibrary.IsLoaded(ProfileVersion.Battlefield2042, ProfileVersion.NeedForSpeedUnbound, ProfileVersion.DeadSpace))
+                if (ProfilesLibrary.IsLoaded(ProfileVersion.Battlefield2042, ProfileVersion.NeedForSpeedUnbound, ProfileVersion.DeadSpace, ProfileVersion.Battlefield6))
                 {
                     writer.Write(Unknown3[0]);
                 }
