@@ -1247,7 +1247,7 @@ namespace Frosty.ModSupport
                 // old fb3 games use an update folder
                 m_patchPath = "Update\\Patch\\Data";
             }
-            else if (ProfilesLibrary.IsLoaded(ProfileVersion.Battlefield5, ProfileVersion.NeedForSpeedUnbound, ProfileVersion.DeadSpace))
+            else if (ProfilesLibrary.IsLoaded(ProfileVersion.Battlefield5, ProfileVersion.NeedForSpeedUnbound, ProfileVersion.DeadSpace, ProfileVersion.Battlefield6))
             {
                 // bfv doesnt have a patch directory
                 m_patchPath = "Data";
@@ -1440,7 +1440,7 @@ namespace Frosty.ModSupport
                                 Directory.CreateDirectory(modDataPath + "Data");
                             cmdArgs.Add(new SymLinkStruct(modDataPath + "Data/Win32", m_fs.BasePath + "Data/Win32", true));
                         }
-                        else if (ProfilesLibrary.IsLoaded(ProfileVersion.Battlefield5, ProfileVersion.NeedForSpeedUnbound, ProfileVersion.DeadSpace))
+                        else if (ProfilesLibrary.IsLoaded(ProfileVersion.Battlefield5, ProfileVersion.NeedForSpeedUnbound, ProfileVersion.DeadSpace, ProfileVersion.Battlefield6))
                         {
                             // bfv and unbound dont have a patch directory so we need to rebuild the data folder structure instead
                             if (!Directory.Exists(modDataPath + "Data"))
@@ -1598,7 +1598,7 @@ namespace Frosty.ModSupport
                     ProfileVersion.PlantsVsZombiesBattleforNeighborville, ProfileVersion.Fifa21,
                     ProfileVersion.Madden22, ProfileVersion.Fifa22,
                     ProfileVersion.Madden23, ProfileVersion.NeedForSpeedUnbound,
-                    ProfileVersion.DeadSpace))
+                    ProfileVersion.DeadSpace, ProfileVersion.Battlefield6))
                 {
                     CasBundleAction.CasFiles.Clear();
                     foreach (string catalog in m_fs.Catalogs)
