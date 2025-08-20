@@ -8,11 +8,126 @@ namespace Frosty.Core.Sdk.Bf2042
 {
     public class Strings
     {
+        public class ClassLookupHelper
+        {
+            public string name;
+            public List<(Guid, string)> fieldNames = new List<(Guid, string)>();
+        }
+        
         public static Dictionary<uint, string> stringHash = new Dictionary<uint, string>();
         public static Dictionary<uint, string> classHash = new Dictionary<uint, string>();
         public static Dictionary<uint, Dictionary<uint, string>> fieldHash = new Dictionary<uint, Dictionary<uint, string>>();
+        public static Dictionary<Guid, ClassLookupHelper> classGuidMap = new Dictionary<Guid, ClassLookupHelper>();
     }
+    
+    public class FieldMatcher
+    {
+        public static List<(int, int)> ComputeLCSAlignment(List<(Guid Type, string Name)> oldList, List<(Guid Type, string Name)> newList)
+        {
+            int n = oldList.Count;
+            int m = newList.Count;
+            int[,] dp = new int[n + 1, m + 1];
 
+            // Build LCS DP table (using Type only)
+            for (int i = 0; i < n; i++)
+            {
+                for (int j = 0; j < m; j++)
+                {
+                    if (oldList[i].Type == newList[j].Type)
+                    {
+                        dp[i + 1, j + 1] = dp[i, j] + 1;
+                    }
+                    else
+                    {
+                        dp[i + 1, j + 1] = Math.Max(dp[i, j + 1], dp[i + 1, j]);
+                    }
+                }
+            }
+
+            // Backtrack to recover alignment pairs
+            int x = n, y = m;
+            List<(int, int)> pairs = new List<(int, int)>();
+            while (x > 0 && y > 0)
+            {
+                if (oldList[x - 1].Type == newList[y - 1].Type && dp[x, y] == dp[x - 1, y - 1] + 1)
+                {
+                    pairs.Add((x - 1, y - 1));
+                    x -= 1;
+                    y -= 1;
+                }
+                else if (dp[x - 1, y] >= dp[x, y - 1])
+                {
+                    x -= 1;
+                }
+                else
+                {
+                    y -= 1;
+                }
+            }
+
+            pairs.Reverse();
+            return pairs;
+        }
+
+        public static Dictionary<int, int> Match(List<(Guid Type, string Name)> oldList, List<(Guid Type, string Name)> newList)
+        {
+            var lcsPairs = ComputeLCSAlignment(oldList, newList);
+            var mapping = new Dictionary<int, int>();
+            var usedNew = new HashSet<int>();
+            var anchors = new Dictionary<int, int>();
+            var oldIndices = new List<int>();
+
+            foreach (var (i, j) in lcsPairs)
+            {
+                anchors[i] = j;
+                oldIndices.Add(i);
+            }
+
+            foreach (var (i, j) in lcsPairs)
+            {
+                Guid t = oldList[i].Type;
+
+                // If type occurs only once in old -> direct match
+                if (oldList.FindAll(x => x.Type == t).Count == 1)
+                {
+                    mapping[i] = j;
+                    usedNew.Add(j);
+                }
+                else
+                {
+                    // Otherwise: resolve with context
+                    int? prevAnchor = null;
+                    int? nextAnchor = null;
+
+                    foreach (var a in oldIndices)
+                    {
+                        if (a < i && (prevAnchor == null || a > prevAnchor)) prevAnchor = a;
+                        if (a > i && (nextAnchor == null || a < nextAnchor)) nextAnchor = a;
+                    }
+
+                    int leftBound = prevAnchor.HasValue ? anchors[prevAnchor.Value] : -1;
+                    int rightBound = nextAnchor.HasValue ? anchors[nextAnchor.Value] : newList.Count;
+
+                    var candidates = new List<int>();
+                    for (int k = leftBound + 1; k < rightBound; k++)
+                    {
+                        if (newList[k].Type == t && !usedNew.Contains(k))
+                        {
+                            candidates.Add(k);
+                        }
+                    }
+
+                    int best = candidates.Count > 0 ? candidates[0] : j;
+
+                    mapping[i] = best;
+                    usedNew.Add(best);
+                }
+            }
+
+            return mapping;
+        }
+    }
+    
     public class TypeInfo : ClassesSdkCreator.TypeInfo
     {
         private bool m_hasNames = !ProfilesLibrary.IsLoaded(ProfileVersion.Battlefield2042, ProfileVersion.Battlefield6);
@@ -59,6 +174,10 @@ namespace Frosty.Core.Sdk.Bf2042
                 else if (Strings.stringHash.ContainsKey(m_nameHash))
                 {
                     Name = Strings.stringHash[m_nameHash];
+                }
+                else if (Strings.classGuidMap.ContainsKey(Guid))
+                {
+                    Name = Strings.classGuidMap[Guid].name;
                 }
                 else
                 {
@@ -143,6 +262,24 @@ namespace Frosty.Core.Sdk.Bf2042
                     fi.Index = i;
 
                     Fields.Add(fi);
+                }
+                
+                if (!m_hasNames && Strings.classGuidMap.ContainsKey(Guid))
+                {
+                    var classGuidHelper = Strings.classGuidMap[Guid];
+                    List<(Guid, string)> newList = new List<(Guid, string)>();
+                    foreach (var fieldInfo in Fields)
+                    {
+                        newList.Add((fieldInfo.TypeGuid, fieldInfo.Name));
+                    }
+
+                    var matching = FieldMatcher.Match(classGuidHelper.fieldNames, newList);
+                    foreach (var pair in matching)
+                    {
+                        var newName = classGuidHelper.fieldNames[pair.Key].Item2;
+                        if (!newName.StartsWith("Field_"))
+                            Fields[pair.Value].Name = newName;
+                    }
                 }
             }
         }
@@ -270,7 +407,9 @@ namespace Frosty.Core.Sdk.Bf2042
             }
             
             long current = reader.Position;
-            reader.Position = TypeOffset + 8;
+            //reader.Position = TypeOffset + 8;
+            reader.Position = TypeOffset;
+            reader.Position = reader.ReadLong() + 8;
             TypeGuid = reader.ReadGuid();
                 
             reader.Position = current;
