@@ -135,6 +135,12 @@ namespace Frosty.Core.Windows
                             foundProcess = process;
                             break;
                         }
+                        if (fi.Name.IndexOf("EAAntiCheat.GameServiceLauncher",
+                                     StringComparison.OrdinalIgnoreCase) >= 0)
+                        {
+                            foundProcess = process;
+                            break;
+                        }
                     }
                     catch (Exception)
                     {

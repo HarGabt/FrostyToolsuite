@@ -14,6 +14,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using Frosty.Core.Sdk.Bf2042;
 using FrostySdk.Managers.Entries;
 
 namespace Frosty.Core.Sdk
@@ -368,7 +369,9 @@ namespace Frosty.Core.Sdk
             else
 #endif
             {
+#if !FROSTY_DEVELOPER
                 File.Delete("temp.cs");
+#endif
             }
         }
 
@@ -461,7 +464,7 @@ namespace Frosty.Core.Sdk
 
                 if (/*parent == "" &&*/ type == EbxFieldType.Pointer)
                 {
-                    if (parent == "DataContainer" || parentDataContainer != 0)
+                    if (parent == "DataContainer")
                     {
                         // add Id field to non asset types
                         sb.AppendLine("[" + typeof(IsTransientAttribute).Name + "]");
@@ -537,7 +540,7 @@ namespace Frosty.Core.Sdk
                     }
                 }
 
-                if ((parent == "DataContainer" || parentDataContainer != 0) && !addedGetId)
+                if ((parent == "DataContainer") && !addedGetId)
                 {
                     Type tmpType = typeof(EbxClassMetaAttribute);
                     string namespaceName = tmpType.GetProperties()[4].Name;
@@ -1340,7 +1343,7 @@ namespace Frosty.Core.Sdk
                     }
                 }
             }
-            else if (ProfilesLibrary.IsLoaded(ProfileVersion.Battlefield2042, ProfileVersion.Battlefield6))
+            else if (ProfilesLibrary.IsLoaded(ProfileVersion.Battlefield2042))
             {
                 // read in strings which were manually created (since Battlefield2042 has stripped all strings)
                 using (NativeReader reader = new NativeReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("Frosty.Core.Sdk.Bf2042-Strings.txt")))
@@ -1377,6 +1380,33 @@ namespace Frosty.Core.Sdk
 
                             Bf2042.Strings.fieldHash[(uint)hash].Add(uint.Parse(arr[0]), arr[1]);
                         }
+                    }
+                }
+            }
+            else if (ProfilesLibrary.IsLoaded(ProfileVersion.Battlefield6))
+            {
+                using (NativeReader reader = new NativeReader(Assembly.GetExecutingAssembly()
+                           .GetManifestResourceStream("Frosty.Core.Sdk.ClassGuids.txt")))
+                {
+                    while (reader.Position != reader.Length)
+                    {
+                        Bf2042.Strings.ClassLookupHelper helper = new Bf2042.Strings.ClassLookupHelper();
+                        
+                        string[] classLine = reader.ReadLine().Split(',');
+                        Guid classGuid = Guid.Parse(classLine[0]);
+                        helper.name = classLine[1];
+                        uint fieldCount =  uint.Parse(classLine[2]);
+
+                        for (uint i = 0; i < fieldCount; i++)
+                        {
+                            string[] fieldLine = reader.ReadLine().Split(',');
+                            Guid fieldTypeGuid =  Guid.Parse(fieldLine[0]);
+                            string fieldName = fieldLine[1];
+                            
+                            helper.fieldNames.Add((fieldTypeGuid, fieldName));
+                        }
+                        
+                        Bf2042.Strings.classGuidMap.Add(classGuid, helper);
                     }
                 }
             }
@@ -2080,7 +2110,36 @@ namespace Frosty.Core.Sdk
 
             DbObject classList = new DbObject(false);
             m_classInfos.Sort((ClassInfo a, ClassInfo b) => a.TypeInfo.Name.CompareTo(b.TypeInfo.Name));
+            
+#if FROSTY_DEVELOPER
+            // Dump ClassGuids from 2042
+            if (ProfilesLibrary.IsLoaded(ProfileVersion.Battlefield2042))
+            {
+                using (NativeWriter writer = new NativeWriter(new FileStream("ClassGuids.txt", FileMode.Create)))
+                {
+                    foreach (ClassInfo classInfo in m_classInfos)
+                    {
+                        if (classInfo.TypeInfo.Name.StartsWith("Class_") ||
+                            classInfo.TypeInfo.Name.StartsWith("Struct_") ||
+                            classInfo.TypeInfo.Name.StartsWith("Unknown_") ||
+                            classInfo.TypeInfo.Name.StartsWith("Delegate_") ||
+                            classInfo.TypeInfo.Name.StartsWith("Enum_") ||
+                            classInfo.TypeInfo.Name.StartsWith("Function_") ||
+                            classInfo.TypeInfo.Name.StartsWith("Interface_"))
+                            continue;
 
+                        writer.WriteLine(classInfo.TypeInfo.Guid + "," + classInfo.TypeInfo.Name + "," +
+                                         classInfo.TypeInfo.Fields.Count);
+
+                        foreach (FieldInfo fieldInfo in classInfo.TypeInfo.Fields)
+                        {
+                            writer.WriteLine(fieldInfo.TypeGuid + "," + fieldInfo.Name);
+                        }
+                    }
+                }
+            }
+#endif
+            
             foreach (ClassInfo classInfo in m_classInfos)
             {
                 if (classInfo.TypeInfo.Type == 2 || classInfo.TypeInfo.Type == 3 || classInfo.TypeInfo.Type == 8 || classInfo.TypeInfo.Type == 0x1B)
