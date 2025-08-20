@@ -2111,7 +2111,7 @@ namespace Frosty.Core.Sdk
             DbObject classList = new DbObject(false);
             m_classInfos.Sort((ClassInfo a, ClassInfo b) => a.TypeInfo.Name.CompareTo(b.TypeInfo.Name));
             
-#if FROSTY_DEVELOPER
+// #if FROSTY_DEVELOPER
             // Dump ClassGuids from 2042
             if (ProfilesLibrary.IsLoaded(ProfileVersion.Battlefield2042))
             {
@@ -2138,7 +2138,7 @@ namespace Frosty.Core.Sdk
                     }
                 }
             }
-#endif
+// #endif
             
             foreach (ClassInfo classInfo in m_classInfos)
             {
