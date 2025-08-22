@@ -1714,8 +1714,13 @@ namespace FrostySdk.IO
 
             if (addSignature)
             {
-                Guid tiGuid = classType.GetCustomAttribute<TypeInfoGuidAttribute>().Guid;
-                m_classSignatures.Add(BitConverter.ToUInt32(tiGuid.ToByteArray(), 12));
+                foreach (TypeInfoGuidAttribute attr in classType.GetCustomAttributes<TypeInfoGuidAttribute>())
+                {
+                    if (m_classGuids.Count != m_classSignatures.Count)
+                    {
+                        m_classSignatures.Add(BitConverter.ToUInt32(attr.Guid.ToByteArray(), 12));
+                    }
+                }
             }
 
             AddTypeName(name);
