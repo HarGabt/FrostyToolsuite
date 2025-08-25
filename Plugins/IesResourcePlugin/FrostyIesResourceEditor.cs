@@ -7,6 +7,10 @@ using D3D11 = SharpDX.Direct3D11;
 using SharpDX.D3DCompiler;
 using Frosty.Core.Controls;
 using Frosty.Core;
+using System.Collections.Generic;
+using Frosty.Core.Windows;
+using FrostySdk.IO;
+using System.IO;
 
 namespace IesResourcePlugin
 {
@@ -284,6 +288,49 @@ namespace IesResourcePlugin
 
             renderer = GetTemplateChild(PART_Renderer) as FrostyViewport;
             Loaded += FrostyAtlasTextureEditor_Loaded;
+        }
+
+        public override List<ToolbarItem> RegisterToolbarItems()
+        {
+            return new List<ToolbarItem>()
+            {
+                new ToolbarItem("Export", "Export IES Profile", "Images/Export.png", new RelayCommand((object state) => { ExportButton_Click(this, new RoutedEventArgs()); }))
+            };
+        }
+
+        private void ExportButton_Click(object sender, RoutedEventArgs e)
+        {
+            FrostySaveFileDialog sfd = new FrostySaveFileDialog("Save DDS", "*.dds (DDS File)|*.dds", "IESProfile", AssetEntry.Filename);
+            if (sfd.ShowDialog())
+            {
+                FrostyTaskWindow.Show("Exporting IES Profile", AssetEntry.Filename, (task) =>
+                {
+                    TextureUtils.DDSHeader header = new TextureUtils.DDSHeader
+                    {
+                        dwHeight = resource.Size,
+                        dwWidth = resource.Size,
+                        dwMipMapCount = 1,
+                        dwPitchOrLinearSize = (int)resource.Data.Length,
+                        ddspf = { dwFourCC = 0x30315844 },
+                        HasExtendedHeader = true,
+                    };
+
+                    header.ExtendedHeader.dxgiFormat = SharpDX.DXGI.Format.R16_Float;
+
+                    resource.Data.Position = 0;
+                    using (NativeWriter writer = new NativeWriter(new FileStream(sfd.FileName, FileMode.Create)))
+                    {
+                        header.Write(writer);
+
+                        byte[] tmpBuf = new byte[resource.Data.Length];
+                        resource.Data.Read(tmpBuf, 0, tmpBuf.Length);
+
+                        writer.Write(tmpBuf);
+                    }
+                });
+
+                logger.Log("Exported {0} to {1}", AssetEntry.Name, sfd.FileName);
+            }
         }
 
         private void FrostyAtlasTextureEditor_Loaded(object sender, RoutedEventArgs e)

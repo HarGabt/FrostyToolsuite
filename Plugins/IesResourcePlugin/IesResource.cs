@@ -12,8 +12,8 @@ namespace IesResourcePlugin
         public Stream Data => data;
 
         private int size;
-        private float unknown1;
-        private float unknown2;
+        private float maxCandelas;
+        private float outputLumens;
         private MemoryStream data;
 
         public IesResource()
@@ -24,8 +24,8 @@ namespace IesResourcePlugin
         {
             base.Read(reader, am, entry, modifiedData);
             size = reader.ReadInt();
-            unknown1 = reader.ReadFloat();
-            unknown2 = reader.ReadFloat();
+            maxCandelas = reader.ReadFloat();
+            outputLumens = reader.ReadFloat();
             long dataOffset = reader.ReadInt();
 
             reader.Position += 0x10;
