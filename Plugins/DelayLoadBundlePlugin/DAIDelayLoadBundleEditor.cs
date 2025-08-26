@@ -82,7 +82,7 @@ namespace DelayLoadBundlePlugin
             if (selectedItem == null)
                 return;
 
-            Clipboard.SetText(selectedItem.Hash.ToString());
+            FrostyClipboard.Current.SetText(selectedItem.Hash.ToString());
         }
 
         GridViewColumnHeader lastSortHeader;

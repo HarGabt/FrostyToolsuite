@@ -2,13 +2,14 @@
 using FrostySdk.Attributes;
 using FrostySdk.Ebx;
 using FrostySdk.IO;
-using FrostySdk.Managers;
+using FrostySdk.Managers.Entries;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
-using FrostySdk.Managers.Entries;
+using System.Runtime.InteropServices;
+using System.Windows;
 
 namespace Frosty.Core.Controls
 {
@@ -180,6 +181,33 @@ namespace Frosty.Core.Controls
             }
 
             return DeepCopy(obj, asset, entry, ref oldNewMapping);
+        }
+
+        [DllImport("user32.dll", SetLastError = true)]
+        private static extern bool OpenClipboard(IntPtr hWndNewOwner);
+        [DllImport("user32.dll", SetLastError = true)]
+        private static extern bool CloseClipboard();
+
+        public void SetText(string text)
+        {
+            try
+            {
+                Clipboard.SetText(text);
+            }
+            catch (COMException e) when ((uint)e.HResult == 0x800401D0)
+            {
+                try
+                {
+                    OpenClipboard(IntPtr.Zero);
+                    CloseClipboard();
+                    Clipboard.SetText(text);
+                    App.Logger.LogWarning($"Initially failed to copy to Clipboard, it was in use by another application.");
+                }
+                catch (COMException ex) when ((uint)ex.HResult == 0x800401D0)
+                {
+                    App.Logger.LogError($"Failed to copy to Clipboard, it is in use by another application.");
+                }
+            }
         }
     }
 }
