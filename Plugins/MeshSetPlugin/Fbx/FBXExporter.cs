@@ -1090,7 +1090,7 @@ namespace MeshSetPlugin
                                     byte b = reader.ReadByte();
                                     byte a = reader.ReadByte();
 
-                                    layerElemVertexColor[colorMapping[elem.Usage]].DirectArray.Add(r / 255.0f, g / 255.0f, b / 255.0f, a / 255.0f);
+                                    layerElemVertexColor[colorMapping[elem.Usage]].DirectArray.Add(r, g, b, a);
                                 }
                                 else
                                 {
