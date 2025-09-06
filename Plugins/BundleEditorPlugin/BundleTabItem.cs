@@ -85,6 +85,18 @@ namespace BundleEditPlugin
             bundlesListTextBox.Text = sb1.ToString();
             if (sb2.Length > 0)
                 bundlesListTextBox.Text += "\r\nAdded to bundles:\r\n" + sb2.ToString();
+
+            foreach (var item in App.EditorWindow.MiscTabControl.Items)
+            {
+                if (item is FrostyTabItem)
+                {
+                    FrostyTabItem tab = item as FrostyTabItem;
+                    if (tab.Header.ToString().Contains("Bundles"))
+                    {
+                        tab.Header = $"Bundles ({sb1.ToString().Split("\n".ToCharArray()).Length - 1} + {sb2.ToString().Split("\n".ToCharArray()).Length - 1})";
+                    }
+                }
+            }
         }
     }
 }

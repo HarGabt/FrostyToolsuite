@@ -25,7 +25,9 @@ using System.Windows;
 
 [assembly: PluginDisplayName("References Plugin")]
 [assembly: PluginAuthor("Cade, Mophead, AdamRaichu")]
-[assembly: PluginVersion("1.0.1.7")]
+[assembly: PluginVersion("1.0.1.8")]
 
 [assembly: RegisterTabExtension(typeof(ReferenceTabExtension))]
 [assembly: RegisterMenuExtension(typeof(CreateCacheMenuExtension))]
+
+[assembly: RegisterOptionsExtension(typeof(ReferencesOptions))]
