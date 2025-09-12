@@ -752,7 +752,7 @@ namespace FrostyCmd
                 writer.Write(0); // ignored res types
 
                 // Flags (MustAddChunks, EbxVersion, RequiresKey, ReadOnly)
-                ProfileFlags pf = new ProfileFlags(0, 2, 0, 1);
+                ProfileFlags pf = new ProfileFlags(0, 2, 0, 0);
                 pf.Write(writer);
 
                 blobs.Add(key, writer.ToByteArray());
@@ -1250,10 +1250,10 @@ namespace FrostyCmd
             CreateNFSUnboundProfile();
             CreateDAVProfile();
             CreateDeadSpaceProfile();
+            CreateNFSEdgeProfile();
 
 #if FROSTY_DEVELOPER
 
-            CreateNFSEdgeProfile();
             CreateFifa21Profile();
             CreateMadden22Profile();
             CreateFifa22Profile();
