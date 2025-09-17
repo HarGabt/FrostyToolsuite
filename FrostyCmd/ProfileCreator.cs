@@ -1229,10 +1229,38 @@ namespace FrostyCmd
                 writer.Write(CreateSources("Patch;false", "Data;false"));
                 writer.WriteObfuscatedString("BF6SDK");
                 writer.Write(CreateBanner("bf6"));
-                writer.WriteObfuscatedString("Common/Shaders/Textures/Debug/T_Debug_Black");
-                writer.WriteObfuscatedString("Common/Shaders/Textures/Debug/T_Debug_D");
-                writer.WriteObfuscatedString("Common/Shaders/Textures/Debug/T_Debug_N");
-                writer.WriteObfuscatedString("Common/Shaders/Textures/Debug/T_Debug_R");
+                writer.WriteObfuscatedString("Common/Shaders/Textures/Debug/Debug_D");
+                writer.WriteObfuscatedString("Common/Shaders/Textures/Debug/Debug_N");
+                writer.WriteObfuscatedString("Common/Shaders/Textures/Debug/Debug_R");
+                writer.WriteObfuscatedString("Common/Shaders/Textures/Debug/Debug_SRM");
+                writer.Write(0); // shared bundle names
+                writer.Write(0); // ignored res types
+
+                // Flags (MustAddChunks, EbxVersion, RequiresKey, ReadOnly, EAAC)
+                ProfileFlags pf = new ProfileFlags(0, 6, 1, 1, 1);
+                pf.Write(writer);
+
+                blobs.Add(key, writer.ToByteArray());
+            }
+        }
+
+        private void CreateSkateProfile()
+        {
+            string key = "Skate";
+            using (NativeWriter writer = new NativeWriter(new MemoryStream()))
+            {
+                writer.WriteObfuscatedString("skate.™");
+                writer.Write((int)ProfileVersion.Skate);
+                writer.WriteObfuscatedString("skate");
+                writer.WriteObfuscatedString(typeof(NullDeobfuscator).Name);
+                writer.WriteObfuscatedString(AssetManager.GetLoaderName("CasAssetLoader"));
+                writer.Write(CreateSources("Patch;false", "Data;false"));
+                writer.WriteObfuscatedString("SkateSDK");
+                writer.Write(CreateBanner("skate"));
+                //writer.WriteObfuscatedString("Common/Shaders/Textures/Debug/T_Debug_Black");
+                //writer.WriteObfuscatedString("Common/Shaders/Textures/Debug/T_Debug_D");
+                //writer.WriteObfuscatedString("Common/Shaders/Textures/Debug/T_Debug_N");
+                //writer.WriteObfuscatedString("Common/Shaders/Textures/Debug/T_Debug_R");
                 writer.Write(0); // shared bundle names
                 writer.Write(0); // ignored res types
 
@@ -1280,6 +1308,7 @@ namespace FrostyCmd
             CreateDeadSpaceProfile();
             CreateBF6Profile();
             CreateBF2042Profile();
+            CreateSkateProfile();
 
 #if FROSTY_DEVELOPER
 

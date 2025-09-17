@@ -32,7 +32,7 @@ namespace Frosty.Core.Viewport
                 ProfileVersion.Fifa21, ProfileVersion.Madden22,
                 ProfileVersion.Fifa22, ProfileVersion.Battlefield2042,
                 ProfileVersion.Madden23, ProfileVersion.NeedForSpeedUnbound, ProfileVersion.DeadSpace,
-                ProfileVersion.DragonAgeVeilguard, ProfileVersion.Battlefield6))
+                ProfileVersion.DragonAgeVeilguard, ProfileVersion.Battlefield6, ProfileVersion.Skate))
             {
                 TextureParameters = ebxEntry.TextureParameters;
             }
@@ -140,7 +140,7 @@ namespace Frosty.Core.Viewport
                 ProfileVersion.Fifa21, ProfileVersion.Madden22,
                 ProfileVersion.Fifa22, ProfileVersion.Battlefield2042,
                 ProfileVersion.Madden23, ProfileVersion.NeedForSpeedUnbound, ProfileVersion.DeadSpace,
-                ProfileVersion.DragonAgeVeilguard, ProfileVersion.Battlefield6))
+                ProfileVersion.DragonAgeVeilguard, ProfileVersion.Battlefield6, ProfileVersion.Skate))
             {
                 IsLoaded = true;
                 return;
@@ -303,7 +303,7 @@ namespace Frosty.Core.Viewport
                 ProfileVersion.Fifa21, ProfileVersion.Madden22,
                 ProfileVersion.Fifa22, ProfileVersion.Battlefield2042,
                 ProfileVersion.Madden23, ProfileVersion.NeedForSpeedUnbound, ProfileVersion.DeadSpace,
-                ProfileVersion.DragonAgeVeilguard, ProfileVersion.Battlefield6))
+                ProfileVersion.DragonAgeVeilguard, ProfileVersion.Battlefield6, ProfileVersion.Skate))
             {
                 IsLoaded = true;
                 return;

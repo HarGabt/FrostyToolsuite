@@ -333,7 +333,8 @@ namespace FrostySdk
                     ProfileVersion.Fifa21, ProfileVersion.Madden22,
                     ProfileVersion.Fifa22, ProfileVersion.Battlefield2042,
                     ProfileVersion.Madden23, ProfileVersion.NeedForSpeedUnbound,
-                    ProfileVersion.DeadSpace, ProfileVersion.DragonAgeVeilguard, ProfileVersion.Battlefield6))
+                    ProfileVersion.DeadSpace, ProfileVersion.DragonAgeVeilguard, ProfileVersion.Battlefield6,
+                    ProfileVersion.Skate))
                 {
                     byte[] buffer = initfs.GetValue<byte[]>("encrypted");
                     if (buffer != null)
@@ -407,7 +408,7 @@ namespace FrostySdk
 
                     DbObject initfs = reader.ReadDbObject();
                     if (ProfilesLibrary.DataVersion == (int)ProfileVersion.Fifa18 || ProfilesLibrary.DataVersion == (int)ProfileVersion.Fifa19 || ProfilesLibrary.DataVersion == (int)ProfileVersion.Anthem || ProfilesLibrary.DataVersion == (int)ProfileVersion.Anthem || ProfilesLibrary.DataVersion == (int)ProfileVersion.Fifa20
-                     || ProfilesLibrary.DataVersion == (int)ProfileVersion.PlantsVsZombiesBattleforNeighborville || ProfilesLibrary.DataVersion == (int)ProfileVersion.NeedForSpeedHeat || ProfilesLibrary.DataVersion == (int)ProfileVersion.NeedForSpeedUnbound || ProfilesLibrary.DataVersion == (int)ProfileVersion.Battlefield6
+                     || ProfilesLibrary.DataVersion == (int)ProfileVersion.PlantsVsZombiesBattleforNeighborville || ProfilesLibrary.DataVersion == (int)ProfileVersion.NeedForSpeedHeat || ProfilesLibrary.DataVersion == (int)ProfileVersion.NeedForSpeedUnbound || ProfilesLibrary.DataVersion == (int)ProfileVersion.Battlefield6 || ProfilesLibrary.DataVersion == (int)ProfileVersion.Skate
                         )
                     {
                         encrypted = true;
@@ -633,7 +634,7 @@ namespace FrostySdk
                             ProfileVersion.Madden22, ProfileVersion.Fifa22,
                             ProfileVersion.Battlefield2042, ProfileVersion.Madden23,
                             ProfileVersion.NeedForSpeedUnbound, ProfileVersion.DeadSpace,
-                            ProfileVersion.DragonAgeVeilguard, ProfileVersion.Battlefield6)))
+                            ProfileVersion.DragonAgeVeilguard, ProfileVersion.Battlefield6, ProfileVersion.Skate)))
                         {
                             // BFV needs even non existent catalogs to be in the list for indexing to work
                             if (!ProfilesLibrary.IsLoaded(ProfileVersion.Battlefield5, ProfileVersion.StarWarsSquadrons))

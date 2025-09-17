@@ -393,6 +393,7 @@ namespace FrostySdk
                     case (int)ProfileVersion.DeadSpace:
                     case (int)ProfileVersion.DragonAgeVeilguard:
                     case (int)ProfileVersion.Battlefield6:
+                    case (int)ProfileVersion.Skate:
                         return 16;
                     default:
                         return 8;
@@ -571,7 +572,7 @@ namespace FrostySdk
                 ProfileVersion.NeedForSpeedHeat, ProfileVersion.Fifa21,
                 ProfileVersion.Madden22, ProfileVersion.Fifa22,
                 ProfileVersion.Battlefield2042, ProfileVersion.Madden23,
-                ProfileVersion.Fifa23, ProfileVersion.NeedForSpeedUnbound, ProfileVersion.Battlefield6))
+                ProfileVersion.Fifa23, ProfileVersion.NeedForSpeedUnbound, ProfileVersion.Battlefield6, ProfileVersion.Skate))
             {
                 Compress2 = Marshal.GetDelegateForFunctionPointer<CompressFunc2>(Kernel32.GetProcAddress(handle, "OodleLZ_Compress"));
             }
@@ -949,7 +950,7 @@ namespace FrostySdk
             {
                 compressionType = CompressionType.LZ4;
                 if (ProfilesLibrary.IsLoaded(ProfileVersion.Anthem, ProfileVersion.PlantsVsZombiesBattleforNeighborville,
-                    ProfileVersion.NeedForSpeedHeat, ProfileVersion.NeedForSpeedUnbound, ProfileVersion.Battlefield6) ||
+                    ProfileVersion.NeedForSpeedHeat, ProfileVersion.NeedForSpeedUnbound, ProfileVersion.Battlefield6, ProfileVersion.Skate) ||
                     (ProfilesLibrary.IsLoaded(ProfileVersion.Fifa19) && texture != null))
                 {
                     compressionType = CompressionType.Oodle;
@@ -1178,7 +1179,7 @@ namespace FrostySdk
                 size = (ulong)Oodle.Compress2(Oodle.OodleFormat.Kraken, ptr1.AddrOfPinnedObject(), buffer.Length, ptr2.AddrOfPinnedObject(), Oodle.OodleCompressionLevel.Optimal3, Oodle.GetOptions(Oodle.OodleFormat.Kraken, Oodle.OodleCompressionLevel.Optimal3));
             }
             else if (ProfilesLibrary.IsLoaded(ProfileVersion.Fifa21, ProfileVersion.Fifa22,
-                ProfileVersion.NeedForSpeedUnbound, ProfileVersion.Battlefield6))
+                ProfileVersion.NeedForSpeedUnbound, ProfileVersion.Battlefield6, ProfileVersion.Skate))
             {
                 // Leviathan
                 compressCode = 0x1970;
