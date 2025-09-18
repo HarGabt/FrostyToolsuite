@@ -9,6 +9,9 @@ using System.Windows.Forms;
 using System.Windows.Media;
 using FrostySdk.Managers.Entries;
 using EbxToXmlPlugin.Windows;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace EbxToXmlPlugin
 {
@@ -28,8 +31,8 @@ namespace EbxToXmlPlugin
             if (win.ShowDialog() == false)
                 return;
             bool exportAsYaml = win.exportAsYamlCheckBox.IsChecked ?? false;
-            bool skipConversationsFolder = win.skipConversationsCheckBox.IsChecked ?? false;
-            bool skipVirtualFolder = win.skipVirtualCheckBox.IsChecked ?? false;
+            ExportMode exportMode = win.SelectedExportMode;
+            HashSet<string> selectedFolders = win.GetSelectedFolders();
             int tabSize = Config.Get<int>("ExportTabSize", 2);
 
 			FolderBrowserDialog fbd = new FolderBrowserDialog();
@@ -45,39 +48,123 @@ namespace EbxToXmlPlugin
                     {
                         task.Update(entry.Name, (idx++ / (double)totalCount) * 100.0d);
 
-                        string fullPath = outDir + "/" + entry.Path + "/";
+                        // Check if this entry should be exported based on folder selection
+                        string[] pathParts = entry.Path.Split('/');
+                        string topLevelFolder = pathParts.Length > 0 ? pathParts[0].ToLower() : "";
 
+                        bool shouldExport = false;
+                        switch (exportMode)
+                        {
+                            case ExportMode.All:
+                                shouldExport = true;
+                                break;
+                            case ExportMode.SelectedOnly:
+                                shouldExport = selectedFolders.Contains(topLevelFolder);
+                                break;
+                            case ExportMode.ExcludeSelected:
+                                shouldExport = !selectedFolders.Contains(topLevelFolder);
+                                break;
+                        }
+
+                        if (!shouldExport)
+                            continue;
+
+                        string fullPath = outDir + "/" + entry.Path + "/";
                         string filename = entry.Filename + ".xml";
                         filename = string.Concat(filename.Split(Path.GetInvalidFileNameChars()));
-
-                        if ((skipConversationsFolder && entry.Path.ToLower().StartsWith("conversations"))
-                        || (skipVirtualFolder && entry.Path.StartsWith("virtual")))
-                            continue;
 
 						if (File.Exists(fullPath + filename))
                             continue;
 
                         try
                         {
-                            DirectoryInfo di = new DirectoryInfo(fullPath);
-                            if (!di.Exists)
-                                Directory.CreateDirectory(di.FullName);
+                            // Create a cancellation token with 500ms timeout
+                            using (var cts = new CancellationTokenSource(TimeSpan.FromMilliseconds(500)))
+                            {
+                                FileStream fileStream = null;
+                                var processTask = Task.Run(() =>
+                                {
+                                    try
+                                    {
+                                        DirectoryInfo di = new DirectoryInfo(fullPath);
+                                        if (!di.Exists)
+                                            Directory.CreateDirectory(di.FullName);
 
-                            EbxAsset asset = App.AssetManager.GetEbx(entry);
-                            if (exportAsYaml)
-                            {
-                                using (EbxYamlWriter writer = new EbxYamlWriter(asset, new FileStream(fullPath + filename, FileMode.Create), App.AssetManager, tabSize, false))
-                                    writer.WriteObjects();
-                            }
-                            else
-                            {
-                                using (EbxXmlWriter writer = new EbxXmlWriter(asset, new FileStream(fullPath + filename, FileMode.Create), App.AssetManager, tabSize, false))
-                                    writer.WriteObjects();
+                                        EbxAsset asset = App.AssetManager.GetEbx(entry);
+                                        fileStream = new FileStream(fullPath + filename, FileMode.Create);
+
+                                        if (exportAsYaml)
+                                        {
+                                            using (EbxYamlWriter writer = new EbxYamlWriter(asset, fileStream, App.AssetManager, tabSize, false))
+                                                writer.WriteObjects();
+                                        }
+                                        else
+                                        {
+                                            using (EbxXmlWriter writer = new EbxXmlWriter(asset, fileStream, App.AssetManager, tabSize, false))
+                                                writer.WriteObjects();
+                                        }
+                                    }
+                                    finally
+                                    {
+                                        fileStream?.Close();
+                                        fileStream?.Dispose();
+                                    }
+                                }, cts.Token);
+
+                                try
+                                {
+                                    processTask.Wait(cts.Token);
+                                }
+                                catch (OperationCanceledException)
+                                {
+                                    // Flush and close the file stream to preserve partial data
+                                    try
+                                    {
+                                        fileStream?.Flush();
+                                        fileStream?.Close();
+                                        fileStream?.Dispose();
+
+                                        // Add a note to the partial file indicating it was incomplete
+                                        if (File.Exists(fullPath + filename))
+                                        {
+                                            string partialContent = File.ReadAllText(fullPath + filename);
+                                            if (exportAsYaml)
+                                            {
+                                                File.WriteAllText(fullPath + filename, partialContent + "\n# File incomplete - processing timed out");
+                                            }
+                                            else
+                                            {
+                                                File.WriteAllText(fullPath + filename, partialContent + "\n<!-- File incomplete - processing timed out -->");
+                                            }
+                                        }
+                                    }
+                                    catch { /* Ignore errors during cleanup */ }
+
+                                    App.Logger.Log("Partial export saved for {0} - processing timeout (>500ms)", entry.Filename);
+                                    continue; // Skip to next file
+                                }
+                                finally
+                                {
+                                    // Clean up file stream immediately
+                                    fileStream?.Close();
+                                    fileStream?.Dispose();
+                                    fileStream = null;
+                                }
                             }
                         }
                         catch (Exception)
                         {
                             App.Logger.Log("Failed to export {0}", entry.Filename);
+                        }
+                        finally
+                        {
+                            // Force cleanup every 50 files
+                            if (idx % 50 == 0)
+                            {
+                                GC.Collect();
+                                GC.WaitForPendingFinalizers();
+                                GC.Collect();
+                            }
                         }
                     }
                 });

@@ -7,7 +7,7 @@
         xmlns:ctrl="clr-namespace:Frosty.Controls;assembly=FrostyControls"
         xmlns:core="clr-namespace:Frosty.Core.Controls;assembly=FrostyCore"
         mc:Ignorable="d"
-        Title="Export Ebx to Xml" Height="300" Width="350" ResizeMode="NoResize" FrostyLoaded="FrostyDockableWindow_FrostyLoaded" WindowStartupLocation="CenterScreen">
+        Title="Export Ebx to Xml" Height="500" Width="400" ResizeMode="NoResize" FrostyLoaded="FrostyDockableWindow_FrostyLoaded" WindowStartupLocation="CenterScreen">
 
     <Window.Resources>
         <ResourceDictionary>
@@ -43,11 +43,42 @@
                 <CheckBox x:Name="exportAsYamlCheckBox" Content="Export as Yaml" Padding="4, 0, 0, 4" Foreground="White"/>
             </StackPanel>
 
-            <!-- Skip Folders Section -->
+            <!-- Export Mode Section -->
             <StackPanel Grid.Row="1" Margin="0,0,0,10">
-                <TextBlock Text="Skip the following folders?" Margin="0,0,0,5" Foreground="White"/>
-                <CheckBox x:Name="skipConversationsCheckBox" Content="Conversations" Padding="4, 0, 0, 4" Foreground="White"/>
-                <CheckBox x:Name="skipVirtualCheckBox" Content="Virtual" Padding="4, 0, 0, 4" Foreground="White"/>
+                <RadioButton x:Name="exportAllRadio" Content="Export all folders" IsChecked="True" GroupName="ExportMode" Foreground="White" Margin="0,0,0,5" Checked="ExportMode_Changed"/>
+                <RadioButton x:Name="exportSelectedRadio" Content="Export selected folders only" GroupName="ExportMode" Foreground="White" Margin="0,0,0,5" Checked="ExportMode_Changed"/>
+                <RadioButton x:Name="skipSelectedRadio" Content="Export all except selected folders" GroupName="ExportMode" Foreground="White" Checked="ExportMode_Changed"/>
+            </StackPanel>
+
+            <!-- Folder Selection Section -->
+            <StackPanel Grid.Row="2">
+                <TextBlock Text="Folders:" Margin="0,0,0,5" Foreground="White" x:Name="folderLabel" Visibility="Collapsed"/>
+                <Border BorderBrush="Gray" BorderThickness="1" Height="200" x:Name="folderBorder" Visibility="Collapsed">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- Search Box -->
+                        <TextBox x:Name="searchBox" Grid.Row="0" Margin="2" VerticalAlignment="Center"
+                                 Text="Search..." Foreground="Gray" GotFocus="SearchBox_GotFocus"
+                                 LostFocus="SearchBox_LostFocus" TextChanged="SearchBox_TextChanged"/>
+
+                        <!-- Folder List -->
+                        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                            <ListBox x:Name="folderList" Background="{StaticResource ListBackground}"
+                                     SelectionMode="Extended" BorderThickness="0">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <CheckBox Content="{Binding Path=Name}" IsChecked="{Binding Path=IsSelected}"
+                                                  Foreground="White" Margin="2"/>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </ScrollViewer>
+                    </Grid>
+                </Border>
             </StackPanel>
         </Grid>
 
