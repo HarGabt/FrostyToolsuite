@@ -69,10 +69,18 @@ namespace FrostySdk.IO
 
             stream.Write(valueBuffer, 0, valueBuffer.Length);
 
-            // Clear memory
+            // Clear memory immediately and aggressively
             objs.Clear();
+            objs.TrimExcess(); // Force capacity reduction
+            objs = null;
             sb.Clear();
-            offsetKeyStack?.Clear();
+            sb = null;
+            offsetKeyStack?.Clear(); // Don't nullify readonly field
+            offsetKey = null;
+
+            // Force immediate disposal of asset
+            asset?.Dispose();
+            asset = null;
         }
 
         private string GetXmlOffset(string suffix)
