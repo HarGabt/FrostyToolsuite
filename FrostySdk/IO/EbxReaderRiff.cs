@@ -312,7 +312,12 @@ namespace FrostySdk.IO
                 Type objType = TypeLibrary.GetType(classGuids[inst.ClassRef]);
                 for (int i = 0; i < inst.Count; i++)
                 {
-                    objects.Add(TypeLibrary.CreateObject(objType));
+                    dynamic obj = TypeLibrary.CreateObject(objType);
+                    if (obj == null && objType != null)
+                    {
+                        obj = Activator.CreateInstance(objType);
+                    }
+                    objects.Add(obj);
                     refCounts.Add(0);
                 }
             }
@@ -327,6 +332,14 @@ namespace FrostySdk.IO
                 for (int j = 0; j < inst.Count; j++)
                 {
                     dynamic obj = objects[typeId++];
+
+                    // Skip processing if object couldn't be created (type not found)
+                    if (obj == null)
+                    {
+                        index++;
+                        continue;
+                    }
+
 
                     EbxClass classType;
                     if (std != null)

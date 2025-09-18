@@ -1271,6 +1271,11 @@ namespace FrostySdk
 
         internal static dynamic CreateObject(Type inType)
         {
+            if (inType == null)
+            {
+                return null;
+            }
+
             EbxClassMetaAttribute attr = inType.GetCustomAttribute<EbxClassMetaAttribute>();
             if (attr != null)
             {

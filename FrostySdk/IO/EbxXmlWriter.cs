@@ -52,7 +52,15 @@ namespace FrostySdk.IO
             sb.AppendLine("<File Guid=\"" + asset.FileGuid.ToString() + "\"" + offsetTag + ">");
 
             foreach (object obj in objs)
+            {
+                // Skip null objects (types that couldn't be resolved)
+                if (obj == null)
+                {
+                    sb.AppendLine("".PadLeft(tabSize) + "<!-- Object could not be loaded (unknown type) -->");
+                    continue;
+                }
                 sb.Append(ClassToXml(obj, obj.GetType(), tabSize));
+            }
 
             sb.AppendLine("</File>");
 
@@ -60,6 +68,11 @@ namespace FrostySdk.IO
             byte[] valueBuffer = Encoding.UTF8.GetBytes(value);
 
             stream.Write(valueBuffer, 0, valueBuffer.Length);
+
+            // Clear memory
+            objs.Clear();
+            sb.Clear();
+            offsetKeyStack?.Clear();
         }
 
         private string GetXmlOffset(string suffix)
@@ -156,6 +169,12 @@ namespace FrostySdk.IO
 
         private string FieldToXml(object Value, ref string AdditionalInfo, int TabCount = 0)
         {
+            if (Value == null)
+            {
+                AdditionalInfo = "";
+                return "<!-- null value -->";
+            }
+
             Type FieldType = Value.GetType();
             StringBuilder SB = new StringBuilder();
 
@@ -201,9 +220,16 @@ namespace FrostySdk.IO
                         PointerRef Reference = (PointerRef)Value;
                         if (Reference.Type == PointerRefType.Internal)
                         {
-                            Type SubObjType = Reference.Internal.GetType();
-                            AssetClassGuid guid = (AssetClassGuid)SubObjType.GetField("__Guid", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(Reference.Internal);
-                            SB.Append("[" + SubObjType.Name + "] " + guid.ToString());
+                            if (Reference.Internal != null)
+                            {
+                                Type SubObjType = Reference.Internal.GetType();
+                                AssetClassGuid guid = (AssetClassGuid)SubObjType.GetField("__Guid", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(Reference.Internal);
+                                SB.Append("[" + SubObjType.Name + "] " + guid.ToString());
+                            }
+                            else
+                            {
+                                SB.Append("[Internal] null");
+                            }
                         }
                         else if (Reference.Type == PointerRefType.External)
                         {
