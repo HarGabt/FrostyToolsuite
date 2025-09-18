@@ -12,6 +12,7 @@ using EbxToXmlPlugin.Windows;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace EbxToXmlPlugin
 {
@@ -78,78 +79,92 @@ namespace EbxToXmlPlugin
 
                         try
                         {
-                            // Create a cancellation token with 500ms timeout
-                            using (var cts = new CancellationTokenSource(TimeSpan.FromMilliseconds(500)))
+                            Thread workerThread = null;
+                            Exception threadException = null;
+                            bool completed = false;
+
+                            FileStream globalFileStream = null;
+                            EbxXmlWriter globalXmlWriter = null;
+                            EbxYamlWriter globalYamlWriter = null;
+
+                            workerThread = new Thread(() =>
                             {
-                                FileStream fileStream = null;
-                                var processTask = Task.Run(() =>
-                                {
-                                    try
-                                    {
-                                        DirectoryInfo di = new DirectoryInfo(fullPath);
-                                        if (!di.Exists)
-                                            Directory.CreateDirectory(di.FullName);
-
-                                        EbxAsset asset = App.AssetManager.GetEbx(entry);
-                                        fileStream = new FileStream(fullPath + filename, FileMode.Create);
-
-                                        if (exportAsYaml)
-                                        {
-                                            using (EbxYamlWriter writer = new EbxYamlWriter(asset, fileStream, App.AssetManager, tabSize, false))
-                                                writer.WriteObjects();
-                                        }
-                                        else
-                                        {
-                                            using (EbxXmlWriter writer = new EbxXmlWriter(asset, fileStream, App.AssetManager, tabSize, false))
-                                                writer.WriteObjects();
-                                        }
-                                    }
-                                    finally
-                                    {
-                                        fileStream?.Close();
-                                        fileStream?.Dispose();
-                                    }
-                                }, cts.Token);
-
                                 try
                                 {
-                                    processTask.Wait(cts.Token);
+                                    DirectoryInfo di = new DirectoryInfo(fullPath);
+                                    if (!di.Exists)
+                                        Directory.CreateDirectory(di.FullName);
+
+                                    EbxAsset asset = App.AssetManager.GetEbx(entry);
+                                    globalFileStream = new FileStream(fullPath + filename, FileMode.Create);
+
+                                    if (exportAsYaml)
+                                    {
+                                        globalYamlWriter = new EbxYamlWriter(asset, globalFileStream, App.AssetManager, tabSize, false);
+                                        globalYamlWriter.WriteObjects();
+                                    }
+                                    else
+                                    {
+                                        globalXmlWriter = new EbxXmlWriter(asset, globalFileStream, App.AssetManager, tabSize, false);
+                                        globalXmlWriter.WriteObjects();
+                                    }
+
+                                    asset = null;
+                                    completed = true;
                                 }
-                                catch (OperationCanceledException)
+                                catch (ThreadAbortException)
                                 {
-                                    // Flush and close the file stream to preserve partial data
+                                    // Save partial data before thread dies
                                     try
                                     {
-                                        fileStream?.Flush();
-                                        fileStream?.Close();
-                                        fileStream?.Dispose();
-
-                                        // Add a note to the partial file indicating it was incomplete
-                                        if (File.Exists(fullPath + filename))
-                                        {
-                                            string partialContent = File.ReadAllText(fullPath + filename);
-                                            if (exportAsYaml)
-                                            {
-                                                File.WriteAllText(fullPath + filename, partialContent + "\n# File incomplete - processing timed out");
-                                            }
-                                            else
-                                            {
-                                                File.WriteAllText(fullPath + filename, partialContent + "\n<!-- File incomplete - processing timed out -->");
-                                            }
-                                        }
+                                        globalFileStream?.Flush();
+                                        globalXmlWriter?.Dispose();
+                                        globalYamlWriter?.Dispose();
+                                        globalFileStream?.Dispose();
                                     }
-                                    catch { /* Ignore errors during cleanup */ }
-
-                                    App.Logger.Log("Partial export saved for {0} - processing timeout (>500ms)", entry.Filename);
-                                    continue; // Skip to next file
+                                    catch { }
+                                    App.Logger.Log("Thread aborted for {0} - partial file saved", entry.Filename);
                                 }
-                                finally
+                                catch (Exception ex)
                                 {
-                                    // Clean up file stream immediately
-                                    fileStream?.Close();
-                                    fileStream?.Dispose();
-                                    fileStream = null;
+                                    threadException = ex;
                                 }
+                            }) { IsBackground = true };
+
+                            workerThread.Start();
+
+                            if (!workerThread.Join(500)) // 500ms timeout
+                            {
+                                // KILL THE FUCKING THREAD TO FREE MEMORY
+                                App.Logger.Log("TIMEOUT: Aborting hung thread for {0}", entry.Filename);
+                                workerThread.Abort();
+
+                                // Wait longer for abort to complete and thread to fully clean up
+                                if (!workerThread.Join(2000))
+                                {
+                                    App.Logger.Log("WARNING: Thread did not abort cleanly for {0}", entry.Filename);
+                                }
+
+                                // Clean up any remaining file handles
+                                try
+                                {
+                                    globalXmlWriter?.Dispose();
+                                    globalYamlWriter?.Dispose();
+                                    globalFileStream?.Dispose();
+                                }
+                                catch { }
+
+                                // More aggressive memory cleanup after thread abort
+                                GC.Collect(2, GCCollectionMode.Forced, true);
+                                GC.WaitForPendingFinalizers();
+                                GC.Collect(2, GCCollectionMode.Forced, true);
+
+                                continue;
+                            }
+
+                            if (threadException != null)
+                            {
+                                App.Logger.Log("Error processing {0}: {1}", entry.Filename, threadException.Message);
                             }
                         }
                         catch (Exception)
@@ -158,12 +173,11 @@ namespace EbxToXmlPlugin
                         }
                         finally
                         {
-                            // Force cleanup every 50 files
-                            if (idx % 50 == 0)
+                            // Minimal cleanup - let .NET handle GC naturally
+                            if (idx % 100 == 0)
                             {
                                 GC.Collect();
                                 GC.WaitForPendingFinalizers();
-                                GC.Collect();
                             }
                         }
                     }
