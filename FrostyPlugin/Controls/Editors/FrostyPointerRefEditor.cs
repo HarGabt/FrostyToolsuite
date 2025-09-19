@@ -430,6 +430,10 @@ namespace Frosty.Core.Controls.Editors
 
             foreach (dynamic obj in GetParentEditor().Objects)
             {
+                // Skip null objects (types that couldn't be resolved)
+                if (obj == null)
+                    continue;
+
                 if (TypeLibrary.IsSubClassOf((object)obj, baseType.Name))
                 {
                     assignObjs.Add(obj);

@@ -135,6 +135,12 @@ namespace Frosty.Core.Windows
                             foundProcess = process;
                             break;
                         }
+                        // Also check for bflabs.exe for BF6
+                        if (ProfilesLibrary.ProfileName == "bf6event" && fi.Name.IndexOf("bflabs", StringComparison.OrdinalIgnoreCase) >= 0)
+                        {
+                            foundProcess = process;
+                            break;
+                        }
                         if (fi.Name.IndexOf("EAAntiCheat.GameServiceLauncher",
                                      StringComparison.OrdinalIgnoreCase) >= 0)
                         {

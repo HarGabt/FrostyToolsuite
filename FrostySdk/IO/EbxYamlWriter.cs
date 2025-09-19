@@ -63,12 +63,31 @@ namespace FrostySdk.IO
             }
 
             foreach (object obj in objs)
+            {
+                // Skip null objects (types that couldn't be resolved)
+                if (obj == null)
+                {
+                    sb.AppendLine("".PadLeft(tabSize) + "# Object could not be loaded (unknown type)");
+                    continue;
+                }
                 sb.Append(ClassToYaml(obj, obj.GetType(), tabSize));
+            }
             RemoveEmptyLines(sb);
             string value = sb.ToString();
             byte[] valueBuffer = Encoding.UTF8.GetBytes(value);
 
             stream.Write(valueBuffer, 0, valueBuffer.Length);
+
+            // Clear memory immediately and aggressively
+            objs.Clear();
+            objs.TrimExcess(); // Force capacity reduction
+            objs = null;
+            sb.Clear();
+            sb = null;
+
+            // Force immediate disposal of asset
+            asset?.Dispose();
+            asset = null;
         }
 
 
