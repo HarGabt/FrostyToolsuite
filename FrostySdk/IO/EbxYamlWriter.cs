@@ -84,6 +84,10 @@ namespace FrostySdk.IO
             objs = null;
             sb.Clear();
             sb = null;
+
+            // Force immediate disposal of asset
+            asset?.Dispose();
+            asset = null;
         }
 
 

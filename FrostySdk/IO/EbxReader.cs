@@ -219,7 +219,7 @@ namespace FrostySdk.IO
         public object RootObject => objects[0];
         public bool IsValid => objects.Count != 0;
         public bool TransientEdit { get; set; }
-		
+
         public Dictionary<string, long> OffsetsMap => offsetsMap;
 
         internal Guid fileGuid;
@@ -227,6 +227,18 @@ namespace FrostySdk.IO
         internal List<Guid> dependencies;
         internal List<int> refCounts;
         internal Dictionary<string, long> offsetsMap;
+
+        public void Dispose()
+        {
+            objects?.Clear();
+            dependencies?.Clear();
+            refCounts?.Clear();
+            offsetsMap?.Clear();
+            objects = null;
+            dependencies = null;
+            refCounts = null;
+            offsetsMap = null;
+        }
 
         public EbxAsset()
         {
@@ -1002,7 +1014,7 @@ namespace FrostySdk.IO
                     return ReadUInt();
                 case EbxFieldType.Int64:
                     return ReadLong();
-                case EbxFieldType.UInt64: 
+                case EbxFieldType.UInt64:
                     return ReadULong();
                 case EbxFieldType.Float32:
                     return ReadFloat();
