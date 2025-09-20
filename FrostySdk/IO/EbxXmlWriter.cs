@@ -77,10 +77,6 @@ namespace FrostySdk.IO
             sb = null;
             offsetKeyStack?.Clear(); // Don't nullify readonly field
             offsetKey = null;
-
-            // Force immediate disposal of asset
-            asset?.Dispose();
-            asset = null;
         }
 
         private string GetXmlOffset(string suffix)
