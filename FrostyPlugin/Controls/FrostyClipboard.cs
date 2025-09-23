@@ -7,6 +7,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows;
@@ -58,7 +59,7 @@ namespace Frosty.Core.Controls
         private object DeepCopy(object data, EbxAsset asset, EbxAssetEntry entry, ref Dictionary<object, object> oldNewMapping)
         {
             Type dataType = data.GetType();
-            if (dataType.IsPrimitive || dataType.IsValueType)
+            if (dataType.IsPrimitive || dataType.IsValueType || !dataType.GetCustomAttributes<EbxClassMetaAttribute>().Any())
                 return data;
 
             dynamic newData;
