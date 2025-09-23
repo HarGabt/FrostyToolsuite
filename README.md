@@ -1,3 +1,5 @@
+🇬🇧 ENGLISH | [🇷🇺 РУССКИЙ](README_RU.md)
+
 # FORK NOTE
 
 This fork of Frosty Tool Suite 1.0.7 is based on [selphea's fork of 1.0.7](https://github.com/selphea/FrostyToolsuite) and is aimed at bringing some of the features from 1.0.6.x and [Veilguard fork](https://github.com/J-Lyt/FrostyToolsuite) if possible, along with keeping NFS Unbound's SDK file up-to-date. This fork serves as an opportunity to mod newer games Frosty Tool Suite 1.0.6.3 doesn't support and will be discontinued in favour of an upcoming 2.0.0 version of Tool Suite, which as of now is still a WIP, and which has no estimated time of release.
@@ -21,6 +23,14 @@ If you are to ask for help with Frosty Tool Suite 1.0.7, create an `Issue` so ~w
 - Mod Manager doesn't identify itself as Editor anymore
 - Fixed splash screen not showing banner art
 - Mod Manager now shows for what game version (Volume) mod was made
+
+## In plans / In progress
+
+- Battlefield 6 complete support
+- Skate.™️ support
+- Dead Space support. I believe modding of this game is already available, but the game just refuses to run with mods
+- Bug fixing if possible
+- Audio import in NewWaveAsset support. The importer 1.0.7 has is broken (but it is there, at least)
 
 # FrostyToolsuite
 The most advanced modding platform for games running on DICE's Frostbite game engine.
