@@ -208,10 +208,30 @@
                         <!-- Launch -->
                         <Border Background="{StaticResource ControlBackground}" Margin="1 0 0 0" DockPanel.Dock="Left" RenderOptions.EdgeMode="Aliased">
                             <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Margin="6,0,6,0">
-                                <Button x:Name="launchButton" Height="20" ToolTip="Launch game with selected mods applied" Click="launchButton_Click">
+                                <Button x:Name="launchButton" Height="20" ToolTip="Patch selected mods into the game" Click="launchButton_Click">
                                     <StackPanel Orientation="Horizontal">
-                                        <Image Source="/FrostyModManager;component/Images/Play.png"/>
-                                        <TextBlock Margin="2,0,3,2" Text="Launch" VerticalAlignment="Center"/>
+                                        <Image Source="/FrostyModManager;component/Images/ModifyAction.png"/>
+                                        <TextBlock Margin="2,0,3,2" Text="Patch Game" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Button>
+                            </StackPanel>
+                        </Border>
+                        <!-- Backup -->
+                        <Border Background="{StaticResource ControlBackground}" Margin="1 0 0 0" DockPanel.Dock="Left" RenderOptions.EdgeMode="Aliased">
+                            <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Margin="6,0,6,0">
+                                <Button x:Name="backupButton" Height="20" ToolTip="Backup the Data, Update and Patch folders" Click="backupButton_Click">
+                                    <StackPanel Orientation="Horizontal">
+                                       <TextBlock Margin="2,0,3,2" Text="Backup Data Folder" VerticalAlignment="Center"/>
+                                    </StackPanel>
+                                </Button>
+                            </StackPanel>
+                       </Border>
+                        <!-- Restore -->
+                        <Border Background="{StaticResource ControlBackground}" Margin="1 0 0 0" DockPanel.Dock="Left" RenderOptions.EdgeMode="Aliased">
+                            <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Margin="6,0,6,0">
+                                <Button x:Name="restoreButton" Height="20" ToolTip="Restore the Data, Update and Patch backups" Click="restoreButton_Click">
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Margin="2,0,3,2" Text="Restore Data Folder" VerticalAlignment="Center"/>
                                     </StackPanel>
                                 </Button>
                             </StackPanel>

@@ -701,7 +701,7 @@ namespace FrostyModManager
 
             // launch
             int retCode = 0;
-            FrostyTaskWindow.Show("Launching", "", (task) =>
+            FrostyTaskWindow.Show("Preparing Files", "", (task) =>
             {
                 try
                 {
@@ -729,6 +729,102 @@ namespace FrostyModManager
 
             if (retCode != -1)
                 WindowState = WindowState.Minimized;
+
+            // kill the application if launched from the command line
+            if (App.LaunchGameImmediately)
+                Close();
+
+            GC.Collect();
+        }
+
+        private void backupButton_Click(object sender, RoutedEventArgs e)
+        {
+            Config.Save();
+
+            // initialize
+            Frosty.Core.App.FileSystemManager = new FileSystemManager(Config.Get<string>("GamePath", "", ConfigScope.Game));
+            foreach (FileSystemSource source in ProfilesLibrary.Sources)
+                Frosty.Core.App.FileSystemManager.AddSource(source.Path, source.SubDirs);
+            Frosty.Core.App.FileSystemManager.Initialize();
+
+            // Set selected pack
+            App.SelectedPack = selectedPack.Name;
+
+            // setup ability to cancel the process
+            CancellationTokenSource cancelToken = new CancellationTokenSource();
+
+            // launch
+            FrostyTaskWindow.Show("Preparing Files", "", (task) =>
+            {
+                try
+                {
+                    foreach (var executionAction in App.PluginManager.ExecutionActions)
+                        executionAction.PreLaunchAction(task.TaskLogger, PluginManagerType.ModManager, cancelToken.Token);
+
+                    FrostyModExecutor modExecutor = new FrostyModExecutor();
+                    modExecutor.BackupGameFiles(fs, cancelToken.Token, task.TaskLogger, $"Mods/{ProfilesLibrary.ProfileName}/");
+
+                    foreach (var executionAction in App.PluginManager.ExecutionActions)
+                        executionAction.PostLaunchAction(task.TaskLogger, PluginManagerType.ModManager, cancelToken.Token);
+                }
+                catch (OperationCanceledException)
+                {
+                    foreach (var executionAction in App.PluginManager.ExecutionActions)
+                        executionAction.PostLaunchAction(task.TaskLogger, PluginManagerType.ModManager, cancelToken.Token);
+
+                    // process was cancelled
+                    App.Logger.Log("Backup Cancelled");
+                }
+
+            }, showCancelButton: true, cancelCallback: (task) => cancelToken.Cancel());
+
+            // kill the application if launched from the command line
+            if (App.LaunchGameImmediately)
+                Close();
+
+            GC.Collect();
+        }
+
+        private void restoreButton_Click(object sender, RoutedEventArgs e)
+        {
+            Config.Save();
+
+            // initialize
+            Frosty.Core.App.FileSystemManager = new FileSystemManager(Config.Get<string>("GamePath", "", ConfigScope.Game));
+            foreach (FileSystemSource source in ProfilesLibrary.Sources)
+                Frosty.Core.App.FileSystemManager.AddSource(source.Path, source.SubDirs);
+            Frosty.Core.App.FileSystemManager.Initialize();
+
+            // Set selected pack
+            App.SelectedPack = selectedPack.Name;
+
+            // setup ability to cancel the process
+            CancellationTokenSource cancelToken = new CancellationTokenSource();
+
+            // launch
+            FrostyTaskWindow.Show("Preparing Files", "", (task) =>
+            {
+                try
+                {
+                    foreach (var executionAction in App.PluginManager.ExecutionActions)
+                        executionAction.PreLaunchAction(task.TaskLogger, PluginManagerType.ModManager, cancelToken.Token);
+
+                    FrostyModExecutor modExecutor = new FrostyModExecutor();
+                    modExecutor.RestoreGameFiles(fs, cancelToken.Token, task.TaskLogger, $"Mods/{ProfilesLibrary.ProfileName}/");
+
+                    foreach (var executionAction in App.PluginManager.ExecutionActions)
+                        executionAction.PostLaunchAction(task.TaskLogger, PluginManagerType.ModManager, cancelToken.Token);
+                }
+                catch (OperationCanceledException)
+                {
+                    foreach (var executionAction in App.PluginManager.ExecutionActions)
+                        executionAction.PostLaunchAction(task.TaskLogger, PluginManagerType.ModManager, cancelToken.Token);
+
+                    // process was cancelled
+                    App.Logger.Log("Restore Cancelled");
+                }
+
+            }, showCancelButton: true, cancelCallback: (task) => cancelToken.Cancel());
 
             // kill the application if launched from the command line
             if (App.LaunchGameImmediately)
