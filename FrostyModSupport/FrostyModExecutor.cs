@@ -1225,12 +1225,143 @@ namespace Frosty.ModSupport
             }
         }
 
+        public int BackupGameFiles(FileSystemManager inFs, CancellationToken cancelToken, ILogger inLogger, string rootPath)
+
+        {
+            cancelToken.ThrowIfCancellationRequested();
+
+            App.Logger.Log("Preparing Files");
+
+            m_fs = inFs;
+            Logger = inLogger;
+
+            if (ProfilesLibrary.IsLoaded(ProfileVersion.Fifa17,
+                ProfileVersion.DragonAgeInquisition,
+                ProfileVersion.Battlefield4,
+                ProfileVersion.NeedForSpeed,
+                ProfileVersion.PlantsVsZombiesGardenWarfare2,
+                ProfileVersion.NeedForSpeedRivals))
+            {
+                // old fb3 games use an update folder
+                m_patchPath = "Update\\Patch\\Data";
+            }
+            else if (ProfilesLibrary.IsLoaded(ProfileVersion.Battlefield5, ProfileVersion.NeedForSpeedUnbound, ProfileVersion.DeadSpace))
+            {
+                // bfv doesnt have a patch directory
+                m_patchPath = "Data";
+                m_hasPatchFolder = false;
+            }
+
+            // check for already running process
+            if (!Config.Get<bool>("DisableLaunchProcessCheck", false))
+            {
+                Process[] processes = Process.GetProcesses();
+                string processName = ProfilesLibrary.ProfileName;
+                foreach (Process process in processes)
+                {
+                    if (process.ProcessName.Equals(processName, StringComparison.OrdinalIgnoreCase))
+                    {
+                        FrostyMessageBox.Show(string.Format("Unable to launch process as there is already a running process with process Id {0}", process.Id), "Frosty Toolsuite");
+                        return -1;
+                    }
+                }
+            }
+
+            cancelToken.ThrowIfCancellationRequested();
+
+            Logger.Log("Reading Files");
+
+            cancelToken.ThrowIfCancellationRequested();
+
+            // Backup Data Files
+            Logger.Log("Backing Up Files");
+
+            try
+            {
+                BackupGameFiles(m_fs.BasePath);
+            }
+            catch (Exception ex)
+            {
+                App.Logger.Log("Error backing up game files, manual backup required.");
+            }
+
+            App.Logger.Log("Done");
+
+            GC.Collect();
+            return 0;
+        }
+
+        public int RestoreGameFiles(FileSystemManager inFs, CancellationToken cancelToken, ILogger inLogger, string rootPath)
+        {
+            cancelToken.ThrowIfCancellationRequested();
+
+            App.Logger.Log("Preparing Files");
+
+            m_fs = inFs;
+            Logger = inLogger;
+
+            if (ProfilesLibrary.IsLoaded(ProfileVersion.Fifa17,
+                ProfileVersion.DragonAgeInquisition,
+                ProfileVersion.Battlefield4,
+                ProfileVersion.NeedForSpeed,
+                ProfileVersion.PlantsVsZombiesGardenWarfare2,
+                ProfileVersion.NeedForSpeedRivals))
+            {
+                // old fb3 games use an update folder
+                m_patchPath = "Update\\Patch\\Data";
+            }
+            else if (ProfilesLibrary.IsLoaded(ProfileVersion.Battlefield5, ProfileVersion.NeedForSpeedUnbound, ProfileVersion.DeadSpace))
+            {
+                // bfv doesnt have a patch directory
+                m_patchPath = "Data";
+                m_hasPatchFolder = false;
+            }
+
+            // check for already running process
+            if (!Config.Get<bool>("DisableLaunchProcessCheck", false))
+            {
+                Process[] processes = Process.GetProcesses();
+                string processName = ProfilesLibrary.ProfileName;
+                foreach (Process process in processes)
+                {
+                    if (process.ProcessName.Equals(processName, StringComparison.OrdinalIgnoreCase))
+                    {
+                        FrostyMessageBox.Show(string.Format("Unable to launch process as there is already a running process with process Id {0}", process.Id), "Frosty Toolsuite");
+                        return -1;
+                    }
+                }
+            }
+
+            cancelToken.ThrowIfCancellationRequested();
+
+            Logger.Log("Reading Backup Files");
+
+            cancelToken.ThrowIfCancellationRequested();
+
+            // Backup Data Files
+            Logger.Log("Restoring Files");
+
+            try
+            {
+                RestoreBackup(m_fs.BasePath);
+            }
+            catch (Exception ex)
+            {
+                App.Logger.Log("Error restoring game files, manual repair required.");
+            }
+
+            App.Logger.Log("Done");
+
+            GC.Collect();
+            return 0;
+        }
+
         public int Run(FileSystemManager inFs, CancellationToken cancelToken, ILogger inLogger, string rootPath, string modPackName, string additionalArgs, params string[] modPaths)
         {
             m_modDirName = "ModData\\" + modPackName;
             cancelToken.ThrowIfCancellationRequested();
 
-            App.Logger.Log("Launching");
+            App.Logger.Log("Preparing Files");
 
             m_fs = inFs;
             Logger = inLogger;
@@ -1568,7 +1699,7 @@ namespace Frosty.ModSupport
                         reason = "New installation detected.";
 
                     FrostyMessageBox.Show(reason + "\r\n\r\nShortly you will be prompted for elevated privileges, this is required to create symbolic links between the original data and the new modified data. Please ensure that you accept this to avoid any issues.", "Frosty Toolsuite");
-                    if (!RunSymbolicLinkProcess(cmdArgs))
+                    /**if (!RunSymbolicLinkProcess(cmdArgs))
                     {
                         FrostyMessageBox.Show("Frosty needs to generate symbolic links, please ensure that you accept this so you don't have to regenerate ModData.", "Frosty Editor");
                         if (!RunSymbolicLinkProcess(cmdArgs))
@@ -1579,7 +1710,7 @@ namespace Frosty.ModSupport
 
 
                         }
-                    }
+                    }**/
                 }
 
                 // set max threads to processor amount (stop hitching)
@@ -2207,29 +2338,20 @@ namespace Frosty.ModSupport
             }
 
             // launch the game (redirecting to the modPath directory)
-            Logger.Log("Launching Game");
+            Logger.Log("Finishing up");
 
             try
             {
-                // ExecuteProcess($"{m_fs.BasePath + ProfilesLibrary.ProfileName}.exe", $"-dataPath \"{modDataPath.Trim('\\')}\" {additionalArgs}");
-                string steamAppIdPath = $"{m_fs.BasePath}steam_appid.txt";
-                if (File.Exists(steamAppIdPath))
-                {
-                    string steamAppId = File.ReadAllLines(steamAppIdPath).First();
-                    string arguments = $"-dataPath \"{m_modDirName.Replace('\\', '/')}\" {additionalArgs}";
-                    string url = Uri.EscapeDataString(arguments);
-                    App.Logger.Log($"Launch: {arguments}");
-                    App.Logger.Log($"Encoded: {url}");
-                    Process.Start($"steam://run/{steamAppId}//{url}/");
-                }
-                else
-                {
-                    ExecuteProcess($"{m_fs.BasePath + ProfilesLibrary.ProfileName}.exe", $"-dataPath \"{modDataPath.Trim('\\')}\" {additionalArgs}");
-                }
+                //KillEADesktop();
+                //ModifyInstallerData($"-dataPath \"{modDataPath.Trim('\\')}\" {additionalArgs}");
+                PatchGameFiles(modDataPath, m_fs.BasePath);
+                //ExecuteProcess($"{m_fs.BasePath + ProfilesLibrary.ProfileName}.exe", $"-dataPath \"{modDataPath.Trim('\\')}\" {additionalArgs}");
+                //WaitForGame();
+                //CleanUpInstalledData();
             }
             catch (Exception ex)
             {
-                App.Logger.Log("Error Launching Game: " + ex);
+                App.Logger.Log("Error patching game files, manual patching required.");
             }
 
             App.Logger.Log("Done");
@@ -2832,5 +2954,77 @@ namespace Frosty.ModSupport
                 File.Copy(baseFi.FullName, modFi.FullName, true);
             }
         }
+        private void PatchGameFiles(string modDataPath, string basePath)
+
+        {
+            int pathLen = modDataPath.Length;
+            foreach (string filePath in Directory.GetFiles(modDataPath, "*.*", SearchOption.AllDirectories))
+            {
+                string subPath = filePath.Substring(pathLen);
+                string newPath = Path.Combine(basePath, subPath);
+                File.Copy(filePath, newPath, true);
+            }
+        }
+
+        private void BackupGameFiles(string basePath)
+        {
+            if (Directory.Exists(Path.Combine(basePath, "Data")))
+            {
+                Directory.CreateDirectory(Path.Combine(basePath, "DataBackup"));
+                RecursiveCopy(Path.Combine(basePath, "Data"), Path.Combine(basePath, "DataBackup"));
+            }
+            if (Directory.Exists(Path.Combine(basePath, "Update")))
+            {
+                Directory.CreateDirectory(Path.Combine(basePath, "UpdateBackup"));
+                RecursiveCopy(Path.Combine(basePath, "Update"), Path.Combine(basePath, "UpdateBackup"));
+            }
+
+            if (Directory.Exists(Path.Combine(basePath, "Patch")))
+            {
+                Directory.CreateDirectory(Path.Combine(basePath, "PatchBackup"));
+                RecursiveCopy(Path.Combine(basePath, "Patch"), Path.Combine(basePath, "PatchBackup"));
+            }
+        }
+
+        private void RestoreBackup(string basePath)
+        {
+            if (Directory.Exists(Path.Combine(basePath, "DataBackup")))
+            {
+                Directory.Delete(Path.Combine(basePath, "Data"), true);
+                Directory.CreateDirectory(Path.Combine(basePath, "Data"));
+                RecursiveCopy(Path.Combine(basePath, "DataBackup"), Path.Combine(basePath, "Data"));
+            }
+            if (Directory.Exists(Path.Combine(basePath, "UpdateBackup")))
+            {
+                Directory.Delete(Path.Combine(basePath, "Update"), true);
+                Directory.CreateDirectory(Path.Combine(basePath, "Update"));
+                RecursiveCopy(Path.Combine(basePath, "UpdateBackup"), Path.Combine(basePath, "Update"));
+            }
+
+            if (Directory.Exists(Path.Combine(basePath, "PatchBackup")))
+            {
+                Directory.Delete(Path.Combine(basePath, "Patch"), true);
+                Directory.CreateDirectory(Path.Combine(basePath, "Patch"));
+                RecursiveCopy(Path.Combine(basePath, "PatchBackup"), Path.Combine(basePath, "Patch"));
+            }
+        }
+
+        private void RecursiveCopy(string source, string destination)
+        {
+            int pathLen = source.Length + 1;
+            foreach (string dirPath in Directory.GetDirectories(source, "*", SearchOption.AllDirectories))
+            {
+                string subPath = dirPath.Substring(pathLen);
+                string newPath = Path.Combine(destination, subPath);
+                Directory.CreateDirectory(newPath);
+            }
+            foreach (string filePath in Directory.GetFiles(source, "*.*", SearchOption.AllDirectories))
+            {
+                string subPath = filePath.Substring(pathLen);
+                string newPath = Path.Combine(destination, subPath);
+                File.Copy(filePath, newPath, true);
+            }
+        }
+
     }
 }
