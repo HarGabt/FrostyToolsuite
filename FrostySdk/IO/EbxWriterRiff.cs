@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using FrostySdk.Managers.Entries;
 
 namespace FrostySdk.IO
 {
@@ -34,6 +35,8 @@ namespace FrostySdk.IO
         private byte[] m_data = null;
         private List<EbxInstance> m_instances = new List<EbxInstance>();
         private List<EbxArray> m_arrays = new List<EbxArray>();
+        private List<uint> m_arrayHashes = new List<uint>();
+        private List<uint> m_boxedValuesHashes = new List<uint>();
         private List<byte[]> m_arrayData = new List<byte[]>();
         private List<uint> m_typeInfoOffsets = new List<uint>();
         private List<uint> m_arrayFieldOffsets = new List<uint>();
@@ -54,8 +57,12 @@ namespace FrostySdk.IO
             m_flags = inFlags;
         }
 
-        public override void WriteAsset(EbxAsset asset)
+        public override void WriteAsset(EbxAsset asset, Stream stream = null)
         {
+            if (stream != null)
+            {
+                ReadStream(stream);
+            }
             if (m_flags.HasFlag(EbxWriteFlags.DoNotSort))
             {
                 foreach (object obj in asset.Objects)
@@ -236,24 +243,30 @@ namespace FrostySdk.IO
                     writer.Write(m_arrays.Count);
                     writer.Write(m_boxedValues.Count);
 
+                    int count = 0;
                     m_arrays.Sort((EbxArray a, EbxArray b) => a.Offset.CompareTo(b.Offset));
                     foreach (EbxArray arr in m_arrays)
                     {
                         writer.Write(arr.Offset);
                         writer.Write(arr.Count);
-                        writer.Write(0x00); // unknown, varies between assets
-                        writer.Write((ushort)arr.Type);
+                        writer.Write(m_arrayHashes[count]);
+                        writer.Write(arr.Type);
                         writer.Write((short)arr.ClassRef);
+
+                        count++;
                     }
 
+                    count = 0;
                     m_boxedValues.Sort((EbxBoxedValue a, EbxBoxedValue b) => a.Offset.CompareTo(b.Offset));
                     foreach (EbxBoxedValue val in m_boxedValues)
                     {
                         writer.Write(val.Offset);
                         writer.Write(1);
-                        writer.Write(0x00); // unknown, varies between assets
+                        writer.Write(m_boxedValuesHashes[count]);
                         writer.Write(val.Type);
                         writer.Write((short)val.ClassRef);
+
+                        count++;
                     }
 
                     ebxxSize = (uint)(writer.Position - 8);
@@ -1818,6 +1831,142 @@ namespace FrostySdk.IO
             return EbxReaderV2.std.GetField(index).Value;
         }
 
+        private void ReadStream(Stream stream)
+        {
+            using (var reader = EbxReader.CreateReader(stream))
+            {
+                #region -- Read Data (Skip to EBXX) --
+                reader.Position = 0;
+
+                // RIFF
+                reader.ReadUInt();
+                reader.ReadUInt();
+
+                // EBX
+                reader.ReadUInt(Endian.Big);
+
+                // EBXD
+                reader.ReadUInt(Endian.Big);
+
+                uint ebxdSize = reader.ReadUInt();
+
+                long ebxdOffset = reader.Position;
+
+                reader.Pad(16);
+
+                long dataStartOffset = reader.Position;
+
+                reader.Position = ebxdOffset + ebxdSize;
+
+                reader.Pad(2);
+
+                // EFIX
+                reader.ReadUInt(Endian.Big);
+                uint efixSize = reader.ReadUInt();
+
+                long efixOffset = reader.Position;
+
+                reader.ReadGuid();
+                uint classGuidCount = reader.ReadUInt();
+
+                for (int i = 0; i < classGuidCount; i++)
+                {
+                    reader.ReadGuid();
+                }
+
+                uint signatureCount = reader.ReadUInt();
+
+                for (int i = 0; i < signatureCount; i++)
+                {
+                    reader.ReadBytes(4);
+                }
+
+                reader.ReadUInt();
+                uint dataOffsetCount = reader.ReadUInt();
+
+                for (int i = 0; i < dataOffsetCount; i++)
+                {
+                    uint offset = reader.ReadUInt();
+
+                    long curPos = reader.Position;
+                    reader.Position = dataStartOffset + offset;
+
+                    reader.ReadUShort();
+
+                    reader.Position = curPos;
+                }
+
+                uint pointerOffsetCount = reader.ReadUInt();
+                for (int i = 0; i < pointerOffsetCount; i++)
+                {
+                    reader.ReadUInt();
+                }
+
+                uint resourceRefOffsetCount = reader.ReadUInt();
+                for (int i = 0; i < resourceRefOffsetCount; i++)
+                {
+                    reader.ReadUInt();
+                }
+
+                uint importReferenceCount = reader.ReadUInt();
+                for (int i = 0; i < importReferenceCount; i++)
+                {
+                    reader.ReadGuid();
+                    reader.ReadGuid();
+                }
+
+                uint importOffsetCount = reader.ReadUInt();
+                for (int i = 0; i < importOffsetCount; i++)
+                {
+                    reader.ReadUInt();
+                }
+
+                uint typeInfoOffsetCount = reader.ReadUInt();
+                for (int i = 0; i < typeInfoOffsetCount; i++)
+                {
+                    reader.ReadUInt();
+                }
+
+                reader.ReadUInt();
+                reader.ReadUInt();
+                reader.ReadUInt();
+
+                if (reader.Position != efixOffset + efixSize)
+                {
+                    reader.Position = efixOffset + efixSize;
+                }
+                #endregion
+
+                // EBXX
+                reader.ReadUInt(Endian.Big);
+                reader.ReadUInt();
+                uint arrayCount = reader.ReadUInt();
+                uint boxedValuesCount = reader.ReadUInt();
+
+                for (int i = 0; i < arrayCount; i++)
+                {
+                    reader.ReadUInt();
+                    reader.ReadUInt();
+                    uint hash = reader.ReadUInt();
+                    reader.ReadUShort();
+                    reader.ReadUShort();
+
+                    m_arrayHashes.Add(hash);
+                }
+
+                for (var i = 0; i < boxedValuesCount; i++)
+                {
+                    reader.ReadUInt();
+                    reader.ReadUInt();
+                    uint hash = reader.ReadUInt();
+                    reader.ReadUShort();
+                    reader.ReadUShort();
+
+
+                    m_boxedValuesHashes.Add(hash);
+                }
+            }
+        }
     }
 
 }

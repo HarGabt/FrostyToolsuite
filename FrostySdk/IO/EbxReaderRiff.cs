@@ -187,7 +187,8 @@ namespace FrostySdk.IO
             {
                 uint offset = ReadUInt();
                 uint count = ReadUInt();
-                Position += 6;
+                uint hash = ReadUInt();
+                ushort type = ReadUShort();
                 ushort classRef = ReadUShort();
 
                 arrays.Add
@@ -196,6 +197,7 @@ namespace FrostySdk.IO
                     {
                         Offset = offset,
                         Count = count,
+                        Hash = hash,
                         ClassRef = classRef
                     }
                 );
@@ -214,6 +216,7 @@ namespace FrostySdk.IO
                     new EbxBoxedValue
                     {
                         Offset = offset,
+                        Hash = hash,
                         Type = type,
                         ClassRef = classRef
                     }

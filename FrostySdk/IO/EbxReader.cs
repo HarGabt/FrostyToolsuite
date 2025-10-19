@@ -121,6 +121,7 @@ namespace FrostySdk.IO
         public uint Offset;
         public uint Count;
         public ushort Type;
+        public uint Hash;
     }
 
     public struct EbxBoxedValue
@@ -128,6 +129,7 @@ namespace FrostySdk.IO
         public uint Offset;
         public ushort ClassRef;
         public ushort Type;
+        public uint Hash;
     }
 
     public struct EbxImportReference

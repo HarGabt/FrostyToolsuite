@@ -227,9 +227,11 @@ namespace Frosty.Core
                     flags |= EbxWriteFlags.DoNotSort;
                 }
 
+                Stream stream = App.AssetManager.GetEbxStream(entry, true);
+
                 using (EbxBaseWriter writer = EbxBaseWriter.CreateWriter(new MemoryStream(), flags))
                 {
-                    writer.WriteAsset(App.AssetManager.GetEbx(entry));
+                    writer.WriteAsset(App.AssetManager.GetEbx(entry), stream);
                     using (NativeWriter fileWriter = new NativeWriter(new FileStream(path, FileMode.Create, FileAccess.Write)))
                         fileWriter.Write(writer.ToByteArray());
                 }
