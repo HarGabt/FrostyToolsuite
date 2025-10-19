@@ -1658,7 +1658,7 @@ namespace FrostyModManager
                     for (int i = 0; i < selectedPack.AppliedMods.Count; i++)
                     {
                         FrostyAppliedMod appliedMod = selectedPack.AppliedMods[i];
-                        if (!appliedMod.IsFound && !appliedMod.IsEnabled)
+                        if (!appliedMod.IsFound || !appliedMod.IsEnabled)
                             continue;
 
 
@@ -1767,7 +1767,7 @@ namespace FrostyModManager
             for (int i = 0; i < selectedPack.AppliedMods.Count; i++)
             {
                 FrostyAppliedMod appliedMod = selectedPack.AppliedMods[i];
-                if (!appliedMod.IsFound && !appliedMod.IsEnabled)
+                if (!appliedMod.IsFound || !appliedMod.IsEnabled)
                     continue;
 
                 Binding primaryActionBinding = new Binding("") { Converter = new ModPrimaryActionConverter(), ConverterParameter = appliedMod.Mod.Filename };
