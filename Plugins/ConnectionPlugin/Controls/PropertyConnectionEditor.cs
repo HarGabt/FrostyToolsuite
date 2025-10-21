@@ -200,7 +200,11 @@ namespace ConnectionPlugin.Editors
                         if (field.ValueRef.Type != PointerRefType.Null)
                         {
                             var entry = App.AssetManager.GetEbxEntry(field.ValueRef.External.FileGuid);
-                            retVal += " (" + entry.Type + " '" + entry.Filename + "')";
+                            
+                            if (entry != null)
+                            {
+                                retVal += " (" + entry.Type + " '" + entry.Filename + "')";
+                            }
                         }
                         else
                         {

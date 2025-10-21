@@ -625,7 +625,7 @@ namespace FrostySdk.IO
         internal uint dataLen;
         internal uint boxedValuesCount;
         internal long boxedValuesOffset;
-		internal long arrayPosition;
+        internal long arrayPosition;
         internal long boxedValuesPosition;
 
         internal EbxVersion magic;
