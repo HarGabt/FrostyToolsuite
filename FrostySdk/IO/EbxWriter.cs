@@ -1922,9 +1922,9 @@ namespace FrostySdk.IO
                             m_boxedValueData.Add(WriteBoxedValueRef(value));
                         }
 
-                        Write(index);
-                        Write((ulong)0);
-                        Write((uint)0);
+                        writer.Write(index);
+                        writer.Write((ulong)0);
+                        writer.Write((uint)0);
                     }
                     break;
 
@@ -1952,19 +1952,12 @@ namespace FrostySdk.IO
 
         private int AddClass(string name, int fieldIndex, byte fieldCount, byte alignment, ushort type, ushort size, ushort secondSize, Type classType)
         {
-            //classTypes.Add(new EbxClass()
-            //{
-            //    Name = name,
-            //    FieldIndex = fieldIndex,
-            //    FieldCount = fieldCount,
-            //    Alignment = alignment,
-            //    Type = type,
-            //    Size = size,
-            //    SecondSize = secondSize
-            //});
             EbxClass ebxClass = GetClass(classType);
             classTypes.Add(ebxClass);
-            classGuids.Add(EbxReaderV2.std.GetGuid(ebxClass).Value);
+            
+            Guid classGuid = ebxClass.SecondSize == 1 ? EbxReaderV2.patchStd.GetGuid(ebxClass).Value : EbxReaderV2.std.GetGuid(ebxClass).Value;
+
+            classGuids.Add(classGuid);
 
             //for (int i = 0; i < ebxClass.FieldCount; i++)
             //{
@@ -2032,16 +2025,28 @@ namespace FrostySdk.IO
             EbxClass? classType = null;
             foreach (TypeInfoGuidAttribute attr in objType.GetCustomAttributes<TypeInfoGuidAttribute>())
             {
-                if (classType == null)
+                classType = EbxReaderV2.patchStd.GetClass(attr.Guid);
+
+                if (!classType.HasValue)
                     classType = EbxReaderV2.std.GetClass(attr.Guid);
-                break;
+
+                if (classType.HasValue) 
+                    break;
             }
 
             return classType.Value;
         }
 
-        internal EbxClass GetClass(Guid guid) => EbxReaderV2.std.GetClass(guid).Value;
+        internal EbxClass GetClass(Guid guid)
+        {
+            EbxClass? ebxClass = EbxReaderV2.patchStd.GetClass(guid);
 
-        internal EbxField GetField(EbxClass classType, int index) => EbxReaderV2.std.GetField(index).Value;
+            if (!ebxClass.HasValue)
+                ebxClass = EbxReaderV2.std.GetClass(guid);
+
+            return ebxClass.Value;
+        }
+
+        internal EbxField GetField(EbxClass classType, int index) => classType.SecondSize == 1 ? EbxReaderV2.patchStd.GetField(index).Value : EbxReaderV2.std.GetField(index).Value;
     }
 }
