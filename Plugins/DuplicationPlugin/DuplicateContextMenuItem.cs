@@ -523,9 +523,10 @@ namespace DuplicationPlugin
             }
             else
             {
+
                 using (EbxBaseWriter writer = EbxBaseWriter.CreateWriter(new MemoryStream(), EbxWriteFlags.DoNotSort))
                 {
-                    writer.WriteAsset(asset);
+                    writer.WriteAsset(asset, App.AssetManager.GetAsset(entry));
                     byte[] buf = writer.ToByteArray();
                     using (EbxReader reader = EbxReader.CreateReader(new MemoryStream(buf)))
                         newAsset = reader.ReadAsset<EbxAsset>();

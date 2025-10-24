@@ -1345,7 +1345,7 @@ namespace FrostySdk.Managers
             return null;
         }
 
-        private Stream GetAsset(AssetEntry entry)
+        public Stream GetAsset(AssetEntry entry)
         {
             // return modified data
             if (entry.ModifiedEntry != null && entry.ModifiedEntry.Data != null)

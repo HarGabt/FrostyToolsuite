@@ -121,6 +121,7 @@ namespace FrostySdk.IO
         public uint Offset;
         public uint Count;
         public ushort Type;
+        public uint Hash;
     }
 
     public struct EbxBoxedValue
@@ -128,6 +129,7 @@ namespace FrostySdk.IO
         public uint Offset;
         public ushort ClassRef;
         public ushort Type;
+        public uint Hash;
     }
 
     public struct EbxImportReference
@@ -623,6 +625,8 @@ namespace FrostySdk.IO
         internal uint dataLen;
         internal uint boxedValuesCount;
         internal long boxedValuesOffset;
+        internal long arrayPosition;
+        internal long boxedValuesPosition;
 
         internal EbxVersion magic;
         internal bool isValid = false;
@@ -1243,6 +1247,46 @@ namespace FrostySdk.IO
             return hash;
         }
 
+        internal List<uint> GetArrayHashes(NativeReader reader)
+        {
+            List<uint> hashes = new List<uint>();
+            
+            reader.Position = arrayPosition;
+
+            for (int i = 0; i < arrayCount; i++)
+            {
+                reader.ReadUInt();
+                reader.ReadUInt();
+                uint hash = reader.ReadUInt();
+                reader.ReadUShort();
+                reader.ReadUShort();
+
+                hashes.Add(hash);
+            }
+            
+            return hashes;
+        }
+        
+        internal List<uint> GetBoxedValuesHashes(NativeReader reader)
+        {
+            List<uint> hashes = new List<uint>();
+            
+            reader.Position = boxedValuesPosition;
+
+            for (int i = 0; i < boxedValuesCount; i++)
+            {
+                reader.ReadUInt();
+                reader.ReadUInt();
+                uint hash = reader.ReadUInt();
+                reader.ReadUShort();
+                reader.ReadUShort();
+
+                hashes.Add(hash);
+            }
+            
+            return hashes;
+        }
+		
         internal void PushXmlOffset(string suffix, bool clear = false)
         {
             if (clear)
