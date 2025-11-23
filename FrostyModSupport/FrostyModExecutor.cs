@@ -2139,7 +2139,7 @@ namespace Frosty.ModSupport
                 }
 
                 // swbf2, bfv, sws
-                if (ProfilesLibrary.IsLoaded(ProfileVersion.StarWarsBattlefrontII, ProfileVersion.Battlefield5, ProfileVersion.StarWarsSquadrons))
+                if (ProfilesLibrary.IsLoaded(ProfileVersion.StarWarsBattlefrontII, ProfileVersion.Battlefield5, ProfileVersion.StarWarsSquadrons, ProfileVersion.Battlefield6))
                 {
                     // copy from old data to new data
                     CopyFileIfRequired(m_fs.BasePath + "Data/chunkmanifest", modDataPath + "Data/chunkmanifest");
@@ -2150,6 +2150,7 @@ namespace Frosty.ModSupport
                     else
                     {
                         CopyFileIfRequired(Path.Combine(m_fs.BasePath, "Data", "initfs_win32"), Path.Combine(modDataPath, "Data", "initfs_win32"), false);
+                        CopyFileIfRequired(Path.Combine(m_fs.BasePath, "Data", "SP_initfs_win32"), Path.Combine(modDataPath, "Data", "SP_initfs_win32"), false);
                     }
                 }
 
