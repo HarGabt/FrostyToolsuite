@@ -1218,10 +1218,10 @@ namespace FrostyCmd
 
         private void CreateBF6Profile()
         {
-            string key = "bf6event";
+            string key = "bf6";
             using (NativeWriter writer = new NativeWriter(new MemoryStream()))
             {
-                writer.WriteObfuscatedString("Battlefield™ 6 Open Beta");
+                writer.WriteObfuscatedString("Battlefield™ 6");
                 writer.Write((int)ProfileVersion.Battlefield6);
                 writer.WriteObfuscatedString("bf6");
                 writer.WriteObfuscatedString(typeof(NullDeobfuscator).Name);
