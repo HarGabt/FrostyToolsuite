@@ -4,10 +4,10 @@ using Frosty.Hash;
 using FrostySdk;
 using FrostySdk.IO;
 using FrostySdk.Managers;
+using FrostySdk.Managers.Entries;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using FrostySdk.Managers.Entries;
 
 namespace Frosty.Core.IO
 {
@@ -122,7 +122,7 @@ namespace Frosty.Core.IO
 
                     using (EbxBaseWriter ebxWriter = EbxBaseWriter.CreateWriter(new MemoryStream(), flags))
                     {
-                        ebxWriter.WriteAsset(entry.ModifiedEntry.DataObject as EbxAsset);
+                        ebxWriter.WriteAsset(entry.ModifiedEntry.DataObject as EbxAsset, App.AssetManager.GetAsset(entry));
 
                         size = ebxWriter.Length;
                         data = Utils.CompressFile(ebxWriter.ToByteArray(), compressionOverride: compressType);

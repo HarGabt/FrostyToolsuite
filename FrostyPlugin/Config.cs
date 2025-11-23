@@ -59,14 +59,13 @@ namespace Frosty.Core
                 }
             }
 
-            internal void Rename(string option, string newoption, ConfigScope scope = ConfigScope.Game) {
-                if (scope == ConfigScope.Pack) {
-                    if (Packs.ContainsKey(option)) {
-                        Packs.TryGetValue(option, out var value);
-                        Packs.Add(newoption, value);
-                        Packs.Remove(option);
-                    }
-                        
+            internal void Rename(string option, string newOption, ConfigScope scope = ConfigScope.Game)
+            {
+                if (scope == ConfigScope.Pack && Packs.ContainsKey(option))
+                {
+                    Packs.TryGetValue(option, out var value);
+                    Packs.Add(newOption, value);
+                    Packs.Remove(option);
                 }
             }
 
@@ -234,11 +233,15 @@ namespace Frosty.Core
 
             if (retrievedValue != null)
             {
+                if (retrievedValue is String s)
+                {
+                    retrievedValue = !string.IsNullOrEmpty(s) ? retrievedValue : null;
+                }
                 // check if the object is or derives from a JToken (i.e raw JSON objects)
-                if (retrievedValue is JToken)
+                else if (retrievedValue is JToken t)
                 {
                     // utilize the JToken converter rather than the convert class' converter
-                    retrievedValue = ((JToken)retrievedValue).ToObject(typeof(T));
+                    retrievedValue = t.ToObject(typeof(T));
                 }
                 else
                 {
@@ -248,7 +251,7 @@ namespace Frosty.Core
                 }
             }
 
-            return (T)(retrievedValue != null ? retrievedValue : defaultValue);
+            return (T)(retrievedValue ?? defaultValue);
         }
 
         // indexer

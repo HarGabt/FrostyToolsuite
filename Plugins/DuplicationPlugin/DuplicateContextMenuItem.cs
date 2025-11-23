@@ -484,6 +484,28 @@ namespace DuplicationPlugin
         }
     }
 
+    // KrrKs' code made for MovieTextureAsset, but I just renamed it to MovieTexture2Asset, hope it works
+    public class MovieTexture2Extension : DuplicateAssetExtension
+    {
+        public override string AssetType => "MovieTexture2Asset";
+
+        public override EbxAssetEntry DuplicateAsset(EbxAssetEntry entry, string newName, bool createNew, Type newType)
+        {
+            EbxAssetEntry refEntry = base.DuplicateAsset(entry, newName, createNew, newType);
+
+            EbxAsset refAsset = App.AssetManager.GetEbx(refEntry);
+            dynamic refRoot = refAsset.RootObject;
+
+            ChunkAssetEntry movieChunk = App.AssetManager.GetChunkEntry(refRoot.ChunkGuid);
+            ChunkAssetEntry newmovieChunk = DuplicateChunk(movieChunk);
+            refRoot.ChunkGuid = newmovieChunk.Id;
+
+            App.AssetManager.ModifyEbx(refEntry.Name, refAsset);
+
+            return refEntry;
+        }
+    }
+
     public class DuplicateAssetExtension
     {
         public virtual string AssetType => null;
@@ -501,9 +523,10 @@ namespace DuplicationPlugin
             }
             else
             {
+
                 using (EbxBaseWriter writer = EbxBaseWriter.CreateWriter(new MemoryStream(), EbxWriteFlags.DoNotSort))
                 {
-                    writer.WriteAsset(asset);
+                    writer.WriteAsset(asset, App.AssetManager.GetAsset(entry));
                     byte[] buf = writer.ToByteArray();
                     using (EbxReader reader = EbxReader.CreateReader(new MemoryStream(buf)))
                         newAsset = reader.ReadAsset<EbxAsset>();

@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using FrostySdk.Managers.Entries;
 
 namespace FrostySdk.IO
 {
@@ -34,6 +35,8 @@ namespace FrostySdk.IO
         private byte[] m_data = null;
         private List<EbxInstance> m_instances = new List<EbxInstance>();
         private List<EbxArray> m_arrays = new List<EbxArray>();
+        private List<uint> m_arrayHashes = new List<uint>();
+        private List<uint> m_boxedValuesHashes = new List<uint>();
         private List<byte[]> m_arrayData = new List<byte[]>();
         private List<uint> m_typeInfoOffsets = new List<uint>();
         private List<uint> m_arrayFieldOffsets = new List<uint>();
@@ -54,8 +57,16 @@ namespace FrostySdk.IO
             m_flags = inFlags;
         }
 
-        public override void WriteAsset(EbxAsset asset)
+        public override void WriteAsset(EbxAsset asset, Stream stream = null)
         {
+            if (stream != null)
+            {
+                using (var reader = EbxReader.CreateReader(stream))
+                {
+                    m_arrayHashes = reader.GetArrayHashes(reader);
+                    m_boxedValuesHashes = reader.GetBoxedValuesHashes(reader);
+                }
+            }
             if (m_flags.HasFlag(EbxWriteFlags.DoNotSort))
             {
                 foreach (object obj in asset.Objects)
@@ -237,23 +248,41 @@ namespace FrostySdk.IO
                     writer.Write(m_boxedValues.Count);
 
                     m_arrays.Sort((EbxArray a, EbxArray b) => a.Offset.CompareTo(b.Offset));
-                    foreach (EbxArray arr in m_arrays)
+                    for (int i = 0; i < m_arrays.Count; i++)
                     {
-                        writer.Write(arr.Offset);
-                        writer.Write(arr.Count);
-                        writer.Write(0x00); // unknown, varies between assets
-                        writer.Write((ushort)arr.Type);
-                        writer.Write((short)arr.ClassRef);
+                        writer.Write(m_arrays[i].Offset);
+                        writer.Write(m_arrays[i].Count);
+
+                        if (m_arrayHashes.Count == m_arrays.Count)
+                        {
+                            writer.Write(m_arrayHashes[i]);
+                        }
+                        else
+                        {
+                            writer.Write(0x00);
+                        }
+
+                        writer.Write(m_arrays[i].Type);
+                        writer.Write((short)m_arrays[i].ClassRef);
                     }
 
                     m_boxedValues.Sort((EbxBoxedValue a, EbxBoxedValue b) => a.Offset.CompareTo(b.Offset));
-                    foreach (EbxBoxedValue val in m_boxedValues)
+                    for (int i = 0; i < m_boxedValues.Count; i++)
                     {
-                        writer.Write(val.Offset);
+                        writer.Write(m_boxedValues[i].Offset);
                         writer.Write(1);
-                        writer.Write(0x00); // unknown, varies between assets
-                        writer.Write(val.Type);
-                        writer.Write((short)val.ClassRef);
+						
+                        if (m_boxedValuesHashes.Count == m_boxedValues.Count)
+                        {
+                            writer.Write(m_boxedValuesHashes[i]);
+                        }
+                        else
+                        {
+                            writer.Write(0x00);
+                        }
+
+                        writer.Write(m_boxedValues[i].Type);
+                        writer.Write((short)m_boxedValues[i].ClassRef);
                     }
 
                     ebxxSize = (uint)(writer.Position - 8);
@@ -1714,8 +1743,13 @@ namespace FrostySdk.IO
 
             if (addSignature)
             {
-                Guid tiGuid = classType.GetCustomAttribute<TypeInfoGuidAttribute>().Guid;
-                m_classSignatures.Add(BitConverter.ToUInt32(tiGuid.ToByteArray(), 12));
+                foreach (TypeInfoGuidAttribute attr in classType.GetCustomAttributes<TypeInfoGuidAttribute>())
+                {
+                    if (m_classGuids.Count != m_classSignatures.Count)
+                    {
+                        m_classSignatures.Add(BitConverter.ToUInt32(attr.Guid.ToByteArray(), 12));
+                    }
+                }
             }
 
             AddTypeName(name);
@@ -1812,7 +1846,6 @@ namespace FrostySdk.IO
             }
             return EbxReaderV2.std.GetField(index).Value;
         }
-
     }
 
 }

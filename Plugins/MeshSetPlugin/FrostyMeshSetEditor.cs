@@ -1516,7 +1516,10 @@ namespace MeshSetPlugin
                         // collect all additional meshes added to the viewport
                         foreach (var previewMesh in m_previewSettings.PreviewMeshes)
                         {
-                            meshSets.Add(m_screen.GetMesh(previewMesh.MeshId));
+                            if (previewMesh.MeshId != -1)
+                            {
+                                meshSets.Add(m_screen.GetMesh(previewMesh.MeshId));
+                            }
                         }
                     }
 

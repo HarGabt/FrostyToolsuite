@@ -1,8 +1,8 @@
-﻿using System;
+﻿using Frosty.Core.Controls;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
-using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
@@ -49,7 +49,7 @@ namespace BiowareLocalizationPlugin.Controls
                     sb.AppendLine(selected.ToString());
                 }
 
-                Clipboard.SetText(sb.ToString());
+                FrostyClipboard.Current.SetText(sb.ToString());
             }
         }
     }

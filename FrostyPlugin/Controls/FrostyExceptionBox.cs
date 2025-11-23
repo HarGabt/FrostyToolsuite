@@ -36,13 +36,11 @@ namespace Frosty.Core.Controls
 
             if (buttonName == "PART_CopyExceptionButton")
             {
-                Clipboard.SetText(parentWin.ExceptionText);
-                Clipboard.Flush();
+                FrostyClipboard.Current.SetText(parentWin.ExceptionText);
             }
             else if (buttonName == "PART_CopyLogButton")
             {
-                Clipboard.SetText(parentWin.LogText);
-                Clipboard.Flush();
+                FrostyClipboard.Current.SetText(parentWin.LogText);
             }
             else if (buttonName == "PART_OpenFolder")
             {

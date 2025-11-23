@@ -345,6 +345,19 @@
                 <Setter Property="Background" Value="{StaticResource WindowBackground}"/>
                 <Setter Property="Foreground" Value="{StaticResource FontColor}"/>
                 <Setter Property="CaretBrush" Value="{StaticResource FontColor}"/>
+                <Setter Property="ContextMenu">
+                    <Setter.Value>
+                        <ContextMenu>
+                            <MenuItem Header="Cut"
+                                      InputGestureText="Ctrl+X"
+                                      Command="ApplicationCommands.Cut" />
+                            <MenuItem Header="Copy"
+                                      Command="ApplicationCommands.Copy" />
+                            <MenuItem Header="Paste"
+                                      Command="ApplicationCommands.Paste" />
+                        </ContextMenu>
+                    </Setter.Value>
+                </Setter>
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type TextBox}">

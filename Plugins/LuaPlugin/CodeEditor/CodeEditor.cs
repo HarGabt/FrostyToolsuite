@@ -1,4 +1,5 @@
 ﻿using Frosty.Core;
+using Frosty.Core.Controls;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -395,7 +396,7 @@ namespace LuaPlugin.CodeEditor
                 // Cut selection
                 int imin = SelectionStart.Index <= SelectionEnd.Index ? SelectionStart.Index : SelectionEnd.Index;
                 int imax = SelectionStart.Index <= SelectionEnd.Index ? SelectionEnd.Index : SelectionStart.Index;
-                Clipboard.SetText(Text.Substring(imin, imax - imin));
+                FrostyClipboard.Current.SetText(Text.Substring(imin, imax - imin));
                 ModifyText(imin, imax, "");
                 CaretBlink = true;
                 if (IndentOnEnter)
@@ -407,7 +408,7 @@ namespace LuaPlugin.CodeEditor
                 // Copy selection
                 int imin = SelectionStart.Index <= SelectionEnd.Index ? SelectionStart.Index : SelectionEnd.Index;
                 int imax = SelectionStart.Index <= SelectionEnd.Index ? SelectionEnd.Index : SelectionStart.Index;
-                Clipboard.SetText(Text.Substring(imin, imax - imin));
+                FrostyClipboard.Current.SetText(Text.Substring(imin, imax - imin));
                 CaretBlink = true;
                 InvalidateVisual();
             }

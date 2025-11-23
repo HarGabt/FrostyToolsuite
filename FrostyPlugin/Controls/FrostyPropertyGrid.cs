@@ -1347,7 +1347,7 @@ namespace Frosty.Core.Controls
                 guidToCopy = obj.GetInstanceGuid().ToString();
             }
 
-            Clipboard.SetText(guidToCopy);
+            FrostyClipboard.Current.SetText(guidToCopy);
         }
 
         /// <summary>

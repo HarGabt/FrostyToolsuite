@@ -182,12 +182,15 @@ namespace FrostySdk.IO
             long ebxxOffset = Position;
             arrayCount = ReadUInt();
             boxedValuesCount = ReadUInt();
+			
+            arrayPosition = Position;
 
             for (int i = 0; i < arrayCount; i++)
             {
                 uint offset = ReadUInt();
                 uint count = ReadUInt();
-                Position += 6;
+                uint hash = ReadUInt();
+                ushort type = ReadUShort();
                 ushort classRef = ReadUShort();
 
                 arrays.Add
@@ -196,10 +199,13 @@ namespace FrostySdk.IO
                     {
                         Offset = offset,
                         Count = count,
+                        Hash = hash,
                         ClassRef = classRef
                     }
                 );
             }
+			
+            boxedValuesPosition = Position;
 
             for (var i = 0; i < boxedValuesCount; i++)
             {
@@ -214,6 +220,7 @@ namespace FrostySdk.IO
                     new EbxBoxedValue
                     {
                         Offset = offset,
+                        Hash = hash,
                         Type = type,
                         ClassRef = classRef
                     }
