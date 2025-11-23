@@ -1242,12 +1242,13 @@ namespace Frosty.ModSupport
                 ProfileVersion.Battlefield4,
                 ProfileVersion.NeedForSpeed,
                 ProfileVersion.PlantsVsZombiesGardenWarfare2,
-                ProfileVersion.NeedForSpeedRivals))
+                ProfileVersion.NeedForSpeedRivals,
+                ProfileVersion.Battlefield6))
             {
-                // old fb3 games use an update folder
+                // old fb3 games and new Frostbite games like BF6 use an update folder
                 m_patchPath = "Update\\Patch\\Data";
             }
-            else if (ProfilesLibrary.IsLoaded(ProfileVersion.Battlefield5, ProfileVersion.NeedForSpeedUnbound, ProfileVersion.DeadSpace, ProfileVersion.Battlefield6))
+            else if (ProfilesLibrary.IsLoaded(ProfileVersion.Battlefield5, ProfileVersion.NeedForSpeedUnbound, ProfileVersion.DeadSpace))
             {
                 // bfv doesnt have a patch directory
                 m_patchPath = "Data";
@@ -1440,7 +1441,7 @@ namespace Frosty.ModSupport
                                 Directory.CreateDirectory(modDataPath + "Data");
                             cmdArgs.Add(new SymLinkStruct(modDataPath + "Data/Win32", m_fs.BasePath + "Data/Win32", true));
                         }
-                        else if (ProfilesLibrary.IsLoaded(ProfileVersion.Battlefield5, ProfileVersion.NeedForSpeedUnbound, ProfileVersion.DeadSpace, ProfileVersion.Battlefield6))
+                        else if (ProfilesLibrary.IsLoaded(ProfileVersion.Battlefield5, ProfileVersion.NeedForSpeedUnbound, ProfileVersion.DeadSpace))
                         {
                             // bfv and unbound dont have a patch directory so we need to rebuild the data folder structure instead
                             if (!Directory.Exists(modDataPath + "Data"))
@@ -2146,6 +2147,7 @@ namespace Frosty.ModSupport
                     if (m_modifiedFs.Count > 0)
                     {
                         m_fs.WriteInitFs(m_fs.BasePath + "Data/initfs_Win32", modDataPath + "Data/initfs_Win32", m_modifiedFs);
+                        m_fs.WriteInitFs(m_fs.BasePath + "Data/SP_initfs_Win32", modDataPath + "Data/SP_initfs_Win32", m_modifiedFs);
                     }
                     else
                     {
