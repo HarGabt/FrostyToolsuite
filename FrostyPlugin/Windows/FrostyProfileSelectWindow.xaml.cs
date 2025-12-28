@@ -1,22 +1,23 @@
+using Frosty.Controls;
+using Frosty.Core.Controls;
+using FrostySdk;
+using Microsoft.Win32;
+using SharpDX;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Threading;
-using Frosty.Controls;
-using Frosty.Core.Controls;
-using FrostySdk;
-using Microsoft.Win32;
-using SharpDX;
 
 namespace Frosty.Core.Windows
 {
     public partial class FrostyProfileSelectWindow
     {
-        private  List<FrostyConfiguration> configurations = new List<FrostyConfiguration>();
+        private ObservableCollection<FrostyConfiguration> configurations = new ObservableCollection<FrostyConfiguration>();
         private string selectedProfileName;
         
         public FrostyProfileSelectWindow()
@@ -156,14 +157,17 @@ namespace Frosty.Core.Windows
 
                         if (ProfilesLibrary.HasProfile(nameWithoutExt))
                         {
-                            foreach (FrostyConfiguration config in configurations)
+                            Application.Current.Dispatcher.Invoke(() =>
                             {
-                                if (config.ProfileName == fi.Name.Remove(fi.Name.Length - 4))
-                                    return;
-                            }
+                                foreach (FrostyConfiguration config in configurations)
+                                {
+                                    if (config.ProfileName == fi.Name.Remove(fi.Name.Length - 4))
+                                        return;
+                                }
 
-                            Config.AddGame(fi.Name.Remove(fi.Name.Length - 4), fi.DirectoryName);
-                            configurations.Add(new FrostyConfiguration(fi.Name.Remove(fi.Name.Length - 4)));
+                                Config.AddGame(fi.Name.Remove(fi.Name.Length - 4), fi.DirectoryName);
+                                configurations.Add(new FrostyConfiguration(fi.Name.Remove(fi.Name.Length - 4)));
+                            });
 
                             totalCount++;
                         }

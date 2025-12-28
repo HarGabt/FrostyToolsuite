@@ -73,7 +73,13 @@ namespace Frosty.Core.Windows
         [Description("Disable the functionality to check if a process is already running when trying to launch")]
         [EbxFieldMeta(EbxFieldType.Boolean)]
         public bool DisableLaunchProcessCheck { get; set; } = false;
-        
+
+        [Category("General")]
+        [DisplayName("Launch Game Using Steam Protocol")]
+        [Description("An alternate launch method that uses the Steam Protocol for launching the game with mods")]
+        [EbxFieldMeta(EbxFieldType.Boolean)]
+        public bool UseSteamProtocol { get; set; } = false;
+
         public override void Load()
         {
             base.Load();
@@ -88,6 +94,7 @@ namespace Frosty.Core.Windows
             MaxCasFileSize.SelectedIndex = sizes.IndexOf(Config.Get<string>("MaxCasFileSize", "512MB"));
 
             DisableLaunchProcessCheck = Config.Get<bool>("DisableLaunchProcessCheck", false);
+            UseSteamProtocol = Config.Get<bool>("UseSteamProtocol", false);
         }
 
         public override void Save()
@@ -101,6 +108,7 @@ namespace Frosty.Core.Windows
             Config.Add("MaxCasFileSize", MaxCasFileSize.SelectedName);
 
             Config.Add("DisableLaunchProcessCheck", DisableLaunchProcessCheck);
+            Config.Add("UseSteamProtocol", UseSteamProtocol);
         }
     }
     
