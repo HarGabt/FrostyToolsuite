@@ -1926,6 +1926,7 @@ namespace MeshSetPlugin.Resources
         private uint m_bonePartCount;
         private uint m_boneCount;
         private List<ushort> m_boneIndices = new List<ushort>();
+        private List<LinearTransform> m_boneTransforms = new List<LinearTransform>();
         private List<AxisAlignedBox> m_boneBoundingBoxes = new List<AxisAlignedBox>();
         private List<AxisAlignedBox> m_partBoundingBoxes = new List<AxisAlignedBox>();
         private List<LinearTransform> m_partTransforms = new List<LinearTransform>();
@@ -2348,6 +2349,10 @@ namespace MeshSetPlugin.Resources
             {
                 if (m_meshType == MeshType.MeshType_Skinned)
                 {
+                    if (m_boneTransforms.Count != 0)
+                    {
+                        meshContainer.AddRelocPtr("BONETRANSFORMS", m_boneTransforms);
+                    }
                     if (m_boneIndices.Count != 0)
                     {
                         meshContainer.AddRelocPtr("BONEINDICES", m_boneIndices);
@@ -2698,6 +2703,16 @@ namespace MeshSetPlugin.Resources
             {
                 if (m_meshType == MeshType.MeshType_Skinned)
                 {
+                    if (m_boneTransforms.Count != 0)
+                    {
+                        meshContainer.AddOffset("BONETRANSFORMS", m_boneTransforms, writer);
+                        foreach (var idx in m_boneTransforms)
+                        {
+                            writer.Write(idx);
+                        }
+
+                        writer.WritePadding(16);
+                    }
                     if (m_boneIndices.Count != 0)
                     {
                         meshContainer.AddOffset("BONEINDICES", m_boneIndices, writer);
