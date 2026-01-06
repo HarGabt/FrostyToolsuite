@@ -558,9 +558,15 @@ namespace DuplicationPlugin
 
             EbxAssetEntry newEntry = App.AssetManager.AddEbx(newName, newAsset);
 
+            MessageBoxResult result = FrostyMessageBox.Show("Add the duplicated asset to the bundles of the original asset?", "Duplicate", MessageBoxButton.YesNo);
+            if (result == MessageBoxResult.Yes)
+            {
                 newEntry.AddedBundles.AddRange(entry.EnumerateBundles());
                 dupeResult = true;
+            }
             
+            // previous behaviour would result in always adding the duplicate asset to them bundles of the original asset
+
             newEntry.ModifiedEntry.DependentAssets.AddRange(newAsset.Dependencies);
 
             return newEntry;
