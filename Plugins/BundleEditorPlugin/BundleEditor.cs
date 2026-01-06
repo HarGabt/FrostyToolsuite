@@ -1,7 +1,9 @@
 ﻿using Frosty.Core;
 using Frosty.Core.Controls;
+using FrostySdk;
 using FrostySdk.IO;
 using FrostySdk.Managers;
+using FrostySdk.Managers.Entries;
 using FrostySdk.Resources;
 using MeshSetPlugin.Resources;
 using System;
@@ -11,8 +13,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using FrostySdk.Managers.Entries;
-using FrostySdk;
+using static BundleEditPlugin.StrandHairBindAssetExtension;
 
 namespace BundleEditPlugin
 {
@@ -103,6 +104,111 @@ namespace BundleEditPlugin
             dynamic clothColliderSetAsset = asset.RootObject;
 
             ResAssetEntry resEntry = App.AssetManager.GetResEntry(clothColliderSetAsset.ClothColliderSetAssetResource);
+            resEntry.AddedBundles.Remove(App.AssetManager.GetBundleId(bentry));
+
+            entry.LinkAsset(resEntry);
+        }
+    }
+
+    // J-Lyt | Remove DefaultGeometryModifier from Bundle
+    public class RemoveDefaultGeometryModifierExtension : RemoveFromBundleExtension
+    {
+        public override string AssetType => "DefaultGeometryModifier";
+        public override void RemoveFromBundle(EbxAssetEntry entry, BundleEntry bentry)
+        {
+            base.RemoveFromBundle(entry, bentry);
+
+            EbxAsset asset = App.AssetManager.GetEbx(entry);
+            dynamic defaultGeometryModifierAsset = asset.RootObject;
+
+            ResAssetEntry resEntry = App.AssetManager.GetResEntry(defaultGeometryModifierAsset.SourceSpaceResource);
+            resEntry.AddedBundles.Remove(App.AssetManager.GetBundleId(bentry));
+
+           entry.LinkAsset(resEntry);
+        }
+    }
+
+    // J-Lyt | Remove DynamicMorphHeadData from Bundle
+    public class RemoveDynamicMorphHeadDataExtension : RemoveFromBundleExtension
+    {
+        public override string AssetType => "DynamicMorphHeadData";
+        public override void RemoveFromBundle(EbxAssetEntry entry, BundleEntry bentry)
+        {
+            base.RemoveFromBundle(entry, bentry);
+
+            EbxAsset asset = App.AssetManager.GetEbx(entry);
+            dynamic dynamicMorphHeadDataAsset = asset.RootObject;
+
+            ResAssetEntry resEntry = App.AssetManager.GetResEntry(dynamicMorphHeadDataAsset.MeshWrapRemappingResource);
+            resEntry.AddedBundles.Remove(App.AssetManager.GetBundleId(bentry));
+
+            entry.LinkAsset(resEntry);
+        }
+    }
+
+  // J-Lyt | Remove MeshComputeAsset from Bundle
+    public class RemoveMeshComputeExtension : RemoveFromBundleExtension
+    {
+        public override string AssetType => "MeshComputeAsset";
+      public override void RemoveFromBundle(EbxAssetEntry entry, BundleEntry bentry)
+        {
+            base.RemoveFromBundle(entry, bentry);
+
+            dynamic runtimeNodesEntry = App.AssetManager.GetEbx(entry).RootObject;
+            dynamic runtimeNodes = runtimeNodesEntry.RuntimeNodes;
+
+            if (runtimeNodes.Count > 0)
+            {
+              for (int i = 0; i < runtimeNodes.Count; i++)
+                {
+                    var runtimeNode = runtimeNodes[i];
+
+                    // Skip if NodeResource is 0
+                    if (runtimeNode.NodeResource == 0)
+                        continue;
+
+                    ResAssetEntry resEntry = App.AssetManager.GetResEntry(runtimeNode.NodeResource);
+                    resEntry.AddedBundles.Remove(App.AssetManager.GetBundleId(bentry));
+                    entry.LinkAsset(resEntry);
+                }
+          }
+        }
+    }
+
+   // J-Lyt | Remove StrandHairAsset from Bundle
+    public class RemoveStrandHairAssetExtension : RemoveFromBundleExtension
+    {
+        public override string AssetType => "StrandHairAsset";
+        public override void RemoveFromBundle(EbxAssetEntry entry, BundleEntry bentry)
+        {
+            base.RemoveFromBundle(entry, bentry);
+
+            EbxAsset asset = App.AssetManager.GetEbx(entry);
+           dynamic strandHairAsset = asset.RootObject;
+
+            ResAssetEntry resEntry = App.AssetManager.GetResEntry(strandHairAsset.StrandHairAssetResource);
+            resEntry.AddedBundles.Remove(App.AssetManager.GetBundleId(bentry));
+
+            ResAssetEntry resEntry2 = App.AssetManager.GetResEntry(strandHairAsset.StrandHairSetResource);
+            resEntry2.AddedBundles.Remove(App.AssetManager.GetBundleId(bentry));
+
+            entry.LinkAsset(resEntry);
+            entry.LinkAsset(resEntry2);
+        }
+    }
+
+    // J-Lyt | Remove StrandHairBindAsset from Bundle
+    public class RemoveStrandHairBindAssetExtension : RemoveFromBundleExtension
+    {
+       public override string AssetType => "StrandHairBindAsset";
+        public override void RemoveFromBundle(EbxAssetEntry entry, BundleEntry bentry)
+        {
+            base.RemoveFromBundle(entry, bentry);
+
+            EbxAsset asset = App.AssetManager.GetEbx(entry);
+            dynamic strandHairBindAsset = asset.RootObject;
+
+           ResAssetEntry resEntry = App.AssetManager.GetResEntry(strandHairBindAsset.StrandHairBindAssetResource);
             resEntry.AddedBundles.Remove(App.AssetManager.GetBundleId(bentry));
 
             entry.LinkAsset(resEntry);
@@ -362,6 +468,45 @@ namespace BundleEditPlugin
         }
     }
 
+    // J-Lyt | Add StrandHairAsset to Bundle
+
+    public class StrandHairAssetExtension : AddToBundleExtension
+    {
+        public override string AssetType => "StrandHairAsset";
+        public override void AddToBundle(EbxAssetEntry entry, BundleEntry bentry)
+        {
+            base.AddToBundle(entry, bentry);
+
+            EbxAsset asset = App.AssetManager.GetEbx(entry);
+            dynamic strandHairAsset = asset.RootObject;
+
+            ResAssetEntry resEntry = App.AssetManager.GetResEntry(strandHairAsset.StrandHairAssetResource);
+            resEntry.AddToBundle(App.AssetManager.GetBundleId(bentry));
+
+            ResAssetEntry resEntry2 = App.AssetManager.GetResEntry(strandHairAsset.StrandHairSetResource);
+          resEntry2.AddToBundle(App.AssetManager.GetBundleId(bentry));
+
+            entry.LinkAsset(resEntry);
+            entry.LinkAsset(resEntry2);
+        }
+    }
+
+   // J-Lyt | Add StrandHairBindAsset to Bundle
+    public class StrandHairBindAssetExtension : AddToBundleExtension
+    {
+        public override string AssetType => "StrandHairBindAsset";
+        public override void AddToBundle(EbxAssetEntry entry, BundleEntry bentry)
+      {
+            base.AddToBundle(entry, bentry);
+
+            EbxAsset asset = App.AssetManager.GetEbx(entry);
+            dynamic strandHairBindAsset = asset.RootObject;
+
+            ResAssetEntry resEntry = App.AssetManager.GetResEntry(strandHairBindAsset.StrandHairBindAssetResource);
+            resEntry.AddToBundle(App.AssetManager.GetBundleId(bentry));
+
+          entry.LinkAsset(resEntry);
+        }
 
     public class SvgImageExtension : AddToBundleExtension
     {
