@@ -147,6 +147,7 @@ namespace Frosty.ModSupport
             public string Category { get; set; }
             public string Link { get; set; }
             public string FileName { get; set; }
+            public string Hash { get; set; }
 
 
             public override bool Equals(object obj)
@@ -1340,7 +1341,25 @@ namespace Frosty.ModSupport
 
                 // check if the mod data needs recreating
                 // ie. mod change or patch
-                if (!IsSamePatch(modDataPath + m_patchPath) || !oldModInfoList.SequenceEqual(currentModInfoList))
+                bool hashMatch = true;
+
+                if (oldModInfoList.SequenceEqual(currentModInfoList))
+                {
+                    for (int i = 0; i < oldModInfoList.Count; i++)
+                    {
+                        if (oldModInfoList[i].Hash != currentModInfoList[i].Hash)
+                        {
+                            hashMatch = false;
+                            break;
+                        }
+                   }
+                }
+                else
+                {
+                    hashMatch = false;
+                }
+
+                if (!IsSamePatch(modDataPath + m_patchPath) || !hashMatch)
                 {
                     needsModding = true;
                 }
@@ -2429,6 +2448,13 @@ namespace Frosty.ModSupport
             }
         }
 
+        private string GenerateModInfoHash(string filename)
+        {
+            FileInfo fi = new FileInfo(filename);
+
+            return $"{fi.Length}{fi.LastWriteTimeUtc:ddMMyyyyHHmmss}";
+        }
+
         private List<ModInfo> GenerateModInfoList(string[] modPaths, string rootPath)
         {
             List<ModInfo> modInfoList = new List<ModInfo>();
@@ -2447,7 +2473,8 @@ namespace Frosty.ModSupport
                         Version = fmod.ModDetails.Version,
                         Category = fmod.ModDetails.Category,
                         Link = fmod.ModDetails.Link,
-                        FileName = path
+                        FileName = path,
+                        Hash = GenerateModInfoHash(fi.FullName),
                     };
                 }
                 else
@@ -2461,7 +2488,8 @@ namespace Frosty.ModSupport
                             Version = fcollection.ModDetails.Version,
                             Category = fcollection.ModDetails.Category,
                             Link = fcollection.ModDetails.Link,
-                            FileName = path
+                            FileName = path,
+                            Hash = GenerateModInfoHash(fi.FullName),
                         };
                     }
                     else
