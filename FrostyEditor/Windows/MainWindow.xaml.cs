@@ -275,9 +275,13 @@ namespace FrostyEditor.Windows
                 {
                     AssetEntry ebx = App.AssetManager.GetEbxEntry(tabId) ?? App.AssetManager.GetCustomAssetEntry("legacy", tabId);
 
-                    state = "Viewing " + ebx.Filename;
-                    if (ebx.IsDirty && ProfilesLibrary.EnableExecution)
-                        state = "Editing " + ebx.Filename;
+                    if (ebx != null)
+                    {
+                        state = "Viewing: " + ebx.Filename;
+
+                        if (ebx.IsDirty && ProfilesLibrary.EnableExecution)
+                            state = "Editing: " + ebx.Filename;
+                    }
                 }
                 else
                     state = header;
