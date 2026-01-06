@@ -507,6 +507,7 @@ namespace BundleEditPlugin
 
           entry.LinkAsset(resEntry);
         }
+    }
 
     public class SvgImageExtension : AddToBundleExtension
     {
