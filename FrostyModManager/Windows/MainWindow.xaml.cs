@@ -968,6 +968,21 @@ namespace FrostyModManager
                     mod.AddWarning("Mod was designed for a different game version");
                 }
             }
+
+            else if (ProfilesLibrary.IsLoaded(ProfileVersion.DeadSpace))
+            {
+                string ForPatch = "This mod was designed for ";
+
+                if (GameVersionHead && mod.GameVersion == 219540)
+                {
+                    mod.AddWarning(ForPatch + "EA App Version of the game");
+                }
+                else if (GameVersionHead)
+                {
+                    mod.AddWarning("This mod was designed for Steam Version of the game");
+                }
+            }
+
             else if (GameVersionHead)
             {
                 mod.AddWarning("Mod was designed for a different game version");
@@ -2003,7 +2018,7 @@ namespace FrostyModManager
 
         private void PART_ShowOnlyReplacementsCheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
-            MessageBoxResult result = FrostyMessageBox.Show("Are you sure you want to show all resources? This can take some time.", "Resources", MessageBoxButton.YesNo);
+            MessageBoxResult result = FrostyMessageBox.Show("Are you sure you want to show all resources?\n\nThis may take a while if you have a lot of mods applied.", "Resources", MessageBoxButton.YesNo);
 
             if (result == MessageBoxResult.Yes)
             {

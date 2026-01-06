@@ -853,7 +853,7 @@
                             <!-- Mod Description -->
                             <ctrl:FrostyTabItem x:Name="modDescTabItem" Header="Description" Visibility="Collapsed"/>
                             <!-- Conflicts -->
-                            <ctrl:FrostyTabItem x:Name="conflictsTabItem" Header="Actions" Visibility="Collapsed">
+                            <ctrl:FrostyTabItem x:Name="conflictsTabItem" Header="Resources" Visibility="Collapsed">
                                 <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="26"/>
@@ -864,8 +864,8 @@
                                         <DockPanel Margin="1">
                                             <Border Background="{StaticResource ControlBackground}" DockPanel.Dock="Left" RenderOptions.EdgeMode="Aliased">
                                                 <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Margin="6,0,6,0">
-                                                    <CheckBox x:Name="showOnlyReplacementsCheckBox" VerticalAlignment="Center" Margin="0,0,0,0" Checked="PART_ShowOnlyReplacementsCheckBox_Checked" Unchecked="PART_ShowOnlyReplacementsCheckBox_Unchecked" IsChecked="False" ToolTip="Filter the list so only replacements are shown." Foreground="{StaticResource FontColor}">
-                                                        <TextBlock Text="Show only replacements" Margin="4,-1,0,0" VerticalAlignment="Center" Foreground="{StaticResource FontColor}"/>
+                                                    <CheckBox x:Name="showOnlyReplacementsCheckBox" VerticalAlignment="Center" Margin="0,0,0,0" Checked="PART_ShowOnlyReplacementsCheckBox_Checked" Unchecked="PART_ShowOnlyReplacementsCheckBox_Unchecked" IsChecked="False" ToolTip="Filter the list so only resources with conflicts are shown." Foreground="{StaticResource FontColor}">
+                                                        <TextBlock Text="Show conflicts only" Margin="4,-1,0,0" VerticalAlignment="Center" Foreground="{StaticResource FontColor}"/>
                                                     </CheckBox>
                                                 </StackPanel>
                                             </Border>
