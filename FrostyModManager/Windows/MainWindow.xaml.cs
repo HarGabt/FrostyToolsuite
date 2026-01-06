@@ -346,6 +346,8 @@ namespace FrostyModManager
             Config.Save();
             Title = "Frosty Mod Manager - " + Frosty.Core.App.Version + " (" + ProfilesLibrary.DisplayName + ")";
 
+            LoadMenuExtensions();
+
             FrostyTaskWindow.Show("Loading Mods", "", (task) =>
             {
                 DirectoryInfo di = new DirectoryInfo("Mods/" + ProfilesLibrary.ProfileName);
@@ -2135,6 +2137,63 @@ namespace FrostyModManager
         private void collectionModsList_LostFocus(object sender, RoutedEventArgs e)
         {
             ((ListView)sender).UnselectAll();
+        }
+        private void LoadMenuExtensions()
+        {
+            // Add menu extensions to Mod Manager
+            foreach (MenuExtension menuExtension in App.PluginManager.MenuExtensions)
+            {
+                // find top level menu if there is one, and create one if not
+                MenuItem foundMenuItem = menu.Items.Cast<MenuItem>().FirstOrDefault(menuItem => menuExtension.TopLevelMenuName.Equals(menuItem.Header as string, StringComparison.OrdinalIgnoreCase));
+                if (foundMenuItem == null)
+                {
+                    foundMenuItem = new MenuItem()
+                    {
+                        Header = menuExtension.TopLevelMenuName,
+                        Tag = menuExtension
+                    };
+                    menu.Items.Add(foundMenuItem);
+                }
+
+                // find sub level menu if there is one, and create one if not
+                if (!string.IsNullOrEmpty(menuExtension.SubLevelMenuName))
+                {
+                    MenuItem parentMenuItem = null;
+                    foreach (object menuItem in foundMenuItem.Items)
+                    {
+                        if (menuItem is MenuItem item)
+                        {
+                            if (menuExtension.SubLevelMenuName.Equals(item.Header as string, StringComparison.OrdinalIgnoreCase))
+                            {
+                                parentMenuItem = foundMenuItem;
+                                foundMenuItem = item;
+                                break;
+                           }
+                        }
+                    }
+
+                    if (parentMenuItem == null)
+                    {
+                        parentMenuItem = foundMenuItem;
+                      foundMenuItem = new MenuItem
+                        {
+                            Header = menuExtension.SubLevelMenuName,
+                            Tag = menuExtension
+                        };
+                        parentMenuItem.Items.Add(foundMenuItem);
+                    }
+               }
+
+                // create and add menu item to top level menu
+                MenuItem menuExtItem = new MenuItem
+                {
+                    Header = menuExtension.MenuItemName,
+                   Icon = new Image() { Source = menuExtension.Icon },
+                    Command = menuExtension.MenuItemClicked,
+                    Tag = menuExtension
+                };
+                foundMenuItem.Items.Add(menuExtItem);
+            }
         }
     }
 }
