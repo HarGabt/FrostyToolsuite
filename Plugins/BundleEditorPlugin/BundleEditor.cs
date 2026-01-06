@@ -297,6 +297,72 @@ namespace BundleEditPlugin
         }
     }
 
+    // J-Lyt | Add DefaultGeometryModifier to Bundle
+    public class DefaultGeometryModifierExtension : AddToBundleExtension
+    {
+        public override string AssetType => "DefaultGeometryModifier";
+        public override void AddToBundle(EbxAssetEntry entry, BundleEntry bentry)
+        {
+            base.AddToBundle(entry, bentry);
+
+            EbxAsset asset = App.AssetManager.GetEbx(entry);
+            dynamic defaultGeometryModifierAsset = asset.RootObject;
+
+            ResAssetEntry resEntry = App.AssetManager.GetResEntry(defaultGeometryModifierAsset.SourceSpaceResource);
+            resEntry.AddToBundle(App.AssetManager.GetBundleId(bentry));
+
+            entry.LinkAsset(resEntry);
+        }
+   }
+
+    // J-Lyt | Add DynamicMorphHeadData to Bundle
+    public class DynamicMorphHeadDataExtension : AddToBundleExtension
+    {
+        public override string AssetType => "DynamicMorphHeadData";
+        public override void AddToBundle(EbxAssetEntry entry, BundleEntry bentry)
+        {
+            base.AddToBundle(entry, bentry);
+
+            EbxAsset asset = App.AssetManager.GetEbx(entry);
+            dynamic dynamicMorphHeadDataAsset = asset.RootObject;
+
+            ResAssetEntry resEntry = App.AssetManager.GetResEntry(dynamicMorphHeadDataAsset.MeshWrapRemappingResource);
+            resEntry.AddToBundle(App.AssetManager.GetBundleId(bentry));
+
+           entry.LinkAsset(resEntry);
+        }
+    }
+
+    // J-Lyt | Add MeshComputeAsset to Bundle
+   public class MeshComputeExtension : AddToBundleExtension
+    {
+        public override string AssetType => "MeshComputeAsset";
+        public override void AddToBundle(EbxAssetEntry entry, BundleEntry bentry)
+        {
+            base.AddToBundle(entry, bentry);
+
+            dynamic runtimeNodesEntry = App.AssetManager.GetEbx(entry).RootObject;
+            dynamic runtimeNodes = runtimeNodesEntry.RuntimeNodes;
+
+            if (runtimeNodes.Count > 0)
+            {
+                for (int i = 0; i < runtimeNodes.Count; i++)
+                {
+                    var runtimeNode = runtimeNodes[i];
+
+                    // Skip if NodeResource is 0
+                    if (runtimeNode.NodeResource == 0)
+                      continue;
+
+                    ResAssetEntry resEntry = App.AssetManager.GetResEntry(runtimeNode.NodeResource);
+                    resEntry.AddToBundle(App.AssetManager.GetBundleId(bentry));
+                    entry.LinkAsset(resEntry);
+                }
+            }
+        }
+    }
+
+
     public class SvgImageExtension : AddToBundleExtension
     {
         public override string AssetType => "SvgImage";
