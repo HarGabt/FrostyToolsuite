@@ -1974,12 +1974,12 @@ namespace MeshSetPlugin.Resources
             using (var trimmedStream = TrimIfNeeded(reader.BaseStream, out m_trimmedHeaderBytes))
             using (NativeReader innerReader = new NativeReader(trimmedStream))
             {
-                using (FileStream fileStream = new FileStream(@"E:/" + entry.Filename, FileMode.Create, FileAccess.Write))
+                /*using (FileStream fileStream = new FileStream(@"E:/" + entry.Filename, FileMode.Create, FileAccess.Write))
                 {
                     fileStream.Write(m_trimmedHeaderBytes, 0, m_trimmedHeaderBytes.Length);
                     innerReader.BaseStream.CopyTo(fileStream);
                     innerReader.BaseStream.Position = 0;
-                }
+                }*/
                 m_boundingBox = innerReader.ReadAxisAlignedBox();
 
                 List<long> lodOffsets = new List<long>();
