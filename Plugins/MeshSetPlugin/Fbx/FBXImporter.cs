@@ -130,7 +130,7 @@ namespace MeshSetPlugin
             m_meshSet = inMeshSet;
 
             m_shaderBlockDepots = new List<ShaderBlockDepot>();
-            if (ProfilesLibrary.IsLoaded(ProfileVersion.StarWarsBattlefrontII))
+            if (ProfilesLibrary.IsLoaded(ProfileVersion.StarWarsBattlefrontII, ProfileVersion.DeadSpace))
             {
                 // collect every shader block depot that is used by this mesh
                 string path = "/" + entry.Filename.ToLower();
@@ -448,7 +448,7 @@ namespace MeshSetPlugin
                 }
             }
 
-            if (ProfilesLibrary.IsLoaded(ProfileVersion.StarWarsBattlefrontII))
+            if (ProfilesLibrary.IsLoaded(ProfileVersion.StarWarsBattlefrontII, ProfileVersion.DeadSpace))
             {
                 // update shader block depot mesh parameters
                 foreach (var depot in m_shaderBlockDepots)
