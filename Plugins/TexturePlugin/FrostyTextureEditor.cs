@@ -172,7 +172,7 @@ namespace TexturePlugin
 
         private void ImportButton_Click(object sender, RoutedEventArgs e)
         {
-            FrostyOpenFileDialog ofd = new FrostyOpenFileDialog("Import Texture", "PNG (*.png)|*.png|TGA (*.tga)|*.tga|HDR (*.hdr)|*.hdr|DDS (*.dds)|*.dds", "Texture");
+            FrostyOpenFileDialog ofd = new FrostyOpenFileDialog("Import Texture", "All files (*.PNG;*.TGA;*.HDR;*.DDS)|*.PNG;*.TGA;*.HDR;*.DDS|PNG (*.png)|*.png|TGA (*.tga)|*.tga|HDR (*.hdr)|*.hdr|DDS (*.dds)|*.dds", "Texture");
             if (m_textureAsset.Type != TextureType.TT_2d)
             {
                 ofd.Multiselect = true;
@@ -278,7 +278,26 @@ namespace TexturePlugin
 
                 FrostyTaskWindow.Show("Importing Texture", "", (task) =>
                 {
-                    ImageFormat fmt = (ImageFormat)(ofd.FilterIndex - 1);
+                    ImageFormat fmt;
+                    string ext = Path.GetExtension(ofd.FileName);
+
+                    if (ext.ToLower() == ".png")
+                    {
+                        fmt = ImageFormat.PNG;
+                    }
+                    else if (ext.ToLower() == ".tga")
+                    {
+                      fmt = ImageFormat.TGA;
+                    }
+                    else if (ext.ToLower() == ".hdr")
+                    {
+                       fmt = ImageFormat.HDR;
+                    }
+                    else
+                    {
+                        fmt = ImageFormat.DDS;
+                    }
+
                     MemoryStream memStream = null;
                     BlobData blob = new BlobData();
 
@@ -307,7 +326,7 @@ namespace TexturePlugin
                         {
                             // one image to one DDS
                             byte[] buf = NativeReader.ReadInStream(new FileStream(ofd.FileName, FileMode.Open, FileAccess.Read));
-                            ConvertImageToDDS(buf, buf.Length, (ImageFormat)(ofd.FilterIndex - 1), options, ref blob);
+                            ConvertImageToDDS(buf, buf.Length, fmt, options, ref blob);
                         }
                         else
                         {
@@ -328,7 +347,7 @@ namespace TexturePlugin
                                 Array.Copy(tmpBuf, 0, buf, buf.Length - tmpBuf.Length, tmpBuf.Length);
                             }
 
-                            ConvertImagesToDDS(buf, sizes, sizes.Length, (ImageFormat)(ofd.FilterIndex - 1), options, ref blob);
+                            ConvertImagesToDDS(buf, sizes, sizes.Length, fmt, options, ref blob);
                         }
                         memStream = new MemoryStream(blob.Data);
                     }
