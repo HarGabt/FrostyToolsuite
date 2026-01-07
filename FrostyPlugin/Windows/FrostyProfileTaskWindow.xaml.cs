@@ -149,13 +149,8 @@ namespace Frosty.Core.Windows
             // check to make sure SDK is up to date
             if (TypeLibrary.GetSdkVersion() != App.FileSystemManager.Head)
             {
-                var skipSdkUpdate = new List<ProfileVersion>
-                {
-                    ProfileVersion.Anthem
-                };
-
                 // requires updating
-                if (!skipSdkUpdate.Contains((ProfileVersion)ProfilesLibrary.DataVersion) && UpdateSdk())
+                if (UpdateSdk())
                 {
                     Close();
                 }

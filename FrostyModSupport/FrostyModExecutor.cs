@@ -2297,11 +2297,21 @@ namespace Frosty.ModSupport
 
             try
             {
-                //KillEADesktop();
-                //ModifyInstallerData($"-dataPath \"{modDataPath.Trim('\\')}\" {additionalArgs}");
-                LaunchGame(m_fs.BasePath, m_modDirName, modDataPath, additionalArgs);
-                //WaitForGame();
-                //CleanUpInstalledData();
+                // ExecuteProcess($"{m_fs.BasePath + ProfilesLibrary.ProfileName}.exe", $"-dataPath \"{modDataPath.Trim('\\')}\" {additionalArgs}");
+                string steamAppIdPath = $"{m_fs.BasePath}steam_appid.txt";
+                if (File.Exists(steamAppIdPath))
+                {
+                    string steamAppId = File.ReadAllLines(steamAppIdPath).First();
+                    string arguments = $"-dataPath \"{m_modDirName.Replace('\\', '/')}\" {additionalArgs}";
+                    string url = Uri.EscapeDataString(arguments);
+                    App.Logger.Log($"Launch: {arguments}");
+                    App.Logger.Log($"Encoded: {url}");
+                    Process.Start($"steam://run/{steamAppId}//{url}/");
+                }
+                else
+                {
+                    ExecuteProcess($"{m_fs.BasePath + ProfilesLibrary.ProfileName}.exe", $"-dataPath \"{modDataPath.Trim('\\')}\" {additionalArgs}");
+                }
             }
             catch (Exception ex)
             {
@@ -2312,48 +2322,6 @@ namespace Frosty.ModSupport
 
             GC.Collect();
             return 0;
-        }
-
-        public static void LaunchGame(string basePath, string modDirName, string modDataPath, string additionalArgs)
-        {
-            string gameExecutable = Path.Combine(basePath, $"{ProfilesLibrary.ProfileName}.exe");
-            string dataPathArgument = $"-dataPath \"{modDataPath.Trim('\\')}\" {additionalArgs}";
-
-            if (Config.Get<bool>("UseSteamProtocol", false))
-            {
-                string steamAppIdFilePath = Path.Combine(basePath, "steam_appid.txt");
-                string steamAppId = null;
-
-                if (File.Exists(steamAppIdFilePath))
-                {
-                    steamAppId = File.ReadLines(steamAppIdFilePath).First();
-                }
-
-                if (string.IsNullOrEmpty(steamAppId) && ProfilesLibrary.IsLoaded(ProfileVersion.DeadSpace))
-                {
-                    steamAppId = "1693980";
-                }
-
-                if (!string.IsNullOrEmpty(steamAppId))
-                {
-                    string arguments = $"-dataPath \"{modDirName.Replace('\\', '/')}\" {additionalArgs}".Trim();
-                    string encodedArguments = Uri.EscapeDataString(arguments);
-
-                    App.Logger.Log($"Launch: {arguments}");
-                    App.Logger.Log($"Encoded: {encodedArguments}");
-
-                    Process.Start($"steam://run/{steamAppId}//{encodedArguments}/");
-                }
-                else
-                {
-                    // fallback
-                    ExecuteProcess(gameExecutable, dataPathArgument);
-                }
-            }
-            else
-            {
-                ExecuteProcess(gameExecutable, dataPathArgument);
-            }
         }
 
         private void KillEADesktop()
