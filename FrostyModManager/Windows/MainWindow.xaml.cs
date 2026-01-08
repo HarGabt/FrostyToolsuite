@@ -969,20 +969,6 @@ namespace FrostyModManager
                 }
             }
 
-            else if (ProfilesLibrary.IsLoaded(ProfileVersion.DeadSpace))
-            {
-                string ForPatch = "This mod was designed for ";
-
-                if (GameVersionHead && mod.GameVersion == 219540)
-                {
-                    mod.AddWarning(ForPatch + "EA App Version of the game");
-                }
-                else if (GameVersionHead)
-                {
-                    mod.AddWarning("This mod was designed for Steam Version of the game");
-                }
-            }
-
             else if (GameVersionHead)
             {
                 mod.AddWarning("Mod was designed for a different game version");
