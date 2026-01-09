@@ -556,7 +556,7 @@ namespace FrostyCmd
         {
             FileInfo baseFile = new FileInfo(basePath);
 
-            ProfilesLibrary.Initialize(baseFile.Name.Replace(baseFile.Extension, ""));
+            ProfilesLibrary.SelectProfile(baseFile.Name.Replace(baseFile.Extension, ""));
             TypeLibrary.Initialize(false);
 
             FileSystemManager fs = new FileSystemManager(baseFile.DirectoryName);

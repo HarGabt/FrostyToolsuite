@@ -1367,6 +1367,8 @@ namespace Frosty.Core.Sdk
 
             m_classList = DumpClasses(task);
 
+            task.StatusMessage = "Scan complete - you can now close the game process";
+
             return m_classList != null && m_classList.Count > 0;
         }
 

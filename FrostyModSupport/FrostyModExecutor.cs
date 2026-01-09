@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Media;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -146,6 +147,7 @@ namespace Frosty.ModSupport
             public string Category { get; set; }
             public string Link { get; set; }
             public string FileName { get; set; }
+            public string Hash { get; set; }
 
 
             public override bool Equals(object obj)
@@ -393,6 +395,12 @@ namespace Frosty.ModSupport
 
             return hash;
         }
+
+        public class NullEntryException : Exception
+        {
+            public NullEntryException() : base() { }
+        }
+
         private void ProcessModResources(IResourceContainer fmod)
         {
             // Bundle whitelist may not contain the chunk bundle. This adds it to prevent issues
@@ -497,7 +505,14 @@ namespace Frosty.ModSupport
 
                             if (data == null)
                             {
-                                data = NativeReader.ReadInStream(m_am.GetRawStream(ebxEntry));
+                                try
+                                {
+                                    data = NativeReader.ReadInStream(m_am.GetRawStream(ebxEntry));
+                                }
+                                catch (System.NullReferenceException)
+                                {
+                                    throw new NullEntryException();
+                                }
 
                                 entry.Sha1 = ebxEntry.Sha1;
                                 entry.OriginalSize = ebxEntry.OriginalSize;
@@ -592,7 +607,14 @@ namespace Frosty.ModSupport
 
                             if (data == null)
                             {
-                                data = NativeReader.ReadInStream(m_am.GetRawStream(resEntry));
+                                try
+                                {
+                                    data = NativeReader.ReadInStream(m_am.GetRawStream(resEntry));
+                                }
+                                catch (System.NullReferenceException)
+                                {
+                                    throw new NullEntryException();
+                                }
 
                                 entry.Sha1 = resEntry.Sha1;
                                 entry.OriginalSize = resEntry.OriginalSize;
@@ -701,7 +723,14 @@ namespace Frosty.ModSupport
 
                             if (data == null)
                             {
-                                data = NativeReader.ReadInStream(m_am.GetRawStream(chunkEntry));
+                                try
+                                {
+                                    data = NativeReader.ReadInStream(m_am.GetRawStream(chunkEntry));
+                                }
+                                catch (System.NullReferenceException)
+                                {
+                                    throw new NullEntryException();
+                                }
 
                                 entry.Sha1 = (chunkEntry.Sha1 == Sha1.Zero) ? Utils.GenerateSha1(data) : chunkEntry.Sha1;
                                 entry.OriginalSize = chunkEntry.OriginalSize;
@@ -1312,7 +1341,25 @@ namespace Frosty.ModSupport
 
                 // check if the mod data needs recreating
                 // ie. mod change or patch
-                if (!IsSamePatch(modDataPath + m_patchPath) || !oldModInfoList.SequenceEqual(currentModInfoList))
+                bool hashMatch = true;
+
+                if (oldModInfoList.SequenceEqual(currentModInfoList))
+                {
+                    for (int i = 0; i < oldModInfoList.Count; i++)
+                    {
+                        if (oldModInfoList[i].Hash != currentModInfoList[i].Hash)
+                        {
+                            hashMatch = false;
+                            break;
+                        }
+                   }
+                }
+                else
+                {
+                    hashMatch = false;
+                }
+
+                if (!IsSamePatch(modDataPath + m_patchPath) || !hashMatch)
                 {
                     needsModding = true;
                 }
@@ -1376,7 +1423,46 @@ namespace Frosty.ModSupport
                     Logger.Log($"Loading Mods ({mod.ModDetails?.Title ?? mod.Filename.Replace(".fbmod", "")})");
                     if (mod.NewFormat)
                     {
-                        ProcessModResources(mod);
+                        try
+                        {
+                            ProcessModResources(mod);
+                        }
+                        catch (AggregateException ae)
+                        {
+                            string nullEntryText = "\"{0}\" is incompatible with the installed version of the game.\n\nPlease remove it from the 'Applied Mods' list and try again.";
+
+                            /*if (ProfilesLibrary.IsLoaded(ProfileVersion.DeadSpace))
+                            {
+                                if (m_fs.Head > 3350000 && mod.GameVersion < 2380000)
+                                {
+                                    nullEntryText = nullEntryText.Replace("installed", "EA App");
+                                }
+                                else if (m_fs.Head < 2380000 && mod.GameVersion > 3350000)
+                                {
+                                    nullEntryText = nullEntryText.Replace("installed", "Steam");
+                                }
+                            }*/
+
+                            var ignoredExceptions = new List<Exception>();
+
+                            foreach (var ex in ae.Flatten().InnerExceptions)
+                            {
+                                if (ex is NullEntryException)
+                                {
+                                    SystemSounds.Exclamation.Play();
+                                    FrostyMessageBox.Show(string.Format(nullEntryText, mod.ModDetails.Title), "Failed to create ModData");
+                                    throw new OperationCanceledException();
+                                }
+                                else
+                                {
+                                    ignoredExceptions.Add(ex);
+                                }
+                            }
+                            if (ignoredExceptions.Count > 0)
+                            {
+                                throw new AggregateException(ignoredExceptions);
+                            }
+                        }
                     }
                     else
                     {
@@ -2211,21 +2297,11 @@ namespace Frosty.ModSupport
 
             try
             {
-                // ExecuteProcess($"{m_fs.BasePath + ProfilesLibrary.ProfileName}.exe", $"-dataPath \"{modDataPath.Trim('\\')}\" {additionalArgs}");
-                string steamAppIdPath = $"{m_fs.BasePath}steam_appid.txt";
-                if (File.Exists(steamAppIdPath))
-                {
-                    string steamAppId = File.ReadAllLines(steamAppIdPath).First();
-                    string arguments = $"-dataPath \"{m_modDirName.Replace('\\', '/')}\" {additionalArgs}";
-                    string url = Uri.EscapeDataString(arguments);
-                    App.Logger.Log($"Launch: {arguments}");
-                    App.Logger.Log($"Encoded: {url}");
-                    Process.Start($"steam://run/{steamAppId}//{url}/");
-                }
-                else
-                {
-                    ExecuteProcess($"{m_fs.BasePath + ProfilesLibrary.ProfileName}.exe", $"-dataPath \"{modDataPath.Trim('\\')}\" {additionalArgs}");
-                }
+                //KillEADesktop();
+                //ModifyInstallerData($"-dataPath \"{modDataPath.Trim('\\')}\" {additionalArgs}");
+                LaunchGame(m_fs.BasePath, m_modDirName, modDataPath, additionalArgs);
+                //WaitForGame();
+                //CleanUpInstalledData();
             }
             catch (Exception ex)
             {
@@ -2236,6 +2312,48 @@ namespace Frosty.ModSupport
 
             GC.Collect();
             return 0;
+        }
+
+        public static void LaunchGame(string basePath, string modDirName, string modDataPath, string additionalArgs)
+        {
+            string gameExecutable = Path.Combine(basePath, $"{ProfilesLibrary.ProfileName}.exe");
+            string dataPathArgument = $"-dataPath \"{modDataPath.Trim('\\')}\" {additionalArgs}";
+
+            if (Config.Get<bool>("UseSteamProtocol", false))
+            {
+                string steamAppIdFilePath = Path.Combine(basePath, "steam_appid.txt");
+                string steamAppId = null;
+
+                if (File.Exists(steamAppIdFilePath))
+                {
+                    steamAppId = File.ReadLines(steamAppIdFilePath).First();
+                }
+
+                if (string.IsNullOrEmpty(steamAppId) && ProfilesLibrary.IsLoaded(ProfileVersion.DeadSpace))
+                {
+                    steamAppId = "1693980";
+                }
+
+                if (!string.IsNullOrEmpty(steamAppId))
+                {
+                    string arguments = $"-dataPath \"{modDirName.Replace('\\', '/')}\" {additionalArgs}".Trim();
+                    string encodedArguments = Uri.EscapeDataString(arguments);
+
+                    App.Logger.Log($"Launch: {arguments}");
+                    App.Logger.Log($"Encoded: {encodedArguments}");
+
+                    Process.Start($"steam://run/{steamAppId}//{encodedArguments}/");
+                }
+                else
+                {
+                    // fallback
+                    ExecuteProcess(gameExecutable, dataPathArgument);
+                }
+            }
+            else
+            {
+                ExecuteProcess(gameExecutable, dataPathArgument);
+            }
         }
 
         private void KillEADesktop()
@@ -2330,6 +2448,13 @@ namespace Frosty.ModSupport
             }
         }
 
+        private string GenerateModInfoHash(string filename)
+        {
+            FileInfo fi = new FileInfo(filename);
+
+            return $"{fi.Length}{fi.LastWriteTimeUtc:ddMMyyyyHHmmss}";
+        }
+
         private List<ModInfo> GenerateModInfoList(string[] modPaths, string rootPath)
         {
             List<ModInfo> modInfoList = new List<ModInfo>();
@@ -2348,7 +2473,8 @@ namespace Frosty.ModSupport
                         Version = fmod.ModDetails.Version,
                         Category = fmod.ModDetails.Category,
                         Link = fmod.ModDetails.Link,
-                        FileName = path
+                        FileName = path,
+                        Hash = GenerateModInfoHash(fi.FullName),
                     };
                 }
                 else
@@ -2362,7 +2488,8 @@ namespace Frosty.ModSupport
                             Version = fcollection.ModDetails.Version,
                             Category = fcollection.ModDetails.Category,
                             Link = fcollection.ModDetails.Link,
-                            FileName = path
+                            FileName = path,
+                            Hash = GenerateModInfoHash(fi.FullName),
                         };
                     }
                     else

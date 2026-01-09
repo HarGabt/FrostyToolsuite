@@ -89,6 +89,7 @@
     <Compile Include="Ebx\AssetClassGuid.cs" />
     <Compile Include="Ebx\BoxedValueRef.cs" />
     <Compile Include="Ebx\CString.cs" />
+    <Compile Include="Ebx\DebugInformation.cs" />
     <Compile Include="Ebx\FileRef.cs" />
     <Compile Include="Ebx\PointerRef.cs" />
     <Compile Include="Ebx\ResourceRef.cs" />
@@ -144,6 +145,7 @@
     <Compile Include="Resources\Texture.cs" />
     <Compile Include="SdkFileLogger.cs" />
     <Compile Include="Sha1.cs" />
+    <Compile Include="StringsManager.cs" />
     <Compile Include="TypeLibrary.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="Utils\HuffmanDecoder.cs" />

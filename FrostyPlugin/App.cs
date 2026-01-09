@@ -32,7 +32,7 @@ namespace Frosty.Core
 
         public static string Version = "";
         public static readonly int MinorVersion = 1;
-        public static readonly string AlphaVersion = " v.25.07.19"; // always update on release!
+        public static readonly string AlphaVersion = " v.26.01.08"; // always update on release!
 
         public static string ProfileSettingsPath => Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "/Frosty/" + ProfilesLibrary.ProfileName;
         public static string GlobalSettingsPath => Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "/Frosty";
@@ -55,7 +55,7 @@ namespace Frosty.Core
         public static bool LoadProfile(string profile)
         {
             // load profiles
-            if (!ProfilesLibrary.Initialize(profile))
+            if (!ProfilesLibrary.SelectProfile(profile))
             {
                 FrostyMessageBox.Show("There was an error when trying to load game using specified profile.", "Frosty Core");
                 return false;

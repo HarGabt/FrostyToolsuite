@@ -149,7 +149,7 @@
             </Grid.RowDefinitions>
 
             <!-- Menu -->
-            <Menu Grid.Row="0">
+            <Menu x:Name="menu" Grid.Row="0">
                 <MenuItem Header="File" Height="22">
                     <MenuItem Header="Pack">
                         <MenuItem x:Name="packRename" Header="Rename" Click="packRename_Click"/>
@@ -162,7 +162,7 @@
                     <MenuItem x:Name="exitMenuItem" Header="Exit" Click="exitMenuItem_Click"/>
                 </MenuItem>
                 <MenuItem x:Name="toolsMenuItem" Header="Tools" Height="22">
-                <MenuItem x:Name="manageModData" Header="Manage ModData" Click="modDataMenuItem_Click"/>
+                    <MenuItem x:Name="manageModData" Header="Manage ModData" Click="modDataMenuItem_Click"/>
                 </MenuItem>
                 <MenuItem Header="Help" Height="22">
                     <MenuItem x:Name="aboutMenuItem" Header="About Frosty Mod Manager" Click="aboutMenuItem_Click"/>
@@ -853,7 +853,7 @@
                             <!-- Mod Description -->
                             <ctrl:FrostyTabItem x:Name="modDescTabItem" Header="Description" Visibility="Collapsed"/>
                             <!-- Conflicts -->
-                            <ctrl:FrostyTabItem x:Name="conflictsTabItem" Header="Actions" Visibility="Collapsed">
+                            <ctrl:FrostyTabItem x:Name="conflictsTabItem" Header="Resources" Visibility="Collapsed">
                                 <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="26"/>
@@ -864,8 +864,8 @@
                                         <DockPanel Margin="1">
                                             <Border Background="{StaticResource ControlBackground}" DockPanel.Dock="Left" RenderOptions.EdgeMode="Aliased">
                                                 <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Margin="6,0,6,0">
-                                                    <CheckBox x:Name="showOnlyReplacementsCheckBox" VerticalAlignment="Center" Margin="0,0,0,0" Checked="PART_ShowOnlyReplacementsCheckBox_Checked" Unchecked="PART_ShowOnlyReplacementsCheckBox_Unchecked" IsChecked="False" ToolTip="Filter the list so only replacements are shown." Foreground="{StaticResource FontColor}">
-                                                        <TextBlock Text="Show only replacements" Margin="4,-1,0,0" VerticalAlignment="Center" Foreground="{StaticResource FontColor}"/>
+                                                    <CheckBox x:Name="showOnlyReplacementsCheckBox" VerticalAlignment="Center" Margin="0,0,0,0" Checked="PART_ShowOnlyReplacementsCheckBox_Checked" Unchecked="PART_ShowOnlyReplacementsCheckBox_Unchecked" IsChecked="False" ToolTip="Filter the list so only resources with conflicts are shown." Foreground="{StaticResource FontColor}">
+                                                        <TextBlock Text="Show conflicts only" Margin="4,-1,0,0" VerticalAlignment="Center" Foreground="{StaticResource FontColor}"/>
                                                     </CheckBox>
                                                 </StackPanel>
                                             </Border>

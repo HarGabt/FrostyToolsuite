@@ -149,8 +149,13 @@ namespace Frosty.Core.Windows
             // check to make sure SDK is up to date
             if (TypeLibrary.GetSdkVersion() != App.FileSystemManager.Head)
             {
+                var skipSdkUpdate = new List<ProfileVersion>
+                {
+                    ProfileVersion.Anthem
+                };
+
                 // requires updating
-                if (UpdateSdk())
+                if (!skipSdkUpdate.Contains((ProfileVersion)ProfilesLibrary.DataVersion) && UpdateSdk())
                 {
                     Close();
                 }
@@ -329,7 +334,7 @@ namespace Frosty.Core.Windows
         private async Task<int> LoadStringList()
         {
             TaskLogger.Log("Loading custom strings");
-            await Task.Run(() => Utils.LoadStringList("strings.txt", TaskLogger));
+            await Task.Run(() => StringsManager.LoadStringList("strings.txt", TaskLogger));
             return 0;
         }
 

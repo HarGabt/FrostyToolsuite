@@ -359,7 +359,7 @@ namespace FrostySdk.IO
 
                     obj.SetInstanceGuid(new AssetClassGuid(instanceGuid, index++));
 
-                    PushXmlOffset(obj.__InstanceGuid.ToString(), true);
+                    debugInformation.PushDebugOffset(obj.__InstanceGuid.ToString(), Position, true);
 
                     try
                     {
@@ -493,8 +493,8 @@ namespace FrostySdk.IO
 
                     if (fieldType.DebugCategory == EbxFieldCategory.ArrayType)
                     {
-                        if (fieldProp != null) { PushXmlOffset($"_{fieldProp.Name}"); }
-						long arrayPos = Position;
+                        if (fieldProp != null) { debugInformation.PushDebugOffset($"_{fieldProp.Name}", Position); }
+                        long arrayPos = Position;
                         int arrayOffset = ReadInt();
                         Position += arrayOffset - 8;
 
@@ -502,10 +502,10 @@ namespace FrostySdk.IO
 
                         for (int i = 0; i < count; i++)
                         {
-                            if (fieldProp != null) { PushXmlOffset($"_{i}"); }
-							object value = ReadField(classType, fieldType.DebugType, fieldType.ClassRef, (attr != null));
-                            if (fieldProp != null) { PopXmlOffset(); }
-							if (fieldProp != null)
+                            if (fieldProp != null) { debugInformation.PushDebugOffset($"_{i}", Position); }
+                            object value = ReadField(classType, fieldType.DebugType, fieldType.ClassRef, (attr != null));
+                            if (fieldProp != null) { debugInformation.PopDebugOffset(); }
+                            if (fieldProp != null)
                             {
                                 try { fieldProp.GetValue(obj).GetType().GetMethod("Add").Invoke(fieldProp.GetValue(obj), new object[] { value }); }
                                 catch (Exception) { }
@@ -516,13 +516,14 @@ namespace FrostySdk.IO
                             }
                         }
                         Position = arrayPos;
+                        if (fieldProp != null) { debugInformation.PopDebugOffset(); }
                     }
                     else
                     {
-                        if (fieldProp != null) { PushXmlOffset($"_{fieldProp.Name}"); }
-						object value = ReadField(classType, fieldType.DebugType, fieldType.ClassRef, (attr != null));
-                        if (fieldProp != null) { PopXmlOffset(); }
-						if (fieldProp != null)
+                        if (fieldProp != null) { debugInformation.PushDebugOffset($"_{fieldProp.Name}", Position); }
+                        object value = ReadField(classType, fieldType.DebugType, fieldType.ClassRef, (attr != null));
+                        if (fieldProp != null) { debugInformation.PopDebugOffset(); }
+                        if (fieldProp != null)
                         {
                             try { fieldProp.SetValue(obj, value); }
                             catch (Exception) { }

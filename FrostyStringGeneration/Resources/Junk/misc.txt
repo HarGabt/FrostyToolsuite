@@ -1,0 +1,7695 @@
+﻿                     (right here) ------^\n
+                     time    time   count   count   time   time\n
+                    frame   frame   frame   frame   call   call\n
+             TOTAL transfers: %I64u / %I64u bytes (%I64u K)
+            fps/ms
+           ESTIMATED MAX FPS: %0.1f
+          ms
+         fps
+        %3d %3d %3d %3d %3d %3d %3d %3d
+        %4u %4u %4u %4u %4u %4u %4u %4u
+        %6.2f   avg|min|max: %6.2f|%6.2f|%6.2f
+        %6.2f   min|avg|max: %6.2f|%6.2f|%6.2f
+       %6.2f  avg: %5.2f  min: %5.2f  max: %6.2f
+     -----------    -----   -----   -----   -----   ----   ----\n
+     ... plus %d Entries beyond display limit, adjust OutputRowLimit to see more entries.\n
+     ... plus %d Entries that did not match key word '%s', change OutputFilterKeyword to see more entries.\n
+     TOTAL Buffer  transfers: %I64u / %I64u bytes (%I64u K)
+     TOTAL Texture transfers: %I64u / %I64u bytes (%I64u K)
+     sim %3d
+     sim %3d/%4.1f
+     sim %4.1f
+     system name      avg     max     avg     max    avg    max\n
+    - %s (%d record(s))\n
+    Component %d: %dhx%dv q=%d
+    Component %d: dc=%d ac=%d
+    Entry = 0x%04x   Char = '%c'  Frequency = %5d (%5.2f%%)\n
+    Frequency =%5d (%5.2f%%)
+    Full: %I64u
+    Index %3d (0x%04x):   Entry = 0x%04x
+    Layer '%s' - Disc spawning inflight for dsd '%s'\n
+    Layer '%s' has not even completed its pass yet.\n
+    Length =%4d  Language = %-20s  Label = %s\n
+    Subresource: %I64u
+    gpu%d %3d
+    gpu%d %3d/%4.1f
+    gpu%d %4.1f
+    packed_string  =
+    packed_string  = %s\n
+    source_string  =
+    wide_string    =
+    with %d x %d thumbnail image
+   <%s>%s</%s>\r\n
+   frame %3d
+   frame %3d/%4.1f
+   frame %4.1f
+  %s(%u) %s\r\n
+  %s: %d
+  %s: 0x%v\n
+  3 ; A I S 0
+  </u:%s>\r\n </s:Body>\r\n</s:Envelope>\r\n\r\n
+  ContextQuery[%d]: 
+  Copy source: %I64u (L2 cache flush)
+  Deferred save requests are ignored.
+  Explicit Buffer  transfers: %I64u / %I64u bytes (%I64u K)
+  Explicit Texture transfers: %I64u / %I64u bytes (%I64u K)
+  GPUs: 
+  Immediate Transitions: %I64u (%I64u calls)
+  Implicit Buffer  transfers: %I64u / %I64u bytes (%I64u K)
+  Implicit Texture transfers: %I64u / %I64u bytes (%I64u K)
+  Queued transitions: %I64u (%I64u calls)
+  RenderContext_PreDispatch,: %I64u
+  RenderContext_PreDraw,: %I64u
+  ShaderDispatch_SetupPass,: %I64u
+  ShaderDispatch_SetupSolution,: %I64u
+  Ss=%d, Se=%d, Ah=%d, Al=%d
+  UAV barriers: %I64u (%I64u calls)
+ "D" "D# "@" "@#
+ #;
+ %-5s %s
+ %02x
+ %04x
+ %c%c%c%c%c%c%c
+ %u %llu 
+ &
+ &&
+ &D
+ ("
+ (%.10f, %.10f, %.10f)
+ (%d unique tables)
+ (%dm%02ds)
+ (%ds)
+ (%f, %f, %f)
+ (%s '%s')
+ (Address: 0x%p, Operation: %s)
+ (Exception code: %08x)
+ (Quest asset was deleted or renamed).  Save metadata= 
+ (Scaled From: 
+ (exception thread)
+ (executing '
+ (with async compute)
+ )B
+ +
+ --- DependsOn: 
+ ------- GPU Stopped somewhere near here -------  \r\n
+ ... 
+ .gnu.linkonce
+ .text 
+ .text._Z
+ 0B
+ 1B
+ :
+ : NULL Driver
+ : Reference Driver
+ : WARP Driver
+ ;B
+ <D
+ CheckpointData = 
+ Entering a cooldown period of 
+ Expected arguments: 
+ HTTP/1.1\r\n
+ Has Valid Transforms: 
+ More information can be found here. <https://frostbite.ea.com/display/UG/Data+Defined+Type+Instance+Error+Messages>
+ Old Region: 
+ Transform not set to sync scale, but is scaled to 
+ UNKNOWN 
+ [%d/%d]
+ [enable_if:
+ \n City: 
+ \n Common: 
+ \n Org: 
+ \n State: 
+ \n Unit: 
+ \t\n\r
+ _Client_SimUpdate_
+ _Server_SimUpdate_
+ aaaaaaaaaaaaaaaaaaaaaaaaaa{
+ and m_pendingActiveFadeSegmentId to 
+ and the upgraded data has failed the validation test due to the following errors:\n
+ arg 
+ as all slots for that save type are full. This should have been caught by the save() method.
+ at offset 
+ away from its expected value.
+ but it does not match the current field type. This can happen if the field type on the type has changed. The value will be ignored.
+ but running with 
+ but that field cannot be found. This can happen if the field was deleted from the type. The value will be ignored.
+ bytes remain after EOO
+ dB
+ data for 
+ deflate 1.2.11 Copyright 1995-2017 Jean-loup Gailly and Mark Adler 
+ degrees away from its expected target.
+ expected type:
+ failed the checksum test. This indicates the save has been corrupted or tampered with.
+ field package.preload['%s']
+ file '%s'
+ for %*[^(](%n%*[^)]%n%c\n
+ for cell 
+ for platform 
+ from scenario: 
+ from the previous point: 
+ gD
+ got value: '
+ id="
+ in career id 
+ in pass 
+ inflate 1.2.11 Copyright 1995-2017 Mark Adler 
+ is blocking Dsd: 
+ is not inside a map region. Design will need to adjust the map volume or move the object.
+ load address is %I64x
+ m@
+ module '%s' in file '%s'
+ noexcept
+ oB
+ on Initialization from Persistence.
+ or later. Please update Windows.
+ ou de performances.
+ pc="
+ qH
+ reader : type=EA::Audio::Core::chunkreader @0x%p\n guid   : %i \n samples: %i \n played : %i \n
+ seconds of a load. This request has been ignored.
+ seconds remaining. 
+ so we are terminating the currently deferred snapshot save
+ state changed to 
+ unresolvable
+ using zstream
+ vector[
+ vs. %s = 
+ was added to the save info.
+ wasn't found in shader solution database 
+ which is required.
+ with m_shouldApplyStartFade == 
+ zB
+ |\r\n
+ ~B
+!!
+!! Suspiciously high number of transitions per frame, possible infinite loop.
+!!!!
+!<j?
+![CDATA[
+!\?.dll;!\..\lib\lua\5.3\?.dll;!\loadall.dll;.\?.dll
+!\lua\?.lua;!\lua\?\init.lua;!\?.lua;!\?\init.lua;!\..\share\lua\5.3\?.lua;!\..\share\lua\5.3\?\init.lua;.\?.lua;.\?\init.lua
+!\t,
+" GPU does not support DirectX 
+" failed with 
+" for cell 
+" is already in the file index lookup.
+" n'est pas compatible avec la version 
+" upgraded save data to version 
+"%s",
+"%s":"%s"
+"%s":%.2f
+"%s":%d
+"%s":%lld
+"%s":%s
+"%s":%u
+". But an existing file data "
+". Defaulting to the largest size of 
+":
+"<
+"Brand": "",
+"Brand": "%s",
+"CPU": 
+"CPU": {},
+"Command Line": "",
+"Command Line": "%s",
+"Cores": %d
+"Cores": 0
+"Device Sku": "",
+"Device Sku": "%s",
+"Device Type": %d,
+"Device Type": 0,
+"DirectX Version": "",
+"DirectX Version": "%s",
+"Distribution": ""
+"Distribution": "%s"
+"Driver Vendor": ""
+"Driver Vendor": "%s"
+"Driver Version": "",
+"Driver Version": "%s",
+"Firmware Version": "",
+"Firmware Version": "%s",
+"Frequency": %d,
+"Frequency": 0,
+"GPU": 
+"GPU": {},
+"Graphics API Other": "",
+"Graphics API Other": "%s",
+"Graphics API Version": "",
+"Graphics API Version": "%s",
+"Graphics API": %d,
+"Graphics API": 0,
+"Hardware": 
+"Hardware": {},
+"Id": "",
+"Id": "%s",
+"Language": "",
+"Language": "%s",
+"Locale": "",
+"Locale": "%s",
+"Main Control Device": %d,
+"Main Control Device": 0,
+"Manufacturer": "",
+"Manufacturer": "%s",
+"Memory Available": 
+"Memory Available": {},
+"Memory Total": 
+"Memory Total": {}
+"Memory": 
+"Memory": {}
+"Model": "",
+"Model": "%s",
+"Name": "",
+"Name": "%s",
+"OS Type other": "",
+"OS Type other": "%s",
+"OS Type": "",
+"OS Type": %d,
+"OS Version": "",
+"OS Version": "%s",
+"Operating System": 
+"Operating System": {}
+"Origin Client Version": "",
+"Origin Client Version": "%s",
+"Physical Memory": %d,
+"Physical Memory": 0,
+"Render.DebugInfoEnable" was also enabled which requires the DirectX SDK to be installed
+"V
+"Vendor Id": "",
+"Vendor Id": "%s",
+"Vendor": "",
+"Vendor": "%s",
+"Video Memory Dedicated": %d,
+"Video Memory Dedicated": 0,
+"Video Memory Shared": %d,
+"Video Memory Shared": 0,
+"Video Memory System": %d,
+"Video Memory System": 0,
+"Virtual Memory": %d
+"Virtual Memory": 0
+"]
+"] = 
+"address": [
+"core": {"en":"%s","s":%d,"gid":"%lld","ts_event":"%s"
+"core":{"en":"
+"en":"%s"
+"hG
+"isCrashed": %d}
+"jG
+"mid":"
+"taxv":"
+"taxv":"%s","sdkv":"%s","sdkt":"%s","sid":"%lld"
+"},
+"}}
+# Arch:
+# Arch: i386
+# Arch: ppc
+# Arch: x86_64
+# Path:
+# Symbols:
+#&G
+#&H
+#.H
+#/H
+#2H
+#G
+#define %-60s  0x%08X    // %s\n
+#define %s_HPP\n
+#iG
+#ifndef %s_HPP\n
+#wH
+$$ 
+$'E
+$.rH
+$0OH
+$7MH
+$:5G
+$@aH
+$B
+$DbH
+$DlH
+$G
+$LH
+$LuaVersion: Lua 5.3.1  Copyright (C) 1994-2015 Lua.org, PUC-Rio $$LuaAuthors: R. Ierusalimschy, L. H. de Figueiredo, W. Celes $
+$N
+$P3G
+$T
+$TT
+$TsH
+$\n
+$\tH
+$file
+$oG
+$yuH
+%!PS-Adobe-3.0 Resource-CIDFont
+%#p %s + %d\r\n
+%#p %s: %d\r\n
+%#p\r\n
+%(p$
+%(px$
+%*x:%*x %*s %I64x
+%-5s %s
+%.15G
+%.17G
+%.7g
+%016llx
+%016llx |
+%016llx | Address appears to be invalid.\r\n
+%02I8x%02I8x%02I8x%02I8x%02I8x%02I8x%02I8x%02I8x%02I8x%02I8x%02I8x%02I8x%02I8x%02I8x%02I8x%02I8x
+%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x
+%03o
+%04d-%02d-%02d %02d:%02d:%02d GMT
+%08X%X
+%08X/%c;%08X/%c%c%c%c/%c%c%c%c/%s
+%16s   %6u  %6u  %6u  %6u %6u %6u\n
+%20
+%A:0x%v not found in function table\n
+%B section %A exceeds stub group size
+%B(%A+0x%lx): %s reloc against `%s': error %d
+%B(%A+0x%lx): %s used with TLS symbol %s
+%B(%A+0x%lx): %s used with non-TLS symbol %s
+%B(%A+0x%lx): automatic multiple TOCs not supported using your crt files; recompile with -mminimal-toc or upgrade gcc
+%B(%A+0x%lx): sibling call optimization to `%s' does not allow automatic multiple TOCs; recompile with -mminimal-toc or -fno-optimize-sibling-calls, or make `%s' extern
+%B(%A+0x%lx): unresolvable %s relocation against symbol `%s'
+%B(%A+0x%v): call to non-code section %B(%A), stack analysis incomplete\n
+%B(%s+0x%lx):%s%s %s relocation against symbol `%s'
+%B: .opd is not a regular array of opd entries
+%B: Relocations in generic ELF (EM: %d)
+%B: bad section length in ihex_read_section
+%B: cannot create stub entry %s
+%B: error: relocation %s not a multiple of %d
+%B: internal error in ihex_read_section
+%B: relocation %s is not supported for symbol %s.
+%B: undefined sym `%s' in .opd section
+%B: unexpected reloc type %u in .opd section
+%B: unknown relocation type %d for symbol %s
+%B:%d: Unexpected character `%s' in S-record file\n
+%B:%d: unexpected character `%s' in Intel Hex file
+%B:%u: bad checksum in Intel Hex file (expected %u, found %u)
+%B:%u: bad extended address record length in Intel Hex file
+%B:%u: bad extended linear address record length in Intel Hex file
+%B:%u: bad extended linear start address length in Intel Hex file
+%B:%u: bad extended start address length in Intel Hex file
+%B:%u: unrecognized ihex type %u in Intel Hex file
+%H.%M.%S
+%I32d
+%I32u.%I32u.%I32u.%I32u
+%I64d
+%I64d Mb
+%I64u-
+%I64u-%I64u
+%I64x %x
+%LaL
+%TEMP%
+%U
+%X%P: stack analysis error: %E\n
+%Y-%m-%d %H:%M:%S
+%a
+%a %b %d %H:%M:%S %Y
+%af
+%c%02x
+%c??
+%d%%
+%d-byte integer does not fit into Lua Integer
+%d.%d
+%d.%d (Build %d)
+%d.%d.%d
+%d.%d.%d-%d:%02d:%02d
+%d.%d.%d.%d
+%d.%d.x.x
+%d:
+%f%*[%%, \t]%f%*[%%, \t]%f%*[%%, \t]%f
+%hu.%02hu.%02hu_%02hu.%02hu.%02hu.%03hu
+%lf
+%llu"
+%ls = %ls%ls
+%p"
+%s '%s'
+%s (Prop Id: %u)
+%s (len %d) = 
+%s + %d\r\n
+%s - invalid NULL data block: m_EntireProbeSetPrecomp must be present
+%s - invalid NULL pointer
+%s - invalid output format
+%s - invalid output format byte order
+%s - size of emissive environment input does not match size specified in precompute
+%s - system GUIDs for input workspaces are incorrect or out of order
+%s - unknown error
+%s at instruction %#p
+%s defined in removed toc entry
+%s expected
+%s expected (to close %s at line %d)
+%s expected, got %s
+%s near %s
+%s size mismatch in
+%s%d.%s.%s
+%s%s.%s
+%s%s: (%.10f, %.10f, %.10f)\n
+%s%s: (%.10f, %.10f, %.10f, %.10f)\n
+%s(%s): relocation %d has invalid symbol index %ld
+%s+%lx
+%s, %2d %s %4d %02d:%02d:%02d GMT
+%s, %s
+%s-tmp
+%s.%s
+%s.tmp
+%s/%s/%s %s:%s:%s
+%s: #%p
+%s: %d\r\n
+%s: %s
+%s: %s [%s]\n
+%s: %s is NULL
+%s: %s precompiled chunk
+%s: (ClusterAlbedoWorkspaceMaterialData) Input is NULL
+%s: (ClusterAlbedoWorkspaceMaterialData) System ID is invalid
+%s: (ClusterAlbedoWorkspaceMaterialData) m_ClusterMaterials DataBlock is invalid
+%s: (ClusterAlbedoWorkspaceMaterialData) m_MaterialGuids DataBlock is invalid
+%s: (InputWorkspace) Input is NULL
+%s: (InputWorkspace) m_InputWorkspacePrecomp DataBlock is empty
+%s: (InputWorkspace) m_InputWorkspacePrecomp DataBlock is of incorrect type
+%s: (InputWorkspace) m_InputWorkspacePrecomp DataBlock signature is corrupted
+%s: (InputWorkspace) m_ProjectedPointData DataBlock is corrupted
+%s: (InputWorkspace) m_ProjectedPointData DataBlock is empty
+%s: (InputWorkspace) m_ProjectedPointData DataBlock is of incorrect type
+%s: (InputWorkspace) m_ProjectedPointData DataBlock is of incorrect version number
+%s: (InputWorkspace) m_ProjectedPointData DataBlock is truncated and corrupt. DataBlock should be at least %d bytes, but is %d bytes
+%s: (InterpolationInputSet) Either m_ProbeSetPrecomp or m_InterpolationData must be non-NULL
+%s: (InterpolationInputSet) Input is NULL
+%s: (PrecomputedVisibilityData) Input is NULL
+%s: (PrecomputedVisibilityData) Signature is corrupted
+%s: (PrecomputedVisibilityData) Version mismatch
+%s: (PrecomputedVisibilityWorkspace) Input is NULL
+%s: (PrecomputedVisibilityWorkspace) Signature is corrupted
+%s: (RadProbeSetCore) Input is NULL
+%s: (RadProbeSetCore) m_EntireProbeSetPrecomp DataBlock is empty
+%s: (RadProbeSetCore) m_EntireProbeSetPrecomp DataBlock signature is corrupted
+%s: (RadProbeSetCore) m_EntireProbeSetPrecomp DataBlock version mismatch
+%s: (RadProbeSetCore) m_InterpolationData DataBlock is empty
+%s: (RadProbeSetCore) m_InterpolationData DataBlock is invalid
+%s: (RadProbeSetCore) m_ProbeSetDebugData DataBlock is empty
+%s: (RadProbeSetCore) m_ProbeSetPrecomp DataBlock is empty
+%s: (RadProbeSetCore) m_ProbeSetPrecomp DataBlock signature is corrupted
+%s: (RadProbeSetCore) m_ProbeSetPrecomp DataBlock version mismatch
+%s: (RadSystemCore) Input is NULL
+%s: (RadSystemCore) m_RadiosityPrecomp DataBlock does not match m_MetaData
+%s: (RadSystemCore) m_RadiosityPrecomp DataBlock is empty
+%s: (RadSystemCore) m_RadiosityPrecomp DataBlock is of incorrect type
+%s: (RadSystemCore) m_RadiosityPrecomp DataBlock signature is corrupted
+%s: (RadSystemCore) m_RadiosityPrecomp DataBlock version mismatch
+%s: (ResamplingData) Input is NULL
+%s: (ResamplingData) Signature is corrupted
+%s: (ResamplingData) Version mismatch
+%s: 0x%p
+%s: address 0x%s out of range for Intel Hex file
+%s: m_EntireProbeSetPrecomp DataBlock is of incorrect type
+%s: m_ProbeSetPrecomp DataBlock is of incorrect type
+%s:%d/%s
+%s:%d: 
+%s:%d: %s
+%s:%s:%u:%s:%s:%c%c%c%c
+%s:%s\r\n
+%s:%u/%s
+%s:%u:%u
+%s:1\r\n
+%sExecutor_%s_%d
+%sURL: %s\nByte range: %s\nIP Address: %s\nPort: %s\nHost: %s\nTransferred size: %I64u, Expected size: %I64u, HTTP result: %s\n
+%s\%s
+%s\LANGUAGE_%s_%s.BIN
+%s\LANGUAGE_%s_HISTOGRAM.BIN
+%s\LanguageExtractor.log
+%s\LanguageExtractor_%s.txt
+%s\nNode %s is almost at the same position than node %s
+%s\nNode %s is at the same position than node %s
+%s\nRight arm doesn't seem to be parallel to X axis, you have a difference of %.5f degree with X axis. Should be below %.5f.
+%u %d %d %d %f %f %f %f %f
+%u %f %f %f %f %f
+%u %u %llu 
+%u %u %u %u
+%u %x:%x %u %x:%x %u %x:%x %u %x:%x
+%u.%u.%u
+%u.%u.%u.%u
+%x%s
+%x:
+%x:%x %2048s %I64x
+%x:%x %xH %*s %32s
+%y-%m-%d
+&%s=%X&%s=%X&%s=%c&%s=%s&%s=%X,
+&&''&&''((
+&fid=
+&z
+' (index 
+' with policy: 
+'%c'
+'%s'
+')
+'=' or 'in' expected
+'block-literal'
+'for' initial value must be a number
+'for' limit must be a number
+'for' step must be a number
+'lambda
+'mG
+'module' not called from a Lua function
+'package.%s' must be a string
+'package.searchers' must be a table
+'tostring' must return a string to 'print'
+'unnamed
+(%f, %f, %f) +- %f
+(%f, %f, %f) [Auto Pass]
+(%f, %f, %f, %f)
+(%s, %s)
+(%s, %s, %s)
+(%s, %s, %s, %s)
+((
+(*no name)
+(*temporary)
+(*vararg)
+(8G
+(G
+(HF
+(NA)
+(anonymous namespace)
+(capacity + 1) * sizeof(T)
+(entire file)
+(fH
+(for control)
+(for generator)
+(for index)
+(for limit)
+(for state)
+(for step)
+(illegal)
+(info currently unavailable for this platform or process)\r\n
+(lG
+(name unavailable in retail)
+(none)\r\n
+(unavailable)
+(unknown machine name)
+(unset)
+)  do not match the snapshots loaded in the index.
+) H
+) memory error
+) started to transition to TransitionPoint: 
+) stream error
+) timed out transitioning to TransitionPoint: 
+) unknown error
+) version error
+)&'')&''*(
+)'G
+), expected EOO.
+)G
+)XH
+)\n
+)dF
+*(
+*.eaPatchInfo
+*ABS*
+*DC
+*DEBUG*
+*G
+*Run debug data build*
+*UND*
+*_*
+*eH
+*s 
+*tB
+*unknown*
++&G
+++!!
++-H
++C
++FC
++gG
+, 64 bit
+, Business Edition
+, Cluster Server Edition
+, Code=
+, Datacenter Edition
+, Datacenter Edition (core installation)
+, Enterprise Edition
+, Enterprise Edition (core installation)
+, Enterprise Edition for Itanium-based Systems
+, Facility=
+, Home Basic Edition
+, Home Premium Edition
+, Professional
+, Small Business Server
+, Small Business Server Premium Edition
+, Standard Edition
+, Standard Edition (core installation)
+, Starter Edition
+, Ultimate Edition
+, Unknown edition: %u
+, Unlicensed
+, Web Server Edition
+, available paths: 
+, could not load the save.
+, entering a cooldown period of 
+, revision %u
+, service pack %s
+, std::allocator<char>
+, version %u.%u.%u
+,"%s":"%lld"
+,"catgid":"
+,"contexts":[
+,"custom":
+,"custom":{"%s": "%s" %s
+,"custom":{"%s": "%s"}
+,"custom":{"game_attr":{
+,"didm":
+,"dob":"
+,"entity_type":"player"
+,"errid":"
+,"et":"
+,"events":[
+,"events":[{
+,"exp_info":
+,"game_mode":"
+,"game_type":"
+,"gid":"
+,"gid":"%lld"
+,"goid":"
+,"is_mlu":
+,"is_player":
+,"is_sess":
+,"lev":"
+,"lev_name":"
+,"loc":"
+,"mac":"
+,"map":"
+,"mode_type":"
+,"pid":"
+,"pidm":
+,"pidt":"
+,"plat":"
+,"psid":"%lld"
+,"rel":"
+,"s":"
+,"s":%d
+,"sdkt":"
+,"sdkv":"
+,"server_name":"
+,"server_type":"
+,"sid":"
+,"sid":"%lld"
+,"subs":
+,"tid":"
+,"tidt":"
+,"ts_event":"
+,"ts_event":"%s"
+,"ts_post":"
+,"type":"
+,"v":"
+,#G
+,1
+-+ #0
+----- GPU Stopped Working Breadcrumb analysis follows -------   \n
+------- GPU Stopped somewhere near here -------\r\n
+-----BEGIN EC PRIVATE KEY-----
+-----BEGIN RSA PRIVATE KEY-----
+-----END EC PRIVATE KEY-----
+-----END RSA PRIVATE KEY-----
+-0123456789
+-10ld
+-7lo
+-8lo
+-G
+-LIBGCCW32-EH-2-GTHR-MINGW32
+-in-
+-~H
+. Could not load the save.
+. File to RPG-Prog.
+. Forcing scale to 1.0 to avoid netstate validation errors
+. Free virtual memory: 
+. Request help from Animation Programming. Additional data: 
+. The required Windows version is 
+. This error is usually caused by the graphics driver crashing; try installing the latest drivers.
+. This is not desired check the priorities or set the blocking disc independent.
+. Version de Windows requise : 
+.*
+..
+....
+..\
+..tail calls...)
+.17 (SDK370, $Rev: 3499 $)
+.<
+.BC
+.G
+.\
+.___
+._restf
+._restfpr_
+._restgpr0_
+._restgpr1_
+._restvr_
+._savef
+._savefpr_
+._savegpr0_
+._savegpr1_
+._savevr_
+.bss
+.cas
+.ctors
+.data
+.debug
+.debug_abbrev
+.debug_addr
+.debug_aranges
+.debug_info
+.debug_line
+.debug_line_str
+.debug_ranges
+.debug_rnglists
+.debug_str
+.debug_str_offsets
+.dll
+.dynamic
+.dynstr
+.eaPatchBFI
+.eaPatchDiff
+.eaPatchDir
+.eaPatchImpl
+.eaPatchInfo
+.eaPatchInstalled
+.eaPatchOld
+.eaPatchState
+.eaPatchTemp
+.edata
+.fixup
+.fixup_head
+.gnu.libstr
+.got
+.idata
+.init
+.interp
+.map
+.note
+.note.netbsdcore.procinfo
+.opd
+.pdb
+.protected
+.rdata
+.reg
+.rel.dyn
+.rel.plt
+.rela.data.rel.ro.brlt
+.rela.plt
+.rodata
+.sb
+.sbss
+.sfpr
+.stab
+.symtab_shndx
+.sys
+.text
+.toc
+.txt
+//\n// %s - Generated by LanguageExtractor.exe\n//\n\n
+//\n// Language Extractor Log File\n//\n\n
+/>
+/Data/
+/FSType
+/LCU
+/Win32MiniDump.exe 
+/\:
+/access_token
+/client_id
+/connect/auth
+/connect/auth?
+/connect/invalidate
+/connect/token
+/connect/tokeninfo
+/crash_dumps
+/data/
+/data/Scripts/%s
+/data/SharedTypeDescriptors_LCU.ebx
+/device_id
+/entAuthPersonaUri
+/entitlement/deviceUri
+/entitlement/entitlementId
+/entitlement/entitlementSource
+/entitlement/entitlementTag
+/entitlement/entitlementType
+/entitlement/grantDate
+/entitlement/groupName
+/entitlement/isConsumable
+/entitlement/managedLifecycle
+/entitlement/originPermissions
+/entitlement/pidUri
+/entitlement/productCatalog
+/entitlement/productId
+/entitlement/projectId
+/entitlement/status
+/entitlement/statusReasonCode
+/entitlement/terminationDate
+/entitlement/useCount
+/entitlement/version
+/entitlementUri
+/expires_in
+/fs
+/fs/
+/id_token
+/index.html
+/infoSharingReqs/eaMayContact
+/infoSharingReqs/eaPartnersMayContact
+/infoSharingReqs/officiallyRegister
+/kG
+/lib/64
+/lib64
+/loctext/
+/native_data
+/native_data/Data/
+/native_data/Patch/
+/native_data/Scripts/%s
+/native_data/shader_cache/
+/native_root
+/optin
+/persona/dateCreated
+/persona/displayName
+/persona/isVisible
+/persona/lastAuthenticated
+/persona/name
+/persona/namespaceName
+/persona/personaId
+/persona/pidId
+/persona/showPersona
+/persona/status
+/persona/statusReasonCode
+/persona_id
+/personas/
+/pid_id
+/pid_type
+/proxy/identity
+/proxy/identity/entitlements/
+/proxy/identity/infosharingrequirements/
+/proxy/identity/personas/
+/proxy/identity/pids/me/optins/
+/ps3/svn/current/toolchain/trunk/binutils/bfd/cpu-powerpc.c
+/ps3/svn/current/toolchain/trunk/binutils/bfd/cpu-rs6000.c
+/ps3/svn/current/toolchain/trunk/binutils/bfd/dwarf2.c
+/ps3/svn/current/toolchain/trunk/binutils/bfd/elf32-spu.c
+/ps3/svn/current/toolchain/trunk/binutils/bfd/ihex.c
+/ps3/svn/current/toolchain/trunk/binutils/bfd/srec.c
+/ps3/svn/current/toolchain/trunk/binutils/bfd/tekhex.c
+/refresh_token
+/scope
+/screenshots
+/server/common
+/server/instance
+/sfnts
+/temp
+/token_type
+/user/localappdata
+/user/profile
+/user/profilealternate
+/user_id
+/usr/lib
+/usr/lib/ld.so.1
+0 1 2 3 4 5 6 7 8 9
+012345678901234567890123456789012345678901234567890123456789012
+0123456789ABCDEF0123456789ABCDEF
+0123456789abcdefFailed to get Steam auth ticket - time out
+059?
+0AC
+0B6P0mXE1saX13LEP23LS23L
+0OH
+0Z
+0cG
+0dH
+0fD
+0hG
+0jG
+0psE
+0u
+0x%016I64x "%s":0x%04x:0x%08x
+0x%016I64x <unknown module>
+0x%016llx
+0x%08llx
+0x%08x %ls\r\n
+0x%I64x
+1 8 41 41 5 4
+1+G
+1.0
+1.1
+1.12.06
+1.19.27
+100.7323
+10646
+11.0
+11.1
+1111111111:
+123456789
+15.4251
+16
+16Vec8
+17 (SDK370, $Rev: 3499 $)
+17.50
+1\nH
+1\r
+2.08.10
+2.17 (SDK370, $Rev: 3499 $)
+200
+204
+206
+21.1.1.0.0
+23H
+24.7.1
+256
+2XH
+2eF
+2f[?!
+2vH
+3&G
+3'
+302 (Redirect) expected from server, actual response code: %d(%s)
+304
+31H
+32
+32Vec2
+32Vec3
+32Vec4
+3333
+333333s@
+3333UUUU
+35 20 20 15 10 0
+3G
+3\n
+3iG
+3nG
+3|H
+4)H
+400
+404
+4:2:0 color not supported in profile 1 or 3
+4:4:4 color not supported in profile 0 or 2
+4G
+4H
+4k
+4rH
+4~H
+5#H
+500
+53G
+5G
+5\n
+5oG
+6'H
+6.0.12.0
+6.1.0.5
+60H
+64
+64 bit
+64-bit,
+646.1991
+6G
+6b  27-Mar-1998
+6d  %6d  %s%s%s%s%s%s%s  
+7&H
+781010\n
+787878789\t9\t9\t9\t787878789\t9\t9\t9\tddeeddee??
+7G
+7MH
+7\tH
+7lo
+8!H
+8859
+8G
+8J
+8Vec16
+8d  15-Jan-2012
+8gG
+8lx%08lx
+9(H
+9,G
+9:G
+9G
+9c
+9eH
+9tB
+9wH
+:&G
+:.H
+:443
+:5G
+:80
+::*
+::..
+:G
+:authority
+:method
+:path
+:scheme
+:status
+;$H
+;,H
+;;
+;A
+;G
+<!
+<%f, %f, %f>
+<%s> at line %d not inside a loop
+<<missing>>
+<?
+<?xm
+<?xml version="1.0" encoding="UTF-8"?>
+<An exception was encountered while writing this section.>
+<CENSORED>
+<Invalid EcsEntityHandle>
+<NULL>
+<\%d>
+<buffer too small>
+<char, std::char_traits<char>
+<enable live editing to get method name>
+<eof>
+<goto %s> at line %d jumps into the scope of local '%s'
+<illegal>
+<integer>
+<method name not available>
+<name>
+<name> or '...' expected
+<number>
+<s:Envelope s:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">\r\n <s:Body>\r\n  <u:%s xmlns:u="%s">\r\n
+<session>
+<string>
+<unknown>
+=(debug command)
+=(load)
+==>>==>>??
+=?
+=[C]
+=stdin
+>    
+> => 
+> typename 
+>!h
+>"
+>%s
+><&'"
+>\n
+?"N
+?&G
+?>
+??
+???UnloadedModule???
+?WH
+?XH
+?\t
+?bC
+?mG
+?v=
+@%s
+@.G
+@;C
+@@@
+@@AA@@AABBCCBBCC@@AA@@AABBCCBBCC454545456\t6\t6\t6\t454545456\t6\t6\t6\t787878789\t9\t9\t9\t787878789\t9\t9\t9\tFFFFFFFF
+@@AA@@AABBCCBBCC@@AA@@AABBCCBBCCD=>>D=>>E?
+@@AA@@AABBCCBBCC@@AA@@AABBCCBBCCbcbcbcbc6\t6\t6\t6\t454545456\t6\t6\t6\t787878789\t9\t9\t9\t787878789\t9\t9\t9\tffffffff
+@@overflow: BFD_RELOC_UNUSED@@
+@ABCDEFGHIJKLMNOPQRSTUVWXYZ0123-
+@FH
+@G
+@H@
+@L
+@T
+@TC
+@\t
+@_H
+@aH
+@d
+@dC
+@gD
+@h
+@j@
+@k
+@k@
+@kC
+@p
+@t
+@t@
+@uC
+@uE
+@uH
+@uninitialized@@
+@w@
+@x
+A
+A 
+A bank containing slotted sample was loaded but no asset loader was provided. Slot data will not be refreshed.
+A duplicate context is already queued to be executed.
+A duplicate of this node that computes the same value exists elsewhere in the graph.
+A force-unload operation for the texture is pending.
+A global counter resource was in use, and the specified counter cannot be used by this Direct3D device at this time.
+A link_order not found\n
+A load operation has already been queued. Cannot execute multiple loads.
+A resource is not available at the time of the call, but may become available later.
+A stream must start with a complete key frame
+A tangent space was found in the vertex stream, but it is not well-formed (are you sure tangents and binormals were generated)?
+A value has been set on the field, 
+A value was set on a field on 
+A,
+A-H
+A4
+A4@
+A8
+AAF
+ABUSED_ID
+ACCELERATOR
+ACCESS_GROUP_ERR_CURRENT_GROUP
+ACCESS_GROUP_ERR_DEFAULT_GROUP
+ACCESS_GROUP_ERR_INVALID_GROUP
+ACCESS_GROUP_ERR_NOT_CURRENT_GROUP
+ACCESS_GROUP_ERR_NO_GROUP_FOUND
+ACCESS_VIOLATION
+ACCESS_VIOLATION %s address %#p
+ACS
+ACTION_QUEUE
+ACTIVE
+ADD
+ADD_STYLE_NAME
+AFFILIATE_ACCOUNT_DELETED
+AGS
+AGS_1
+ALIGN_TYPE is wrong, please fix
+AMA
+AME
+ANGUAGE
+ANON
+ANONYMOUS
+ANTGenericWorld Broadphase
+ANY
+APPLICATION
+AQUA
+ARFILENAMES/
+ARRAY_BOUNDS_EXCEEDED
+ASC_ORDER
+AT style demangling
+ATTLIST
+AUDCLNT
+AUDIO
+AUDIOSTREAMING
+AUDIT
+AUTH
+AUXILIARY
+AUX_MASTER
+AUX_SLAVE
+AVERAGE_WIDTH
+AVG_CAPITAL_WIDTH
+AVG_LOWERCASE_WIDTH
+Abort Signal
+AccelBlendPlugin (launchAngle=%f, prevPercent=%f, blendPercent=%f)
+Accept-Encoding
+Accept-Language
+AccessRights
+Accumulated Animation Total Translation
+Active Fast Travel Point Reset due to new map, previously was: 
+Active Fast Travel Point Updated to: 
+Actor has no Rig.
+AdapterLuid
+Adding 0 does not change the value.
+Additional Bundles Loaded: Could not access the file.
+Address
+Address  Size     Align Out     In      File    Symbol
+Address(%p) for mapping is not aligned to PageSize(%llu) for %s
+Addressing
+Adobe APP14 marker: version %d, flags 0x%04x 0x%04x, transform %d
+Advapi32.dll
+AffinityMask
+Aftermath Code: 
+Aftermath not enabled: 
+AhG
+AjG
+AlG
+All inputs are constant.
+Allocations#: %3d  (max:%2d) d3dResources#: %4d (max:%2d) Size#:%5dKB (max:%5dKB) - Total:%dMB
+Alternate success value, indicating a successful but nonstandard completion (the precise meaning depends on context).
+Ambient AI failed to start the Choreographer action.\n\n
+An error occurred attempting to load an asset
+An event (such as power cycle) interrupted the gathering of presentation statistics. Any previous statistics should be considered invalid.
+An exception handler returned an invalid disposition to the exception dispatcher. Programmers using a high-level language such as C should never encounter this exception.
+An internal issue prevented the driver from carrying out the specified operation. The driver's state is probably suspect, and the application should not continue.
+An invalid handle was passed to the returning function.
+An invalid parameter was passed to the returning function.
+An invalid pointer was passed to the returning function.
+An unhandled exception
+And-ing any value with false will always be false.
+Angle Max Delta Against Turn
+Angle Max Delta With Turn
+Animatable index %d out of range for audition with %d animatables.
+Animation '%s' has some problems:
+App path
+App version
+AppId
+Application built with libpng-
+Application info
+Application transferred too few scanlines
+Application transferred too many scanlines
+Apply Fade (IN): Debug Name: 
+Archive has no index; run ranlib to add one
+Archive object file in wrong format
+Argument parse errors. 
+Arithmetic table 0x%02x was not defined
+Array element type mismatch found at index 
+Assert %s - %s - %s (%s:%d)\n
+Asset load operation canceled.
+Asset load operation discarded (target bank unloaded).
+Asset loader failed to load the requests asset.
+Asset tracking test case
+AsyncDeviceName
+AsyncExecutor
+AsyncExecutorAsyncOps
+At marker 0x%02x, recovery action %d
+Attempted to insert file data "
+Attempted to load a post-streaming install savefile, we do not see ourselves as being past the streaming install
+AuthCode not found from redirect URL: %s
+AuthForCode
+AutoFadeQuestInfoComponent applyPendingFade set m_activeFadeSegmentId to 
+AutoFadeQuestInfoComponent onDeInit set m_pendingActiveFadeSegmentId to 
+AutoFadeQuestInfoComponent onInit for Quest: 
+AutoFadeQuestInfoComponent onInit set m_pendingActiveFadeSegmentId to 
+Available page file memory
+Available physical memory
+B(
+B0
+B4
+B: invalid SHT_GROUP entry
+B@
+BACKGROUNDCOPY
+BAD
+BAD#
+BAND
+BANNED
+BANNED_COUNTRY
+BASENAME
+BBX
+BCD
+BDF
+BFD_ARELOC_BFIN_CONST
+BFD_ARELOC_BFIN_LAND
+BFD_ARELOC_BFIN_XOR
+BFD_RELOC_16_GOTOFF
+BFD_RELOC_16_PCREL
+BFD_RELOC_16_PLT_PCREL
+BFD_RELOC_24
+BFD_RELOC_32_GOTOFF
+BFD_RELOC_32_GOT_PCREL
+BFD_RELOC_32_SECREL
+BFD_RELOC_386_GOTOFF
+BFD_RELOC_386_TLS_LDM
+BFD_RELOC_390_20
+BFD_RELOC_390_GOT64
+BFD_RELOC_390_GOTENT
+BFD_RELOC_390_GOTPLT12
+BFD_RELOC_390_GOTPLTENT
+BFD_RELOC_390_PC32DBL
+BFD_RELOC_390_PLT64
+BFD_RELOC_390_PLTOFF16
+BFD_RELOC_390_RELATIVE
+BFD_RELOC_390_TLS_GDCALL
+BFD_RELOC_390_TLS_GOTIE12
+BFD_RELOC_390_TLS_GOTIE20
+BFD_RELOC_390_TLS_GOTIE64
+BFD_RELOC_390_TLS_IEENT
+BFD_RELOC_390_TLS_LE32
+BFD_RELOC_390_TLS_TPOFF
+BFD_RELOC_68K_GLOB_DAT
+BFD_RELOC_860_COPY
+BFD_RELOC_860_HIGOT
+BFD_RELOC_860_HIGOTOFF
+BFD_RELOC_860_LOGOT1
+BFD_RELOC_860_PC16
+BFD_RELOC_860_PLT26
+BFD_RELOC_8_FFnn
+BFD_RELOC_8_GOTOFF
+BFD_RELOC_ALPHA_DTPMOD64
+BFD_RELOC_ALPHA_TPREL16
+BFD_RELOC_ARM_ADR_IMM
+BFD_RELOC_ARM_CP_OFF_IMM_S2
+BFD_RELOC_ARM_LITERAL
+BFD_RELOC_ARM_OFFSET_IMM8
+BFD_RELOC_ARM_PCREL_BRANCH
+BFD_RELOC_ARM_T32_ADD_PC12
+BFD_RELOC_ARM_T32_CP_OFF_IMM
+BFD_RELOC_ARM_T32_CP_OFF_IMM_S2
+BFD_RELOC_ARM_T32_IMM12
+BFD_RELOC_ARM_T32_IMMEDIATE
+BFD_RELOC_ARM_TARGET2
+BFD_RELOC_ARM_THUMB_OFFSET
+BFD_RELOC_ARM_TLS_DTPMOD32
+BFD_RELOC_ARM_TLS_LE32
+BFD_RELOC_AVR_CALL
+BFD_RELOC_AVR_HH8_LDI_PM
+BFD_RELOC_AVR_HI8_LDI
+BFD_RELOC_AVR_HI8_LDI_NEG
+BFD_RELOC_AVR_MS8_LDI
+BFD_RELOC_AVR_MS8_LDI_NEG
+BFD_RELOC_BFIN_10_PCREL
+BFD_RELOC_BFIN_11_PCREL
+BFD_RELOC_BFIN_12_PCREL_JUMP
+BFD_RELOC_BFIN_12_PCREL_JUMP_S
+BFD_RELOC_BFIN_24_PCREL_CALL_X
+BFD_RELOC_BFIN_24_PCREL_JUMP_L
+BFD_RELOC_BFIN_4_PCREL
+BFD_RELOC_BFIN_FUNCDESC
+BFD_RELOC_BFIN_FUNCDESC_GOT17M4
+BFD_RELOC_BFIN_FUNCDESC_GOTHI
+BFD_RELOC_BFIN_FUNCDESC_GOTOFF17M4
+BFD_RELOC_BFIN_FUNCDESC_GOTOFFHI
+BFD_RELOC_BFIN_FUNCDESC_GOTOFFLO
+BFD_RELOC_BFIN_FUNCDESC_VALUE
+BFD_RELOC_CRIS_32_GOT
+BFD_RELOC_CRIS_32_GOTPLT
+BFD_RELOC_CRIS_32_PLT_PCREL
+BFD_RELOC_CRIS_RELATIVE
+BFD_RELOC_CRX_REGREL28
+BFD_RELOC_CRX_REL8
+BFD_RELOC_D30V_15_PCREL
+BFD_RELOC_D30V_15_PCREL_R
+BFD_RELOC_D30V_21_PCREL
+BFD_RELOC_D30V_21_PCREL_R
+BFD_RELOC_D30V_32_PCREL
+BFD_RELOC_DLX_HI16_S
+BFD_RELOC_DLX_JMP26
+BFD_RELOC_FR30_10_IN_8
+BFD_RELOC_FR30_20
+BFD_RELOC_FR30_8_IN_8
+BFD_RELOC_FRV_FUNCDESC_GOTLO
+BFD_RELOC_FRV_FUNCDESC_GOTOFF12
+BFD_RELOC_FRV_FUNCDESC_GOTOFFHI
+BFD_RELOC_FRV_FUNCDESC_GOTOFFLO
+BFD_RELOC_FRV_GOTOFF12
+BFD_RELOC_FRV_GOTTLSDESCHI
+BFD_RELOC_FRV_GOTTLSOFFHI
+BFD_RELOC_FRV_GPREL12
+BFD_RELOC_FRV_LABEL24
+BFD_RELOC_FRV_TLSOFF
+BFD_RELOC_H8_DIR16R8
+BFD_RELOC_HI16_S_GOTOFF
+BFD_RELOC_IA64_DTPREL64LSB
+BFD_RELOC_IA64_FPTR32LSB
+BFD_RELOC_IA64_FPTR64I
+BFD_RELOC_IA64_GPREL32LSB
+BFD_RELOC_IA64_GPREL64LSB
+BFD_RELOC_IA64_IMM14
+BFD_RELOC_IA64_LTOFF_DTPMOD22
+BFD_RELOC_IA64_LTOFF_FPTR32LSB
+BFD_RELOC_IA64_LTOFF_FPTR32MSB
+BFD_RELOC_IA64_LTOFF_FPTR64LSB
+BFD_RELOC_IA64_LTOFF_FPTR64MSB
+BFD_RELOC_IA64_PCREL21F
+BFD_RELOC_IA64_PCREL21M
+BFD_RELOC_IA64_PCREL22
+BFD_RELOC_IA64_SECREL64LSB
+BFD_RELOC_IA64_SEGREL64LSB
+BFD_RELOC_IP2K_LO8INSN
+BFD_RELOC_LO16_GOTOFF
+BFD_RELOC_M32C_HI8
+BFD_RELOC_M32R_10_PCREL
+BFD_RELOC_M32R_18_PCREL
+BFD_RELOC_M32R_26_PCREL
+BFD_RELOC_M32R_GOTPC24
+BFD_RELOC_M32R_HI16_SLO
+BFD_RELOC_M32R_HI16_ULO
+BFD_RELOC_M32R_LO16
+BFD_RELOC_M32R_SDA16
+BFD_RELOC_M68HC11_RL_GROUP
+BFD_RELOC_MCORE_PCREL_IMM11BY2
+BFD_RELOC_MCORE_PCREL_JSR_IMM11BY2
+BFD_RELOC_MIPS16_GPREL
+BFD_RELOC_MIPS_HIGHEST
+BFD_RELOC_MIPS_JALR
+BFD_RELOC_MIPS_JMP
+BFD_RELOC_MIPS_SHIFT6
+BFD_RELOC_MIPS_TLS_DTPMOD32
+BFD_RELOC_MIPS_TLS_DTPMOD64
+BFD_RELOC_MIPS_TLS_DTPREL32
+BFD_RELOC_MIPS_TLS_DTPREL64
+BFD_RELOC_MIPS_TLS_DTPREL_HI16
+BFD_RELOC_MIPS_TLS_DTPREL_LO16
+BFD_RELOC_MIPS_TLS_GD
+BFD_RELOC_MMIX_BASE_PLUS_OFFSET
+BFD_RELOC_MMIX_CBRANCH_J
+BFD_RELOC_MMIX_JMP_3
+BFD_RELOC_MMIX_LOCAL
+BFD_RELOC_MMIX_PUSHJ
+BFD_RELOC_MMIX_PUSHJ_2
+BFD_RELOC_MMIX_PUSHJ_STUBBABLE
+BFD_RELOC_MMIX_REG
+BFD_RELOC_MSP430_16_PCREL_BYTE
+BFD_RELOC_MSP430_2X_PCREL
+BFD_RELOC_MT_GNU_VTINHERIT
+BFD_RELOC_MT_HI16
+BFD_RELOC_MT_PCINSN8
+BFD_RELOC_NS32K_DISP_32_PCREL
+BFD_RELOC_NS32K_IMM_16_PCREL
+BFD_RELOC_NS32K_IMM_8
+BFD_RELOC_NS32K_IMM_8_PCREL
+BFD_RELOC_PJ_CODE_HI16
+BFD_RELOC_PPC64_ADDR16_LO_DS
+BFD_RELOC_PPC64_DTPMOD32
+BFD_RELOC_PPC64_DTPREL16_HIGHER
+BFD_RELOC_PPC64_DTPREL16_HIGHERA
+BFD_RELOC_PPC64_DTPREL16_HIGHEST
+BFD_RELOC_PPC64_DTPREL16_HIGHESTA
+BFD_RELOC_PPC64_DTPREL16_LO_DS
+BFD_RELOC_PPC64_HIGHER
+BFD_RELOC_PPC64_HIGHEST
+BFD_RELOC_PPC64_HIGHEST_S
+BFD_RELOC_PPC64_PLTGOT16_DS
+BFD_RELOC_PPC64_PLTGOT16_LO_DS
+BFD_RELOC_PPC64_TOC16_HA
+BFD_RELOC_PPC64_TOC16_LO_DS
+BFD_RELOC_PPC64_TPREL16_HIGHER
+BFD_RELOC_PPC64_TPREL16_HIGHERA
+BFD_RELOC_PPC64_TPREL16_HIGHEST
+BFD_RELOC_PPC64_TPREL16_HIGHESTA
+BFD_RELOC_PPC64_TPREL16_LO_DS
+BFD_RELOC_PPC_BA16_BRNTAKEN
+BFD_RELOC_PPC_BA26
+BFD_RELOC_PPC_COPY
+BFD_RELOC_PPC_DTPREL
+BFD_RELOC_PPC_DTPREL16_HI
+BFD_RELOC_PPC_EMB_MRKREF
+BFD_RELOC_PPC_EMB_NADDR16_LO
+BFD_RELOC_PPC_EMB_NADDR32
+BFD_RELOC_PPC_EMB_RELST_LO
+BFD_RELOC_PPC_EMB_SDA21
+BFD_RELOC_PPC_EMB_SDA2I16
+BFD_RELOC_PPC_GOT_DTPREL16
+BFD_RELOC_PPC_GOT_TLSGD16_HI
+BFD_RELOC_PPC_GOT_TLSLD16_LO
+BFD_RELOC_PPC_LOCAL24PC
+BFD_RELOC_PPC_TPREL16_LO
+BFD_RELOC_SH_ALIGN
+BFD_RELOC_SH_COPY
+BFD_RELOC_SH_DISP20
+BFD_RELOC_SH_DISP20BY8
+BFD_RELOC_SH_GOTPC
+BFD_RELOC_SH_GOTPC_MEDHI16
+BFD_RELOC_SH_GOTPC_MEDLOW16
+BFD_RELOC_SH_GOTPLT10BY8
+BFD_RELOC_SH_GOT_MEDHI16
+BFD_RELOC_SH_IMM3U
+BFD_RELOC_SH_IMMS10BY4
+BFD_RELOC_SH_IMMS6
+BFD_RELOC_SH_IMM_MEDHI16
+BFD_RELOC_SH_IMM_MEDHI16_PCREL
+BFD_RELOC_SH_IMM_MEDLOW16_PCREL
+BFD_RELOC_SH_JMP_SLOT
+BFD_RELOC_SH_PLT_MEDHI16
+BFD_RELOC_SH_TLS_DTPMOD32
+BFD_RELOC_SH_TLS_GD_32
+BFD_RELOC_SH_TLS_TPOFF32
+BFD_RELOC_SPARC_11
+BFD_RELOC_SPARC_5
+BFD_RELOC_SPARC_7
+BFD_RELOC_SPARC_COPY
+BFD_RELOC_SPARC_LOX10
+BFD_RELOC_SPARC_PC22
+BFD_RELOC_SPARC_PC_HH22
+BFD_RELOC_SPARC_PC_HM10
+BFD_RELOC_SPARC_PC_LM22
+BFD_RELOC_SPARC_PLT64
+BFD_RELOC_SPARC_TLS_DTPOFF64
+BFD_RELOC_SPARC_TLS_GD_CALL
+BFD_RELOC_SPARC_TLS_IE_ADD
+BFD_RELOC_SPARC_TLS_LDM_HI22
+BFD_RELOC_SPARC_TLS_LE_LOX10
+BFD_RELOC_SPARC_UA16
+BFD_RELOC_SPARC_WDISP16
+BFD_RELOC_SPARC_WDISP19
+BFD_RELOC_SPU_IMM16
+BFD_RELOC_SPU_IMM16W
+BFD_RELOC_SPU_IMM8
+BFD_RELOC_THUMB_PCREL_BRANCH12
+BFD_RELOC_THUMB_PCREL_BRANCH20
+BFD_RELOC_THUMB_PCREL_BRANCH23
+BFD_RELOC_THUMB_PCREL_BRANCH25
+BFD_RELOC_TIC54X_PARTMS9
+BFD_RELOC_V850_CALLT_16_16_OFFSET
+BFD_RELOC_V850_CALLT_6_7_OFFSET
+BFD_RELOC_V850_LO16_SPLIT_OFFSET
+BFD_RELOC_V850_SDA_15_16_OFFSET
+BFD_RELOC_V850_SDA_16_16_OFFSET
+BFD_RELOC_V850_SDA_16_16_SPLIT_OFFSET
+BFD_RELOC_V850_TDA_16_16_OFFSET
+BFD_RELOC_V850_TDA_4_5_OFFSET
+BFD_RELOC_V850_TDA_6_8_OFFSET
+BFD_RELOC_V850_TDA_7_7_OFFSET
+BFD_RELOC_V850_ZDA_15_16_OFFSET
+BFD_RELOC_V850_ZDA_16_16_OFFSET
+BFD_RELOC_V850_ZDA_16_16_SPLIT_OFFSET
+BFD_RELOC_VAX_JMP_SLOT
+BFD_RELOC_VTABLE_INHERIT
+BFD_RELOC_X86_64_DTPOFF64
+BFD_RELOC_X86_64_GLOB_DAT
+BFD_RELOC_X86_64_GOT32
+BFD_RELOC_X86_64_GOTPC32
+BFD_RELOC_X86_64_GOTPC32_TLSDESC
+BFD_RELOC_X86_64_GOTPC64
+BFD_RELOC_X86_64_GOTPCREL64
+BFD_RELOC_XSTORMY16_12
+BFD_RELOC_XTENSA_OP2
+BFD_RELOC_XTENSA_SLOT0_ALT
+BFD_RELOC_XTENSA_SLOT11_OP
+BFD_RELOC_XTENSA_SLOT4_ALT
+BFD_RELOC_XTENSA_SLOT8_ALT
+BILLING
+BITMAP
+BLB
+BLBUI
+BLB_CLI
+BLUETOOTH_ATT
+BNOT
+BOR
+BREAKPOINT
+BROADPHASE_BORDER_ASSERT
+BROADPHASE_BORDER_DO_NOTHING
+BROADPHASE_BORDER_FIX_ENTITY
+BROADPHASE_BORDER_REMOVE_ENTITY
+BROADPHASE_TYPE_HYBRID
+BROADPHASE_TYPE_SAP
+BROADPHASE_TYPE_TREE
+BROAD_PHASE_BORDER
+BROAD_PHASE_ENTITY
+BROAD_PHASE_INVALID
+BROAD_PHASE_MAX_ID
+BROAD_PHASE_PHANTOM
+BSF: Parsed AU %3d: %p / %d\n
+BSF: Skipped AU %3d: %p / %d\n
+BSH
+BS__
+BWEcoQuestDataAdvisorServer - journal pause
+BWEcoQuestDataAdvisorServer saving suspended while switching quests.
+BWWorldUtilitiesPersistenceSavegameContributor::savegameLoad Fail to load: Invalid quest id 
+BWWorldUtilitiesPersistenceSavegameContributor::savegameLoad Failed to load a checkpoint Id from the save file's metadata.
+BXOR
+B\
+Backing store not supported
+Backup dei dati del profilo
+Backup dos dados do perfil
+Bad 360 collinear inversions, origNumSections=%d\n
+Bad value
+BaseRenderer:m_activeRenderContextCs
+Beat Detector External Memory Buffers
+Bin/Win32MiniDump
+Bogus DAC index %d
+Bogus DAC value 0x%x
+Bogus DHT index %d
+Bogus DQT index %d
+Bogus Huffman table definition
+Bogus JPEG colorspace
+Bogus buffer control mode
+Bogus input colorspace
+Bogus marker length
+Bogus message code %d
+Bogus sampling factors
+Bogus virtual array access
+Bold Italic
+Browser reported error: 0x%x %s
+Buffer %d does not contain a decoded frame
+Buffer error in compressed datastream
+Buffer passed to JPEG library is too small
+BufferSizeInMB
+Build info
+Building destination file info
+Building destination files
+Building save data cache.
+BundleName, RequestedAssetName, ActualAssetName, RefCount\n
+Bundles Loaded: Template File could not be opened.
+Bundles Loaded: Variant File could not be opened.
+BusError Signal
+C levels
+C stack overflow
+C$
+C(
+C++
+C,
+C0
+C4
+C4H
+C8
+C<
+C@
+CAL
+CALL
+CANCEL
+CAP_HEIGHT
+CATEGORY_TYPE_GLOBAL
+CATEGORY_TYPE_REGULAR
+CBV_SRV_UAV
+CCIR601 sampling not implemented yet
+CCP
+CD
+CDATA
+CDATA[
+CERT
+CFF
+CH
+CHARS
+CHARSET_COLLECTIONS
+CHARSET_ENCODING
+CHARSET_REGISTRY
+CHILD_APPROVED
+CHILD_PENDING
+CID
+CID Type 1
+CIDFontType
+CIDFontVersion
+CIDMapOffset
+CI\VEN_10DE&CC_0302
+CLAIMED_BY_TRUE_OWNER
+CLF
+CLNT
+CLONE_DATAS_WITH_MOTORS
+CLONE_DEEP_WITH_MOTORS
+CLONE_DEFAULT
+CLONE_FORCE_SHALLOW
+CLONE_SHALLOW_IF_NOT_CONSTRAINED_TO_WORLD
+CLOSURE
+CLUBS_ACCEPT_CHALLENGES
+CLUBS_ACCEPT_RIVALS
+CLUBS_ALL_NEWS
+CLUBS_ART_GIF
+CLUBS_ART_JPG
+CLUBS_ART_UNKNOWN
+CLUBS_ASSOCIATE_NEWS
+CLUBS_CUSTOM_BANNER
+CLUBS_CUSTOM_LOGO
+CLUBS_GM
+CLUBS_INVITATION
+CLUBS_IN_SEASON
+CLUBS_MAX_DIVISION_SIZE
+CLUBS_MAX_GM_COUNT
+CLUBS_MAX_INACTIVE_DAYS
+CLUBS_MAX_INVITE_COUNT
+CLUBS_MAX_MEMBER_COUNT
+CLUBS_MAX_NEWS_COUNT
+CLUBS_MEMBER
+CLUBS_MEMBER_CUSTOM_ONLINE_STATUS
+CLUBS_MEMBER_CUSTOM_ONLINE_STATUS_1
+CLUBS_MEMBER_CUSTOM_ONLINE_STATUS_2
+CLUBS_MEMBER_CUSTOM_ONLINE_STATUS_3
+CLUBS_MEMBER_CUSTOM_ONLINE_STATUS_4
+CLUBS_MEMBER_CUSTOM_ONLINE_STATUS_5
+CLUBS_MEMBER_CUSTOM_ONLINE_STATUS_6
+CLUBS_MEMBER_CUSTOM_ONLINE_STATUS_7
+CLUBS_MEMBER_CUSTOM_ONLINE_STATUS_8
+CLUBS_MEMBER_IN_GAME
+CLUBS_MEMBER_IN_GAMEROOM
+CLUBS_MEMBER_IN_OPEN_SESSION
+CLUBS_MEMBER_OFFLINE
+CLUBS_MEMBER_ONLINE_INTERACTIVE
+CLUBS_MEMBER_ONLINE_NON_INTERACTIVE
+CLUBS_MEMBER_ONLINE_STATUS_COUNT
+CLUBS_MEMBER_POSTED_NEWS
+CLUBS_METADATA_TYPE_BINARY
+CLUBS_METADATA_TYPE_STRING
+CLUBS_MSGATR_CLUB_MSG_ID
+CLUBS_MSGATR_CLUB_NAME
+CLUBS_MSGATR_MESSAGE_TYPE
+CLUBS_NEWS_HIDDEN_BY_GM
+CLUBS_NEWS_HIDDEN_BY_GPS
+CLUBS_NO_ORDER
+CLUBS_ORDER_BY_CREATIONTIME
+CLUBS_ORDER_BY_MEMBERCOUNT
+CLUBS_ORDER_BY_NAME
+CLUBS_OWNER
+CLUBS_PERIOD_DAILY
+CLUBS_PERIOD_MONTHLY
+CLUBS_PERIOD_WEEKLY
+CLUBS_PETITION
+CLUBS_PETITION_SENT_BY_ME
+CLUBS_PETITION_SENT_TO_CLUB
+CLUBS_PI_PETITION_ACCEPTED
+CLUBS_PI_PETITION_DECLINED
+CLUBS_PI_PETITION_REVOKED
+CLUBS_PI_PETITION_SENT
+CLUBS_POST_SEASON
+CLUBS_PURGE_HOUR
+CLUBS_RECORD_STAT_FLOAT
+CLUBS_RECORD_STAT_INT
+CLUBS_SENT_BY_CLUB
+CLUBS_SENT_BY_ME
+CLUBS_SENT_TO_ME
+CLUBS_SERVER_GENERATED_NEWS
+CLUBS_SORT_TIME_ASC
+CLUBS_SORT_TIME_DESC
+CLUB_ACCEPT_ALL
+CLUB_ACCEPT_GM_FRIENDS
+CLUB_ACCEPT_NONE
+CLUB_JOIN_AND_PETITION_FAILURE
+CLUB_JOIN_SUCCESS
+CLUB_LOG_EVENT_AWARD_TROPHY
+CLUB_LOG_EVENT_CREATE_CLUB
+CLUB_LOG_EVENT_GM_DEMOTED
+CLUB_LOG_EVENT_GM_PROMOTED
+CLUB_LOG_EVENT_JOIN_CLUB
+CLUB_LOG_EVENT_LEAVE_CLUB
+CLUB_LOG_EVENT_OWNERSHIP_TRANSFERRED
+CLUB_LOG_EVENT_REMOVED_FROM_CLUB
+CLUB_PASSWORD_IGNORE
+CLUB_PASSWORD_NOT_PROTECTED
+CLUB_PASSWORD_PROTECTED
+CLUB_PETITION_SUCCESS
+CLUB_TAG_SEARCH_IGNORE
+CLUB_TAG_SEARCH_MATCH_ALL
+CLUB_TAG_SEARCH_MATCH_ANY
+CMI
+CODE
+CODE_ALREADY_DISABLED
+CODE_ALREADY_USED
+COMMENT
+COMMON
+COMPENSATION
+COMPLUS
+COMPRESSION_ERROR
+CONCAT
+CONFIGURATION/WIA
+CONFIG_MASTER
+CONNECT
+CONNECT_ERROR
+CONTACT_POINT_ACCEPT_ALWAYS
+CONTACT_POINT_REJECT_DUBIOUS
+CONTACT_POINT_REJECT_MANY
+CONTROL
+COPYRIGHT
+COUNT
+COUNTRY
+CPU cores: %d  Job threads: %d  CPU: %s
+CPU count
+CPU_LOCKABLE 
+CRC error
+CS
+CT
+CUSTOMER_OPT_OUT
+CUSTOMER_UNDER_AGE
+CX
+C_CTYPE
+C_MESSAGES
+C_TIME
+C`
+CachePageSizeInKB
+CacheSizeInMB
+CachedContacts
+Call stack
+Call to NULL read function
+Call to NULL write function
+Callstack entry
+Callstack not available\r\n
+Callstack:\r\n
+Can't set both read_data_fn and write_data_fn in the same structure
+Can't write sCAL (buffer too small)
+Can't write tRNS with an alpha channel
+Cannot attach log handler (%x); out of slots for type %s.
+Cannot change width or height after initialization
+Cannot create another save of type 
+Cannot determine type from empty array
+Cannot increase lag_in_frames
+Cannot increase width or height larger than their initial values
+Cannot quantize more than %d color components
+Cannot quantize to fewer than %d colors
+Cannot quantize to more than %d colors
+Cannot queue a save operation which would occur after a load operation
+Cannot transcode due to multiple use of quantization table %d
+CapCap
+Career snapshots on disk for the career 
+Case %i input returned.
+CaseFold
+CaseFold 
+Category for shapes that are returned from audio queries
+Category for shapes that are returned from detailed queries
+Category for shapes that are returned from queries that are interested in terrain only
+Category for shapes that are returned from queries that want to find water height
+Category for shapes that collide with the camera
+Category for shapes that everything else (non-gameplay) collides with
+Category for shapes that fast debris should collide with
+Category for shapes that gameplay objects should collide with
+Category for shapes that represent the character (eg capsule)
+Category for shapes that represent the character ragdoll
+Category for shapes that the character (eg capsule) should collide with
+Category for shapes that vehicles should collide with
+Category for shapes that will affect pathfinding
+Category for shapes that will cause water disturbances
+Caution: quantization tables are too coarse for baseline JPEG
+Cd
+Cell:Mambo
+Ch
+ChActivation
+ChBatchPostSim
+ChBatchPreSim
+ChGetCurrentPose
+ChPostSimUpdEnd
+ChPreSimUpdEnd
+ChSetCurrentPose
+ChSetup
+ChToiManager
+ChUpdateProc
+Child Controller Absolute Tick
+Chunk doesn't belong to heap.
+Chunk has fill error.
+Clear Int (Key Range) | Min Key: %i | Max Key: %i
+ClientBWSaveGameManager::Save Copying autosave as directed by project interface (see licensee_code::isSaveAllowed)
+ClientBWSaveGameManager::Save Rejected by project interface (see licensee_code::isSaveAllowed)
+ClientBWSaveGameManager::copyAutosave Failed to copy last autosave
+ClientBWSavegameManager::load BWSavegame system is not active
+ClientBWSavegameManager::load Failed to find player, load is not possible
+ClientBWSavegameManager::save BWSavegame system is not active
+ClientBWSavegameManager::save Failed to find player, load is not possible
+ClientMorrisonRPGPlayerExtent::savegameLoad - failed to deserialize custom player appearance data.File to RPG->Prog.
+ClipMaxSizeCompressedInKB
+ClipMaxSizeInKB
+ClipResetToKeyFrame
+ClipSBASizeInKB
+Closed temporary file %s
+ClothInstance::SkinningMatrices
+ColliderSetDefinition::Init::Colliders
+CollisionHook do not match. Expected: (
+CommonRenderFrameResourceProvider
+CompartmentSerializationMap - tracks compartments that are alive for serialization
+CompileContacts
+CompileDrives
+CompileJoints
+Compiler
+Component index %d: mismatching sampling ratio %d:%d, %d:%d, %c
+ComputeShaderSolution(%X-%X-%X-%X)
+Computer DNS name
+Computer name
+Condition will always be false.
+Condition will always be true.
+Condition: Carry clear (no bit carry); Executed if C flag == 0.
+Condition: Carry set (there was a bit carry); Executed if C flag == 1.
+Condition: Equal; Executed if Z flag == 1.
+Condition: Minus, negative; Executed if N flag == 1.
+Condition: No overflow; Executed if V flag == 0.
+Condition: Not equal; Executed if Z flag == 0.
+Condition: Overflow; Executed if V flag == 1.
+Condition: Plus, positive or zero; Executed if N flag == 0.
+Condition: Signed greater than or equal; flags: N == V.
+Condition: Signed greater than; Executed if flags: Z == 0 and N == V.
+Condition: Signed less than or equal; Executed if flags: Z == 1 or N != V
+Condition: Signed less than; Executed if flags: N != V.
+Condition: Unsigned higher; Executed if flags: C == 1 and Z == 0.
+Condition: Unsigned lower or same; Executed if flags: C == 0 or Z == 1.
+Conflicting flags.
+Connection: 
+Connection: Keep-Alive
+Console command '%s' is missing a groupName. Perhaps you meant '%s.%s' instead?
+ConsoleRegistry
+Constant has been duplicated.
+Contact Spy AccumlateJob
+Contact Spy Accumulate Job
+Contact Spy Container
+ContactGen Scheduler
+ContactGen Workspace
+Content-Encoding: gzip\r\n
+Content-Length:
+Content-Type: application/heat
+Content-Type: application/json
+Content-Type: application/json; charset=UTF-8\r\nx-ea-taxv:%s\r\nx-ea-env:%s\r\n
+Content-Type: application/x-www-form-urlencoded\r\n
+Content-Type: application/xml
+Content-Type: text/plain; charset=UTF-8\r\n
+Content-Type: text/xml; charset="utf-8"\r\nSOAPAction: "%s#%s"\r\nCache-Control: no-cache\r\n
+ContentIdArray
+Context status(es)\r\n
+Control statement that branches based on an integer
+Control statement that selects a case value to return
+ConversationLoadScreenAspect Instant UI Fade IN
+ConversationLoadScreenStreaming Instant UI Fade IN
+ConvexHullMesh
+ConvexHullPrim
+Copyright (C) 1998, Thomas G. Lane
+Copyright (C) 2007 EA DICE
+Copyright (C) 2012, Thomas G. Lane, Guido Vollbeding
+Copyright 2005 Free Software Foundation, Inc.\n
+Core2GlobalPipelineCache_Preloading
+Corrupt JPEG data: %u extraneous bytes before marker 0x%02x
+Corrupt JPEG data: bad Huffman code
+Corrupt JPEG data: bad arithmetic code
+Corrupt JPEG data: found marker 0x%02x instead of RST%d
+Corrupt JPEG data: premature end of data segment
+Corrupt slot data loaded into transfer buffer (discarded).
+Could not CopyFile %s to %s
+Could not create directory %s
+Could not create directory %s because file with the same name exists.\n
+Could not find DOF %s in the Pose; does it exist in this Actor's Rig?
+Could not get TLS/SSL certificate info for %s\n
+Could not get controller for Animatable %s.
+Could not load url
+Could not open [%s] with params [%s]
+Could not read actual value.
+Couldn't free memory for %s
+Couldn't reserve memory (size: %llu) for %s
+Couldn't reserve memory (size: %llu) when allocating for %s
+CreateDXGIFactory1(__uuidof(IDXGIFactory1), (void**)(&m_dxgiFactory.assignGet()))
+Critical Error, unable to allocate %d bytes for %d objects in GeoArray::Init()
+CryptoKeyId
+CryptoRequest
+Ct
+Curr Action Delta Rotation
+CurrentBuildNumber
+CurveClipNode (anim=0x%x, prevTime=%f, curTime=%f)
+CwH
+C|
+D+G
+D+H
+D3D ERROR #
+D3D10_ERROR_FILE_NOT_FOUND
+D3D10_ERROR_TOO_MANY_UNIQUE_STATE_OBJECTS
+D3D11CreateDeviceExtensionContext1
+D3D11DestroyDeviceExtensionContext
+D3D11GetSupportedVersions
+D3D11_ERROR_DEFERRED_CONTEXT_MAP_WITHOUT_INITIAL_DISCARD
+D3D11_ERROR_FILE_NOT_FOUND
+D3D11_ERROR_TOO_MANY_UNIQUE_STATE_OBJECTS
+D3D11_ERROR_TOO_MANY_UNIQUE_VIEW_OBJECTS
+D3D12.dll
+D3D12SerializeRootSignature
+D3D12SerializeRootSignature( &rootSignatureDesc, D3D_ROOT_SIGNATURE_VERSION_1, outBlob, &errorBlob.assignGet())
+D3D12_ERROR_ADAPTER_NOT_FOUND
+D3D12_ERROR_DRIVER_VERSION_MISMATCH
+D3DKMTEnumAdapters2
+D3DKMTEnumAdapters3
+D3DKMTQueryAdapterInfo
+D6
+D:G
+D=>>D=>>E?
+DAF
+DATATYPE_MISALIGNMENT
+DATE_STATUS_MISMATCH
+DC
+DCT coefficient out of range
+DCT scaled block size %dx%d not supported
+DEACTIVATED
+DEACTIVATED_AFFILIATE
+DEACTIVATED_CS
+DEACTIVATED_EMAIL_LINK
+DEBUG
+DEBUGGERS
+DED
+DEF
+DEFAULT_CHAR
+DEFRAG
+DELETE
+DELETED-OUTPUT_FORMAT_LRB_DUALTEXTURE
+DELETED-OUTPUT_FORMAT_U16
+DELETE_BY_CATEGORY
+DELETE_BY_CATEGORY_ENTITYID
+DELETE_BY_CATEGORY_KEYSCOPE
+DELETE_BY_CATEGORY_KEYSCOPE_ENTITYID
+DELETE_BY_CATEGORY_KEYSCOPE_USERSET
+DELETE_BY_ENTITYID
+DELETE_BY_KEYSCOPE_ENTITYID
+DELETE_BY_KEYSCOPE_USERSET
+DELIVERY_OPTIMIZATION
+DEP
+DEPLOYMENT_SERVICES_BINLSVC
+DEPLOYMENT_SERVICES_CONTENT_PROVIDER
+DEPLOYMENT_SERVICES_DRIVER_PROVISIONING
+DEPLOYMENT_SERVICES_IMAGING
+DEPLOYMENT_SERVICES_MANAGEMENT
+DEPLOYMENT_SERVICES_MULTICAST_CLIENT
+DEPLOYMENT_SERVICES_MULTICAST_SERVER
+DEPLOYMENT_SERVICES_PXE
+DEPLOYMENT_SERVICES_SERVER
+DEPLOYMENT_SERVICES_TFTP
+DEPLOYMENT_SERVICES_TRANSPORT_MANAGEMENT
+DEPLOYMENT_SERVICES_UTIL
+DESC_ORDER
+DESTINATION
+DEVICE
+DEVICE_FONT_NAME
+DEVICE_UPDATE_AGENT
+DFGirl-W6-WIN-BF
+DFGothic-EB
+DFGyoSho-Lt
+DFHSGothic-W5
+DFHSMincho-W3
+DFHSMincho-W7
+DFKai-SB
+DFKaiSho-SB
+DFKaiShu
+DGF
+DIRECT2D
+DIRECT3D10
+DIRECT3D11
+DIRECT3D11_DEBUG
+DIRECT3D12
+DIRECT3D12_DEBUG
+DIRECTMUSIC
+DIRECTORYSERVICE
+DISPATCH
+DIT
+DIV
+DLCHayBold
+DLCHayMedium
+DLCKaiMedium
+DLCLiShu
+DLCRoundBold
+DLS
+DO
+DOB
+DOCTYPE
+DOF gather near alpha
+DONE
+DO_ADD_REFERENCES
+DO_NOT_ADD_REFERENCES
+DPLAY
+DR
+DRVSERVICING
+DSTORAGE.dll
+DSV
+DUPLICATE_VALUE
+DVG
+DWIDTH
+DXGI
+DXGI is unable to provide content protection on the swapchain. This is typically caused by an older driver, or by the application using a swapchain that is incompatible with content protection.
+DXGI_DDI
+DXGI_ERROR_ACCESS_DENIED
+DXGI_ERROR_ACCESS_LOST
+DXGI_ERROR_CANNOT_PROTECT_CONTENT
+DXGI_ERROR_DEVICE_HUNG
+DXGI_ERROR_DEVICE_REMOVED
+DXGI_ERROR_DEVICE_RESET
+DXGI_ERROR_DRIVER_INTERNAL_ERROR
+DXGI_ERROR_FRAME_STATISTICS_DISJOINT
+DXGI_ERROR_GRAPHICS_VIDPN_SOURCE_IN_USE
+DXGI_ERROR_INVALID_CALL
+DXGI_ERROR_MORE_DATA
+DXGI_ERROR_NAME_ALREADY_EXISTS
+DXGI_ERROR_NONEXCLUSIVE
+DXGI_ERROR_NOT_CURRENTLY_AVAILABLE
+DXGI_ERROR_NOT_FOUND
+DXGI_ERROR_REMOTE_CLIENT_DISCONNECTED
+DXGI_ERROR_REMOTE_OUTOFMEMORY
+DXGI_ERROR_RESTRICT_TO_OUTPUT_STALE
+DXGI_ERROR_SESSION_DISCONNECTED
+DXGI_ERROR_UNSUPPORTED
+DXGI_ERROR_WAIT_TIMEOUT
+DXGI_ERROR_WAS_STILL_DRAWING
+DXGI_FORMAT_420_OPAQUE
+DXGI_FORMAT_A8P8
+DXGI_FORMAT_A8_UNORM
+DXGI_FORMAT_AI44
+DXGI_FORMAT_AYUV
+DXGI_FORMAT_B4G4R4A4_UNORM
+DXGI_FORMAT_B5G5R5A1_UNORM
+DXGI_FORMAT_B5G6R5_UNORM
+DXGI_FORMAT_B8G8R8A8_TYPELESS
+DXGI_FORMAT_B8G8R8A8_UNORM
+DXGI_FORMAT_B8G8R8A8_UNORM_SRGB
+DXGI_FORMAT_B8G8R8X8_TYPELESS
+DXGI_FORMAT_B8G8R8X8_UNORM
+DXGI_FORMAT_B8G8R8X8_UNORM_SRGB
+DXGI_FORMAT_BC1_TYPELESS
+DXGI_FORMAT_BC1_UNORM
+DXGI_FORMAT_BC1_UNORM_SRGB
+DXGI_FORMAT_BC2_TYPELESS
+DXGI_FORMAT_BC2_UNORM
+DXGI_FORMAT_BC2_UNORM_SRGB
+DXGI_FORMAT_BC3_TYPELESS
+DXGI_FORMAT_BC3_UNORM
+DXGI_FORMAT_BC3_UNORM_SRGB
+DXGI_FORMAT_BC4_SNORM
+DXGI_FORMAT_BC4_TYPELESS
+DXGI_FORMAT_BC4_UNORM
+DXGI_FORMAT_BC5_SNORM
+DXGI_FORMAT_BC5_TYPELESS
+DXGI_FORMAT_BC5_UNORM
+DXGI_FORMAT_BC6H_SF16
+DXGI_FORMAT_BC6H_TYPELESS
+DXGI_FORMAT_BC6H_UF16
+DXGI_FORMAT_BC7_TYPELESS
+DXGI_FORMAT_BC7_UNORM
+DXGI_FORMAT_BC7_UNORM_SRGB
+DXGI_FORMAT_D16_UNORM
+DXGI_FORMAT_D24_UNORM_S8_UINT
+DXGI_FORMAT_D32_FLOAT
+DXGI_FORMAT_D32_FLOAT_S8X24_UINT
+DXGI_FORMAT_G8R8_G8B8_UNORM
+DXGI_FORMAT_IA44
+DXGI_FORMAT_NV11
+DXGI_FORMAT_NV12
+DXGI_FORMAT_P010
+DXGI_FORMAT_P016
+DXGI_FORMAT_P8
+DXGI_FORMAT_R10G10B10A2_TYPELESS
+DXGI_FORMAT_R10G10B10A2_UINT
+DXGI_FORMAT_R10G10B10A2_UNORM
+DXGI_FORMAT_R10G10B10_XR_BIAS_A2_UNORM
+DXGI_FORMAT_R11G11B10_FLOAT
+DXGI_FORMAT_R16G16B16A16_FLOAT
+DXGI_FORMAT_R16G16B16A16_SINT
+DXGI_FORMAT_R16G16B16A16_SNORM
+DXGI_FORMAT_R16G16B16A16_TYPELESS
+DXGI_FORMAT_R16G16B16A16_UINT
+DXGI_FORMAT_R16G16B16A16_UNORM
+DXGI_FORMAT_R16G16_FLOAT
+DXGI_FORMAT_R16G16_SINT
+DXGI_FORMAT_R16G16_SNORM
+DXGI_FORMAT_R16G16_TYPELESS
+DXGI_FORMAT_R16G16_UINT
+DXGI_FORMAT_R16G16_UNORM
+DXGI_FORMAT_R16_FLOAT
+DXGI_FORMAT_R16_SINT
+DXGI_FORMAT_R16_SNORM
+DXGI_FORMAT_R16_TYPELESS
+DXGI_FORMAT_R16_UINT
+DXGI_FORMAT_R16_UNORM
+DXGI_FORMAT_R1_UNORM
+DXGI_FORMAT_R24G8_TYPELESS
+DXGI_FORMAT_R24_UNORM_X8_TYPELESS
+DXGI_FORMAT_R32G32B32A32_FLOAT
+DXGI_FORMAT_R32G32B32A32_SINT
+DXGI_FORMAT_R32G32B32A32_TYPELESS
+DXGI_FORMAT_R32G32B32A32_UINT
+DXGI_FORMAT_R32G32B32_FLOAT
+DXGI_FORMAT_R32G32B32_SINT
+DXGI_FORMAT_R32G32B32_TYPELESS
+DXGI_FORMAT_R32G32B32_UINT
+DXGI_FORMAT_R32G32_FLOAT
+DXGI_FORMAT_R32G32_SINT
+DXGI_FORMAT_R32G32_TYPELESS
+DXGI_FORMAT_R32G32_UINT
+DXGI_FORMAT_R32G8X24_TYPELESS
+DXGI_FORMAT_R32_FLOAT
+DXGI_FORMAT_R32_FLOAT_X8X24_TYPELESS
+DXGI_FORMAT_R32_SINT
+DXGI_FORMAT_R32_TYPELESS
+DXGI_FORMAT_R32_UINT
+DXGI_FORMAT_R8G8B8A8_SINT
+DXGI_FORMAT_R8G8B8A8_SNORM
+DXGI_FORMAT_R8G8B8A8_TYPELESS
+DXGI_FORMAT_R8G8B8A8_UINT
+DXGI_FORMAT_R8G8B8A8_UNORM
+DXGI_FORMAT_R8G8B8A8_UNORM_SRGB
+DXGI_FORMAT_R8G8_B8G8_UNORM
+DXGI_FORMAT_R8G8_SINT
+DXGI_FORMAT_R8G8_SNORM
+DXGI_FORMAT_R8G8_TYPELESS
+DXGI_FORMAT_R8G8_UINT
+DXGI_FORMAT_R8G8_UNORM
+DXGI_FORMAT_R8_SINT
+DXGI_FORMAT_R8_SNORM
+DXGI_FORMAT_R8_TYPELESS
+DXGI_FORMAT_R8_UINT
+DXGI_FORMAT_R8_UNORM
+DXGI_FORMAT_R9G9B9E5_SHAREDEXP
+DXGI_FORMAT_UNKNOWN
+DXGI_FORMAT_X24_TYPELESS_G8_UINT
+DXGI_FORMAT_X32_TYPELESS_G8X24_UINT
+DXGI_FORMAT_Y210
+DXGI_FORMAT_Y216
+DXGI_FORMAT_Y410
+DXGI_FORMAT_Y416
+DXGI_FORMAT_YUY2
+DYNAMIC
+D\rH
+D_ARELOC_BFIN_ADD
+D_ARELOC_BFIN_ADDR
+D_ARELOC_BFIN_MULT
+D_ARELOC_BFIN_PAGE
+D_ARELOC_BFIN_RSHIFT
+D_ARELOC_BFIN_SUB
+D_NOW
+D_RELOC_14
+D_RELOC_16C_DISP04_C
+D_RELOC_16C_DISP08_C
+D_RELOC_16C_DISP16_C
+D_RELOC_16C_DISP24_C
+D_RELOC_16C_REG04a_C
+D_RELOC_16_BASEREL
+D_RELOC_32
+D_RELOC_32_PCREL
+D_RELOC_32_PLT_PCREL
+D_RELOC_386_GLOB_DAT
+D_RELOC_386_TLS_DTPOFF32
+D_RELOC_386_TLS_GOTIE
+D_RELOC_386_TLS_LDO_32
+D_RELOC_386_TLS_LE
+D_RELOC_390_12
+D_RELOC_390_GLOB_DAT
+D_RELOC_390_GOTPLT32
+D_RELOC_390_PLT32DBL
+D_RELOC_390_PLTOFF64
+D_RELOC_390_TLS_DTPMOD
+D_RELOC_390_TLS_GD32
+D_RELOC_390_TLS_GOTIE32
+D_RELOC_390_TLS_IE32
+D_RELOC_390_TLS_LDM32
+D_RELOC_390_TLS_LDM64
+D_RELOC_390_TLS_LDO32
+D_RELOC_390_TLS_LDO64
+D_RELOC_68K_RELATIVE
+D_RELOC_860_HAPC
+D_RELOC_860_JUMP_SLOT
+D_RELOC_860_LOGOT0
+D_RELOC_860_LOGOTOFF0
+D_RELOC_860_LOGOTOFF1
+D_RELOC_860_LOGOTOFF2
+D_RELOC_860_LOGOTOFF3
+D_RELOC_860_LOPC
+D_RELOC_860_RELATIVE
+D_RELOC_860_SPGOTOFF0
+D_RELOC_860_SPGOTOFF1
+D_RELOC_860_SPLIT0
+D_RELOC_860_SPLIT1
+D_RELOC_860_SPLIT2
+D_RELOC_8_BASEREL
+D_RELOC_8_GOT_PCREL
+D_RELOC_8_PCREL
+D_RELOC_ALPHA_CODEADDR
+D_RELOC_ALPHA_DTPREL16
+D_RELOC_ALPHA_DTPREL_HI16
+D_RELOC_ALPHA_DTPREL_LO16
+D_RELOC_ALPHA_ELF_LITERAL
+D_RELOC_ALPHA_GPREL_LO16
+D_RELOC_ALPHA_LINKAGE
+D_RELOC_ALPHA_LITERAL
+D_RELOC_ALPHA_LITUSE
+D_RELOC_ALPHA_TPREL64
+D_RELOC_ALPHA_TPREL_HI16
+D_RELOC_ARM_GOT32
+D_RELOC_ARM_GOTPC
+D_RELOC_ARM_IN_POOL
+D_RELOC_ARM_LDR_IMM
+D_RELOC_ARM_PCREL_JUMP
+D_RELOC_ARM_PLT32
+D_RELOC_ARM_PREL31
+D_RELOC_ARM_RELATIVE
+D_RELOC_ARM_SBREL32
+D_RELOC_ARM_T32_OFFSET_IMM
+D_RELOC_ARM_T32_OFFSET_U8
+D_RELOC_ARM_TLS_GD32
+D_RELOC_AVR_16_PM
+D_RELOC_AVR_HH8_LDI
+D_RELOC_AVR_HH8_LDI_NEG
+D_RELOC_AVR_HI8_LDI_PM_NEG
+D_RELOC_AVR_LO8_LDI
+D_RELOC_AVR_LO8_LDI_NEG
+D_RELOC_AVR_LO8_LDI_PM
+D_RELOC_BFIN_16_LOW
+D_RELOC_BFIN_FUNCDESC_GOTLO
+D_RELOC_BFIN_GOTHI
+D_RELOC_BFIN_PLTPC
+D_RELOC_CRIS_16_GOT
+D_RELOC_CRIS_32_GOTREL
+D_RELOC_CRIS_UNSIGNED_16
+D_RELOC_CRX_ABS16
+D_RELOC_CRX_ABS32
+D_RELOC_CRX_NUM8
+D_RELOC_CRX_REGREL12
+D_RELOC_CRX_REL16
+D_RELOC_CRX_REL24
+D_RELOC_CRX_REL32
+D_RELOC_CRX_SWITCH32
+D_RELOC_D30V_15
+D_RELOC_D30V_21
+D_RELOC_D30V_32
+D_RELOC_D30V_9_PCREL
+D_RELOC_FR30_12_PCREL
+D_RELOC_FR30_48
+D_RELOC_FR30_6_IN_4
+D_RELOC_FR30_9_IN_8
+D_RELOC_FRV_FUNCDESC_GOT12
+D_RELOC_FRV_GOTOFFLO
+D_RELOC_FRV_GOTTLSOFF12
+D_RELOC_FRV_GOTTLSOFFLO
+D_RELOC_FRV_GPRELU12
+D_RELOC_FRV_LABEL16
+D_RELOC_FRV_LO16
+D_RELOC_FRV_TLSMOFF
+D_RELOC_FRV_TLSMOFF12
+D_RELOC_FRV_TLSMOFFHI
+D_RELOC_FRV_TLSMOFFLO
+D_RELOC_H8_DIR24R8
+D_RELOC_HI16_BASEREL
+D_RELOC_HI16_GOTOFF
+D_RELOC_HI16_PCREL
+D_RELOC_HI16_S
+D_RELOC_I370_D12
+D_RELOC_IA64_DTPMOD64MSB
+D_RELOC_IA64_DTPREL14
+D_RELOC_IA64_DTPREL22
+D_RELOC_IA64_DTPREL32LSB
+D_RELOC_IA64_DTPREL64I
+D_RELOC_IA64_FPTR64LSB
+D_RELOC_IA64_GPREL32MSB
+D_RELOC_IA64_GPREL64I
+D_RELOC_IA64_GPREL64MSB
+D_RELOC_IA64_IMM64
+D_RELOC_IA64_IPLTLSB
+D_RELOC_IA64_LTOFF22
+D_RELOC_IA64_PLTOFF64MSB
+D_RELOC_IA64_SECREL32LSB
+D_RELOC_IA64_SEGREL32LSB
+D_RELOC_IA64_TPREL22
+D_RELOC_IP2K_FR9
+D_RELOC_IP2K_HI8DATA
+D_RELOC_IP2K_PAGE3
+D_RELOC_IP2K_PC_SKIP
+D_RELOC_LO10
+D_RELOC_LO16_PCREL
+D_RELOC_M32C_RL_1ADDR
+D_RELOC_M32C_RL_2ADDR
+D_RELOC_M32R_24
+D_RELOC_M32R_26_PLTREL
+D_RELOC_M32R_GOTOFF_HI_SLO
+D_RELOC_M68HC11_PAGE
+D_RELOC_M68HC11_RL_JUMP
+D_RELOC_M68HC12_5B
+D_RELOC_MCORE_PCREL_IMM8BY4
+D_RELOC_MIPS_CALL_LO16
+D_RELOC_MIPS_DELETE
+D_RELOC_MIPS_GOT16
+D_RELOC_MIPS_GOT_DISP
+D_RELOC_MIPS_GOT_OFST
+D_RELOC_MIPS_GOT_PAGE
+D_RELOC_MIPS_INSERT_A
+D_RELOC_MIPS_INSERT_B
+D_RELOC_MIPS_RELGOT
+D_RELOC_MIPS_SHIFT5
+D_RELOC_MIPS_TLS_LDM
+D_RELOC_MIPS_TLS_TPREL64
+D_RELOC_MMIX_CBRANCH_2
+D_RELOC_MMIX_JMP_1
+D_RELOC_MSP430_RL_PCREL
+D_RELOC_MT_LO16
+D_RELOC_MT_PC16
+D_RELOC_NONE
+D_RELOC_NS32K_DISP_16_PCREL
+D_RELOC_NS32K_DISP_8
+D_RELOC_NS32K_IMM_16
+D_RELOC_PDP11_DISP_8_PCREL
+D_RELOC_PJ_CODE_DIR16
+D_RELOC_PJ_CODE_DIR32
+D_RELOC_PJ_CODE_REL16
+D_RELOC_PJ_CODE_REL32
+D_RELOC_PPC64_ADDR16_DS
+D_RELOC_PPC64_GOT16_LO_DS
+D_RELOC_PPC64_PLT16_LO_DS
+D_RELOC_PPC64_PLTGOT16_HA
+D_RELOC_PPC64_PLTGOT16_HI
+D_RELOC_PPC64_PLTGOT16_LO
+D_RELOC_PPC64_SECTOFF_DS
+D_RELOC_PPC64_TOC16_LO
+D_RELOC_PPC64_TOC32
+D_RELOC_PPC_B26
+D_RELOC_PPC_BA16
+D_RELOC_PPC_DTPREL16_HA
+D_RELOC_PPC_DTPREL16_LO
+D_RELOC_PPC_EMB_NADDR16
+D_RELOC_PPC_EMB_NADDR16_HA
+D_RELOC_PPC_EMB_RELST_HA
+D_RELOC_PPC_EMB_SDA2REL
+D_RELOC_PPC_GOT_TLSLD16
+D_RELOC_PPC_GOT_TLSLD16_HA
+D_RELOC_PPC_GOT_TPREL16_HI
+D_RELOC_PPC_JMP_SLOT
+D_RELOC_PPC_TPREL16
+D_RELOC_PPC_TPREL16_HA
+D_RELOC_RVA
+D_RELOC_SH_DISP12BY4
+D_RELOC_SH_GLOB_DAT
+D_RELOC_SH_GOTOFF_HI16
+D_RELOC_SH_GOTOFF_MEDHI16
+D_RELOC_SH_GOTPLT_HI16
+D_RELOC_SH_GOTPLT_MEDHI16
+D_RELOC_SH_GOT_MEDLOW16
+D_RELOC_SH_IMM3
+D_RELOC_SH_IMM4BY4
+D_RELOC_SH_IMM8BY4
+D_RELOC_SH_IMMS16
+D_RELOC_SH_IMMU16
+D_RELOC_SH_IMMU6
+D_RELOC_SH_IMM_LOW16
+D_RELOC_SH_IMM_MEDLOW16
+D_RELOC_SH_LOOP_END
+D_RELOC_SH_LOOP_START
+D_RELOC_SH_PLT_MEDLOW16
+D_RELOC_SH_RELATIVE
+D_RELOC_SH_TLS_DTPOFF32
+D_RELOC_SH_TLS_IE_32
+D_RELOC_SH_TLS_LDO_32
+D_RELOC_SPARC_6
+D_RELOC_SPARC_BASE22
+D_RELOC_SPARC_H44
+D_RELOC_SPARC_HIX22
+D_RELOC_SPARC_HM10
+D_RELOC_SPARC_JMP_SLOT
+D_RELOC_SPARC_L44
+D_RELOC_SPARC_M44
+D_RELOC_SPARC_PLT32
+D_RELOC_SPARC_REGISTER
+D_RELOC_SPARC_TLS_DTPMOD64
+D_RELOC_SPARC_TLS_LDM_ADD
+D_RELOC_SPARC_TLS_LDM_CALL
+D_RELOC_SPARC_UA64
+D_RELOC_SPU_HI16
+D_RELOC_V850_22_PCREL
+D_RELOC_V850_ALIGN
+D_RELOC_V850_LONGCALL
+D_RELOC_V850_LONGJUMP
+D_RELOC_V850_TDA_4_4_OFFSET
+D_RELOC_V850_TDA_7_8_OFFSET
+D_RELOC_VPE4KMATH_DATA
+D_RELOC_X86_64_COPY
+D_RELOC_X86_64_DTPMOD64
+D_RELOC_X86_64_GOTOFF64
+D_RELOC_X86_64_JUMP_SLOT
+D_RELOC_X86_64_TLSLD
+D_RELOC_X86_64_TPOFF64
+D_RELOC_XSTORMY16_FPTR16
+D_RELOC_XTENSA_DIFF8
+D_RELOC_XTENSA_OP0
+D_RELOC_XTENSA_SLOT10_ALT
+D_RELOC_XTENSA_SLOT11_ALT
+D_RELOC_XTENSA_SLOT12_ALT
+D_RELOC_XTENSA_SLOT13_ALT
+D_RELOC_XTENSA_SLOT13_OP
+D_RELOC_XTENSA_SLOT14_ALT
+D_RELOC_XTENSA_SLOT2_ALT
+D_RELOC_XTENSA_SLOT6_ALT
+Data Upgraded to version 1
+Data error in compressed datastream
+Database Blob ExternalMetaData
+Database DiskTOC
+Database TempCompMemory
+Database TempCompMemory Tail
+Datos del perfil (copia de seguridad)
+DbgHelp.dll
+DctDeltaTrajectory (anim=%s, prevTime=%f, curTime=%f)
+Debug2 %s: %d vertices, %d draw calls
+Debug2 cmd %s: %d commands, %d bytes
+Debugger present
+Debugging option [DONT_UPDATE_HEADER] has been selected...\n
+Decode failed. Frame data header is corrupted.
+Decode failed. Frame data is corrupted.
+Decompression Error
+Decompression error
+Deferred save requests are ignored.
+Define Arithmetic Table 0x%02x: 0x%02x
+Define Huffman Table 0x%02x
+Define Quantization Table %d  precision %d
+Define Restart Interval %u
+DenseProbesSystem warning: tried to add probe set that is already contained in the DenseProbesSystem.
+DenseProbesSystem warning: tried to remove probe set that is not contained in the DenseProbesSystem.
+DenseProbesSystem warning: unable to allocate %ux%ux%u probes.
+DependentPatchIdArray
+Detected %s driver version %s. The recommended driver version is %s or later. %s\n\nDo you want to try and run the game anyway? There may be stability, performance or visual corruption issues.
+Detected %s driver version %s. The required driver version is %s or later. %s
+Detected Windows version 
+Detected corruption of loaded DbObject for 
+Detected corruption of savegame data DbObject. Validation error(s):\n
+Detected corruption of savegame meta DbObject. Validation error(s):\n
+Device %d \t ProcessQueue %d \t DataIndex %d \n
+Did not change any values.
+Did not check any values this tick.
+Didn't expect more than one scan
+DiffFileURL
+Direct3D 12 (XB1 S)
+Direct3D 12 (XB1 Scorpio)
+Direct3D 12 (Xbox Anaconda)
+Direct3D 12 (Xbox Lockhart)
+Direct3D could not allocate sufficient memory to complete the call.
+DirectX device creation error
+Directs execution depending on the conditional input.
+DirtyCert
+Disable Input Fade (OUT): Debug Name: 
+Disallowed by contributor 
+DiskCache Page base
+DiskCache Page state
+DiskCache Process
+Display Device %d
+Dividing by 1 does not change the value.
+DlH
+Dn
+Do
+DoDirectInputLighting - invalid DirectInputLightingParameters
+DoIndirectInputLighting - albedo buffer input is NULL.
+DoIndirectInputLightingInternal - albedo buffer mismatch.
+DoIndirectInputLightingInternal - emissive buffer mismatch.
+DoIndirectInputLightingInternal - input incident light buffers don't match.
+DoIndirectInputLightingInternal - invalid NULL parameter
+DoResampleBounce - Texture sampling parameters not supplied.
+DoResampleBounce - invalid ResampleBounceParameters
+DofModifyNode (dof=%d, type=%d, element=%d, value=%.4f)
+Dolby Pro Logic IIHRTF
+DosPath
+DosPath 
+Downloading PatchDiff files
+Downloading PatchImpl file
+Downloading directory
+Downloading directory entries
+DriverDate
+DriverSupportModules
+DriverSupportModulesWow
+DriverVersion
+DsdId: %d, Connection: %d, internal state: %d
+Duplicate PLTE chunk
+Duplicate bKGD chunk
+Duplicate cHRM chunk
+Duplicate gAMA chunk
+Duplicate hIST chunk
+Duplicate iCCP chunk
+Duplicate oFFs chunk
+Duplicate pCAL chunk
+Duplicate pHYs chunk
+Duplicate sBIT chunk
+Duplicate sCAL chunk
+Duplicate sRGB chunk
+Duplicate tIME chunk
+Duplicate tRNS chunk
+Dv
+Dw
+Dwarf Error: Abbrev offset (%lu) greater than or equal to .debug_abbrev size (%lu).
+Dwarf Error: Bad abbrev number: %u.
+Dwarf Error: Can't find .debug_abbrev section.
+Dwarf Error: Can't find .debug_line section.
+Dwarf Error: Can't find .debug_ranges section.
+Dwarf Error: Can't find .debug_str section.
+Dwarf Error: Could not find abbrev number %u.
+Dwarf Error: DW_FORM_strp offset (%lu) greater than or equal to .debug_str size (%lu).
+Dwarf Error: Invalid or unhandled FORM value: %u.
+Dwarf Error: Line offset (%lu) greater than or equal to .debug_line size (%lu).
+Dwarf Error: found address size '%u', this reader can not handle sizes greater than '%u'.
+Dwarf Error: found address size '%u', this reader can only handle address sizes '2', '4' and '8'.
+Dwarf Error: found dwarf version '%u', this reader only handles version 2 information.
+Dwarf Error: mangled line number section (bad file number).
+Dwarf Error: mangled line number section.
+Dx
+Dx11ComputeShaderInternal
+Dx11Renderer::map
+Dx11Renderer::tryMap
+Dx12RenderBuffer::m_resource->Map(0, &readRange, reinterpret_cast<void**>(&m_mappedPtr))
+Dx12RenderResourceAllocator_Heap
+Dx12Renderer::waitOnSwapChain Gpu timeout detected
+Dx12TransientTexturePool
+DxDiag_DisplayDevices
+DxRender::buildDriverVersion
+Dylan Online Client State
+Dynamic AO - Aux Debug
+Dynamic AO - HBAO Aux Debug
+E?
+EA
+EA Tunnel
+EA::Audio::Core::Collection: NodeBlock
+EA::Audio::Core::Dac - MixJob-related Memory
+EA::Audio::Core::Dac External Data Memory
+EA::Audio::Core::EaSpeexDec external buffer
+EA::Audio::Core::InterpDelayLine::mpDelayLine
+EA::Audio::Core::Mixer::Mixer and SampleBuffer Memory
+EA::Audio::Core::Pan3D::Delay line, internal buffer and DSPSettingsLocal
+EA::Audio::Core::TimeStretch - Samples Buffers
+EA::Audio::SampleBank::SampleGroupFactory::InitialPool
+EAAsyncGlobal
+EAAsyncRequest
+EAAsyncRequestAllocator
+EACallstack version
+EACallstack/EACallstack/DWARF3File
+EACallstack/EACallstack/MapFileApple
+EACallstack/EACallstack/MapFileGCC3
+EACallstack/EACallstack/MapFileMSVC
+EACallstack/EACallstack/MapFileSN
+EACallstack/EACallstack/PDBFile
+EACallstackBookmarkFunction
+EAIO/EAFileDirectory/EntryFindData
+EAIO/EAStreamMemory/data
+EAIO/EAStreamMemory/ptr
+EAIO/StreamBuffer
+EAIOAsyncExecutor
+EAJSON/JsonDomArray
+EAJSON/JsonDomBool
+EAJSON/JsonDomDocument
+EAJSON/JsonDomDouble
+EAJSON/JsonDomInteger
+EAJSON/JsonDomNode
+EAJSON/JsonDomNull
+EAJSON/JsonDomObject
+EAJSON/JsonDomString
+EAJSON/TokenBuffer
+EAMessage/List
+EAP
+EAPatchClient/StreamBuffer
+EAPatchDir
+EAS
+EATURE
+EAWebKit DLL version: 
+EAWebKit header version: 13.3.2.0.1
+EAWebKit/ProxyJobExecutionHelper
+EAWebKit/TransportHandlerDirtySDK
+EAWebKitUtil version: 13.3.2.0.0
+EAWin32AsyncGlobal
+EA_PLATFORM
+ECKSUM
+EDG style demangling
+EINIT_ARRAYSZ
+ELA
+ELACOUNT
+ELAENT
+ELEMENT
+EMAIL
+EMAIL_CONFIRMATION_REQUIRED
+EMPTY
+ENCODING
+ENDCHAR
+ENDFONT
+ENDIAN_SWAP_BUFFER_SIZE is too small
+ENDPROPERTIES
+END_BLOCK
+END_QBLOCK
+END_SPACE
+ENHANCE_YOUR_CALM
+ENT
+ENTITIES
+ENTITLEMENT_TAG_MISSING
+ENTITY
+EOF
+EQ
+EQUALS
+ERROR : Unable to initialize critical section in CAtlBaseModule\n
+ERROR: Breadcrumb stream is not valid. No breadcrumbs could be reported by Dx12GPUCrashAnalyser\r\n
+ERROR: ConvertFromOutputFormat - bad input format.
+ERROR: ConvertToOutputFormat - bad output format
+ERR_ENTITY_NOT_FOUND
+ERR_ENTITY_TYPE_NOT_FOUND
+ERR_NOT_SUPPORTED
+ERT: '%s'\nFile: %s(%d)\nFunction: %s\nMessage: %s\n
+ES
+EXECUTING\r\n
+EXTERNAL_IPPORT
+EXTRAARG
+EXt
+E_ACCESSDENIED
+E_FAIL
+E_HANDLE
+E_INVALIDARG
+E_NOINTERFACE
+E_OUTOFMEMORY
+E_POINTER
+E_UNEXPECTED
+EclipseClipNode (anim=0x%x, prevTime=%f, curTime=%f)
+Ee
+EeH
+EkG
+Embedded profile length in iCCP chunk is negative
+Embedded profile length too large in iCCP chunk
+Empty JPEG image (DNL not supported)
+Empty input file
+Empty language field in iTXt chunk
+Enable Input Fade (IN): Debug Name: 
+Enabling RenderDoc will disable Raytracing! Disable Renderdoc (RenderDevice.CaptureEnable 0) or Raytracing (Render.RaytraceEnable 0).
+End Of Image
+Enlighten Spot Visibility CS
+Enlighten Sun Visibility CS
+Entity for location A. Uses triggering entity if not connected.
+Entity for location B. Uses triggering entity if not connected.
+Entity for location C. Uses triggering entity if not connected.
+Envelope Buffer
+Error in API call. URI: %s %s \r\nHTTP Response Code: %d (%s)
+Error in API call. URI: %s %s \r\nHTTP Response Code: %d (%s)\r\nerror: %s
+Error job description: 
+Error reading socket: 
+Error writing socket: 
+Error: EAWebKit DLL and header version don't match.
+Evaluate a Tuning Curve.
+Exceeded size limit while expanding chunk
+Exception Report
+Exception info
+ExceptionHandler version
+Excessive object depth - %d
+Excluded Tags (Tag 
+Exports
+Extra compressed data
+Extra compression data
+Extra data is not complete due to an exception generated by some client.\r\n
+F 
+F$
+F,
+FACE_NAME
+FAILED: DOF %s is %d, but should be %d.
+FAILED: DOF %s is %f, but should be %f.
+FAILED: DOF %s is (%f, %f, %f),\n    but should be (%f, %f, %f).
+FAILED: DOF %s is (%f, %f, %f, %f), \n    but should be (%f, %f, %f, %f).
+FAILED: DOF %s is (%f, %f, %f, %f),\n    but should be (%f, %f, %f, %f).
+FAILED: DOF %s is\n                 [%f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f]\n   but should be [%f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f, %f].\n
+FAILURE
+FAMILY_NAME
+FATAL
+FATAL ERROR: 
+FB
+FBCHUNKS
+FBPhysicsWorld.activateFixedPartition
+FBPhysicsWorld.angularJointNextEnabled
+FBPhysicsWorld.bodiesForModifiedIndex
+FBPhysicsWorld.bodiesForUnmodifiedIndex
+FBPhysicsWorld.bodiesWithShapeCountChanges
+FBPhysicsWorld.bodyBoundsEverModified
+FBPhysicsWorld.bodyLastSleeping
+FBPhysicsWorld.bodyNextAffectedByConstraints
+FBPhysicsWorld.bodyNextAngularVelocity
+FBPhysicsWorld.bodyNextEnabled
+FBPhysicsWorld.bodyNextIntegrated
+FBPhysicsWorld.bodyNextIsDebris
+FBPhysicsWorld.bodyNextLinearVelocity
+FBPhysicsWorld.bodyNextOrientation
+FBPhysicsWorld.bodyNextPosition
+FBPhysicsWorld.bodyNextSleeping
+FBPhysicsWorld.bodyRequiresHistory
+FBPhysicsWorld.bodyWasAffectedByConstraints
+FBPhysicsWorld.bodyWasIntegrated
+FBPhysicsWorld.breakableJointNextEnabled
+FBPhysicsWorld.cullingTableBuffer
+FBPhysicsWorld.destroyedBodies
+FBPhysicsWorld.directionalDriveNextEnabled
+FBPhysicsWorld.linearJointNextEnabled
+FBPhysicsWorld.modifiedBodies
+FBPhysicsWorld.modifiedBodyBounds
+FBPhysicsWorld.modifiedBodyCategories
+FBPhysicsWorld.modifiedShapeBounds
+FBPhysicsWorld.modifiedShapeCategories
+FBPhysicsWorld.newBody
+FBPhysicsWorld.newShapes
+FB_GAMEPLAY_AFFINITY_WIDE
+FB_LONG_AFFINITY
+FB_RENDER_AFFINITY
+FB_RENDER_AFFINITY_WIDE
+FD
+FDBytes
+FD_ARELOC_BFIN_DIV
+FD_ARELOC_BFIN_HWPAGE
+FD_ARELOC_BFIN_LSHIFT
+FD_ARELOC_BFIN_MOD
+FD_ARELOC_BFIN_PUSH
+FD_RELOC_12_PCREL
+FD_RELOC_16C_ABS20
+FD_RELOC_16C_ABS20_C
+FD_RELOC_16C_DISP24a_C
+FD_RELOC_16C_IMM04
+FD_RELOC_16C_IMM04_C
+FD_RELOC_16C_IMM20
+FD_RELOC_16C_IMM20_C
+FD_RELOC_16C_IMM32
+FD_RELOC_16C_IMM32_C
+FD_RELOC_16C_NUM08
+FD_RELOC_16C_NUM08_C
+FD_RELOC_16C_NUM32
+FD_RELOC_16C_NUM32_C
+FD_RELOC_16C_REG04
+FD_RELOC_16C_REG04_C
+FD_RELOC_16C_REG16
+FD_RELOC_16C_REG16_C
+FD_RELOC_16_GOT_PCREL
+FD_RELOC_16_PCREL_S2
+FD_RELOC_26
+FD_RELOC_386_COPY
+FD_RELOC_386_GOT32
+FD_RELOC_386_PLT32
+FD_RELOC_386_TLS_DTPMOD32
+FD_RELOC_386_TLS_GD
+FD_RELOC_386_TLS_GOTDESC
+FD_RELOC_386_TLS_IE_32
+FD_RELOC_386_TLS_LE_32
+FD_RELOC_390_COPY
+FD_RELOC_390_GOT12
+FD_RELOC_390_GOT16
+FD_RELOC_390_GOTPC
+FD_RELOC_390_GOTPLT16
+FD_RELOC_390_PC16DBL
+FD_RELOC_390_PLT32
+FD_RELOC_390_PLTOFF32
+FD_RELOC_390_TLS_DTPOFF
+FD_RELOC_390_TLS_LE64
+FD_RELOC_64_PCREL
+FD_RELOC_64_PLT_PCREL
+FD_RELOC_68K_JMP_SLOT
+FD_RELOC_8
+FD_RELOC_860_GLOB_DAT
+FD_RELOC_860_HAGOT
+FD_RELOC_860_HAGOTOFF
+FD_RELOC_860_LOW0
+FD_RELOC_860_LOW1
+FD_RELOC_860_LOW2
+FD_RELOC_860_LOW3
+FD_RELOC_860_SPGOT0
+FD_RELOC_8_PLT_PCREL
+FD_RELOC_ALPHA_GOTTPREL16
+FD_RELOC_ALPHA_GPDISP
+FD_RELOC_ALPHA_GPDISP_HI16
+FD_RELOC_ALPHA_GPDISP_LO16
+FD_RELOC_ALPHA_GPREL_HI16
+FD_RELOC_ALPHA_TLSGD
+FD_RELOC_ARM_ADRL_IMMEDIATE
+FD_RELOC_ARM_CP_OFF_IMM
+FD_RELOC_ARM_GLOB_DAT
+FD_RELOC_ARM_HWLITERAL
+FD_RELOC_ARM_IMMEDIATE
+FD_RELOC_ARM_JUMP_SLOT
+FD_RELOC_ARM_MULTI
+FD_RELOC_ARM_OFFSET_IMM
+FD_RELOC_ARM_PCREL_BLX
+FD_RELOC_ARM_SHIFT_IMM
+FD_RELOC_ARM_SMC
+FD_RELOC_ARM_TARGET1
+FD_RELOC_ARM_THUMB_ADD
+FD_RELOC_ARM_THUMB_IMM
+FD_RELOC_ARM_THUMB_SHIFT
+FD_RELOC_ARM_TLS_TPOFF32
+FD_RELOC_AVR_13_PCREL
+FD_RELOC_AVR_HH8_LDI_PM_NEG
+FD_RELOC_AVR_HI8_LDI_PM
+FD_RELOC_AVR_LDI
+FD_RELOC_BFIN_16_IMM
+FD_RELOC_BFIN_5_PCREL
+FD_RELOC_BFIN_GOT
+FD_RELOC_BFIN_GOT17M4
+FD_RELOC_BFIN_GOTLO
+FD_RELOC_BFIN_GOTOFFHI
+FD_RELOC_BFIN_GOTOFFLO
+FD_RELOC_CRIS_32_PLT_GOTREL
+FD_RELOC_CRIS_COPY
+FD_RELOC_CRIS_GLOB_DAT
+FD_RELOC_CRIS_JUMP_SLOT
+FD_RELOC_CRIS_SIGNED_8
+FD_RELOC_CRIS_UNSIGNED_5
+FD_RELOC_CRIS_UNSIGNED_8
+FD_RELOC_CRX_REGREL32
+FD_RELOC_CRX_REL8_CMP
+FD_RELOC_CRX_SWITCH16
+FD_RELOC_D10V_10_PCREL_R
+FD_RELOC_D10V_18
+FD_RELOC_FR30_9_PCREL
+FD_RELOC_FRV_FUNCDESC
+FD_RELOC_FRV_FUNCDESC_GOTHI
+FD_RELOC_FRV_GOT12
+FD_RELOC_FRV_GOTHI
+FD_RELOC_FRV_GOTLO
+FD_RELOC_FRV_GOTOFFHI
+FD_RELOC_FRV_GOTTLSDESCLO
+FD_RELOC_FRV_GPRELHI
+FD_RELOC_FRV_TLSOFF_RELAX
+FD_RELOC_GPREL32
+FD_RELOC_H8_DIR16A8
+FD_RELOC_H8_DIR32A16
+FD_RELOC_HI16
+FD_RELOC_HI16_PLTOFF
+FD_RELOC_HI16_S_PCREL
+FD_RELOC_HI22
+FD_RELOC_IA64_DIR32LSB
+FD_RELOC_IA64_DIR32MSB
+FD_RELOC_IA64_DIR64LSB
+FD_RELOC_IA64_DIR64MSB
+FD_RELOC_IA64_DTPREL32MSB
+FD_RELOC_IA64_FPTR32MSB
+FD_RELOC_IA64_GPREL22
+FD_RELOC_IA64_IPLTMSB
+FD_RELOC_IA64_LTOFF_DTPREL22
+FD_RELOC_IA64_LTOFF_FPTR22
+FD_RELOC_IA64_LTOFF_FPTR64I
+FD_RELOC_IA64_LTV32LSB
+FD_RELOC_IA64_LTV32MSB
+FD_RELOC_IA64_LTV64LSB
+FD_RELOC_IA64_LTV64MSB
+FD_RELOC_IA64_PCREL21B
+FD_RELOC_IA64_PCREL21BI
+FD_RELOC_IA64_PCREL32MSB
+FD_RELOC_IA64_PCREL60B
+FD_RELOC_IA64_PCREL64I
+FD_RELOC_IA64_PCREL64MSB
+FD_RELOC_IA64_REL32LSB
+FD_RELOC_IA64_REL32MSB
+FD_RELOC_IA64_REL64LSB
+FD_RELOC_IA64_REL64MSB
+FD_RELOC_IA64_SECREL32MSB
+FD_RELOC_IA64_SEGREL32MSB
+FD_RELOC_IA64_TPREL14
+FD_RELOC_IA64_TPREL64LSB
+FD_RELOC_IP2K_HI8INSN
+FD_RELOC_IP2K_LO8DATA
+FD_RELOC_LO16
+FD_RELOC_LO16_BASEREL
+FD_RELOC_M32C_RL_JUMP
+FD_RELOC_M32R_COPY
+FD_RELOC_M32R_GLOB_DAT
+FD_RELOC_M32R_GOT16_HI_SLO
+FD_RELOC_M32R_GOT16_HI_ULO
+FD_RELOC_M32R_GOT16_LO
+FD_RELOC_M32R_GOTOFF
+FD_RELOC_M32R_GOTOFF_LO
+FD_RELOC_M32R_GOTPC_HI_SLO
+FD_RELOC_M32R_GOTPC_HI_ULO
+FD_RELOC_M32R_GOTPC_LO
+FD_RELOC_M32R_JMP_SLOT
+FD_RELOC_M32R_RELATIVE
+FD_RELOC_M68HC11_LO16
+FD_RELOC_M68HC11_LO8
+FD_RELOC_MCORE_PCREL_IMM4BY2
+FD_RELOC_MCORE_RVA
+FD_RELOC_MIPS16_HI16
+FD_RELOC_MIPS16_JMP
+FD_RELOC_MIPS_CALL16
+FD_RELOC_MIPS_HIGHER
+FD_RELOC_MIPS_LITERAL
+FD_RELOC_MIPS_SUB
+FD_RELOC_MIPS_TLS_GOTTPREL
+FD_RELOC_MIPS_TLS_TPREL32
+FD_RELOC_MIPS_TLS_TPREL_LO16
+FD_RELOC_MMIX_ADDR27
+FD_RELOC_MMIX_CBRANCH_3
+FD_RELOC_MMIX_GETA
+FD_RELOC_MMIX_GETA_1
+FD_RELOC_MMIX_GETA_3
+FD_RELOC_MMIX_JMP
+FD_RELOC_MMIX_JMP_2
+FD_RELOC_MMIX_PUSHJ_3
+FD_RELOC_MSP430_16_BYTE
+FD_RELOC_MSP430_16_PCREL
+FD_RELOC_MT_GNU_VTENTRY
+FD_RELOC_OPENRISC_ABS_26
+FD_RELOC_PDP11_DISP_6_PCREL
+FD_RELOC_PJ_CODE_LO16
+FD_RELOC_PPC64_HIGHER_S
+FD_RELOC_PPC64_TOC16_DS
+FD_RELOC_PPC64_TOC16_HI
+FD_RELOC_PPC_B16
+FD_RELOC_PPC_B16_BRNTAKEN
+FD_RELOC_PPC_DTPREL16
+FD_RELOC_PPC_EMB_RELSDA
+FD_RELOC_PPC_EMB_RELST_HI
+FD_RELOC_PPC_EMB_SDAI16
+FD_RELOC_PPC_GLOB_DAT
+FD_RELOC_PPC_GOT_DTPREL16_HA
+FD_RELOC_PPC_GOT_DTPREL16_LO
+FD_RELOC_PPC_GOT_TLSGD16_LO
+FD_RELOC_PPC_GOT_TPREL16
+FD_RELOC_PPC_GOT_TPREL16_HA
+FD_RELOC_PPC_TLS
+FD_RELOC_PPC_TOC16
+FD_RELOC_PPC_TPREL
+FD_RELOC_SH_CODE
+FD_RELOC_SH_COPY64
+FD_RELOC_SH_DISP12
+FD_RELOC_SH_DISP12BY2
+FD_RELOC_SH_GLOB_DAT64
+FD_RELOC_SH_GOT10BY4
+FD_RELOC_SH_GOTOFF_LOW16
+FD_RELOC_SH_GOTPC_HI16
+FD_RELOC_SH_GOTPC_LOW16
+FD_RELOC_SH_GOTPLT10BY4
+FD_RELOC_SH_GOTPLT_LOW16
+FD_RELOC_SH_GOT_LOW16
+FD_RELOC_SH_IMM4
+FD_RELOC_SH_IMM8
+FD_RELOC_SH_IMMS10BY8
+FD_RELOC_SH_IMMS6BY32
+FD_RELOC_SH_IMM_HI16
+FD_RELOC_SH_JMP_SLOT64
+FD_RELOC_SH_LABEL
+FD_RELOC_SH_PCRELIMM8BY2
+FD_RELOC_SH_PLT_LOW16
+FD_RELOC_SH_RELATIVE64
+FD_RELOC_SH_SHMEDIA_CODE
+FD_RELOC_SH_SWITCH16
+FD_RELOC_SH_TLS_LD_32
+FD_RELOC_SH_USES
+FD_RELOC_SPARC13
+FD_RELOC_SPARC_BASE13
+FD_RELOC_SPARC_GOT13
+FD_RELOC_SPARC_LM22
+FD_RELOC_SPARC_OLO10
+FD_RELOC_SPARC_PC10
+FD_RELOC_SPARC_RELATIVE
+FD_RELOC_SPARC_REV32
+FD_RELOC_SPARC_TLS_DTPOFF32
+FD_RELOC_SPARC_TLS_IE_HI22
+FD_RELOC_SPARC_TLS_IE_LD
+FD_RELOC_SPARC_TLS_IE_LO10
+FD_RELOC_SPARC_TLS_LDO_ADD
+FD_RELOC_SPARC_TLS_LDO_HIX22
+FD_RELOC_SPARC_TLS_LE_HIX22
+FD_RELOC_SPU_IMM10
+FD_RELOC_SPU_IMM10W
+FD_RELOC_SPU_LO16
+FD_RELOC_SPU_PCREL9b
+FD_RELOC_THUMB_PCREL_BLX
+FD_RELOC_THUMB_PCREL_BRANCH7
+FD_RELOC_TIC30_LDP
+FD_RELOC_TIC54X_MS7_OF_23
+FD_RELOC_TIC54X_PARTLS7
+FD_RELOC_V850_9_PCREL
+FD_RELOC_VAX_RELATIVE
+FD_RELOC_VPE4KMATH_INSN
+FD_RELOC_X86_64_GOTPCREL
+FD_RELOC_X86_64_GOTTPOFF
+FD_RELOC_X86_64_PLT32
+FD_RELOC_X86_64_PLTOFF64
+FD_RELOC_X86_64_TLSDESC
+FD_RELOC_X86_64_TLSGD
+FD_RELOC_XSTORMY16_24
+FD_RELOC_XTENSA_GLOB_DAT
+FD_RELOC_XTENSA_OP1
+FD_RELOC_XTENSA_RELATIVE
+FD_RELOC_XTENSA_SLOT12_OP
+FD_RELOC_XTENSA_SLOT1_ALT
+FD_RELOC_XTENSA_SLOT1_OP
+FD_RELOC_XTENSA_SLOT3_OP
+FD_RELOC_XTENSA_SLOT5_ALT
+FD_RELOC_XTENSA_SLOT5_OP
+FD_RELOC_XTENSA_SLOT7_OP
+FD_RELOC_XTENSA_SLOT9_ALT
+FD_RELOC_XTENSA_SLOT9_OP
+FD_RELOC_Z80_DISP8
+FD_RELOC_Z8K_CALLR
+FD_RELOC_Z8K_DISP7
+FD_RELOC_Z8K_IMM4L
+FEMALE
+FFT instance
+FFTBloom
+FFTBloomFilter
+FFTBloomModuleBlackboardData
+FFTKernelFilter
+FFX_FSR2_ENABLE_DEPTH_INFINITE and FFX_FSR2_ENABLE_DEPTH_INVERTED present, cameraFar value is very low which may result in depth separation artefacting
+FFX_FSR2_ENABLE_DEPTH_INFINITE and FFX_FSR2_ENABLE_DEPTH_INVERTED present, cameraNear value is very low which may result in depth separation artefacting
+FFX_FSR2_ENABLE_DEPTH_INFINITE and FFX_FSR2_ENABLE_DEPTH_INVERTED present, yet cameraFar != FLT_MAX
+FFX_FSR2_ENABLE_DEPTH_INFINITE and FFX_FSR2_ENABLE_DEPTH_INVERTED present, yet cameraNear != FLT_MAX
+FFX_FSR2_ENABLE_DEPTH_INVERTED flag is present yet cameraNear is less than cameraFar
+FFs
+FH
+FIGURE_WIDTH
+FILE*
+FINISHED\r\n
+FIXED
+FLOW_CONTROL_ERROR
+FLT_DENORMAL_OPERAND
+FLT_DIVIDE_BY_ZERO
+FLT_INEXACT_RESULT
+FLT_INVALID_OPERATION
+FLT_OVERFLOW
+FLT_STACK_CHECK
+FLT_UNDERFLOW
+FONT
+FONTBOUNDINGBOX
+FONTNAME_REGISTRY
+FONT_ASCENT
+FONT_DESCENT
+FORCE_PPU_MODIFIER_REQUEST
+FORCE_PPU_SHAPE_REQUEST
+FORCE_PPU_SHAPE_UNCHECKED
+FORCE_PPU_USER_REQUEST
+FORLOOP
+FORPREP
+FOUNDRY
+FRAME_SIZE_ERROR
+FRAUD
+FRAUD_REVIEW
+FULL_NAME
+FVE
+FWP
+FWriteSafe failed.  Only wrote %d of %d bytes
+F\nH
+Face Posture Select Time
+FadeIn [Unqueued by BF4 Ship hack]
+Failed aim preservation on '
+Failed on element '
+Failed to add [%s]
+Failed to allocate MFQE framebuffer
+Failed to allocate altref buffer
+Failed to allocate bool decoder %d
+Failed to allocate bool decoder 0
+Failed to allocate cm->cur_frame->mvs
+Failed to allocate cm->fc
+Failed to allocate cm->frame_contexts
+Failed to allocate context buffers
+Failed to allocate cpi->active_map
+Failed to allocate cpi->consec_zero_last
+Failed to allocate cpi->consec_zero_last_mvbias
+Failed to allocate cpi->cyclic_refresh_map
+Failed to allocate cpi->gf_active_flags
+Failed to allocate cpi->lf_ref_frame
+Failed to allocate cpi->lf_ref_frame_sign_bias
+Failed to allocate cpi->lfmv
+Failed to allocate cpi->mLeftJobContext
+Failed to allocate cpi->mb.ss
+Failed to allocate cpi->mb_activity_map
+Failed to allocate cpi->mb_row_ei
+Failed to allocate cpi->mt_current_mb_col
+Failed to allocate cpi->segmentation_map
+Failed to allocate cpi->skin_map
+Failed to allocate cpi->tok
+Failed to allocate cpi->tplist
+Failed to allocate decoder
+Failed to allocate denoiser
+Failed to allocate frame buffer
+Failed to allocate frame buffers
+Failed to allocate frame_worker_data
+Failed to allocate frame_worker_data cond
+Failed to allocate frame_workers
+Failed to allocate lag buffers
+Failed to allocate last frame buffer
+Failed to allocate lf_sync->cond_
+Failed to allocate lf_sync->cur_sb_col
+Failed to allocate lf_sync->lfdata
+Failed to allocate lf_sync->mutex_
+Failed to allocate memory of size %llu at address %p (OUT OF MEMORY?) for %s
+Failed to allocate partition data
+Failed to allocate pbi->leftJobContext
+Failed to allocate pbi->lf_worker.data1
+Failed to allocate pbi->mb_row_di
+Failed to allocate pbi->mt_current_mb_col
+Failed to allocate pbi->mt_uabove_row
+Failed to allocate pbi->mt_uabove_row[i]
+Failed to allocate pbi->mt_uleft_col
+Failed to allocate pbi->mt_uleft_col[i]
+Failed to allocate pbi->mt_vabove_row
+Failed to allocate pbi->mt_vabove_row[i]
+Failed to allocate pbi->mt_vleft_col
+Failed to allocate pbi->mt_vleft_col[i]
+Failed to allocate pbi->mt_yabove_row
+Failed to allocate pbi->mt_yabove_row[i]
+Failed to allocate pbi->mt_yleft_col
+Failed to allocate pbi->mt_yleft_col[i]
+Failed to allocate pbi->tile_worker_data
+Failed to allocate pbi->tile_workers
+Failed to allocate scaled source buffer
+Failed to connect to: 
+Failed to create TCP-socket: 
+Failed to create temporary file %s
+Failed to decode frame size
+Failed to decode tile data
+Failed to determine the save game file size from the format enum "
+Failed to determine the save game format extension from the format enum "
+Failed to determine the save game format from the save name "
+Failed to enumerate modules.\r\n
+Failed to find an autosave to load.
+Failed to find required function "%s" in %s\n
+Failed to find snapshots for the career id 
+Failed to find virtual filesystem for EAIO File Interface, saves will not function correctly
+Failed to get auth ticket from Steam. Steam error code = %d
+Failed to get environment information
+Failed to initialize display adapter.\nPlease ensure your video card is compatible and the drivers for it installed.\nUsually this is a result of missing vendor specific drivers.
+Failed to initialize internal frame buffers
+Failed to load an autosave to copy into a manual snapshot save
+Failed to load dll. EAWebKit module Path:
+Failed to make an immediate save. Reason= 
+Failed to parse response Json for field: %s
+Failed to parse savegame file (NativeDBO) for 
+Failed to reallocate scratch buffer
+Failed to retrieve a valid checkpoint Id from the save context's Metadata. Metadata = 
+Failed to retrieve active careerId for load, setting to invalid.
+Failed to retrieve chekcpoint snapshot data from the Persistence Snapshot Manager for checkpoint 
+Failed to retrieve max career index for load, setting to invalid.
+Failed to start AppearanceStateMachine. Another instance is still in flight. Unable to apply custom character appearance. Current state hash is 
+Falling back to software Gibs.
+Fast Clear Buffer RW
+Fast Travel Point 
+Fast Travel Point Registered with transition start point name: 
+Fatal (internal) error in %s, line %d: %s\n
+FbC
+Feedback inputs are not connected; the output value wil always be 0.
+Feedback output will always be 0.
+Feedback returns a constant value.
+FiG
+Field '%s' found multiple times
+Field '%s' has type that contains error
+File %s does not exist\n
+File %s is missing - passed to CopyIfDifferent()\n
+File '%S' does not have the secondary NVIDIA signature - Streamline will not load unsecured modules\n
+File '%S' is NOT correctly signed - Streamline will not load unsecured modules\n
+File '%S' is signed by NVIDIA and the signature was verified.\n
+File format is ambiguous
+File in wrong format
+FileHashValue
+FileURL
+FileUnchanged
+Filemanager failed to save the file, and returned a result code of 
+FinalDiskSpaceUsage
+FinalFileSizeUsage
+FindClosestMatchingMode
+FindProbeSetOctreeNode: probeSetCore must be an octree probe set
+Floating Point Exception Signal
+FlurryLoader
+FlurryLoaderFixup
+For future Engine usage
+Fractional sampling not implemented yet
+Frame Worker thread creation failed
+Frame output cache is full.
+Frame time  [0 .. %.1fms]: %.1fms variance: %.2f stddev: %.2f
+Frame time, CPU frame, GPU frame\n
+FramesPerClip
+Free virtual memory
+Freed EMS handle %u
+Freed XMS handle %u
+FreezeEntireProbeSetTask
+FreezeEntireProbeSetTask - requires m_EntireProbeSetPrecomp precomputed data block.
+FreezeEntireProbeSetTask - version number of probeset data does not match run-time
+FreezeInputLightingBuffer - invalid NULL parameter
+Frostbite MiniDump. Address: %p (In Windbg type: .ecxr)
+Fullscreen mode could not be achieved because the specified output was already in use.
+G 
+G,
+G0
+G<
+G@
+GAMEREPORT_FINISHED_STATUS_DEFAULT
+GAMEREPORT_FINISHED_STATUS_DNF
+GAMEREPORT_FINISHED_STATUS_FINISHED
+GB
+GDBytes
+GEOIP_ERR_USER_OPTOUT
+GEOIP_INCOMPLETE_PARAMETERS
+GEO_DISABLE_FMA4
+GET
+GETTABLE
+GETTABUP
+GETUPVAL
+GH
+GLOBAL_
+GLSL.std.450
+GNU (g++) V3 ABI-style demangling
+GNU (g++) style demangling
+GOT
+GRANT_DATE_RANGE_INVALID
+GRAPHICS
+GROUP_NAME_DOES_NOT_MATCH
+GUARD_PAGE
+GUEST
+Game.Level is not set in Game.cfg
+GameSimulation.GameClock RenderFrames
+GameState asset is not set.
+GameState bool %s is %s, but should be %s
+GameState float %s is %f, but should be %f
+GameState float %s is %f, but should be %f (wraparound comparison with range %f)
+GameState integer %s is %d, but should be %d
+GameState matrix %s is:\n               (%f,%f,%f,%f %f,%f,%f,%f %f,%f,%f,%f %f,%f,%f,%f),\n but should be (%f,%f,%f,%f %f,%f,%f,%f %f,%f,%f,%f %f,%f,%f,%f)
+GameState quaternion %s is (%f,%f,%f,%f),\n          but should be (%f,%f,%f,%f)
+GameState quaternion %s not similar: Value is (%f,%f,%f,%f),\n                              but should be (%f,%f,%f,%f)
+GameState vector2 %s is (%f,%f), but should be (%f,%f)
+GameState vector3 %s is (%f,%f,%f),\n       but should be (%f,%f,%f)
+GameState vector4 %s is (%f,%f,%f,%f),n       but should be (%f,%f,%f,%f)
+GatherWindowDeviceInfos
+Gathered light precompute shader
+General access denied error.
+Generating new header file '%s'\n
+GeoNonAABoundingBox::SetMatrices - Basis is not orthonormal.
+GetDpiForMonitor
+GetEmailOptinSetting
+GetInputWorkspaceGUID - index out of range
+GetModuleBaseNameW
+GetOctreeNumVirtualProbesLod: LOD index out of range
+GetOctreeNumVirtualProbesLod: probeSetCore must be an octree probe set
+GetProbeEnvironmentVisibility - invalid probe interpolation data type: %d
+GetProbeEnvironmentVisibility - no probe interpolation data available
+GetProbeEnvironmentVisibility - probeId out of range
+GetProbeInterpolants - 'maxNumCandidates' must be at least 8 for a regular grid.
+GetProbeInterpolants - probe sets that aren't regular grids require an array of probe positions as input.
+GetProbeInterpolants: 'numMaxInterpolants' must be larger than zero
+GetUserDefaultLocaleName
+GgG
+GiGridProbesResourceAtlas Warning: Unable to allocate atlas type "
+GiGridProbesResourceAtlas Warning: Unable to allocate brick irradiance 
+Gibs Ray Lighting Buffer
+GlassSessionId
+Gx
+H E Z L O C U S
+H(G
+H.
+H264
+H=%s\t
+HARDWARE\DESCRIPTION\System\CentralProcessor\0
+HASH
+HDC
+HEAD
+HH
+HR: 0x%08x (
+HTG
+HTTP_1_1_REQUIRED
+HT_DYNAMIC
+HT_NOTE
+HT_REL
+HT_SHLIB
+HT_SYMTAB
+H\n
+H_FRAME
+Hand Posture Select Time
+Hang detected by RenderCore2 breadcrumb handler and broadcast to Rc1 handler
+Hangup Signal
+Hardware RT Alpha Test Hit
+Hardware RT Opaque Hit
+Heap structures are corrupted.
+Heap/VirtualAllocSlabMemoryAdapter
+Heart Beat Contract Initialized 
+Heart Beat Incremented 
+Hips doesn't seem to be Z-facing, you have a difference of %.5f degree with X axis. Should be below  %.5f.
+Host:
+HtB
+HttpTask
+HuaTianKaiTi?
+HuaTianSongTi?
+Huffman code size table overflow
+Huffman table 0x%02x was not defined
+Hull-Prim Instancing ticks
+HwH
+I#C
+ICC profile length invalid (not a multiple of 4)
+ICC profile too short
+IDAT
+IDCT output block size %d not supported
+IDENTIFIER
+IDIV
+IDREF
+IDREFS
+IH
+ILLEGAL_FOR_COUNTRY
+ILLEGAL_INSTRUCTION
+ILLEGAL_VALUE
+IMPLIED
+INADEQUATE_SECURITY
+INCOMPLETE
+INCOMPLETE_PHONE
+INDICES_INT16
+INDICES_INT32
+INDICES_INT8
+INDICES_INVALID
+INDICES_MAX_ID
+INENT
+INF
+INIT
+INIT_ARRAYSZ
+INSZ
+INTERNAL_ERROR
+INTERNAL_IPPORT
+INTERNET
+INTERP
+INT_DIVIDE_BY_ZERO
+INT_OVERFLOW
+INUX
+INVALID_CLIENT_GROUP
+INVALID_CLIENT_NAMESPACE
+INVALID_CODE
+INVALID_DATE_RANGE
+INVALID_DISPOSITION
+INVALID_EMAIL
+INVALID_EMAIL_DOMAIN
+INVALID_HANDLE
+INVALID_OPTIN
+INVALID_PASSWORD
+INVALID_PRODUCT_CONFIGURATION
+INVALID_PRODUCT_MAPPING
+INVALID_TYPE_FOR_CATEGORY
+INVALID_VALUE
+IN_PAGE_ERROR
+IRV
+ISO-8859-1
+IStream type 0x%08x
+IT
+ITALIC_ANGLE
+ITF
+IT_ARRAY
+I\
+I_ARRAY
+I_ARRAYSZ
+Idle Posture Select Time
+IgnoredFileArray
+Ignoring PLTE chunk in grayscale PNG
+Ignoring attempt to set cHRM RGB triangle with zero area
+Ignoring attempt to set negative chromaticity value
+Ignoring attempt to write 16-bit bKGD chunk when bit_depth is 8
+Ignoring attempt to write 16-bit tRNS chunk when bit_depth is 8
+Ignoring attempt to write bKGD chunk out-of-range for bit_depth
+Ignoring attempt to write tRNS chunk out-of-range for bit_depth
+Ignoring cHRM chunk with negative chromaticities
+Ignoring gAMA chunk with out of range gamma
+Ignoring iCCP chunk with declared size = @1 and actual length = @2
+Ignoring incorrect cHRM value when sRGB is also present
+Ignoring incorrect cHRM white(@1,@2) r(@3,@4)g(@5,@6)b(@7,@8) when sRGB is also present
+Ignoring incorrect gAMA value @1 when sRGB is also present
+Ignoring invalid num_trans value
+Ignoring invalid time value
+Ignoring nonzero compression type in iCCP chunk
+Ignoring request to write a PLTE chunk in grayscale PNG
+Illegal Instruction Signal
+Image height exceeds user limit in IHDR
+Image height is zero in IHDR
+Image size must match encoder init configuration size
+Image too wide for this implementation
+Image width exceeds user limit in IHDR
+Image width is too large for this architecture
+Image width is zero in IHDR
+Improper call to JPEG library in state %d
+Incomplete compressed datastream
+Inconsistent progression sequence for component %d coefficient %d
+Incorrect IEND chunk length
+Incorrect bKGD chunk index value
+Incorrect bKGD chunk length
+Incorrect buffer dimensions
+Incorrect cHRM chunk length
+Incorrect gAMA chunk length
+Incorrect hIST chunk length
+Incorrect oFFs chunk length
+Incorrect pHYs chunk length
+Incorrect sBIT chunk length
+Incorrect sRGB chunk length
+Incorrect tIME chunk length
+Incorrect tRNS chunk length
+Index files passed the 'fast' validation check.
+Indirect Rt Args Pass
+Indirect Update Args Pass
+InitialiseEmissiveBufferFromTexture: fixedPointMaximum parameter must be greater than zero.
+Initializing controller user pairing
+Initiating load of latest snapshot
+InlineVertexBuffer
+Input file read error
+InstanceUserData0 or InstanceUserData1 are in use.  This is not allowed.
+Instruction
+Instruction address
+Instruction data
+Insufficient memory (case %d)
+Insufficient memory for hIST chunk data
+Insufficient memory for pCAL parameter
+Insufficient memory for pCAL params
+Insufficient memory for pCAL purpose
+Insufficient memory for pCAL units
+Insufficient memory to process iCCP chunk
+Insufficient memory to process iCCP profile
+Insufficient memory to process text chunk
+Insufficient memory to store iTXt chunk
+Insufficient memory to store zTXt chunk
+IntermediateDiskSpaceUsage
+Internal error
+Invalid %s track %d: 
+Invalid IHDR chunk
+Invalid IHDR data
+Invalid JPEG file structure: SOS before SOF
+Invalid JPEG file structure: missing SOS marker
+Invalid JPEG file structure: two SOF markers
+Invalid JPEG file structure: two SOI markers
+Invalid PLTE after IDAT
+Invalid SOS parameters for sequential JPEG
+Invalid UTF8 character in string
+Invalid attempt to read row data
+Invalid bKGD after IDAT
+Invalid background palette index
+Invalid bit depth for RGB image
+Invalid bit depth for RGBA image
+Invalid bit depth for grayscale image
+Invalid bit depth for grayscale+alpha image
+Invalid bit depth for paletted image
+Invalid bit depth in IHDR
+Invalid block size.
+Invalid cHRM after IDAT
+Invalid cHRM blue point
+Invalid cHRM green point
+Invalid cHRM red point
+Invalid cHRM white point
+Invalid color quantization mode change
+Invalid color type in IHDR
+Invalid color type/bit depth combination in IHDR
+Invalid component ID %d in SOS
+Invalid compression type specified
+Invalid crop request
+Invalid curT: mStartT = %.2f, curT = %.2f
+Invalid deadT: mStartT = %.2f, curT = %.2f, first deadT = %.2f
+Invalid element type (
+Invalid element type: 
+Invalid error code>
+Invalid filter method in IHDR
+Invalid filter type specified
+Invalid format for pCAL parameter
+Invalid format specified.\n    Format: 
+Invalid frame height
+Invalid frame marker
+Invalid frame size
+Invalid frame size in index
+Invalid frame sync code
+Invalid frame width
+Invalid gAMA after IDAT
+Invalid hIST after IDAT
+Invalid header size
+Invalid iCCP after IDAT
+Invalid image color type specified
+Invalid image format. Only YV12 and I420 images are supported
+Invalid image height in IHDR
+Invalid image width in IHDR
+Invalid interlace type specified
+Invalid joint index %d for joint %s.
+Invalid memory block: end of track %d %s (addr 0x%08X); start of track %d %s (addr 0x%08X)
+Invalid memory block: mMemoryBlock %X != %X track 0 memory block
+Invalid memory pool code %d
+Invalid number of colors in palette
+Invalid number of histogram entries specified
+Invalid number of tile columns
+Invalid number of transparent colors specified
+Invalid oFFs after IDAT
+Invalid object size: 
+Invalid object type: 
+Invalid operation
+Invalid pCAL after IDAT
+Invalid pCAL data
+Invalid pCAL equation type
+Invalid pCAL parameters for equation type
+Invalid pHYs after IDAT
+Invalid palette chunk
+Invalid palette length
+Invalid palette size, hIST allocation skipped
+Invalid payload size; the payload must include the zero terminator
+Invalid position error: end of track %d %s (%.2f, %.2f); start of track %d %s (%.2f, %.2f)
+Invalid progressive parameters Ss=%d Se=%d Ah=%d Al=%d
+Invalid progressive parameters at scan script entry %d
+Invalid reference frame
+Invalid reference frame map
+Invalid sBIT after IDAT
+Invalid sBIT depth specified
+Invalid sCAL after IDAT
+Invalid sCAL chunk ignored: bad height format
+Invalid sCAL chunk ignored: bad width format
+Invalid sCAL chunk ignored: non-positive height
+Invalid sCAL chunk ignored: non-positive width
+Invalid sCAL height
+Invalid sCAL ignored: invalid unit
+Invalid sCAL unit
+Invalid sCAL width
+Invalid sPLT after IDAT
+Invalid sRGB after IDAT
+Invalid sRGB rendering intent specified
+Invalid scan script at entry %d
+Invalid string length. %d, actual = %d
+Invalid tRNS after IDAT
+Invalid time specified for tIME chunk
+Invalid usage of segement feature on small blocks
+Invalid zlib compression method or flags in IDAT
+Invalid zlib compression method or flags in non-IDAT chunk
+IsProbeCulled - no probe culling data available
+IsProbeCulled - probeId out of range
+J'H
+JArray1Z
+JBC
+JFIF APP0 marker: version %d.%02d, density %dx%d  %d
+JFIF extension marker: JPEG-compressed thumbnail image, length %u
+JFIF extension marker: RGB thumbnail image, length %u
+JFIF extension marker: palette thumbnail image, length %u
+JFIF extension marker: type 0x%02x, length %u
+JH
+JMP
+JOB_PRIORITY_HIGH
+JOB_PRIORITY_LOW
+JOB_PRIORITY_MEDIUM
+JPEG datastream contains no image
+JPEG parameter struct mismatch: library thinks size is %u, caller expects %u
+JSCRIPT
+JSON parse error (%u): %s
+JSON parse error in %s(%u): %s
+JXH
+JobQueue_
+JobScheduler_
+JobServiceList_
+Joins elements into a type
+Joint Mapping Feature not enabled on Rig.
+Joint Spy AccumulateJob
+Joint Spy Container
+Joint Spy Container Job
+Json malformatted.
+JsonReader
+K#H
+K@
+KH
+KNOWN!
+K\
+K\t
+Key: . = fail, 1 = barely passed (or unscored weighted cell), 2-9 = pass but not perfect, # = pass perfect
+Keyframe / intra-only frame required to reset decoder state
+KnG
+KoG
+L prev foot state
+L prev toe state
+L)H
+L.H
+LANG
+LANGUAGE_%s
+LARGE_COMMON
+LCU
+LCU.PatchDirectoryURL
+LCU.PatchServerURL
+LCU.RootOverride
+LC_COLLATE
+LC_MONETARY
+LC_NUMERIC
+LE
+LEAP
+LEN
+LENT
+LH
+LINGUISTIC_SERVICES
+LINK_ALREADY_EXISTS
+LL
+LNT
+LOADBOOL
+LOADK
+LOADKX
+LOADNIL
+LPID[%i] Controller[*(%p) Index(%i) Id(%s) Type(%s) Virtual(%s)] User[*(%p), Id(%s)] Primary[%s] VirtualPairing[%s]
+LS
+LSI
+LT
+LT%(px$
+LTPADSZ
+LUA: 
+LUA_CPATH
+LUA_CPATH_5_3
+LUA_NOENV
+LUA_PATH
+LUA_PATH_5_3
+LZ4SoftwareCompressionBlockSizeInKB
+La fonction DirectX "
+Label_
+Language table has overflowed at size %d (category %d).\n
+LanguageFormat_
+Last Transition ending up at 
+Last50WindowResized
+LayoutData
+LayoutMetaInfo
+LeadingDir
+LeadingDir 
+Left arm doesn't seem to be parallel to X axis, you have a difference of %.5f degree with X axis. Should be below %.5f.
+Leftover Party Member 
+Lifetime Manager is being deleted and there are %d spawn refs still mapped to DSD ids!\nDumping leaked refs:
+LightRenderDB.cpp::convertToLightInfo case PBRAnalyticLightShape_Rectangular shadowView
+LightRenderDB.cpp::convertToLightInfo case PBRAnalyticLightShape_Spot shadowView
+Line numbers
+Line: %d, column: %d, byte: %d\n
+LinkAutogen TotalTime = %3.2f\n
+LkH
+Load failed. No valid CareerId found.
+Load requested via BWSavegameRequestLoadMessage
+Loc/
+Local IBL render info
+Local PR render info
+LocaleArray
+LocaleSupport
+Location header not found in redirect. uri: %s
+Location:
+Log of textures loaded will be dumped to /temp/
+Logger (%x) for %s was already attached, so detaching first.
+Login cancelled by user.
+Login: unable to create a protohttpref connection object
+Longest string table:\n\n
+Loop filter thread creation failed
+Lower bound of maximum stack required is 0x%v (%u bytes)\n
+Lua
+Lua 5.3
+Lua function expected
+LuaContext_executeString
+LvH
+M style demangling
+M&H
+M0H
+M1H
+M44(%.12g %.12g %.12g %.12g) (%.12g %.12g %.12g %.12g) (%.12g %.12g %.12g %.12g) (%.12g %.12g %.12g %.12g) 
+M44(%f %f %f %f) (%f %f %f %f) (%f %f %f %f) (%f %f %f %f) 
+MA
+MALE
+MATERIAL_INDICES_INT16
+MATERIAL_INDICES_INT8
+MATERIAL_INDICES_INVALID
+MATERIAL_INDICES_MAX_ID
+MAX_ALLOC_CHUNK is wrong, please fix
+MAX_SPACE
+MBN/POWERSHELL
+MCC
+MD5 part of OpenSSL 0.9.8k 25 Mar 2009
+MEDIASERVER
+MESSAGING_ERR_DATABASE
+MESSAGING_ERR_FEATURE_DISABLED
+MESSAGING_ERR_INVALID_PARAM
+MESSAGING_ERR_MATCH_NOT_FOUND
+MESSAGING_ERR_MAX_ATTR_EXCEEDED
+MESSAGING_ERR_PROFANITY_SYSTEM
+MESSAGING_ERR_TARGET_INBOX_FULL
+MESSAGING_ERR_TARGET_NOT_FOUND
+MESSAGING_ERR_TARGET_TYPE_INVALID
+MESSAGING_ERR_UNKNOWN
+METADIRECTORY
+MGPU Transfers (est. for 2 GPUs):
+MH
+MIN_SPACE
+MIP_AUTOGEN 
+MISCONDUCT
+MISSING_VALUE
+MISTYPED_ID
+MNG features are not allowed in a PNG datastream
+MOBILE
+MOD
+MOTION_BOX_INERTIA
+MOTION_CHARACTER
+MOTION_DYNAMIC
+MOTION_FIXED
+MOTION_INVALID
+MOTION_KEYFRAMED
+MOTION_MAX_ID
+MOTION_SPHERE_INERTIA
+MOTION_THIN_BOX_INERTIA
+MOVE
+MOVEENT
+MOVESZ
+MSMQ
+MUL
+MULTIPLE_WALLET_ACCOUNTS_FOUND
+MULTI_THREADING_CHECKS_ENABLE
+MULTI_THREADING_CHECKS_IGNORE
+MY_
+M\t
+Malformed iCCP chunk
+Malformed iTXt chunk
+Max Alive by Count (Limit %d)
+Max Alive by Tag (
+Max Performance Cost (Limit %.1f)
+Max Simultaneous Creature Score (Limit %.1f)
+Max Simultaneous by Creature Type (Creature %d, Limit %d)
+Max Total by Creature Type (Creature %d, Limit %d)
+Max Unique Creature Types (Limit %d)
+Max external spawns alive by count (Limit %d)
+Maximum supported image dimension is %u pixels
+MemCache 0x%x: totalSize=%ld, total numBlocks=%d\n
+MemTotalPageFileMB
+MemTotalPhysMB
+MemTotalVirtualMB
+Memory allocation
+Memory allocation failed while processing sCAL
+Memory leak (allocID = %u, tag = "%s", size = %u) at: %8x\n
+Memory leak at: %8x\n
+Memory load
+Memory output is 0.
+Memory output is constant.
+Memory view write failed due to an exception.\r\n
+Mesh Scattering Quality Level
+MeshPrim
+Metadata version read failure
+Microsoft Base Cryptographic Provider v1.0
+Microsoft C/C++ MSF 7.00
+Microsoft C/C++ MSF 8.00
+Microsoft Visual C++ compiler, version 1930
+MinOSVersionArray
+Ming(for ISO10646)
+MingLi43
+MingLiU
+MingMedium
+Miscellaneous marker 0x%02x, length %u
+Mismatch in types of fields member size!
+Missing Huffman code table entry
+Missing IHDR before IDAT
+Missing IHDR before PLTE
+Missing IHDR before bKGD
+Missing IHDR before cHRM
+Missing IHDR before gAMA
+Missing IHDR before hIST
+Missing IHDR before iCCP
+Missing IHDR before iTXt
+Missing IHDR before oFFs
+Missing IHDR before pCAL
+Missing IHDR before pHYs
+Missing IHDR before sBIT
+Missing IHDR before sCAL
+Missing IHDR before sPLT
+Missing IHDR before sRGB
+Missing IHDR before tEXt
+Missing IHDR before tRNS
+Missing IHDR before zTXt
+Missing PLTE before IDAT
+Missing PLTE before bKGD
+Missing PLTE before hIST
+Missing PLTE before tRNS
+Module count exceeds our enumeration limit of 256. Only 256 will be displayed.\r\n
+Module enumeration API is not available. Cannot dump module list.\r\n
+Modules
+MultiStreamOpusDecBase mpMemory
+MultiStreamOpusEncBase encoder instance
+MultiStreamOpusEncBase input buffer
+MultiStreamOpusEncBase mapping
+Multiple Pairing Manager State:
+Multiple scattering precompute shader
+Multiplying by 0 results in 0.
+Multiplying by 1 does not change the value.
+Multiplying by identity does not change the value.
+N3H
+N=%s\t
+NAME
+NAT_TYPE_MODERATE
+NAT_TYPE_NONE
+NAT_TYPE_PENDING
+NAT_TYPE_STRICT
+NAT_TYPE_STRICT_SEQUENTIAL
+NAT_TYPE_UNKNOWN
+ND*
+NDATA
+NDIS
+NEWS_PARAM_BLAZE_ID
+NEWS_PARAM_INT
+NEWS_PARAM_NONE
+NEWS_PARAM_PLAYER_ID
+NEWS_PARAM_STRING
+NEWS_PARAM_TROPHY_ID
+NEWTABLE
+NFIG
+NMTOKEN
+NMTOKENS
+NONCONTINUABLE_EXCEPTION
+NORM_SPACE
+NOT
+NOT STARTED\r\n
+NOTATION
+NOTATION(
+NOTICE
+NOT_ALLOWED
+NO_ASSOCIATED_PRODUCT
+NO_ERROR
+NO_SUCH_AUTH_DATA
+NO_SUCH_COUNTRY
+NO_SUCH_DEVICE
+NO_SUCH_ENTITLEMENT
+NO_SUCH_EXTERNAL_REFERENCE
+NO_SUCH_GROUP
+NO_SUCH_GROUP_NAME
+NO_SUCH_NAMESPACE
+NO_SUCH_OPTIN
+NO_SUCH_PERSONA
+NO_SUCH_PERSONA_REFERENCE
+NO_SUCH_PID
+NO_SUCH_USER
+NPATH
+NTDLL.DLL
+NULL IStream
+NULL file handle passed to FWriteSafe
+NULL row buffer
+NUMBERSUGGESTIONS
+NUM_PRIORITIES
+NV12
+N\tH
+NavPower custom build description = "%s"\n
+Navigation won't succeed. SSL processing error on 
+NetBSD-CORE
+New high-water mark for Slot count (%u).
+No 'last' reference frame
+No ClientAppearanceComponent found on the player character. Unable to apply custom character appearance. File to RPG-Prog.
+No ClientBWPaperdollAppearanceDbDataComponent found on the player character. Unable to apply custom character appearance. File to RPG-Prog.
+No ClientDylanCharacter found for the player. Unable to apply custom character appearance. File to RPG-Prog.
+No High Priority Threshold has been defined
+No IDATs written into file
+No action; always Passing.
+No active mode found in RootCameraController
+No asset loader was provided at startup.  Slot banks will not load new samples on update.
+No default input, 0 returned.
+No default persona id found!
+No error occurred.
+No image in file
+No input on case %i, 0 returned.
+No inputs to switch.
+No load buffers initialized to service shared slots.
+No memory for pCAL params
+No memory for pCAL purpose
+No memory for sPLT palettes
+No memory to process iTXt chunk
+No memory to process text chunk
+No more archived files
+No more arguments to parse
+No pilot creation skin has been set on the editor.
+No profile for iCCP chunk
+No raytracing hardware detected! You may not have the correct driver or the correct version of Windows.
+No reference data for this tick.
+No server game context
+No server map advisor
+No server player manager
+No space in chunk cache for iTXt
+No space in chunk cache for sPLT
+No space in chunk cache for tEXt
+No space in chunk cache for unknown chunk
+No space in chunk cache for zTXt
+No such interface supported.
+NoEscape 
+Node %s is almost at the same position than node %s
+Node %s is at the same position than node %s
+Nonrepresentable section on output
+Normalized resolution scale [0.00 .. 1.00]: %.2f 
+Not a JPEG file: starts with 0x%02x 0x%02x
+Not a PNG file
+Not enough image data
+Not enough memory left in pool for texture.\r\tTexture size = %u bytes\r\tRemaining pool size = %u bytes
+Not enough memory to decompress chunk
+Not enough memory to process iTXt chunk
+Not enough memory to process text chunk
+Not enough memory to process zTXt chunk
+Not enough memory to sort relocations
+Not implemented yet
+Not implemented.
+Not supported in frame parallel decode
+NtQueryObject
+NtQuerySystemInformation
+Nucleus::HttpTaskHeader
+Nucleus::HttpTaskRedirect
+Nucleus::HttpTaskResponse
+Nucleus::IdentitySessionImpl::TaskPool
+Null PersonalizationLoadoutEditor on %s.
+Num Hull-Hull Overlaps
+Num Hull-Hull Queries
+Num Hull-Prim Overlaps
+Num Hull-Prim Queries
+Num extracted tris
+Num filtered collisions
+Num hull-cluster queries
+Num hull-tri collisions
+Number of values in InputLightingBuffer does not match expected by resolution %d: %d vs %d
+OAD
+OBAL_
+OE
+OF
+OG
+OH
+OLUMNS
+OM*
+ONLINE_ACCESS
+ONLINE_ID
+ON_DESTRUCTION_REMAP
+ON_DESTRUCTION_REMOVE
+ON_DESTRUCTION_RESET_REMOVE
+OPC
+OPTINTYPE
+OPTIN_MISMATCH
+OPTIONS
+OPT_OUT
+ORDER_DEFAULT
+ORDER_TIME_ASC
+ORDER_TIME_DESC
+OS name
+OS service pack
+OS version number
+OSFLAG_1
+OSIX
+OSNameArray
+OTE
+OUTPUT_FORMAT_FP16
+OUTPUT_FORMAT_LRB
+OUTPUT_FORMAT_R11G11B10
+OUTPUT_FORMAT_R9G9B9E5
+OUTPUT_FORMAT_RGBM
+OVETAB
+O\r
+O\tA
+O\tB
+O\tC
+Object Layers Mask do not match. Expected: (
+Obtained EMS handle %u
+Obtained XMS handle %u
+One of the operands in a floating-point operation is denormal. A denormal value is one that is too small to represent as astandard floating-point value.
+Open files
+OpenGLDriverName
+OpenGLDriverNameWow
+Opened temporary file %s
+Operation aborted.
+OptInRequest
+Optimizes several different joint reads.
+Opus encoder array
+Opus encoder instance
+Opus input buffer
+Opus input buffer array
+Or-ing any value with true will always be true.
+Out of Memory
+Out of memory
+Out of memory processing zTXt chunk
+Out of memory while procesing keyword
+Out of memory while processing sCAL chunk
+Out of memory while processing sPLT chunk
+Out of memory while processing unknown chunk
+Out of memory.  Failed to register dataset.
+Out of place IHDR
+Out of place cHRM chunk
+Out of place gAMA chunk
+Out of place iCCP chunk
+Out of place sBIT chunk
+Out of place sRGB chunk
+Out of place tIME chunk
+Out of range gamma value ignored
+Output file write error --- out of disk space?
+Output to YV12 is not supported for this JPEG.
+Overlord denied save for complicated reasons
+P A
+P&
+P(=
+P0B
+P2P
+P2P_INT
+P4
+PANIC: unprotected error in call to Lua API (%s)
+PANIC: unprotected error in call to Lua API (%s)\n
+PARENTAL_APPROVAL
+PARENTAL_EMAIL
+PARENTAL_REQUEST
+PARENTDECLINED
+PARENTS_REQUEST
+PARENTVERIFIED
+PARSE
+PARSE_EXCEPTION
+PASSWORD
+PATCH
+PBR light cull info
+PBR light render info
+PC64_ADDR14_BRNTAKEN
+PC64_ADDR16_HA
+PC64_ADDR16_HIGHER
+PC64_ADDR16_HIGHESTA
+PC64_ADDR16_LO
+PC64_ADDR32
+PC64_DTPMOD64
+PC64_DTPREL16_HIGHEST
+PC64_GNU_VTINHERIT
+PC64_GOT16_HI
+PC64_GOT_TLSGD16
+PC64_GOT_TLSGD16_LO
+PC64_GOT_TLSLD16_HI
+PC64_GOT_TPREL16_LO_DS
+PC64_JMP_SLOT
+PC64_PLT16_HI
+PC64_PLT32
+PC64_PLTREL64
+PC64_REL14_BRTAKEN
+PC64_REL24
+PC64_REL64
+PC64_SECTOFF_HA
+PC64_TLS
+PC64_TOC16_DS
+PC64_TOC16_HI
+PC64_TOC32
+PC64_TPREL16_HA
+PC64_UADDR64
+PCDATA
+PCF
+PCI\VEN_10DE&CC_0300
+PE
+PENDINGEMAILVERIFY
+PENDINGPARENTVERIFICATION
+PH
+PIB
+PIDGENX
+PID_DOES_NOT_MATCH
+PIX
+PIXEL_SIZE
+PLA/WINDOWS_SETUP
+PLTPAD
+PLTRELSZ
+PMingLiU
+PNG file corrupted by ASCII conversion
+PNG unsigned integer out of range
+POINT_SIZE
+POSIXLY_CORRECT
+POST
+POSTPONED
+POW
+PPC64_ADDR14_BRTAKEN
+PPC64_ADDR16
+PPC64_ADDR16_HIGHEST
+PPC64_ADDR16_LO_DS
+PPC64_ADDR64
+PPC64_DTPREL16_HIGHESTA
+PPC64_DTPREL64
+PPC64_GOT16
+PPC64_GOT16_HA
+PPC64_GOT_DTPREL16_HA
+PPC64_GOT_DTPREL16_HI
+PPC64_GOT_TLSLD16
+PPC64_GOT_TLSLD16_LO
+PPC64_GOT_TPREL16_DS
+PPC64_GOT_TPREL16_HA
+PPC64_PLT16_HA
+PPC64_PLTGOT16_DS
+PPC64_PLTGOT16_LO_DS
+PPC64_RELATIVE
+PPC64_SECTOFF_HI
+PPC64_TOC16
+PPC64_TOC16_HA
+PPC64_TOC16_LO_DS
+PPC64_TPREL16_HI
+PREINIT_ARRAY
+PREL
+PRI * HTTP/2.0\r\n\r\nSM\r\n\r\n
+PRIORITY_INVALID
+PRIORITY_PSI
+PRIORITY_SIMPLIFIED_TOI_UNUSED
+PRIORITY_TOI
+PRIORITY_TOI_FORCED
+PRIORITY_TOI_HIGHER
+PRIVACY_POLICY
+PRIV_INSTRUCTION
+PRODUCT_ID_NOT_SPECIFIED
+PROMOTIONAL
+PROTOBUF_TYPE_32BIT
+PROTOBUF_TYPE_64BIT
+PROTOBUF_TYPE_END_GROUP
+PROTOBUF_TYPE_LENGTH_DELIMITED
+PROTOBUF_TYPE_START_GROUP
+PROTOBUF_TYPE_VARINT
+PROTOCOL_ERROR
+PSO-Creation: The blob provided does not match the adapter that the device was created on.
+PSO-Creation: The blob provided was created for a different version of the driver, and must be re-created.
+PUBLIC
+PUT
+PU_ADDR16_HI
+PU_ADDR18
+PU_REL16
+PU_REL9
+PYC
+P\t
+PaB
+Packing ratio vs using 16bit chars\t\t\t\t: %5.2f\n
+Party Gather point 
+Pass Through Control Flow
+Passes all constrol flow straight through
+Passes all data straight through
+PatchBaseDirectory
+PatchClass
+PatchDescription
+PatchEULA
+PatchEntry
+PatchHash
+PatchId
+PatchImpl
+PatchImplURL
+PatchInfo
+PatchInfoURL
+PatchName
+Pathname
+Pathname 
+PbB
+PcG
+PdB
+Percent characters valued 0x0000 -> 0x007f\t\t: %5.2f\n
+Percent characters valued 0x0080 -> 0x00ff\t\t: %5.2f\n
+Percent double char histogram entries\t\t\t: %5.2f\n
+Percent single char histogram entries\t\t\t: %5.2f\n
+PgD
+Physics Category Preset Database
+Physics IK Assembly Def
+PiD
+Pj@
+PjC
+Platform: %s\n
+Play time read failure for 
+Player Load Save File
+Please update Windows
+Please update your %s driver
+Please update your driver using GeForce Experience or by downloading at http://www.geforce.com/drivers before playing the game.
+Please update your drivers at http://downloadcenter.intel.com/ before playing the game.
+Please update your drivers at http://www.amd.com/ before playing the game.
+Position wasn't found in the vertex stream.
+PostRunScript
+Potential overflow in png_zalloc()
+Powered by Frostbite \o/ EA Digital Illusions CE AB
+Pp
+Pq@
+PreRunScript
+PredictableBlendPlugin (masterFacingAngle=%f, masterRelativeMoveAngle=%f, masterSpeed=%f, slaveFacingAngle=%f, slaveRelativeMoveAngle=%f, slaveSpeed=%f, legScale=%f, prevPercent=%f, percent=%f, totalTicks=%f, timeToUpdate=%f)
+Preferred display rect (Surround/UI): [%d, %d, %d, %d]
+PrefetchClips
+PrefixDir
+PrefixDir 
+Premature EOO. 
+Premature end of JPEG file
+Premature end of input file
+Prev pose DB clip frame
+Prev pose DB clip idx
+PrimPrim
+Probe Bitmask Update Payload
+Probe Depth Update Payload
+Probe Irradiance Update Payload
+Probe Priority Group Budget
+Probe Priority Group Counters
+Process list
+Processing PatchImpl file
+Processing directory
+Processor level
+Processor revision
+Processor type
+Profile length does not match profile
+Profile size field missing from iCCP chunk
+ProfileOptionsType[]
+Program Header:\n
+Progress Bar Render Batch
+ProtoHttp %d.%d/DS %d.%d.%d.%d.%d (Windows)
+ProtoHttp error (%d) for method %s(%d) and uri: %s
+ProtoHttpRecvAll error %08x uri: %s
+ProtoSSL Global State
+ProtoSSL Secure State
+Pure Function Call
+Pure Virtual Function Call in function %#p
+PureFuncCallDump
+QH
+QUAD_WIDTH
+QUOTED_STRING
+QeH
+Quantization table 0x%02x was not defined
+Quantizing to %d = %d*%d*%d colors
+Quantizing to %d colors
+QuestPhase Name: Unknown Id: 
+Queue[%u](%u)"%s":\n
+Quit requested through schematics.
+Quit requested. Reason only visible in non-retail
+R prev foot state
+R prev toe state
+R,H
+R4
+RAS
+RAW_ASCENT
+RAW_AVERAGE_WIDTH
+RAW_AVG_CAPITAL_WIDTH
+RAW_AVG_LOWERCASE_WIDTH
+RAW_CAP_HEIGHT
+RAW_DESCENT
+RAW_END_SPACE
+RAW_FIGURE_WIDTH
+RAW_MAX_SPACE
+RAW_MIN_SPACE
+RAW_NORM_SPACE
+RAW_PIXELSIZE
+RAW_PIXEL_SIZE
+RAW_POINTSIZE
+RAW_POINT_SIZE
+RAW_QUAD_WIDTH
+RAW_SMALL_CAP_SIZE
+RAW_STRIKEOUT_ASCENT
+RAW_STRIKEOUT_DESCENT
+RAW_SUBSCRIPT_SIZE
+RAW_SUBSCRIPT_X
+RAW_SUBSCRIPT_Y
+RAW_SUPERSCRIPT_SIZE
+RAW_SUPERSCRIPT_X
+RAW_SUPERSCRIPT_Y
+RAW_UNDERLINE_POSITION
+RAW_UNDERLINE_THICKNESS
+RAW_X_HEIGHT
+RE
+REACTIVATED_CUSTOMER
+REDIRECTOR_CLIENT_NOT_COMPATIBLE
+REDIRECTOR_CLIENT_UNKNOWN
+REDIRECTOR_INVALID_PARAMETER
+REDIRECTOR_MISSING_SERVICE_NAME
+REDIRECTOR_NO_MATCHING_INSTANCE
+REDIRECTOR_NO_SERVER_CAPACITY
+REDIRECTOR_PAST_EVENT
+REDIRECTOR_SERVER_DOWN
+REDIRECTOR_SERVER_NAME_ALREADY_IN_USE
+REDIRECTOR_SERVER_NOT_FOUND
+REDIRECTOR_SERVER_SUNSET
+REDIRECTOR_UNKNOWN_CONNECTION_PROFILE
+REDIRECTOR_UNKNOWN_SCHEDULE_ID
+REDIRECTOR_UNKNOWN_SERVICE_NAME
+REFUSED_STREAM
+REGISTERED
+REL
+RELASZ
+RELATIVE_SETWIDTH
+RELATIVE_WEIGHT
+RELRO
+RELSZ
+REPLACEMENT
+REQUIRED
+RESOLUTION
+RESOLUTION_X
+RESOLUTION_Y
+RESPONSE_INVALID
+RESPONSE_MAX_ID
+RESPONSE_NONE
+RESPONSE_REPORTING
+RESPONSE_SIMPLE_CONTACT
+RESTRICTION_VIOLATION
+RESULT_SET_TOO_LARGE
+RETURN
+RH
+RNEED
+RNEEDNUM
+ROCEDURE_LINKAGE_TABLE_
+ROOT\WMI
+RPC
+RSA
+RSAPUBLICBLOB
+RST%d
+RSYM
+RT
+RTV
+RVR
+R_PPC64_ADDR16_DS
+R_PPC64_ADDR32
+R_PPC64_ADDR64
+R_PPC64_DTPREL16_DS
+R_PPC64_DTPREL16_HA
+R_PPC64_DTPREL16_HI
+R_PPC64_DTPREL16_HIGHER
+R_PPC64_DTPREL16_HIGHERA
+R_PPC64_DTPREL16_LO
+R_PPC64_DTPREL16_LO_DS
+R_PPC64_DTPREL32
+R_PPC64_GLOB_DAT
+R_PPC64_GOT16_LO
+R_PPC64_GOT16_LO_DS
+R_PPC64_GOT_TLSGD16_HI
+R_PPC64_GOT_TLSLD16_HA
+R_PPC64_NONE
+R_PPC64_PLT16_LO
+R_PPC64_PLT16_LO_DS
+R_PPC64_PLTGOT16_HA
+R_PPC64_PLTGOT16_HI
+R_PPC64_PLTGOT16_LO
+R_PPC64_REL30
+R_PPC64_SECTOFF_DS
+R_PPC64_TOC16_LO
+R_PPC64_TPREL16_DS
+R_PPC64_TPREL16_HIGHER
+R_PPC64_TPREL32
+RamDisk
+Range: bytes=%I64u-%I64u\r\n
+Range: bytes=%I64u-\r\n
+RawClipNode (anim=0x%x, curTime=%f {%u->%u})
+RawClipNode (anim=0x%x, prevTime=%f {%u->%u}, curTime=%f {%u->%u})
+Ray Proxy (variable rate)
+Raytracing has been disabled with WorldRender.RaytraceEnable/Render.RaytraceEnable False
+Rc2PipelineCache
+Read Error
+Read failed on temporary file
+Read from EMS failed
+Read from XMS failed
+Read palette index exceeding num_palette
+ReadBatches
+ReadDirectoryChangesW
+ReadQueue
+Reading archive file mod timestamp
+Reading files in TnT.Core VFS
+Reads the default value on the first frame. Reads the feedback value on all subsequent frames.
+Reads the input value on the first frame and holds that value for all subsequent frames.
+Redirect location is null. Uri: %s
+Reference frame has invalid dimensions
+Referenced frame has incompatible color format
+Referenced frame has invalid size
+Register memory
+Registered Persistence Transaction 
+Registers
+Rel Move Angle (current)
+Release Fade (OUT): Debug Name: 
+Removed a DegreesToQuaternion that was only connected to a DofWriter.
+Removed a DofToDegreeReader node that is hooked up to a join.
+Removed a ForceDofReader node that is hooked up to a join.
+Removed a ForceDofReader whose value went into a RadiansToDegrees.
+Removed a RadiansToDegrees that was only connected to a ForceDofReader.
+Removed a is valid node
+Removed a join that was connecting three dofs.
+Removed a print node.
+Removed a quaternion DofWriter whose quaternion came from a DegreesToQuaternion.
+Removing intermediate files
+Removing original files
+Renaming destination files
+Renaming original files
+Render Arc End Cap End Line
+Render Arc End Cap Start Line
+RenderAsyncResourceManager
+RenderCore2 (RenderDevice.Core2FrameSubmit True) is needed for raytracing!
+RenderThreadOwnershipCs
+Renderer: %s  Resolution: %dx%d
+Replaced a PassthroughWithDefault with a Passthrough
+Replaced a pose blend with an array version.
+Report Path
+Report context is invalid.
+Requested Asset could not be found: 
+Requested a save with a broken metadata.  This request has been ignored
+Requested alignment is invalid.
+Requested an autosave within 
+Requested feature was omitted at compile time
+Requested size is too large.
+Reserved bit set
+ResolvePenetrations
+ResourceBarriers: %I64u (%I64u calls, %.1f average)
+ResourceHandle
+Result: %s\n
+Returns values depending on the value of the boolean expression
+Reverb IR Buffer
+RgH
+RhG
+Right arm doesn't seem to be parallel to X axis, you have a difference of %.5f degree with X axis. Should be below %.5f.
+Rime Label: Custom Objects
+Rime Label: Text Decoration
+Rime Text Input: Text Decoration
+RimeTextInput: Add Clip Mask
+RimeTextInput: Remove Clip Mask
+RjG
+RotateDeltaNode (rotation=<%.4f, %.4f, %.4f, %.4f>)
+RotateNode (dof=%d, rotation=<%.4f, %.4f, %.4f, %.4f>)
+RotatePoseNode (joint=%d, pivot=<%.4f, %.4f, %.4f>, quat=<%.4f, %.4f, %.4f, %.4f>)
+Rotation of Joint %s is (%f,%f,%f,%f), but should be (%f,%f,%f,%f)
+Rotations not similar on Joint %s : Rotation is (%f,%f,%f,%f),\n                     but should be (%f,%f,%f,%f)
+Row has too many bytes to allocate in memory
+RtlGetVersion
+Rva+Base               Lib:Object
+RwH
+S$H
+S(%.12g %.12g %.12g) (%.12g %.12g %.12g) (%.12g %.12g %.12g) (%.12g %.12g %.12g) %.12g 
+S(%f %f %f) (%f %f %f) (%f %f %f) (%f %f %f) %f 
+S(H
+S*
+SAMPLER
+SC
+SCARD
+SCRIPT
+SDIAG
+SECP256R1
+SECP384R1
+SED
+SELECT * FROM Win32_VideoController
+SELECT * FROM WmiMonitorID
+SELECT InstallDate,SerialNumber FROM Win32_OperatingSystem
+SELECT Manufacturer,SerialNumber FROM Win32_BaseBoard
+SELECT Manufacturer,SerialNumber FROM Win32_Bios
+SELECT PNPDeviceID FROM Win32_VideoController WHERE Availability=3
+SELECT SerialNumber FROM Win32_DiskDrive
+SELF
+SESS
+SETLIST
+SETTABLE
+SETTABUP
+SETTINGS_TIMEOUT
+SETUPAPI
+SETUPVAL
+SETWIDTH_NAME
+SEVERE 
+SG
+SH
+SHA1 part of OpenSSL 0.9.8k 25 Mar 2009
+SHELL/NAP
+SHGetFolderPathW
+SHL
+SHLIB
+SHR
+SHT_NOBITS
+SIMULATION_TYPE_CONTINUOUS
+SIMULATION_TYPE_DISCRETE
+SIMULATION_TYPE_INVALID
+SIMULATION_TYPE_MULTITHREADED
+SINGLE_STEP
+SIZE
+SKUIdArray
+SLANT
+SLASH
+SLAVE
+SMALL_CAP_SIZE
+SOFTWARE\BioWare\Dragon Age The Veilguard
+SOFTWARE\Khronos\OpenCL\Vendors
+SOFTWARE\Khronos\Vulkan\Drivers
+SOFTWARE\Microsoft\DirectX
+SOFTWARE\Microsoft\Windows NT\CurrentVersion
+SOLVER_TYPE_MAX_ID
+SOS
+SOURCE
+SPACES_NOT_ALLOWED
+SPACING
+SPP/RESTORE/DMSERVER
+SPU_ADDR16
+SPU_ADDR16X
+SPU_ADD_PIC
+SPU_NONE
+SPU_PPU32
+SPU_REL9I
+SPU_SEND_CONTACT_POINT_ADDED
+SPU_SEND_CONTACT_POINT_ADDED_OR_PROCESS
+SPU_SEND_CONTACT_POINT_PROCESS
+SPU_SEND_CONTACT_POINT_REMOVED
+SPU_SEND_NONE
+SQLITE
+SRVR
+SSLv3
+SSPI/SECURITY
+SSR READ FAILURE (error %d) - %d of data from replay file at offset %d (%dk)!
+SSR WRITE-FAILURE (error %d) - failed writing %d bytes of data to replay file at offset %d (%dk), temp partition is presumably full? If this is occuring during development, maybe we need to uninstall APP to reset temp partition!\n
+ST
+STACK
+STACK_OVERFLOW
+STALE_VERSION
+STARTCHAR
+STARTFONT
+STARTPROPERTIES
+START_BLOCK
+START_QBLOCK
+STATEREPOSITORY
+STATESTREAMREPLAY
+STATE_MANAGEMENT
+STATS_ERR_BAD_PERIOD_COUNTER
+STATS_ERR_BAD_PERIOD_OFFSET
+STATS_ERR_BAD_PERIOD_TYPE
+STATS_ERR_BAD_SCOPE_INFO
+STATS_ERR_CONFIG_NOTAVAILABLE
+STATS_ERR_DB_DATA_NOT_AVAILABLE
+STATS_ERR_DB_QUERY_FAILED
+STATS_ERR_DB_TRANSACTION_ERROR
+STATS_ERR_INVALID_FOLDER_ID
+STATS_ERR_INVALID_FOLDER_NAME
+STATS_ERR_INVALID_LEADERBOARD_ID
+STATS_ERR_INVALID_OBJECT_ID
+STATS_ERR_INVALID_OPERATION
+STATS_ERR_INVALID_UPDATE_TYPE
+STATS_ERR_LEADERBOARD_NOT_IN_MEMORY
+STATS_ERR_NO_DB_CONNECTION
+STATS_ERR_OPERATION_IN_PROGRESS
+STATS_ERR_RANK_OUT_OF_RANGE
+STATS_ERR_STAT_NOT_FOUND
+STATS_ERR_UNKNOWN_CATEGORY
+STATS_ERR_UNKNOWN_STAT_GROUP
+STATUS
+STAT_NUM_PERIODS
+STAT_PERIOD_ALL_TIME
+STAT_PERIOD_DAILY
+STAT_PERIOD_MONTHLY
+STAT_PERIOD_WEEKLY
+STEAMHTMLSURFACE_INTERFACE_VERSION_005
+STORAGE
+STR
+STREAM_CLOSED
+STRIKEOUT_ASCENT
+STRIKEOUT_DESCENT
+STRONG
+SUB
+SUBPART_MATERIAL_INDICES_MASK
+SUBPART_MATERIAL_INDICES_SHIFT
+SUBPART_NUM_MATERIALS_MASK
+SUBPART_NUM_MATERIALS_SHIFT
+SUBPART_SHAPE
+SUBPART_TRIANGLES
+SUBPART_TYPE_MASK
+SUBPART_TYPE_MAX
+SUBSCRIPTIONS
+SUBSCRIPTION_CREATED
+SUBSCRIPTION_EXPIRED
+SUBSCRIPT_SIZE
+SUBSCRIPT_X
+SUBSCRIPT_Y
+SUBTITLE_LSCS_LOCKED_SP_01_GreenAcres_Scene_15b_L01
+SUCCESS
+SUNSET
+SUPERSCRIPT_SIZE
+SUPERSCRIPT_X
+SUPERSCRIPT_Y
+SUSPENDED_MISCONDUCT_EXPLOITATION
+SUSPENDED_MISCONDUCT_GENERAL
+SUSPENDED_MISCONDUCT_HARASSMENT
+SUSPENDED_MISCONDUCT_MACROING
+SWIDTH
+SXS
+SYMTAB
+SYNCENGINE
+SYSTEM
+SYSTEM\CurrentControlSet\Control\Class\
+SYSTEM\CurrentControlSet\Control\Terminal Server\
+S\n
+S_ECDHE_RSA_WITH_AES_128_CBC_SHA
+S_ECDHE_RSA_WITH_AES_128_CBC_SHA256
+S_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+S_ECDHE_RSA_WITH_AES_256_CBC_SHA
+S_ECDHE_RSA_WITH_AES_256_CBC_SHA384
+S_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+S_FALSE
+S_OK
+S_RSA_WITH_AES_128_CBC_SHA
+S_RSA_WITH_AES_128_CBC_SHA256
+S_RSA_WITH_AES_128_GCM_SHA256
+S_RSA_WITH_AES_256_CBC_SHA
+S_RSA_WITH_AES_256_CBC_SHA256
+S_RSA_WITH_AES_256_GCM_SHA384
+S_RSA_WITH_RC4_128_MD5
+S_RSA_WITH_RC4_128_SHA
+Sampling Tables count: %d
+Sampling factors too large for interleaved scan
+Save requested via BWSavegameRequestSaveMessage
+Scale of Joint %s is (%f,%f,%f), but should be (%f,%f,%f)
+Scan script does not transmit all data
+Sce Controller: Dualsense (PS5)
+Sce Controller: Dualshock 4 (PS4)
+Scenario AnimatableId Copy Extension
+Scenario Controller Reg Fields
+Scheduled save jettisoned due to return to main menu
+Scheduler attempted a save, 
+Scheduler gracefully denied a save request (the request will now be forgotten). Entering a cooldown period of 
+Scheduler initiated a save request with sessionId 
+Scheduler recieved a BWSavegameClearPendingSave message. Termining any deferred saves. Current scheduler state={
+Scheduler: A new save context is being set on the scheduler but the scheduler is currently in a save cooldown with 
+Scheduler: Save failed, No retries remain. SessionId: 
+Scheduler: Save failed, attempting a retry. SessionId: 
+Scheduler: The Savegame system has initiated a snapshot save for session 
+SchematicsEcs
+Scripts/Game/Startup.lua
+Seek failed on temporary file
+Segmentation Fault Signal
+Selected %d colors for quantization
+ServerAITeleportAtPathLinkEntity called for bad pathlink.  The pathlink is set to 
+ServerPlayer spawn harsh disconnect.
+SetDofNode  dofIdx=%d size=%d floats=
+SetDofSetNode  (dofIdx=%d size=%d numDofs=%d) floats=
+SetRotateNode (dof=%d, rotation=<%.4f, %.4f, %.4f, %.4f>)
+SetTranslateNode (dof=%d, translation=<%.4f, %.4f, %.4f>)
+Setupapi.dll
+ShaderDispatch/RootSignature (allow all - pixel)
+ShaderDispatch/RootSignature (vertex & pixel only)
+ShaderSystem.DxDispatchJobEnable is required for raytracing
+Sharpness out of range [..7]
+Shell32.dll
+Show Account Info cancelled by user.
+Signal Freq Domain Blocks
+Signal IR Buffer
+Signal::GetTargetedSignal() Input signals do not have targets.
+Simulated exception %d.
+Simulation Scratchpad
+Simulation Workspace
+SimulationMap - tracks all objects in simulation
+SimulationMapCreated - tracks actual lifetimes of objects seen during serialization
+SimulationTime.ClampTicks 1
+SimulationTime.ForceDeltaTickCount 1
+SimulationTime.ForceDeltaTime 0.0333333333333333f
+SimulationTime.ForceSimRate 30.0f
+SimulationTime.VariableSimTickTimeEnable false
+Single scattering precompute shader
+Size(%llu) for mapping is not aligned to PageSize(%llu) for %s
+Size: %9I64u Type: %4s Path: %ls\r\n
+Sl
+SlabAllocator
+Slnt
+Smoothing not supported with nonstandard sampling ratios
+SndPlayer1
+SndPlayer1 StreamLoopFileName
+SndPlayer1 external buffer
+SndPlayer1PostMix
+SndPlayer1PreMix
+SnowDisplacementRenderPassModule::drawUpdate
+SnowDisplacementRenderPassModule::onDrawDebug
+Socket component failure in UpdateCachedSocket for 
+Socket level error on 
+SocketTransportHanderInstance
+SolveEntireProbeSetTask
+SolveEntireProbeSetTask - Invalid m_OutputShOrder value. Specify either Enlighten::SH_ORDER_L1 or Enlighten::SH_ORDER_L2.
+SolveEntireProbeSetTask - Probe sets with non-default coefficient orders/basis axes require a valid m_DirectionPalette.
+SolveEntireProbeSetTask - Requires m_TemporalCoherenceBuffer persistent buffer.
+SolveEntireProbeSetTask - m_DirectionPalette does not match m_CoreProbeSet parameters.
+SolveEntireProbeSetTask - m_Output must be aligned to 16 bytes to use the SSE or NEON solvers.
+SolveEntireProbeSetTask - m_U8Output must be aligned to 4 bytes to use the SSE or NEON solvers.
+SolveEntireProbeSetTask - m_U8Output output pointer specified. Compressed output is not supported with an m_OutputShOrder of Enlighten::SH_ORDER_L2.
+SolveEntireProbeSetTask - no output pointer specified. One of m_Output or m_U8Output must be valid and non-NULL.
+SolveEntireProbeSetTask - output size mismatch: %d, requires %d based on value of RadProbeSetMetaData::m_NumProbesOutput
+SolveEntireProbeSetTask - requires m_EntireProbeSetPrecomp precomputed data block.
+SolveEntireProbeSetTask - two output pointers specified. Specify either m_Output or m_U8Output depending on required output format.
+SolveEntireProbeSetTask - unrecognised solver type.
+SolveEntireProbeSetTask - version number of probeset data does not match run-time
+SolveIrradianceTask - Directional Irradiance output was requested, but system has no precomputed directional data
+SolveProbeTaskL1 - invalid NULL workspace parameter
+SolveProbeTaskL1 - invalid output pointers, set either the m_OutputPointers member *or* the m_U8OutputPointers member
+SolveProbeTaskL1 - order of probeset is not L1, use SolveProbeTaskL2 instead
+SolveProbeTaskL1 - requires m_ProbeSetPrecomp precomputed data block
+SolveProbeTaskL1 - version number of probeset data does not match run-time
+SolveProbeTaskL2 - invalid NULL workspace parameter
+SolveProbeTaskL2 - invalid output pointers, set only the m_OutputPointers member
+SolveProbeTaskL2 - order of probeset is not L2, use SolveProbeTaskL1 instead
+SolveProbeTaskL2 - requires m_ProbeSetPrecomp precomputed data block
+SolveProbeTaskL2 - version number of probeset data does not match run-time
+Sorry, there are legal restrictions on arithmetic coding
+SpWldPairGen
+Speed of Joint %s is (%f), but should be (%f)
+Speex Bits
+Speex buffer
+Spine doesn't seem to be along the Y axis, you have a difference of %.5f degree with Y axis. Should be below %.5f.
+Splits a type into separate components
+SportsWorld Broadphase
+St
+Stack analysis will ignore the call from %s to %s\n
+Stack data
+Stack pointer (%p) appears to point to invalid memory or some other thread's memory.\r\n
+Stack size for call graph root nodes.\n
+Start Of Frame 0x%02x: width=%u, height=%u, components=%d
+Start Of Scan: %d components
+Start of Image
+SteamBrowserService
+Stream error
+String encoding
+Subtracting 0 does not change the value.
+SupercedentPatchIdArray
+SupercedingPatchIdArray
+Supplied core is invalid.
+Surfel Cell Density Texture
+Surfel Cell Irradiance Texture
+Surfel Cell Sky Visibility Texture
+Surfel Indirect Args Pass
+Surfel Indirect Count Pass
+Surfel Lighting Apply Irradiance
+Surfel Lighting Apply Tile Classify
+Surfel Lighting Apply Uber
+Surfel Lighting Halfres Debug Output
+Surfel Lighting Halfres Meta Output
+Surfel Lighting SkyVis Output
+Surfel Ray Count Pass
+Surfel Sky Visibility Fixup
+Surfel Spawn Update Info
+Surfel Trace Debug Output
+Suspension not allowed here
+Switch input is constant, but does not match any cases; Default value returned.
+Switch only has a default case.
+Symbol needs debug section which does not exist
+Syntax error
+Syntax error: Non-terminated string
+SysThreadId (DWORD): %u%s, Windows thread base priority: %ld
+System info
+System shutting down, ignoring bank load request.
+T H E Z O C Q S
+T,G
+TAB
+TAG
+TAILCALL
+TECHNICAL
+TENTATIVE
+TER
+TERMINATION_DATE_BEFORE_GRANT_DATE
+TERMINATION_DATE_RANGE_INVALID
+TEST
+TESTSET
+TEXT
+TFH
+TFORCALL
+TFORLOOP
+TG
+TH
+TIERING
+TIMEOUT
+TLM3=
+TLS 1.3, %s CertificateVerify
+TLS/SSL certificate failure (%d) for %s: (country=%s, state=%s, city=%s, organization=%s, unit=%s, common=%s)\n
+TLS_AES_128_GCM_SHA256
+TLS_AES_256_GCM_SHA384
+TLS_CHACHA20_POLY1305_SHA256
+TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA
+TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256
+TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256
+TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA
+TLS_ECDHE_ECDSA_WITH_AES_256_CBC_SHA384
+TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
+TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256
+TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA
+TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256
+TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA
+TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384
+TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305_SHA256
+TLS_RSA_WITH_AES_128_CBC_SHA
+TLS_RSA_WITH_AES_128_CBC_SHA256
+TLS_RSA_WITH_AES_128_GCM_SHA256
+TLS_RSA_WITH_AES_256_CBC_SHA
+TLS_RSA_WITH_AES_256_CBC_SHA256
+TLS_RSA_WITH_AES_256_GCM_SHA384
+TMPDIR
+TOKEN
+TOKEN_EXPIRED
+TOO_LONG
+TOO_MANY
+TOO_OLD
+TOO_SHORT
+TOO_YOUNG
+TPM_SERVICES
+TPM_SOFTWARE
+TQ
+TREAT_CONVEX_LIST_AS_CONVEX
+TREAT_CONVEX_LIST_AS_LIST
+TREAT_CONVEX_LIST_AS_NORMAL
+TRIAL_ONLINE_ACCESS
+TRSZ
+TSH
+TT
+TTTTUUUUTTTTUUUUVVVV
+TYPE_CHAIN
+TYPE_DISABLE_SPU
+TYPE_NORMAL
+T\n
+T_HASH
+T_PROGBITS
+T_STRTAB
+Tagging Controller Subject Name
+Target time [0 .. %.1fms]: %.1fms 
+Te
+Telem14
+Telemetry PIN Context Header
+Telemetry PIN Context Header Snapshot
+Telemetry PIN Context Header Snapshot 2
+Telemetry PIN Event Header Snapshot
+Telemetry PIN Session Header
+Telemetry PIN Session Header Realloc
+Terminated to break infinite loop in content
+Texture is not OnDemand
+Texture is not marked as streaming
+The DXGI outuput (monitor) to which the swapchain content was restricted, has been disconnected or changed.
+The GPU device instance has been suspended. Use GetDeviceRemovedReason to determine the appropriate action.
+The GPU was busy at the moment when the call was made, and the call was neither executed nor scheduled.
+The GPU will not respond to more commands
+The GPU will not respond to more commands, most likely because of an invalid command passed by the calling application.
+The GPU will not respond to more commands, most likely because some other application submitted invalid commands. The calling application should re-create the device and continue.
+The application attempted calling a function with no implementation. Check that you aren't calling virtual functions within constructor/destructors
+The application attempted to acquire exclusive ownership of an output, but failed because some other application (or device within the application) has already acquired ownership.
+The application has exceeded the maximum number of unique state objects per Direct3D device. The limit is 4096 for feature levels up to 11.1.
+The application has exceeded the maximum number of unique view objects per Direct3D device. The limit is 2^20 for feature levels up to 11.1.
+The application is trying to create a shared handle using a name that is already associated with some other resource.
+The application is trying to use a resource to which it does not have the required access privileges. This is most commonly caused by writing to a shared resource with read-only access.
+The application made a call that is invalid. Either the parameters of the call or the state of some object was incorrect. Enable the D3D debug layer in order to see details via debug messages.
+The application provided invalid parameter data; this must be debugged and fixed before the application is released.
+The application's first call per command list to Map on a deferred context did not use D3D11_MAP_WRITE_DISCARD.
+The application's remote device has been removed due to session disconnect or network disconnect. The application should call IDXGIFactory1::IsCurrent to find out when the remote device becomes available again.
+The application's remote device has failed due to lack of memory or machine error. The application should destroy and recreate resources using less memory.
+The buffer loaded with 
+The buffer supplied by the application is not big enough to hold the requested data.
+The caller did not supply a sufficiently large buffer.
+The device failed due to a badly formed command. This is a run-time issue; The application should destroy and recreate the device.
+The device has been removed during a remote session because the remote computer ran out of memory.
+The device was busy, and did not schedule the requested task. This error only applies to asynchronous queries in Direct3D 10 (see ID3D10Asynchronous Interface).
+The driver encountered a problem and was put into the device removed state.
+The entitlement to be decreased has 0 use count.
+The exponent of a floating-point operation is greater than the magnitude allowed by the corresponding type.
+The exponent of a floating-point operation is less than the magnitude allowed by the corresponding type.
+The field needs to be set to a new value or reset.
+The keyed mutex was abandoned.
+The new context will overwrite the existing deferred context: 
+The object was not found. If calling IDXGIFactory::EnumAdaptes, there is no adapter with the specified ordinal.
+The output duplication has been turned off because the Windows session ended or was disconnected. This happens when a remote user disconnects, or when "switch user" is used locally.
+The requested functionality is not supported by the device or the driver.
+The requested functionality is not supported by the device or the driver. 
+The result of a floating-point operation cannot be represented exactly as a decimal fraction.
+The result of an integer operation caused a carry out of the most significant bit of the result.
+The scheduler is currently awaiting a response from the Savegame Manager regarding session 
+The specified device interface or feature level is not supported on this system.
+The specified file was not found.
+The stack overflowed or underflowed as the result of a floating-point operation.
+The thread tried to access a page that was not present, and the system was unable to load the page. For example, this exception might occur if a network connection is lost while running a program over the network.
+The thread tried to access an array element that is out of bounds and the underlying hardware supports bounds checking
+The thread tried to continue execution after a noncontinuable exception occurred.
+The thread tried to divide a floating-point value by a floating-point divisor of zero.
+The thread tried to divide an integer value by an integer divisor of zero.
+The thread tried to execute an instruction whose operation is not allowed in the current machine mode.
+The thread tried to execute an invalid instruction.
+The thread tried to read or write data that is misaligned on hardware that does not provide alignment.For example, 16-bit values must be aligned on 2-byte boundaries; 32-bit values on 4-byte boundaries, and so on.
+The thread used up its stack.
+The timeout value has elapsed and the resource is not yet available.
+The truth is back in style.
+The value needs to be recreated.
+The video card has been physically removed from the system, or a driver upgrade for the video card has occurred. 
+There is no valid journal handle available for this ui journal entry entity: 
+There was no boolean reference data available.
+There was no float reference data available for DOF %s.
+There was no float reference data available.
+There was no integer reference data available for DOF %s.
+There was no integer reference data available.
+There was no matrix reference data available for DOF %s.
+There was no matrix reference data available.
+There was no quaternion reference data available for DOF %s.
+There was no quaternion reference data available.
+There was no vector2 reference data available.
+There was no vector3 reference data available for DOF %s.
+There was no vector3 reference data available.
+There was no vector4 reference data available for DOF %s.
+There was no vector4 reference data available.
+This Report
+This exception represents any floating-point exception not included in this list.
+This program is free software; you may redistribute it under the terms of\nthe GNU General Public License.  This program has absolutely no warranty.\n
+Thread
+Thread list
+Thread scratchpad EASTL allocation
+Thread tried to access an invalid memory address
+Tile decoder thread creation failed
+Timeout on 
+Timestamp is
+Tn
+TocEntries
+TocPinnedEntriesPercentage
+TokenGetByCode
+TokenGetByRefresh
+TokenInfoGet
+TokenInfoGet cancelled
+Too many IDATs found
+Too many color components: %d, max %d
+Too many pending tasks. TaskPool is full.
+Total Creature Score (Limit %.1f)
+Total NPC Count (Limit %d)
+Total Spawn Tag Limit (
+Total page file memory
+Total physical memory
+Total virtual memory
+Totally useless join connected to a split.
+Tp
+Transition Point Name: 
+Transition is fading 
+Transition of type (
+TransitionPolicyNode (weight=%0.4f)  numBlends:%d
+TranslateDeltaNode (vec=<%.4f, %.4f, %.4f>)
+TranslateNode (dof=%d, translation=<%.4f, %.4f, %.4f>)
+Translation of Joint %s is (%f,%f,%f), but should be (%f,%f,%f)
+TransportHanderInstance
+Trouble reading %s...\n
+Truncated DbObject!
+Truncated iTXt chunk
+Truncated key frame header
+Truncated packet
+Truncated packet or corrupt header length
+Truncated packet or corrupt partition 
+Truncated packet or corrupt partition %d length
+Truncated packet or corrupt partition 0 length
+Truncated packet or corrupt tile length
+Truncated packet or corrupt tile size
+Truncated partition size data
+Truncated zTXt chunk
+Truncating incorrect info tRNS chunk length
+Truncating incorrect tRNS chunk length
+Truncating profile to actual length in iCCP chunk
+Trying to add default value for field %d which doesn't exist
+Ts
+Tt
+Tu
+Ty
+Type 42
+Type On DataDefinedEnumValue is not an enum type
+Type On DataDefinedEnumValue not found
+Type On DataDefinedTypeInstance not found
+T}H
+U H
+U"A
+U'
+U*H
+UCS-4LE
+UG
+UH
+UHF
+UIDBase
+ULH
+UMI
+UNDERLINE_POSITION
+UNDERLINE_THICKNESS
+UNKNOWN
+UNKNOWN\r\n
+UNM
+UNREGISTERED
+UNUSED
+UPDATE_REASON_CLUB_CREATED
+UPDATE_REASON_CLUB_DESTROYED
+UPDATE_REASON_CLUB_SETTINGS_UPDATED
+UPDATE_REASON_TRANSFER_OWNERSHIP
+UPDATE_REASON_USER_DEMOTED_TO_MEMBER
+UPDATE_REASON_USER_JOINED_CLUB
+UPDATE_REASON_USER_LEFT_CLUB
+UPDATE_REASON_USER_ONLINE_STATUS_UPDATED
+UPDATE_REASON_USER_PROMOTED_TO_GM
+UPDATE_REASON_USER_SESSION_CREATED
+UPDATE_REASON_USER_SESSION_DESTROYED
+URL:
+URT
+US-ASCII
+USED
+USER
+USERMODE_COMMONLOG
+USERMODE_FILTER_MANAGER
+USERMODE_HNS
+USERMODE_HYPERVISOR
+USERMODE_LICENSING
+USERMODE_SDBUS
+USERMODE_SPACES
+USERMODE_VHD
+USERMODE_VIRTUALIZATION
+USERMODE_VOLMGR
+USERMODE_VOLSNAP
+USER_DELETED
+USER_DOES_NOT_MATCH
+USER_DOES_NOT_MATCH_PERSONA
+USER_ERR_DUPLICATE_SESSION
+USER_ERR_EXISTS
+USER_ERR_GEOIP_LOOKUP_FAILED
+USER_ERR_INVALID_PARAM
+USER_ERR_INVALID_SESSION_INSTANCE
+USER_ERR_KEY_NOT_FOUND
+USER_ERR_MAX_DATA_REACHED
+USER_ERR_MINIMUM_CHARACTERS
+USER_ERR_NO_EXTENDED_DATA
+USER_ERR_SESSION_NOT_FOUND
+USER_ERR_USER_NOT_FOUND
+USER_MODE_SECURITY_CORE
+USER_OR_PERSONA
+USN
+UTC
+UTF-16
+UTF-16BE
+UTF-16LE
+UTF-8
+UTF-8 value too large
+UTFXml/DomAttributeList
+UTFXml/DomCharacterData
+UTFXml/DomComment
+UTFXml/DomDeclaration
+UTFXml/DomDocument
+UTFXml/DomElement
+UTFXml/DomEntityRef
+UTFXml/DomProcessingInstruction
+UTFXml/DomPrologue
+UTFXml/XmlReader/InputStream
+UTFXml/XmlReader/InputStream/Buffer
+UTFXml/XmlReader/NSDeclaration
+UTFXml/XmlReader/StrDup
+UTFXml/XmlTokenBuffer
+UTIL_SUSPEND_PING_TIME_TOO_LARGE
+UTIL_SUSPEND_PING_TIME_TOO_SMALL
+UTIL_TELEMETRY_KEY_TOO_LONG
+UTIL_TELEMETRY_NO_SERVERS_AVAILABLE
+UTIL_TELEMETRY_OUT_OF_MEMORY
+UTIL_TICKER_KEY_TOO_LONG
+UTIL_TICKER_NO_SERVERS_AVAILABLE
+UTIL_USS_DB_ERROR
+UTIL_USS_RECORD_NOT_FOUND
+UTIL_USS_TOO_MANY_KEYS
+UTIL_USS_USER_NO_EXTENDED_DATA
+UUU?6
+UXH
+U_ADDR10I
+U_ADDR16I
+U_GLOB_DAT
+U_PPU64
+U_REL32
+Ua9enable_ifI
+Ub
+Ul
+Unable to allocate buffer space for large printf.\n
+Unable to display register memory; no thread context is available.\r\n
+Unable to find free frame buffer
+Unable to open file '%s' for reading
+Unable to replace slotted sample, no matching loader table.
+Unable to replace slotted sample.  Selected asset is larger than the load buffer. (bufferSize=%u, slotSize=%u, assetSize=%u)
+Unable to replace slotted sample.  Selected asset is larger than the target slot.
+UncompressedFrameCount
+UncompressedFrameCountReadOnly
+Unexpected failure.
+Unexpected marker 0x%02x
+Uninitialized entropy context.
+Uninitialized row
+UnixPath
+UnixPath 
+Unknown APP0 marker (not JFIF), length %u
+Unknown APP14 marker (not Adobe), length %u
+Unknown Adobe color transform code %d
+Unknown HttpMethod value 0x%x
+Unknown compression method in IHDR
+Unknown compression type @1
+Unknown compression type in iCCP chunk
+Unknown compression type in zTXt chunk
+Unknown console command "%s"! (use 'list' command to view available commands)
+Unknown edition: %u
+Unknown exception 0x%08x at instruction %#p
+Unknown filter method in IHDR
+Unknown interlace method in IHDR
+Unknown log message type: %d
+Unknown network error on 
+Unknown response type for AuthForCodeResponse: %d
+Unknown sRGB intent
+Unknown zlib error
+Unknown, probably a successor to Windows 7 or Windows server 2008.
+Unreasonable position error: %.2f
+Unrecognized DW_FORM_* form, callstack parsing will fail.\n
+Unrecognized component IDs %d %d %d, assuming YCbCr
+Unrecognized equation type for pCAL chunk
+Unrecognized unit type for oFFs chunk
+Unrecognized unit type for pHYs chunk
+Unspecified GPU driver error occurred in "
+Unspecified error.
+Unsupported JPEG data precision %d
+Unsupported JPEG process: SOF type 0x%02x
+Unsupported bitstream profile
+Unsupported color conversion request
+Unsupported marker type 0x%02x
+UpdateAlbedoBuffer: The albedo buffer needs to be re-initialised. This is due to some material status (Static/Dynamic) having changed since the buffer was last initialised.
+UpdateEmissiveBuffer: The emissive buffer needs to be re-initialised. This is due to some material status (Static/Dynamic) having changed since the buffer was last initialised.
+UpdateProbeBounceBuffer - required InputWorkspace data block not present (m_ClusterProbeSampleBounceData)
+UpdateProbeBounceBuffer: interpolationInputs and probeSetManager are both be NULL
+UpdateTransparencyBuffer: The transparency buffer needs to be re-initialised. This is due to some material status (Static/Dynamic) having changed since the buffer was last initialised.
+Use validateStream to verify the correctness of breadcrumb recording in each from of non-final builds. Check the immediate FB_ERROR logs for reports from validateStream in TTY\r\n
+UsedFileArray
+User name
+UserChecksum
+UserFriendlyName
+UserInfo
+UserModeDListDriverName
+UserModeDListDriverNameWow
+UserModeDriverName
+UserModeDriverNameWow
+Ut
+V!H
+V/H
+VALIDATION_FAILED
+VARARG
+VERDEFNUM
+VERIFIED
+VFS 1.0.0
+VFSMountPoint
+VH
+VISUALCPP
+VOLATILE
+VRAM %.1f / %.1f GB
+VRAM[%u]: %llu MiB / %llu MiB
+VRT32
+VTT for 
+VVVV
+Valid palette required for paletted images
+Value is %f, but should be %f.
+VbrClipNode (anim=%s, time=%f, prev=%f)
+VertexCompute intermediate
+VgG
+VidMemDed
+VidMemDedSys
+VidMemShared
+Virtual array controller messed up
+Virtual file system
+VkG
+Vol part voxel HQ
+Vorbis
+Votre carte graphique "
+Vs
+VvH
+V~H
+W
+W4H
+W4vC
+WARNING
+WARNING:  Label %s is duplicated in %s\n
+WARNING:  Label %s, Language %d, is not valid UTF8 string\n
+WARNING:  Language string with id %s is too long.\n
+WARNING:  Maximum number of exported languages (%d) reached!!!\n
+WARNING:  String %s, language %s, did not pack properly!\n
+WARNING:  String with label %s, language %d, is too long (%d chars) (%d over)\n
+WARNING: Rotation DOF %s has the expected rotation but with a different representation.
+WEAK
+WEB
+WEBSERVICES
+WEB_SOCKET
+WEIGHT
+WEIGHT_NAME
+WEP
+WER
+WG
+WH
+WHITESPACE
+WIN32
+WIN32UNKNOWN
+WINCODEC_DWRITE_DWM
+WINDOWS
+WINDOWSUPDATE
+WINDOWS_CE
+WINDOWS_DEFENDER
+WINDOWS_STORE
+WINML
+WINRM
+WIPE_STATS_OPERATION_INVALID
+WMAAECMA
+WPN
+WSBAPP
+WSB_ONLINE
+Waiting for debugger to attach
+Wanted shader path 
+Warning: overflowed nursery
+Warning: overflowed nursery barrier
+Warning: overflowed nursery barrier\n
+Warning: overflowed nursery\n
+Warning: thumbnail image size does not match data length %u
+Warning: unknown JFIF revision number %d.%02d
+Warning: writing archive was slow: rewriting timestamp\n
+Warp Track Asset Start
+Warp Track Shoulder Bend
+Warp Track Y Bonus
+Was using behaviour policy: 
+Was using transition '
+WebCore: Worker
+WebM Project VP8 Decoder v1.6.0
+WebM Project VP8 Decoder v1.7.0
+WebM Project VP8 Encoder v1.7.0
+WebM Project VP9 Decoder v1.6.0
+WebM Project VP9 Decoder v1.7.0
+When calling IDXGIObject::GetPrivateData, the GUID passed in is not recognized as one previously passed to IDXGIObject::SetPrivateData or IDXGIObject::SetPrivateDataInterface. When calling IDXGIFactory::EnumAdapters or IDXGIAdapter::EnumOutputs, the enumerated ordinal is out of range.
+Width is too large for libpng to process pixels
+Win32 result:
+Win32ConcurrentAsyncExecutorImpl
+Win32CrashDump
+Win32SequentialAsyncExecutorImpl
+Window.AllowWindowsLargerThanDesktop true
+Windows 10.0
+Windows 2000
+Windows 7
+Windows 8
+Windows 8.1
+Windows 98 or earlier
+Windows FNT
+Windows Home Server
+Windows Server 2003
+Windows Server 2003 R2
+Windows Server 2008
+Windows Server 2008 R2
+Windows Server 2012
+Windows Server 2012 R2
+Windows Server 2016
+Windows Version
+Windows Vista
+Windows XP
+Windows XP Professional x64 Edition
+Windows on x64
+Worker %p failed to decode frame
+Write Color/Depth to UAV
+Write Error
+Write failed on temporary file --- out of disk space?
+Write to EMS failed
+Write to XMS failed
+Writing %s [%s]: %d records, record table @ %x, string table @ %x\n
+Writing PatchInfo file
+Writing patch installed file
+Writing updated armap timestamp
+Writing zero-length unknown chunk
+Wrong JPEG library version: library is %d, caller expects %d
+Wrote palette index exceeding num_palette
+X 
+X-Include-Consoleprv
+X-Include-Deviceid
+X-Page-Number
+X-Page-Size
+X-Recursive-Group-Search
+X9G
+XAML
+XBLTOKEN_NOT_FOUND
+XBOX_SERVER_ADDRESS
+XG
+XMF
+XML declaration not well-formed
+XML or text declaration not at start of entity
+XML_CONTEXT_BYTES
+XPS
+XQH
+XTREL
+X_HEIGHT
+X`
+XdF
+XfH
+XmG
+Xt
+XtB
+Y+H
+Y2H
+YAML
+YMBOLIC
+YMINFO
+YNAMIC
+YUY2
+YV12
+YiG
+You tried to use a resource to which you did not have the required access privileges.
+Your computer does not meet the minimum requirements for playing this game.
+Y}H
+Z3G
+ZLibHardwareCompressionBlockSizeInKB
+ZZTTUUUUZZTTUUUU[[VV
+Z\t
+Z_OK on Z_FINISH with output space
+Zero length keyword
+Zero length tRNS chunk
+ZlG
+[    NO     ]-
+["
+[%.12g %.12g %.12g %.12g] 
+[%0.1f, %0.1f, %0.1f]
+[%s:%04d] %%s AddTask()
+[%s:%04d] %%s CustomHeaderCallback()
+[%s:%04d] %%s OnRestResponse()
+[%s:%04d] %%s SetDone()
+[%s:%04d] %%s Tick() %d times. IsDone: %s
+[%s:%04d] %%s ~%s()
+[%s:%04d] %%s ~HttpTask()
+[%s]
+[%s]\r\n
+[8
+[BundleLoading] could not load asset 
+[CATEGORY]
+[DONT_UPDATE_HEADER]
+[EACUP] DefaultUserFactory
+[EACUP] EAUser
+[EACUP] MessagePool
+[EOF]
+[ExceptionHandlerWin32] Custom Stack
+[GPU_BEGIN  ]\r\n
+[GPU_END    ]\r\n
+[LABEL]
+[NetworkChannel::Connect] Cannot connect to %s:%s
+[PLATFORM]
+[Scale | #pixels | WxH]
+[TaskPool:%s] %%s AddTask()
+[TaskPool:%s] %%s Cancel()
+[TaskPool:%s] %%s CancelAll()
+[TaskPool:%s] %%s Tick() %d times
+[TaskPool:%s] %%s ~TaskPool()
+[[VV
+[abi:
+[no zlib message]
+[string "
+[x%.2f | %.2fM | %dx%d]
+\%03d
+\%03o
+\%d
+\CrashDumps
+\Logs
+\Screenshots
+\Server
+\SystemRoot\system32\
+\Temp
+\\?\
+\\?\UNC\
+\\n;\n?\n!\n-\n
+\]
+\crash_dumps
+\mfpmp.exe
+\n Country: 
+\nStack size for functions.\nFlags: '*' max stack, 't' tail call, 'r' recursive call\n       'i' makes indirect call, 'a' address taken\n       'd' contains dynamic stack allocation, '^' printed above\n Max     Func\n Depth   Stack  Flags    Calls\n
+]'H
+]*
+]OF
+]fF
+]vH
+]},{"c_delta":true
+]}]
+^$*+?.([%-
+^.H
+^RH
+^XH
+^YH
+^\t
+_%02u"\n
+_-!@#$%^&*()0123ABCDEFGHIJKLMNOP456789abcdefghijklmnopqrstuvwxyz__newindex
+_ADDR10
+_ADDR16_LO
+_ADDR7
+_COPYRIGHT
+_DESCRIPTION
+_ENV
+_Float
+_G
+_G.
+_GLOBAL__N
+_IO_input
+_IO_output
+_LOADED
+_M
+_MULE_BASELINE_OFFSET
+_MULE_RELATIVE_COMPOSE
+_NAME
+_PACKAGE
+_PPC64_ADDR14
+_PPC64_ADDR16_HI
+_PPC64_ADDR16_HIGHERA
+_PPC64_ADDR24
+_PPC64_COPY
+_PPC64_DTPMOD32
+_PPC64_DTPREL16
+_PPC64_GNU_VTENTRY
+_PPC64_GOT16_DS
+_PPC64_GOT_DTPREL16_DS
+_PPC64_GOT_DTPREL16_LO_DS
+_PPC64_GOT_TLSGD16_HA
+_PPC64_GOT_TPREL16_HI
+_PPC64_NONE
+_PPC64_PLT64
+_PPC64_PLTGOT16
+_PPC64_PLTREL32
+_PPC64_REL14
+_PPC64_REL14_BRNTAKEN
+_PPC64_REL32
+_PPC64_SECTOFF
+_PPC64_SECTOFF_LO
+_PPC64_SECTOFF_LO_DS
+_PPC64_TOC
+_PPC64_TPREL16
+_PPC64_TPREL16_HIGHERA
+_PPC64_TPREL16_HIGHEST
+_PPC64_TPREL16_HIGHESTA
+_PPC64_TPREL16_LO
+_PPC64_TPREL16_LO_DS
+_PPC64_TPREL64
+_PPC64_UADDR16
+_PPC64_UADDR32
+_PRELOAD
+_VERSION
+_XFREE86_GLYPH_RANGES
+_Z
+__ClearEventsQueue
+__CreateSchematicsInstance
+__CreateSchematicsInstanceNoParam
+__EcsComponentRef
+__GetComponentField
+__GetEvent
+__GetSchematicsComponent
+__GetSystemEvent
+__HasComponent
+__IsInRealm
+__ObserveEvent
+__ObserveEventEcs
+__ObserveEventGlobal
+__RemoveComponentFromEntity
+__SetComponentField
+__SetReplicatedFieldGeneric
+__SignalEventEcs
+__SignalEventFrames
+__SignalEventGlobalEcs
+__SignalEventInstant
+__SignalEventNoDelay
+__SignalEventSeconds
+__StopObservingEventEcs
+__StopObservingEventGlobal
+__UnobserveEvent
+__Z
+___Z
+____Z
+__add
+__addComponent
+__band
+__bnot
+__bor
+__bxor
+__call
+__concat
+__createComponentData
+__div
+__eq
+__findEcsEntity
+__fsinternal__
+__gc
+__idiv
+__index
+__ipairs
+__le
+__len
+__lt
+__metatable
+__mod
+__mode
+__mul
+__newindex
+__pairs
+__pow
+__shl
+__shr
+__sub
+__text_end
+__tostring
+__unm
+__uuidof
+_block_invoke
+_bugsentry
+_glink
+_renderContext
+_restfpr_
+_restgpr0_
+_restgpr1_
+_restvr_
+_savefpr_
+_savegpr0_
+_savegpr1_
+_savevr_
+`&H
+`-G
+`.G
+`9C
+`PH
+`RC
+`TC
+`[H
+`\H
+`\n
+`d@
+`eH
+`iC
+`j@
+`k@
+`l@
+`qATPP\l<
+`sH
+`t@
+`uE
+a1
+aAbBcdHIjmMpSUwWxXyYz%
+aD
+aG
+aH
+aRef
+aaaaFFFF
+abfd != NULL
+abs
+absolute-path
+accept-charset
+accept-encoding
+accept-language
+accept-ranges
+access denied
+access-control-allow-origin
+access_denied
+access_token
+activelines
+ad
+ada_
+adapter->EnumOutputs(0, ppOutput)
+adapterPtr->EnumOutputs(0, ppOutput)
+additionalServiceLists
+addr2line
+adobe
+af
+af_ZA
+affinity
+after array element, I expect ',' or ']'
+after key and value, inside map, I expect ',' or '}'
+alformed archive
+alid
+alignof 
+all
+allocator
+allowCommandlineSettings = 
+ame [%d] - Queue length%d:
+amp
+api-ms-win-core-synch-l1-2-0.dll
+apos
+apple
+application-id
+application/octet-stream
+ar_AE
+ar_BH
+ar_DZ
+ar_EG
+ar_IQ
+ar_JO
+ar_KW
+ar_LB
+ar_LY
+ar_MA
+ar_OM
+ar_QA
+ar_SY
+ar_TN
+ar_YE
+ar_sa
+arenaAlloc
+arnr_max_frames out of range [0..15]
+arnr_strength out of range [..6]
+arnr_type out of range [1..3]
+arshift
+assert
+assertion failed!
+assertion failed: SUBMODE(innovation_quant)
+assertion failed: SUBMODE(innovation_unquant)
+assertion failed: SUBMODE(ltp_quant)
+assertion failed: SUBMODE(ltp_unquant)
+assertion failed: st->windowSize-st->frameSize == st->subframeSize
+asynchronous entity
+at
+ation
+attempt to %s a %s value%s
+attempt to compare %s with %s
+attempt to compare two %s values
+attempt to divide by zero
+attempt to load a %s chunk (mode is '%s')
+attempt to perform 'n%%0'
+attempt to use a closed file
+attempt to use a closed zip file
+attempt to yield across a C-call boundary
+attempt to yield from outside a coroutine
+auds
+authCode cannot be NULL
+authentication_source
+authorization_code
+aux
+auxv
+ava style demangling
+aw\n
+az
+b)H
+b0E
+b1E
+b:Ce:sfHhij:Vv
+bGF
+bH
+bKGD
+bMF
+bad adaptive filter value
+bad argument #%d (%s)
+bad argument #%d to '%s' (%s)
+bad array new length
+bad certificate
+bad certificate hash
+bad certificate status
+bad conversion
+bad parameters to zlib
+bad record mac
+bad zip file
+band
+base 0x%016I64x size 0x%016I64x entry 0x%016I64x %-48ls %ls
+base out of range
+baseQualityLevel = 
+basic_iostream
+basic_istream
+basic_ostream
+basic_string
+bdf
+be
+be_BY
+bfd
+bfd_cache_lookup_worker
+bfd_elf32_write_relocs
+bfd_elf64_write_relocs
+bfd_elf_get_lineno
+bfd_elf_size_dynsym_hash_dynstr
+bfd_generic_get_relocated_section_contents
+bfd_hash_replace
+bfd_map_over_sections
+bfd_merged_section_offset
+bg_BG
+binary
+binary_ls_align
+binary_start
+binutils
+ble
+block sequence entries are not allowed in this context
+bnot
+bor
+both mirror and no-mirror
+bt
+btest
+buffer error
+buffer too large
+buffer too small
+bugsentry
+buildInitialSaveCache did not add any entries to the index for file interface 
+buildInitialSaveCache did not find the account file for file interface 
+buildsignature
+but Savegame manager is too busy. 
+but the save was disallowed (
+bxor
+cH
+ca
+ca_ES
+cacertificate.certificatelist.certificatelist
+cache-control
+calling '%s' on bad self (%s)
+cameraFovAngleVertical is 0.0f - this value should be > 0.0f
+cameraFovAngleVertical is greater than 180 degrees/PI
+cameraNear is greater than cameraFar in non-inverted-depth context
+cannot %s %s: %s
+cannot allocate memory.
+cannot change a protected metatable
+cannot change setting once parsing has begun
+cannot close standard file
+cannot open file '%s' (%s)
+cannot resume dead coroutine
+cannot resume non-suspended coroutine
+cannot suspend in external parameter entity
+cannot use '...' outside a vararg function
+cas.cat
+cas_
+cbFSR2
+cbGenerateReactive
+cbRCAS
+cbSPD
+cc
+cert.vno.co.kr/IPIN/close.cb
+certificate expired
+certificate revoked
+certificate unknown
+certificate unobtainable
+cess terminated. Reason: %s\n
+cessaire au bon fonctionnement du jeu.
+cff
+cff-load
+chG
+char16_t
+char32_t
+char8_t
+charpattern
+chars
+chunk has too many lines
+chunkMeta
+chunks
+cjG
+class
+client cancelled parse via callback return value
+client finished
+clientId cannot be NULL
+client_id
+client_id=%s&client_secret=%s&access_token=%s&refresh_token=%s
+client_secret
+clock
+clock$
+close notify
+close_me:
+closed file
+cmpd
+cmpld
+cmplw
+cmpw
+co
+codepoint
+codes
+coefficient
+coff-Intel-little
+coff_fix_symbol_name
+collate
+collectgarbage
+collectnursery
+color resource is null
+com1
+com2
+com3
+com4
+com5
+com6
+com7
+com8
+com9
+commandLine = {
+commandList is null
+commandlLists: %I64u, %.1f average (%I64u execute calls)
+comment
+compressed data too long
+con
+concat
+concatenate
+config
+config = '
+const_cast
+constants
+construction vtable for 
+constructor too long
+consume
+cont\n
+containingOutput->GetDesc(&screenOutputDesc)
+content-disposition
+content-encoding
+content-language
+content-location
+content-range
+content-type
+contextdata
+control characters are not allowed
+control structure too long
+cookie
+coroutine
+corrupted
+corrupted stream
+cosh
+could not find expected ':'
+could not find expected directive name
+could not open file `%s'
+covariant return thunk to 
+cpath
+cpu_used out of range [-16..16]
+cq_level out of range [0..63]
+cq_level out of range [cfg->rc_min_quantizer..cfg->rc_max_quantizer]
+create_got_section
+createtime
+cryptbase.dll
+cryptnet.dll
+cs
+cs_CZ
+cs_cz
+csds
+csed
+csid
+ction de la version Windows 
+ctype
+cur
+currentAdapter->GetDesc(&adapterDesc)
+currentline
+d.
+d3G
+dH
+dNoImport
+da
+da_DK
+da_da
+damaged LZ stream
+data error
+data string too short
+data.rel
+date
+day
+db
+dbx
+de
+de_AT
+de_CH
+de_LI
+de_LU
+de_de
+debug_str
+decimal escape too large
+decimal128
+decimal32
+decimal64
+decltype
+decltype(auto)
+decode error
+decompression failure
+decrypt error
+decryption failed
+dedicated
+def
+defaultFullscreenEnabled = 0
+defaultFullscreenEnabled = 1
+defaultFullscreenHeight = 
+defaultFullscreenMode = 
+defaultFullscreenOutputIndex = 
+defaultFullscreenOutputIndex = 0
+defaultFullscreenRefreshRate = 
+defaultFullscreenWidth = 
+defaultVSyncEnabled = 
+defaultWindowedBorderless = 
+deflateEnd failed (ignored)
+demangle
+depth resource is null
+desktopFullscreenHeight = 
+desktopFullscreenWidth = 
+destination wrap around
+desyncdata
+desyncgroup
+desyncid
+detectedAdapterName = "%s"
+detectedAvailableGpuMemory = 
+detectedAvailableGpuMemoryMiB = 
+detectedAvailableMemory = 
+detectedAvailableMemoryMiB = 
+detectedCpuCount = 
+detectedCpuFreq = 
+detectedDeviceId = 
+detectedGpuCount = 
+detectedRtSupport = 
+detectedSystemMemory = 
+detectedSystemMemoryMiB = 
+detectedVendorId = 
+device->CreateBuffer(&dxDesc, &resourceData, &buffer->m_buffer)
+device->CreateBuffer(&dxDesc, 0, &buffer->m_buffer)
+device->CreateCommittedResource( &heapProps, D3D12_HEAP_FLAG_NONE, &resourceDesc, D3D12_RESOURCE_STATE_COPY_DEST, nullptr, FB_IID_PPV_ARGS(&m_headBufferResource.assignGet()))
+device->CreateCommittedResource( &heapProps, D3D12_HEAP_FLAG_NONE, &resourceDesc, D3D12_RESOURCE_STATE_COPY_DEST, nullptr, FB_IID_PPV_ARGS(&m_pageBufferResource.assignGet()))
+devobj.dll
+did not find URI escaped octet
+did not find expected '!'
+did not find expected ',' or ']'
+did not find expected ',' or '}'
+did not find expected '-' indicator
+did not find expected <document start>
+did not find expected <stream-start>
+did not find expected alphabetic or numeric character
+did not find expected comment or line break
+did not find expected digit or '.' character
+did not find expected hexdecimal number
+did not find expected key
+did not find expected node content
+did not find expected tag URI
+did not find expected version number
+did not find expected whitespace
+did not find expected whitespace or line break
+did not find the expected '>'
+diff: Rt%f Ca%f, oneOffT: %.0f/%.0f la:%.0f \n
+difftime
+dir
+dispatchComputeBlockRc2
+dispatchComputeBlocks
+dispatchHitGroups
+division by zero
+document is not standalone
+dof euler writer optimizer
+dofile
+dqH
+drectve
+drvstore.dll
+dtors
+dump
+duplicate attribute
+dx12Device->CreateCommittedResource( &heapProps, D3D12_HEAP_FLAG_NONE, &bufferDesc, initialUsage, nullptr, FB_IID_PPV_ARGS(&resource))
+dxDevice->CreateCommittedResource( &heapProps, heapFlags, &resourceDesc, initialUsage, nullptr, FB_IID_PPV_ARGS(&resource))
+dxDevice->CreateTexture1D(&texDesc1d, desc.subResourceCount != 0 ? reinterpret_cast<const D3D11_SUBRESOURCE_DATA*>(desc.subResourceData) : 0, &m_texture1d)
+dxDevice->CreateTexture2D(&texDesc2d, desc.subResourceCount != 0 ? subresData : 0, &m_texture2d)
+dxDevice->CreateTexture3D(&texDesc3d, desc.subResourceCount != 0 ? reinterpret_cast<const D3D11_SUBRESOURCE_DATA*>(desc.subResourceData) : 0, &m_texture3d)
+dynamic
+dynamic_cast
+dynbss
+dynstr
+dynsym
+e
+e jeu.
+e!
+e,H
+e0H
+e3ls
+eE
+eH
+eamain_output.txt
+edg
+egG
+eh_frame_hdr
+el
+el_GR
+eldicsidcsedcsdsravgrdagtrpgtrpdtrpa
+elf 
+elf32-big
+elf32-little
+elf64-big
+elf64-little
+elf64-powerpc
+elf64-powerpc-celloslv2
+elf64-powerpc-spu-elf
+elf64-powerpcle
+elf_link_add_object_symbols
+elf_link_check_versioned_symbol
+elf_link_output_extsym
+elf_reloc_link_order
+ell:PPU
+empty noun, adj, prep
+en_*
+en_AU
+en_BZ
+en_CA
+en_CB
+en_GB
+en_IE
+en_JM
+en_NZ
+en_PH
+en_TT
+en_ZA
+en_ZW
+en_uk
+en_us
+enable_auto_alt_ref expected boolean
+enc
+encoding
+encoding specified in XML declaration is incorrect
+encoding="UTF-8"
+encrypted
+endianness mismatch in
+entitlement_banned
+entitlement_missing
+entitlements/
+entity declared in parameter entity
+entity_type
+enum
+epat
+eq
+error in __gc metamethod (%s)
+error in error handling
+error in processing external entity reference
+error in user chunk
+error loading module '%s' from file '%s':\n\t%s
+error writing ancillary chunked compressed data
+error: 
+error_code
+ersion References:\n
+es_AR
+es_BO
+es_CL
+es_CO
+es_CR
+es_DO
+es_EC
+es_GT
+es_HN
+es_NI
+es_PA
+es_PE
+es_PR
+es_PY
+es_SV
+es_UY
+es_VE
+es_es
+es_mx
+et_EE
+etag
+eting bad inversion idx=%d/%d, actualDegrees=%.2f\n
+eu
+eu_ES
+excess TOCBASE offset in stub code for `%s'
+executeString loadbuffer error: 
+exp
+expand 32-byte kexpand 16-byte k
+expected low surrogate area
+exponentP
+exponentQ
+export restriction
+exposure resource provided, however auto exposure flag is present
+external hook
+extra interior spaces removed from keyword
+extreme cHRM chunk cannot be converted to tristimulus values
+f i j k d b h
+f=
+fDeltaTime
+fDeviceToViewDepth
+fDownscaleFactor
+fDynamicResChangeFactor
+fG
+fH
+fJitter
+fJitterSequenceLength
+fL
+fMotionVectorJitterCancellation
+fMotionVectorScale
+fPreExposure
+fPreviousFramePreExposure
+fReactiveMax
+fReactiveScale
+fTanHalfFOV
+fTcScale
+fTcThreshold
+fViewSpaceToMetersFactor
+f\tH
+fa
+fa_IR
+fatal error while creating .fixup
+fbdatacache
+fff?+
+fft convolve
+fft kernel gather
+fft kernel horiz split
+fft kernel integral
+fft kernel rad2
+fft kernel rad4
+fft kernel scatter
+fft kernel vertical split fwd
+fft kernel vertical split inv
+fftBloomSpikeLimit
+fftConvolve
+fftFilterKernel
+fftGatherDst
+fftHorizFwdSplit
+fftScatterSrc
+fftTransformHorizontal_StepRad2
+fftTransformHorizontal_StepRad4
+fftTransformVertical_StepRad2
+fftTransformVertical_StepRad4
+fftVerticalFwdSplit
+fftVerticalInvSplit
+fi
+fi_FI
+field
+field '%s' missing in date table
+field cannot be negative
+file
+file (%p)
+file (closed)
+file error
+file in VFS (%s)
+file is already closed
+files
+final position out of string
+find
+findCACertificates
+fini
+fiques au fournisseur.
+flnStu
+float format mismatch in
+flurryJob
+flush
+fmod
+fnG
+fo
+fo_FO
+font-format
+for iterator
+format
+format asks for alignment not power of 2
+format mismatch in
+format result too large
+found a tab character that violate intendation
+found a tab character where an intendation space is expected
+found an incorrect leading UTF-8 octet
+found an incorrect trailing UTF-8 octet
+found an intendation indicator equal to 0
+found character that cannot start any token
+found duplicate %TAG directive
+found duplicate %YAML directive
+found extremely long version number
+found incompatible YAML document
+found invalid Unicode character escape code
+found uknown directive name
+found undefined tag handle
+found unexpected ':'
+found unexpected document indicator
+found unexpected end of stream
+found unexpected non-alphabetical character
+found unknown escape character
+fp
+fpT
+fr_BE
+fr_CA
+fr_CH
+fr_LU
+fr_MC
+fr_fr
+frameTimeDelta is less than 1.0f - this value should be milliseconds (~16.6f for 60fps)
+fread sucks.  See FilesDifferent()
+frexp
+ftp
+ftp.
+full
+func
+function
+function '%s'
+function <%s:%d>
+function arguments expected
+function at line %d
+function or expression needs too many registers
+functions
+fwH
+g$H
+g'F
+g1H
+gD
+gG
+gH
+gXH
+g_dx11Renderer->getDevice()->CreateBlendState(&desc, &m_blendStateMap[desc].assignGet())
+g_dx11Renderer->getDevice()->CreateDepthStencilState(&desc, &m_depthStateMap[desc].assignGet())
+g_dx11Renderer->getDevice()->CreateDepthStencilView( depthTexture->getTexture2d(), &dxDesc, &view->m_depthStencilView)
+g_dx11Renderer->getDevice()->CreateDepthStencilView(m_resource, &dsvDesc, &m_depthStencilView)
+g_dx11Renderer->getDevice()->CreateInputLayout( dxElements, geomDesc.elementCount, bytecodeData, bytecodeSize, &layout)
+g_dx11Renderer->getDevice()->CreateRasterizerState(&desc, &m_rasterizerStateMap[desc].assignGet())
+g_dx11Renderer->getDevice()->CreateRenderTargetView( colorTexture->getTexture2d(), &dxDesc, &view->m_renderTargetViews[targetIt])
+g_dx11Renderer->getDevice()->CreateRenderTargetView(m_resource, &rtvDesc, &m_renderTargetView)
+g_dx11Renderer->getDevice()->CreateSamplerState(&desc, &m_samplerStateMap[desc].assignGet())
+g_dx11Renderer->getDevice()->CreateShaderResourceView( buffer->m_buffer, &srvDesc, &buffer->m_shaderView)
+g_dx11Renderer->getDevice()->CreateShaderResourceView(m_resource, &srvDesc, &m_shaderView)
+g_dx11Renderer->getDevice()->CreateUnorderedAccessView( buffer->getBuffer(), &uavDesc, &buffer->m_uav)
+g_dx11Renderer->getDevice()->CreateUnorderedAccessView(m_resource, &uavDesc, &m_uav)
+g_dx12Renderer->getDevice()->CreateCommandList( (1 << gpuNode), D3D12_COMMAND_LIST_TYPE_COPY, m_broadcastCommandAllocator, nullptr, FB_IID_PPV_ARGS(&gpuData.dxBroadcastCommandList.assignGet()))
+g_dx12Renderer->getDevice()->CreateCommandList( (1 << gpuNode), type, commandAllocator, nullptr, FB_IID_PPV_ARGS(&commandList.assignGet()))
+g_dx12Renderer->getDevice()->CreateCommandList( 0, type, commandAllocator, nullptr, useCommandList1 ? __uuidof(ID3D12GraphicsCommandList1) : __uuidof(ID3D12GraphicsCommandList), reinterpret_cast<void**>(&commandList))
+g_dx12Renderer->getDevice()->CreateCommandSignature( &desc, newPipeline->rootSignature, FB_IID_PPV_ARGS(&newPipeline->commandSignatureIndirect.assignGet()))
+g_dx12Renderer->getDevice()->CreateCommittedResource( &heapProps, D3D12_HEAP_FLAG_NONE, &resourceDesc, initialUsage, pOptimizedClearValue, FB_IID_PPV_ARGS(&resource))
+g_dx12Renderer->getDevice()->CreateDescriptorHeap( &heapDesc, FB_IID_PPV_ARGS(&m_heap.assignGet()))
+g_dx12Renderer->getDevice()->CreateDescriptorHeap(&heapDesc, FB_IID_PPV_ARGS(&m_heap.assignGet()))
+g_dx12Renderer->getDevice()->CreatePlacedResource( heap, desc.dxHeapOffset, &resourceDesc, initialUsage, nullptr, FB_IID_PPV_ARGS(&resource))
+g_h out of range [1..16383]
+g_lag_in_frames out of range [..25]
+g_pass out of range [VPX_RC_ONE_PASS..VPX_RC_LAST_PASS]
+g_profile out of range [..3]
+g_threads out of range [..64]
+g_timebase.den out of range [1..1000000000]
+g_timebase.num out of range [1..1000000000]
+g_w out of range [1..16383]
+gamma table being rebuilt
+gcF
+gdi32.dll
+ge
+get length of
+getBuildInfo
+getCACertificates
+getDevice()->CreateRootSignature( nodeMask, signatureBlob->GetBufferPointer(), signatureBlob->GetBufferSize(), FB_IID_PPV_ARGS(&rootSignature.assignGet()))
+getDeviceContext()->FinishCommandList(false, &dxCommandList)
+getenv
+gethook
+getinfo
+getlocal
+getmainargs
+getmetatable
+getregistry
+gettable chain too long; possible loop
+getupvalue
+getuservalue
+gl
+gl_ES
+gmatch
+goto
+grant_type
+gs
+gsub
+gt
+gtB
+gu
+gu_IN
+guard variable for 
+guest_mode
+gzip, deflate
+h"A
+h)
+h*H
+h1
+h32
+hH
+hIST
+hU.z\n
+h\r
+h\t
+half
+handshake failure
+hardwareCpuBias = 
+hardwareGpuBias = 
+hardwareProfile = 
+hars
+hasheddeviceid
+hasheduserid
+hdrSupport = 
+he
+he application has exceeded the maximum number of unique state objects per Direct3D device.  The limit is 4096 for feature levels up to 11.1.
+he_IL
+head_libmoldname_a
+head_libmsvcrt_a
+header crc mismatch
+her Time             = %3.2f\n
+hexadecimal digit expected
+hi
+hi_IN
+hinting-engine
+hook
+horts
+hour
+hr
+hr_HR
+http://127.0.0.1/success?error=access_denied&error_number=102122
+http://error/
+http://www.w3.org/2000/xmlns/
+http://www.w3.org/XML/1998/namespace
+https://accounts.ea.com/
+https://accounts.int.ea.com/
+https://gateway.ea.com/
+https://gateway.int.ea.com/
+https://nucleus/oauth_callback
+https://signin.ea.com/
+https://signin.int.ea.com/
+hu
+hu_HU
+huge
+hy
+hy_AM
+i386
+iCCP: invalid keyword
+iDisplaySize
+iFrameIndex
+iH
+iInputColorResourceDimensions
+iLumaMipDimensions
+iLumaMipLevelToUse
+iMaxRenderSize
+iRenderSize
+iTXt: invalid compression
+iTXt: invalid keyword
+iTXt: uncompressed text too long
+i\n
+ia
+ib
+id: %s, sys id: %s, name: %s
+id<
+id_ID
+identity
+ieure. %s
+if-modified-since
+if-none-match
+if-range
+if-unmodified-since
+ig
+igd10iumd64
+igdext64.dll
+ihex
+il
+il calls...)
+illegal character(s) in public id
+illegal parameter
+illegal parameter entity reference
+imp_
+imp__
+imp__GetAtomNameA@12
+imp__GetFullPathNameA@16
+imp__access
+imp__atoi
+imp__ctime
+imp__fprintf
+imp__fstat
+imp__malloc
+imp__memcpy
+imp__mktemp
+imp__signal
+imp__stat
+imp__strchr
+imp__strlen
+imp__strncat
+imp__strpbrk
+imp__tolower
+in upon arriving at
+in use by IDAT
+incompatible version
+incomplete UTF-16 character
+incomplete UTF-16 surrogate pair
+incomplete UTF-8 octet sequence
+incomplete markup in parameter entity
+incorrect data check
+incorrect header check
+incorrect length check
+incorrect png_set_filler call ignored
+index
+index out of range
+ing
+inheritContent
+init
+init.fixups
+initPipelineState
+initfs
+initial position is a continuation byte
+initial position out of string
+initializer for module 
+input error
+inside a string, '\' occurs before a character which it may not.
+installEarlyArenaFactories
+insufficient memory
+insufficient security
+integer
+integral size (%d) out of limits [1,%d]
+integrateFFTKernel
+interface
+internal
+internal error
+internal error handling cHRM coefficients
+internal error handling cHRM->XYZ
+internal error in png_XYZ_from_xy
+internal error: dangerous error
+internal error: out of range error
+internal error: unknown error
+internal error: unsupported relocation error
+internal row logic error
+internal row size calculation error
+internal row width error
+internal sequential row size calculation error
+internal write transform logic error
+interp
+interval is empty
+interval too large
+invalid (non-hex) character occurs after '\u' inside string.
+invalid UTF-8 code
+invalid Unicode character
+invalid argument
+invalid background gamma type
+invalid bit length repeat
+invalid block type
+invalid bytes in UTF8 string.
+invalid capture index %%%d
+invalid char in json text.
+invalid character inside string.
+invalid chunk type
+invalid chunklength
+invalid code -- missing end-of-block
+invalid code lengths set
+invalid conversion specifier '%%%s'
+invalid distance code
+invalid distance too far back
+invalid distances set
+invalid escape sequence
+invalid format
+invalid format (repeated flags)
+invalid format (width or precision too long)
+invalid format option '%c'
+invalid iTXt compression flag
+invalid key to 'next'
+invalid keyword character 0x@1
+invalid leading UTF-8 octet
+invalid length of a UTF-8 sequence
+invalid literal/length code
+invalid literal/lengths set
+invalid long string delimiter
+invalid mode
+invalid next option for option 'X'
+invalid object key (must be a string)
+invalid option
+invalid option '%%%c' to 'format'
+invalid option '%%%c' to 'lua_pushfstring'
+invalid option '%s'
+invalid order function for sorting
+invalid pattern capture
+invalid replacement value (a %s)
+invalid state
+invalid stored block lengths
+invalid string in json text.
+invalid text keyword
+invalid token, internal error
+invalid trailing UTF-8 octet
+invalid upvalue index
+invalid use of '%c' in replacement string
+invalid user transform pixel depth
+invalid value (%s) at index %d in table for 'concat'
+invalid window size
+invalid zlib state
+invocation function for block in 
+io
+ipairs
+ire.
+isTrinity = 0
+isX86 = 0
+is_IS
+isdst
+iso
+isrunning
+istailcall
+isvararg
+isyieldable
+it
+itOn(%s[%02i]-"%s") Dep_%02u\n
+it_CH
+it_it
+items in a constructor
+j3H
+jH
+j\n
+ja_jp
+jitterOffset contains value outside of expected range [-1.0, 1.0]
+jkG
+jobScheduler
+joint sqt reader optimizer
+junk after document element
+k H
+k(H
+k5
+kB
+kB / 
+kH
+kOptionReportProcessList is currently disabled. Use ReportWriter::SetOption to enable it.\r\n
+ka
+ka_GE
+kernel32
+kernel32.dll
+key expansion
+key exponent
+key modulus
+keyword "@1": bad character '0x@2'
+keyword length must be 1 - 79 characters
+keyword truncated
+kf_min_dist not supported in auto mode, use 0 or kf_max_dist instead.
+kf_mode out of range [VPX_KF_DISABLED..VPX_KF_AUTO]
+kk
+kk_KZ
+kmG
+kn
+kn_IN
+ko
+ko / 
+ko_KR
+ko_ko
+ko_kr
+kpH
+krH
+ky
+ky_KZ
+l4H
+lH
+lOH
+lVec2
+lVec3
+lVec4
+l\rH
+la
+label '%s' already defined on line %d
+labels/gotos
+lastlinedefined
+layer%d w'%.2f' e'%.2f' entry'%d/%d'
+layout.toc
+layout/cas/
+lbH
+lbz
+lbzu
+ld
+ld package.preload['%s']
+ldexp
+le
+leading spaces removed from keyword
+lease report this bug.\n
+legacyAffinityPriorityMappings
+len
+length exceeds PNG maxima
+length exceeds PNG maximum
+level out of range
+lexical element too long
+lfd
+lfdu
+lfs
+lfsu
+lge
+lgt
+lha
+lhau
+lhz
+lhzu
+li
+liG
+libc_start_main
+libkernel32_a_iname
+libpng does not support gamma+background+rgb_to_gray
+libpng error: %s
+libpng warning: %s
+libuser32_a_iname
+light userdata
+linedefined
+lines
+linkage table error against `%s'
+linker stubs in %u group%s\n  branch       %lu\n  toc adjust   %lu\n  long branch  %lu\n  long toc adj %lu\n  plt call     %lu
+little endian
+ll
+lle
+llision KDBuild Time = %3.2f\n
+llision Time         = %3.2f\n
+llt
+lmw
+load address is 00000
+load buffer resize required
+loaded
+loaders
+loadfile
+loadlib
+loadstring
+loc/
+local
+local variables
+locale
+lock(%s[%02i]-"%s") Dep_%02u\n
+logicalOffset
+logicalSize
+long branch stub `%s' offset overflow
+long double
+long long
+lpt1
+lpt2
+lpt3
+lpt4
+lpt5
+lpt6
+lpt7
+lpt8
+lpt9
+lr
+lrotate
+ls
+ls_align
+lshift
+lt
+lt_LT
+lua_Integer
+lua_Number
+lua_debug> 
+luaopen_%s
+lv
+lv_LV
+lwz
+lwzu
+lx
+l||||||||||||````h"
+mX:%.12g mZ:%.12g mT:%.12g 
+mX:%f mZ:%f mT:%f 
+m\t
+m_device->CheckFeatureSupport(D3D11_FEATURE_ARCHITECTURE_INFO, &archInfo, sizeof(archInfo))
+m_device->CheckFeatureSupport(D3D11_FEATURE_D3D10_X_HARDWARE_OPTIONS, &hardwareOptions, sizeof(hardwareOptions))
+m_device->CheckFeatureSupport(D3D11_FEATURE_D3D11_OPTIONS, &options, sizeof(options))
+m_device->CheckFeatureSupport(D3D11_FEATURE_D3D11_OPTIONS2, &options2, sizeof(options2))
+m_device->CheckFeatureSupport(D3D11_FEATURE_THREADING , &m_threadingCaps, sizeof(m_threadingCaps))
+m_device->CreateCommandList( 0, D3D12_COMMAND_LIST_TYPE_DIRECT, m_breadcrumbManagementCommandAllocator[0], nullptr, FB_IID_PPV_ARGS(&m_breadcrumbManagementCommandList))
+m_device->CreateCommandSignature( &desc, nullptr, FB_IID_PPV_ARGS(&m_gpuNodes[gpuNode].dispatchIndirectCommandSignature))
+m_device->CreateCommandSignature( &desc, nullptr, FB_IID_PPV_ARGS(&m_gpuNodes[gpuNode].drawIndexedIndirectCommandSignature))
+m_device->CreateCommandSignature( &desc, nullptr, FB_IID_PPV_ARGS(&m_gpuNodes[gpuNode].drawIndirectCommandSignature))
+m_device->CreateDeferredContext(0, &tempDeviceContext.assignGet())
+m_device->CreateFence( 0, D3D12_FENCE_FLAG_NONE, FB_IID_PPV_ARGS(&gpuNode.computeQueueFence.assignGet()))
+m_device->CreateFence( 0, D3D12_FENCE_FLAG_NONE, FB_IID_PPV_ARGS(&gpuNode.copyQueueFence.assignGet()))
+m_device->CreateFence( 0, D3D12_FENCE_FLAG_NONE, FB_IID_PPV_ARGS(&gpuNode.directQueueFence.assignGet()))
+m_device->CreateFence( 0, D3D12_FENCE_FLAG_NONE, FB_IID_PPV_ARGS(&m_frameFence.assignGet()))
+m_device->CreateQuery(&desc, &query->m_slots[slotIt])
+m_device->CreateQuery(&queryDesc, &m_frameDoneQueries[queryIt].assignGet())
+m_device->QueryInterface(__uuidof(ID3D11Debug), (void**)&m_debug.assignGet())
+m_device->QueryInterface(__uuidof(ID3D11InfoQueue), (void**)&m_infoQueue.assignGet())
+m_deviceContext->Map( m_externalValueConstantBuffers[stageIt], 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource)
+m_deviceContext->Map( m_functionConstantBuffers[stageIt], 0, D3D11_MAP_WRITE_DISCARD, 0, &mappedResource)
+m_dxgiAdapter->QueryInterface(IID_PPV_ARGS(&m_dxgiAdapter3.assignGet()))
+m_output->FindClosestMatchingMode(&matchMode, &m_outputMode, m_renderer->getDxgiDevice())
+m_renderer->createSwapChain(&swapChainDesc, &fullscreenDesc, m_hWnd, &m_swapChain.assignGet())
+m_renderer->getDxgiFactory()->MakeWindowAssociation(m_hWnd, DXGI_MWA_NO_PRINT_SCREEN | DXGI_MWA_NO_ALT_ENTER | DXGI_MWA_NO_WINDOW_CHANGES)
+m_swapChain->GetBuffer(bufferIndex, FB_IID_PPV_ARGS(&result))
+m_swapChain->ResizeBuffers( m_bufferCount, m_info.width, m_info.height, m_outputMode.Format, swapChainDesc.Flags)
+m_swapChain3->ResizeBuffers1( swapChainDesc.BufferCount, m_info.windowWidth, m_info.windowHeight, m_outputMode.Format, swapChainDesc.Flags, creationNodeMasks, commandQueues)
+mailto
+mailto:
+main
+main chunk
+main function
+malformed number
+malformed number, a digit is required after the decimal point.
+malformed number, a digit is required after the exponent.
+malformed number, a digit is required after the minus sign.
+malformed pattern (ends with '%%')
+malformed pattern (missing ']')
+malformed pattern (missing arguments to '%%b')
+malformed sPLT chunk
+map/set too long
+mapping keys are not allowed in this context
+mapping values are not allowed in this context
+master secret
+match
+math
+max-forwards
+maxThreadCount
+maxn
+mb_cur_max
+mc
+mdmp
+me avec les pilotes de la carte graphique; veuillez installer les derniers pilotes.
+memdump
+memory
+memory allocation error: block too big
+memory allocation failed
+messages
+metamethod
+method
+mi
+minThreadCount
+mininteger
+mips
+mismatched tag
+missing '[' after '%%f' in pattern
+missing '{'
+missing '}'
+missing LZ dictionary
+missing size for format option 'c'
+mk
+mk_MK
+mn
+mn_MN
+mo
+modf
+modifiers for format '%%a'/'%%A' not implemented
+module
+module '%s' not found:%s
+moduleinfo
+monetary
+month
+motionVectorScale contains scale value greater than maxRenderSize
+motionVectorScale contains zero scale value
+motionVectors resource is null
+mountLocalDir
+move to target, no run style transitions
+mr
+mr_IN
+ms_BN
+ms_MY
+msasn1.dll
+muH
+multi-masters
+multiple Lua VMs detected
+must not undeclare prefix
+mutx
+m}H
+n!H
+n'F
+n+H
+nLF
+nN
+name conflict for module '%s'
+namedPriorityLists
+namewhat
+narrowband
+native_ui
+nb_NO
+ncep
+ndif // %s\n
+ne
+nedmalloc: Attempt to free already freed memory block %p - aborting!\n
+nedmalloc: nedpfree() called with a block not created by nedmalloc!\n
+nedmalloc: nedprealloc() called with a block not created by nedmalloc!\n
+need dictionary
+neg
+new
+next
+ng
+nil or table expected
+nl_BE
+nl_nl
+nn_NO
+no application protocol
+no certificate
+no element found
+no message
+no renegotiation
+no time provider
+no value
+no visible label '%s' for <goto> at line %d
+no_no
+nocoredump
+noexcept
+noexcept 
+noise_sensitivity out of range [..6]
+non-PIC
+non-virtual thunk to 
+none*)
+normalize
+not
+not a
+not an integer in proper range
+not enough memory
+not well-formed (invalid token)
+note.spu_name
+notfound noun, adj, prep
+noun, adj, other adj
+noun, hyphen (de), adj
+noun, other noun, prep
+noun, prefix (de), same prefix(de)
+noun, prep, other prep
+noun, prevoweladj (fr), adj
+nparams
+ns
+nsition Point Name: 
+nslation
+nsupported .stab relocation
+nt
+ntdll.dll
+nul
+nullptr
+numWorkGroups
+number
+number has no integer representation
+number%s has no integer representation
+numeric
+numeric (floating point) overflow
+nups
+nv
+nvapi64.dll
+nvapi_QueryInterface
+nvldumd.dll
+nvldumdx.dll
+nz
+nzf
+nzt
+o symbols
+oH
+o\t
+o^B
+objc_object
+objcproto
+object key and value must be separated by a colon (':')
+object length is not an integer
+objectid
+offset
+oire virtuelle disponible: 
+ojG
+on
+opcodes
+opd
+operator
+operator 
+operator co_await
+operator delete
+operator delete[]
+operator new
+operator new[]
+operator!
+operator!=
+operator"" 
+operator%
+operator%=
+operator&
+operator&&
+operator&=
+operator()
+operator*
+operator*=
+operator+
+operator++
+operator+=
+operator,
+operator-
+operator--
+operator-=
+operator->
+operator->*
+operator.
+operator.*
+operator/
+operator/=
+operator<
+operator<<
+operator<<=
+operator<=
+operator<=>
+operator=
+operator==
+operator>
+operator>=
+operator>>
+operator>>=
+operator?
+operator[]
+operator^
+operator^=
+operator|
+operator|=
+operator||
+operator~
+optinstate
+originalSize
+our Windows.
+out of memory
+out of range
+output resource is null
+outputPtr->GetDesc(&outputDesc)
+p%+d
+p'?D
+p.H
+p/H
+p3B
+p4G
+p6B
+pCAL
+pCAL: invalid keyword
+pCAL: invalid purpose keyword
+pH
+pP
+pUB
+p__environ
+p__fmode
+pa
+paG
+pa_IN
+pack
+package
+package.path='/data/Scripts/Packages/?.lua'
+packsize
+paddr 0x
+pairs
+parser not suspended
+parser suspended
+parsing aborted
+parsing finished
+partial character
+patch
+path
+pattern too complex
+pcall
+pcf
+pdB
+perform arithmetic on
+perform bitwise operation on
+persona_status_invalid
+pfr-metrics
+phG
+ph_PH
+pi
+pid_
+pin telemetry context config
+pin telemetry session config
+pinEvents
+pixel vector[
+pji_
+pl
+pl_pl
+plt_branch
+plt_call
+pmC
+png_do_encode_alpha: unexpected call
+png_do_quantize returned rowbytes=0
+png_do_rgb_to_gray found nongray pixel
+png_inflate logic error
+png_write_info was never called before png_write_row
+popen
+position out of bounds
+position out of range
+postscript-cmaps
+pow
+powerpc
+powerpc:603
+powerpc:EC603e
+powerpc:MPC8XX
+powerpc:common64
+ppc64_elf_create_dynamic_sections
+ppc64_elf_finish_dynamic_sections
+ppc64_elf_finish_dynamic_symbol
+ppc64_elf_gc_sweep_hook
+ppc64_elf_relocate_section
+ppc64_elf_size_dynamic_sections
+ppc_build_one_stub
+ppmLocalAllocDescriptorHeap
+preExposure provided as 0.0f which is invalid
+prefix must not be bound to one of the reserved namespace names
+preload
+prevoweladj (fr), initialvoweladj, nonvowelnoun (accepted incorrect result; fr ideally should be 'bel haut' not 'beau haut')
+primeP
+primeQ
+priorities
+priorityList
+private key exponent
+prn
+probable comment found in input text, comments are not enabled.
+profile matches sRGB but writing iCCP instead
+prompt
+proto
+protocol version
+proxy-authenticate
+proxy-authorization
+ps
+psH
+ps__
+psapi.dll
+psid
+pt_br
+pt_pt
+ptxe
+puE
+puGUID
+puH
+public key exponent
+pzB
+q g j y
+q'H
+qH
+q\r
+qu\t
+quency table for language %s\n
+quot
+q~H
+r x z o e s c
+r)m?<6m?
+r0
+r1
+r10
+r10 
+r11
+r11 
+r12
+r12 
+r13
+r13 
+r14
+r14 
+r15
+r15 
+r2
+r3
+r4
+r5
+r6
+r7
+r8
+r8 
+r8  
+r9
+r9 
+r9  
+rDC
+rE
+rH
+r_auto_exposure
+r_dilatedDepth
+r_dilated_motion_vectors
+r_dilated_reactive_masks
+r_imgMips
+r_img_mip_5
+r_img_mip_shading_change
+r_input_color_jittered
+r_input_depth
+r_input_exposure
+r_input_motion_vectors
+r_input_opaque_only
+r_input_prev_color_post_alpha
+r_input_prev_color_pre_alpha
+r_internal_upscaled_color
+r_lanczos_lut
+r_lock_input_luma
+r_lock_status
+r_luma_history
+r_new_locks
+r_prepared_input_color
+r_previous_dilated_motion_vectors
+r_rcas_input
+r_reactive_mask
+r_reconstructed_previous_nearest_depth
+r_strand_hair_mask
+r_transparency_and_composition_mask
+r_upsample_maximum_bias_lut
+rad
+random-seed
+randomseed
+range
+rawequal
+rawget
+rawlen
+rawset
+rax
+rax 
+rb
+rbp
+rbp 
+rbx
+rbx 
+rc_2pass_vbr_bias_pct out of range [..100]
+rc_dropframe_thresh out of range [..100]
+rc_end_usage out of range [VPX_VBR..VPX_Q]
+rc_max_quantizer out of range [..63]
+rc_min_quantizer out of range [..cfg->rc_max_quantizer]
+rc_overshoot_pct out of range [..1000]
+rc_resize_allowed expected boolean
+rc_resize_down_thresh out of range [..100]
+rc_resize_up_thresh out of range [..100]
+rc_twopass_stats_in missing EOS stats packet
+rc_twopass_stats_in requires at least two packets.
+rc_twopass_stats_in.buf not set.
+rc_twopass_stats_in.sz indicates truncated packet.
+rc_undershoot_pct out of range [..1000]
+rcasConfig
+rcx
+rcx 
+rdag
+rdi
+rdi 
+rdx
+rdx 
+re.
+read_address
+reader function must return a string
+reading
+record overflow
+recursive entity reference
+redirect_uri
+reference temporary for 
+reference to binary entity
+reference to external entity in attribute
+reference to invalid character number
+referer
+refresh_token
+reg2
+register name fn with SetContextNameFns
+reinterpret_cast
+rel_
+rela.bss
+rela.dyn
+rela.plt
+rela.rodata.brlt
+release_type
+rendAsyncResCre
+renderSize
+renderSize contains zero dimension
+renderSize is greater than context maxRenderSize
+rep
+request not implemented
+requested feature requires XML_DTD support in Expat
+resMeta
+resRid
+resType
+reserved prefix (xml) must not be undeclared or bound to another namespace name
+reserved prefix (xmlns) must not be declared or undeclared
+resourceDispatchJob
+resourceMgrJob
+resourceMgrKickJob
+response_type
+resulting string too large
+rgeant sur http://www.geforce.fr/drivers avant de jouer au jeu.
+rique DirectX
+rix33
+rix44
+rix44Affine
+ro
+ro_RO
+rodata.brlt
+root.URLBase
+root.device
+rpedQuaternion
+rplyCompress
+rplyCopyBlobs
+rplyDecompress
+rplyFreezeClip
+rplyResetToKeyFrame
+rrotate
+rs6000:rs1
+rshift
+rsi
+rsi 
+rsp
+rsp 
+ru_ru
+rw_auto_exposure
+rw_dilatedDepth
+rw_dilated_motion_vectors
+rw_dilated_reactive_masks
+rw_img_mip_5
+rw_img_mip_shading_change
+rw_internal_upscaled_color
+rw_lock_input_luma
+rw_lock_status
+rw_luma_history
+rw_new_locks
+rw_output_autocomposition
+rw_output_autoreactive
+rw_output_prev_color_post_alpha
+rw_output_prev_color_pre_alpha
+rw_prepared_input_color
+rw_reconstructed_previous_nearest_depth
+rw_spd_global_atomic
+rw_upscaled_output
+rwa
+s : %.2f deg
+s : (%.2f, %.2f, %.2f)
+s&H
+s-H
+s: Matching formats:
+sBIT
+sCAL chunk too short
+sH
+sP
+sPLT
+sPLT chunk has bad length
+sPLT chunk requires too much memory
+sPLT chunk too long
+sPLT: invalid keyword
+sXH
+sZ
+s\n
+s\nH
+s_
+s_LinearClamp
+sa
+sa_IN
+scope
+screen->m_swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&backBuffer.assignGet())
+screen->threadsafeSetFullscreenState(false)
+screen_content_mode out of range [..2]
+scriptcontext
+sdata
+sdkversion
+searchers
+searchpath
+sec
+sec%d
+seeall
+selectedAdapter->GetDesc(&adapterDesc)
+sequential row overflow
+server finished
+servername
+servertype
+session_mutx
+setPrimaryController: ControllerIndex [%d] is not in cache
+set_app_type
+set_symbol_from_hash
+sethook
+setlocal
+setlocale
+setmetatable
+setpause
+setpausenursery
+setstepmul
+settable chain too long; possible loop
+setupvalue
+setuservalue
+setvbuf
+sfnt
+sfnts
+sha1
+shadProgCreateIl
+sharpness contains value outside of expected range [0.0, 1.0]
+shcore.dll
+short_src
+shorts
+signature data
+signed char
+sinh
+sition
+sizeof 
+sizeof(ValueType) * initCapacity __alignof(ValueType)
+sizeof(XML_Char)
+sizeof(XML_LChar)
+sizeof...
+sizeof... 
+sk
+sk_SK
+sl
+slPrevRenderView Streamline Jitter Disable
+slRenderView Streamline Jitter Disable
+sl_SI
+smooth
+smooth-lcd
+smooth-lcdv
+so
+sort
+source
+sp
+spdCounter
+spdIntermediateA
+spdIntermediateB
+spdIntermediateG
+spdIntermediateR
+spu_elf_size_dynamic_sections
+sq
+sq_AL
+sqrt
+sr
+srN
+stabstr
+stack overflow
+stack overflow (%s)
+stack traceback:
+stack_%s
+standalone
+standalone="yes"
+standard %s file is closed
+start
+startWithScreenRenderDisabled
+static
+static_cast
+stb
+stbu
+std
+std::
+std::allocator
+std::basic_iostream<char, std::char_traits<char> >
+std::basic_istream<char, std::char_traits<char> >
+std::basic_ostream<char, std::char_traits<char> >
+std::basic_string<char, std::char_traits<char>, std::allocator<char> >
+std::iostream
+std::nullptr_t
+std::ostream
+std::string
+std__
+stderr
+stdin
+stdout
+step
+stfd
+stfdu
+stfs
+stfsu
+sth
+sthu
+sti__
+stmw
+str
+stream
+stream end
+stream error
+string categories found:\n
+string contains zeros
+string length does not fit in given size
+string length overflow
+string literal
+string slice too long
+string/function/table expected
+struct
+stubs don't match calculated size
+stw
+stwu
+sv_FI
+sv_sv
+sw
+sw_KE
+symbolsrec
+syntax error
+system error %d
+system error %d\n
+system32\
+systemconfig
+szDescription
+szDriverDateEnglish
+szDriverVersion
+t!
+t-
+t.-
+t16
+t16Vec8
+t1cid
+t2H
+t32
+t32Vec2
+t32Vec3
+t32Vec4
+t64
+t8
+t8Vec16
+tEXt: invalid keyword
+tEXt: text too long
+tH
+tIME
+tPos
+tRNS chunk has out-of-range samples for bit_depth
+tRNS chunk not allowed with alpha channel
+ta
+ta1
+ta_IN
+table index is NaN
+table index is nil
+table or string expected
+table overflow
+tag:yaml.org,2002:
+tail call
+tanh
+tcommon
+te_IN
+tekhex
+telemetry
+template parameter object for 
+template<
+ternion
+text compression mode is out of range
+text declaration not well-formed
+th_TH
+thfinding Time       = %3.2f\n
+thread
+thread expected
+thread-local initialization routine for 
+thread-local wrapper routine for 
+threadMask
+threads
+throw
+throw 
+time result cannot be represented in this Lua installation
+timeout in getting environment
+tings[deleted/frame:%d | maximum Queue size:%d]
+tl
+tlG
+tlpb
+tlpb snapshot
+tmp
+tmpfile
+tmpname
+to black in progress to
+togram for language %s\n
+token_partitions out of range [VP8_ONE_TOKENPARTITION..VP8_EIGHT_TOKENPARTITION]
+too many %s (limit is %d)
+too many %s (limit is %d) in %s
+too many arguments
+too many arguments to resume
+too many captures
+too many elements to move
+too many length or distance symbols
+too many nested functions
+too many results
+too many results to resume
+too many results to unpack
+too many text chunks
+too many upvalues
+tor2
+tor3
+tor4
+tr
+tr_TR
+tr_tr
+traceback
+trailing spaces removed from keyword
+trpa
+trpd
+trpg
+trying to access non-existent bits
+ts_layer_id[i] out of range [..cfg->ts_number_layers-1]
+ts_number_layers out of range [1..5]
+ts_periodicity out of range [..16]
+ts_post
+ts_rate_decimator factors are not powers of 2
+ts_rate_decimator[cfg->ts_number_layers-1] out of range [1..1]
+ts_target_bitrate entries are not strictly increasing
+tsoh
+tt_RU
+tw
+txv_
+type.2d.image
+type.cbFSR2
+type.cbGenerateReactive
+type.cbRCAS
+type.cbSPD
+type.sampled.image
+type.sampler
+type_info function
+type_info node
+typedef
+typeid 
+typeinfo for 
+typeinfo name for 
+typename 
+t}H
+u#H
+u'F
+u='@
+uH
+ugF
+uiAC<
+uk
+uk_UA
+ul
+ule '%s' in file '%s'
+ultra-wideband (sub-band CELP)
+unable to dump given function
+unable to generate a unique filename
+unable to get ModuleFileName
+unallowed token at this point in JSON text
+unbound prefix
+unclosed CDATA section
+unclosed token
+undefined entity
+unexpected end of LZ stream
+unexpected low surrogate area
+unexpected message
+unexpected parser state - please send a bug report
+unexpected symbol
+unexpected zlib return
+unexpected zlib return code
+unfinished capture
+unfinished long %s (starting at line %d)
+unfinished string
+union
+uniqueidentifiers
+unknown ca
+unknown compression method
+unknown critical chunk
+unknown encoding
+unknown error
+unknown header flags set
+unknown iTXt compression type
+unknown psk identify
+unpack
+unrecognized name
+unsigned 
+unsigned __int128
+unsigned char
+unsigned int
+unsigned long
+unsigned long long
+unsigned overflow
+unsigned short
+unsupported certificate
+unsupported extension
+unsupported zlib version
+until
+updateSubresource: %I64u calls, %I64u bytes
+upper
+upported architectures:
+upvalue
+upvalueid
+upvaluejoin
+upvalues
+ur Windows
+ur votre pilote %s
+ur votre pilote sur http://downloadcenter.intel.com/fr/ avant de jouer au jeu.
+ur votre pilote sur http://www.amd.com/fr avant de jouer au jeu.
+ur_PK
+url:
+urn:schemas-upnp-org:device:wanconnectiondevice
+user cancelled
+user-agent
+user_status_invalid
+user_underage
+userdata
+utf8
+uz
+v x z o e s c
+vE
+vH
+vH7B
+v\t
+value expected
+value out of range
+variable-length format
+vars
+vary
+vc
+vec.vec
+vector<T> too long
+ver_
+version
+version mismatch in
+version mismatch: app. needs %f, Lua core provides %f
+version="1.0"
+vfs
+vfsFile
+vfsInternalFile
+vi
+vi_VN
+via
+vids
+virtual thunk to 
+vmaddfp
+vmhaddshs
+vmhraddshs
+vmladduhm
+vmsummbm
+vmsumshm
+vmsumshs
+vmsumubm
+vmsumuhm
+vmsumuhs
+vnmsubfp
+vorbis
+vp6DecodeCallBack
+vp6MbRowDecode
+vp8CalcSsErrJob
+vp8CallBackJob
+vp8DecodeCallBackJob
+vp8DecodeRowsJob
+vp8EncodeRowsJob
+vp8EncodeStartJob
+vp8EncodeSyncJob
+vp8JobifiedLpfJob
+vp8LoopFilterJob
+vp8LpfStartJob
+vp8LpfSyncJob
+vp8PackTokensIntoPartitionJob
+vp8PostFrameJob
+vp8PostProcessJob
+vp9DecodeFrame
+vp9DecodePostJob
+vp9DecodeTileJobified
+vp9FilterFrameJobified
+vp9PostFilterJob
+vperm
+vs
+vsel
+vsldoi
+vtB
+vtable for 
+v~H
+wH
+wNF
+warning: %s exceeds section size\n
+warning: creating a DT_TEXTREL in a shared object.
+warning: section '%s' in '%B' is non-PIC\n
+wc_wc
+wchar_t
+wday
+wgG
+what
+while parsing a %TAG directive
+while parsing a block collection
+while parsing a block mapping
+while parsing a block node
+while parsing a flow mapping
+while parsing a flow node
+while parsing a flow sequence
+while parsing a node
+while parsing a quoted scalar
+while parsing a tag
+while parsing a tag directive
+while scanning a %TAG directive
+while scanning a %YAML directive
+while scanning a block scalar
+while scanning a directive
+while scanning a plain scalar
+while scanning a quoted scalar
+while scanning a simple key
+while scanning a tag
+while scanning a tag directive
+while scanning an alias
+while scanning an anchor
+while scanning for the next token
+wideband (sub-band CELP)
+width must be positive
+window size: %d x %d, window mode: %s
+window.jQuery.fn.registration.backToLoginScreen();
+winfonts
+wldp.dll
+workGroupOffset
+write
+writing
+wrong length
+wrong number of arguments
+wrong number of arguments to 'insert'
+wuH
+www-authenticate
+www.
+x)H
+x+
+x,G
+x,H
+x-ea-game-id:%s\r\nx-ea-game-id-type:%s\r\n
+x-ea-privacy-ipad
+x-ea-privacy-tcip
+x0p+0
+x86
+x86 on x86-64
+x86-64
+xX
+xaH
+xcpt
+xh
+xml
+xml=http://www.w3.org/XML/1998/namespace
+xpcall
+xvH
+xx.xx.%d.%d
+xxxx
+xxxxxxxxxxxxxxxxxxxxxxx          xxxxxxxxxxxxxxxxxxxxxxx!!!!!!!!!!xxxxxxxxxxxxxxxxxxxxxxxjjjjjjjjjjxxxxxxx
+xyzw
+yAC
+yH
+yMF
+yN
+yday
+year
+yield
+ynamic Section:\n
+yptn
+ystem call error
+yyyy-MM-ddTHH:mm
+yz
+yzw
+z(
+zTXt: invalid compression type
+zTXt: invalid keyword
+zero length keyword
+zf
+zh_CHS
+zh_HK
+zh_MO
+zh_SG
+zh_cn
+zh_tw
+ziG
+zlib IO error
+zlib error
+zlib failed to initialize compressor (
+zlib failed to reset compressor: @1(@2): @3
+zlib memory error
+zlib stream error
+zlib version error
+zstream already in use (internal error)
+zstream not in use (internal error)
+zt
+zzFA
+zzYS_
+{ "%s":"%s", "AQUA":%d, "transaction": { "base64":"
+{"c_delta":false
+{"core":{
+{"name": 
+{"underage_flag": "null",%s}
+{"underage_flag": "null"}
+{...}
+{}
+|'F
+|*H
+|LA
+|XH
+|\r
+|jH
+|{H
+}$H
+}0H
+}DC
+}\r
+}]
+~=
+~H
+~MHz
+~PH
+~\tH
+~kG
+~nG
+~~~~ffff

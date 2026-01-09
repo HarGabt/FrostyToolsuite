@@ -221,14 +221,14 @@ namespace FrostySdk.IO
         public object RootObject => objects[0];
         public bool IsValid => objects.Count != 0;
         public bool TransientEdit { get; set; }
-		
-        public Dictionary<string, long> OffsetsMap => offsetsMap;
+
+        public DebugInformation DebugInformation => debugInformation;
 
         internal Guid fileGuid;
         internal List<object> objects;
         internal List<Guid> dependencies;
         internal List<int> refCounts;
-        internal Dictionary<string, long> offsetsMap;
+        internal DebugInformation debugInformation;
 
         public EbxAsset()
         {
@@ -633,10 +633,7 @@ namespace FrostySdk.IO
 
         internal byte[] boxedValueBuffer;
 
-        // For writing to XML
-        internal Dictionary<string, long> offsetsMap = new Dictionary<string, long>();
-        internal string offsetKey = string.Empty;
-        internal readonly Stack<string> offsetKeyStack = new Stack<string>();
+        internal DebugInformation debugInformation = new DebugInformation();
 
         internal EbxReader(Stream inStream, bool passthru)
             : base(inStream)
@@ -794,7 +791,7 @@ namespace FrostySdk.IO
             asset.objects = objects;
             asset.dependencies = dependencies;
             asset.refCounts = refCounts;
-            asset.offsetsMap = offsetsMap;
+            asset.debugInformation = debugInformation;
             asset.OnLoadComplete();
 
             return asset;
@@ -1285,35 +1282,6 @@ namespace FrostySdk.IO
             }
             
             return hashes;
-        }
-		
-        internal void PushXmlOffset(string suffix, bool clear = false)
-        {
-            if (clear)
-            {
-                offsetKeyStack.Clear();
-                offsetKey = suffix;
-            }
-            else
-            {
-                offsetKey += suffix;
-            }
-            offsetKeyStack.Push(suffix);
-            if (!offsetsMap.ContainsKey(offsetKey))
-            {
-                offsetsMap.Add(offsetKey, Position);
-            }
-        }
-        internal void PopXmlOffset()
-        {
-            if (offsetKeyStack.Count > 0)
-            {
-                string suffix = offsetKeyStack.Pop();
-                if (offsetKey.EndsWith(suffix))
-                {
-                    offsetKey = offsetKey.Substring(0, offsetKey.Length - suffix.Length);
-                }
-            }
         }
     }
 }

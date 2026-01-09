@@ -379,7 +379,7 @@ namespace FrostyEditor.Windows
         private async Task<int> LoadStringList(ILogger logger)
         {
             logger.Log("Loading custom strings");
-            await Task.Run(() => Utils.GetString(0));
+            await Task.Run(() => StringsManager.LoadStringList("strings.txt"));
             return 0;
         }
 
