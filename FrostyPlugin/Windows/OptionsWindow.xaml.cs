@@ -78,7 +78,7 @@ namespace Frosty.Core.Windows
         [DisplayName("Launch Game Using Steam Protocol")]
         [Description("An alternate launch method that uses the Steam Protocol for launching the game with mods")]
         [EbxFieldMeta(EbxFieldType.Boolean)]
-        public bool UseSteamProtocol { get; set; } = false;
+        public bool UseSteamProtocol { get; set; } = true;
 
         public override void Load()
         {
@@ -94,7 +94,7 @@ namespace Frosty.Core.Windows
             MaxCasFileSize.SelectedIndex = sizes.IndexOf(Config.Get<string>("MaxCasFileSize", "1GB"));
 
             DisableLaunchProcessCheck = Config.Get<bool>("DisableLaunchProcessCheck", false);
-            UseSteamProtocol = Config.Get<bool>("UseSteamProtocol", false);
+            UseSteamProtocol = Config.Get<bool>("UseSteamProtocol", true);
         }
 
         public override void Save()
