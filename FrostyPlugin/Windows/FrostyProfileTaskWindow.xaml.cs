@@ -334,7 +334,7 @@ namespace Frosty.Core.Windows
         private async Task<int> LoadStringList()
         {
             TaskLogger.Log("Loading custom strings");
-            await Task.Run(() => Utils.LoadStringList("strings.txt", TaskLogger));
+            await Task.Run(() => StringsManager.LoadStringList("strings.txt", TaskLogger));
             return 0;
         }
 
