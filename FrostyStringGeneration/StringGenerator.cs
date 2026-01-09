@@ -248,10 +248,7 @@ namespace FrostyStringGeneration
             {
                 case ProfileVersion.NeedForSpeedUnbound:
                     additionalGamesToScan = new List<ProfileVersion>() {
-                        ProfileVersion.DragonAgeInquisition,
-                        ProfileVersion.MassEffectAndromeda,
                         ProfileVersion.DeadSpace,
-                        ProfileVersion.Anthem
                     };
                     break;
                 default:
@@ -303,11 +300,11 @@ namespace FrostyStringGeneration
                     scannerParams.StartOnString = "Excalibur";
                     scannerParams.StopOnString = @"D:\dev\TnT\Local\Bin\Nfs22\Win64\retail\Nfs22.Main_Win64_retail.pdb";
                     break;
-                case ProfileVersion.DragonAgeInquisition:
-                    sectionsToScan = new List<string> { ".data1" };
-                    scannerParams.StartOnString = "Dragon Age: Inquisition";
-                    // scannerParams.StopOnString = @"C:\monkey\bwmonkey-da3\tnt\local_win64_retail\Bin\DA3.Main_Win64_retail.pdb" // This includes slightly more junk
-                    scannerParams.StopOnString = "Stereo";
+                case ProfileVersion.DeadSpace:
+                    sectionsToScan = new List<string> { ".link" };
+                    scannerParams.StartOnString = "Beyond";
+                    scannerParams.StopOnString = @"F:\byd\Stabilization\TnT\Local\Bin\Beyond\Win64\retail\Beyond.Main_Win64_retail.pdb";
+                    //scannerParams.StopOnString = "Stereo";
                     break;
                 case ProfileVersion.MassEffectAndromeda:
                     sectionsToScan = new List<string> { ".rdata" };
