@@ -2,7 +2,7 @@
 
 # FORK NOTE
 
-This fork of Frosty Tool Suite 1.0.7 is based on [selphea's fork of 1.0.7](https://github.com/selphea/FrostyToolsuite) and is aimed at bringing some of the features from 1.0.6.x and [Veilguard fork](https://github.com/J-Lyt/FrostyToolsuite) if possible, along with keeping NFS Unbound's SDK file up-to-date. This fork serves as an opportunity to mod newer games Frosty Tool Suite 1.0.6.3 doesn't support and will be discontinued in favour of an upcoming 2.0.0 version of Tool Suite, which as of now is still a WIP, and which has no estimated time of release.
+This fork of Frosty Tool Suite 1.0.7 is based on [selphea's fork of 1.0.7](https://github.com/selphea/FrostyToolsuite) and is aimed at bringing some of the features from 1.0.6.x and existing forks like [Veilguard fork by J-Lyt](https://github.com/J-Lyt/FrostyToolsuite) if possible, along with keeping NFS Unbound's SDK file up-to-date. This fork serves as an opportunity to mod newer games Frosty Tool Suite 1.0.6.3 doesn't support and will be discontinued in favour of an upcoming 2.0.0 version of Tool Suite, which as of now is still a WIP, and which has no estimated time of release.
 <br>The backport commits in this fork bear the "throw and see what sticks and doesn't fail during build" philosophy and you have all the rights to take all of the actions here with a grain of sea salt, so _do_ report of issues if there are any.
 
 If you are to ask for help with Frosty Tool Suite 1.0.7, create an `Issue` so ~we~ I can try taking a look into it. But keep in mind that [the original developers of Frosty Tool Suite 1.0.7 have discontinued it and no longer provide help for it](https://images2.imgbox.com/a6/a1/CqTQvcGL_o.png), which means if something goes wrong and we can't help you with it, you will be on your own.
@@ -13,7 +13,7 @@ If you are to ask for help with Frosty Tool Suite 1.0.7, create an `Issue` so ~w
 - Improved mesh importing:
   - Added support for importing meshes that require tangent space compression (both Heat and Unbound are supported)
   - More detailed exceptions if something is wrong with imported mesh
-- Template and Blueprint modding (RimeWidgetBlueprint modding is somewhat broken, would really like to fix that if I knew how)
+- Template and Blueprint modding
 - Fixed Mod Manager exit, meaning you don't have to close it manually in Task Manager anymore
 - Shadercache symlinking, meaning it should help with performance when running mods
 - Fixed `Object reference not set to an instance of an object` `IterateSubKeys` type crash at launch
@@ -28,9 +28,9 @@ If you are to ask for help with Frosty Tool Suite 1.0.7, create an `Issue` so ~w
 
 - Battlefield 6 complete support
 - Skate.™️ support
-- Dead Space support. I believe modding of this game is already available, but the game just refuses to run with mods
-- Bug fixing if possible
-- Audio import in NewWaveAsset support. The importer 1.0.7 has is broken (but it is there, at least)
+- Dead Space support. I believe modding of this game is already available, the game just lacks the feature of loading custom data path, despite having mention of the launch parameter
+- Bugs fixing if possible
+- Audio importing in `NewWaveAsset` assets support. The importer 1.0.7 has is broken (but it is there, at least)
 
 # FrostyToolsuite
 The most advanced modding platform for games running on DICE's Frostbite game engine.
