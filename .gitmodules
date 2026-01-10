@@ -16,3 +16,6 @@
 [submodule "Plugins/FrostyFlammenwerferPlugin"]
 	path = Plugins/FrostyFlammenwerferPlugin
 	url = https://github.com/shoushou1106/FrostyFlammenwerferPlugin/
+[submodule "Plugins/FrostyBetterLocalizedStringPlugin"]
+	path = Plugins/FrostyBetterLocalizedStringPlugin
+	url = https://github.com/shoushou1106/FrostyBetterLocalizedStringPlugin
