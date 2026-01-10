@@ -13,3 +13,6 @@
 [submodule "Plugins/CopyFilePathPlugin"]
 	path = Plugins/CopyFilePathPlugin
 	url = https://github.com/HarGabt/CopyFilePathPlugin
+[submodule "Plugins/FrostyFlammenwerferPlugin"]
+	path = Plugins/FrostyFlammenwerferPlugin
+	url = https://github.com/shoushou1106/FrostyFlammenwerferPlugin/
