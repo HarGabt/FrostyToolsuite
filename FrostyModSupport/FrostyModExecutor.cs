@@ -208,6 +208,11 @@ namespace Frosty.ModSupport
         private ConcurrentDictionary<Guid, ChunkAssetEntry> m_modifiedChunks = new ConcurrentDictionary<Guid, ChunkAssetEntry>();
         private ConcurrentDictionary<string, DbObject> m_modifiedFs = new ConcurrentDictionary<string, DbObject>();
 
+
+        private HashSet<string> ebxWithUnmodifiedData = new HashSet<string>();
+        private HashSet<string> resWithUnmodifiedData = new HashSet<string>();
+        public static object forLock = new object();
+
         private ConcurrentDictionary<Sha1, ArchiveInfo> m_archiveData = new ConcurrentDictionary<Sha1, ArchiveInfo>();
         private int m_numArchiveEntries = 0;
         private int m_numTasks;
@@ -439,17 +444,29 @@ namespace Frosty.ModSupport
                 {
                     if (resource.IsModified || !m_modifiedEbx.ContainsKey(resource.Name))
                     {
+                        lock (forLock)
+                        {
+                            if (!resource.IsModified)
+                                ebxWithUnmodifiedData.Add(resource.Name);
+                        }
+
                         if (resource.HasHandler)
                         {
                             HandlerExtraData extraData;
                             byte[] data = fmod.GetResourceData(resource);
 
-                            if (m_modifiedEbx.TryGetValue(resource.Name, out EbxAssetEntry entry) && entry.ExtraData != null)
+                            if (m_modifiedEbx.TryGetValue(resource.Name, out EbxAssetEntry entry) && !ebxWithUnmodifiedData.Contains(resource.Name))
                             {
                                 extraData = (HandlerExtraData)entry.ExtraData;
                             }
                             else
                             {
+
+                                lock (forLock)
+                                {
+                                    if (ebxWithUnmodifiedData.Contains(resource.Name))
+                                        ebxWithUnmodifiedData.Remove(resource.Name);
+                                }
                                 entry = new EbxAssetEntry();
                                 extraData = new HandlerExtraData();
 
@@ -462,13 +479,19 @@ namespace Frosty.ModSupport
 
                                 // add in existing bundles
                                 var ebxEntry = m_am.GetEbxEntry(resource.Name);
-                                foreach (int bid in ebxEntry.Bundles)
+                                if (ebxEntry != null)
                                 {
-                                    bundles.Add(HashBundle(m_am.GetBundleEntry(bid)));
+                                    foreach (int bid in ebxEntry.Bundles)
+                                    {
+                                        bundles.Add(HashBundle(m_am.GetBundleEntry(bid)));
+                                    }
                                 }
 
                                 entry.ExtraData = extraData;
-                                m_modifiedEbx.TryAdd(resource.Name, entry);
+                                if (m_modifiedEbx.ContainsKey(resource.Name))
+                                    m_modifiedEbx[resource.Name] = entry;
+                                else
+                                    m_modifiedEbx.TryAdd(resource.Name, entry);
                             }
 
                             // merge new and old data together
@@ -487,6 +510,12 @@ namespace Frosty.ModSupport
                                 if (!m_archiveData.ContainsKey(existingEntry.Sha1))
                                 {
                                     return;
+                                }
+
+                                lock (forLock)
+                                {
+                                    if (ebxWithUnmodifiedData.Contains(resource.Name))
+                                        ebxWithUnmodifiedData.Remove(resource.Name);
                                 }
 
                                 m_archiveData[existingEntry.Sha1].RefCount--;
@@ -539,19 +568,34 @@ namespace Frosty.ModSupport
                 }
                 else if (resource.Type == ModResourceType.Res)
                 {
+
                     if (resource.IsModified || !m_modifiedRes.ContainsKey(resource.Name))
                     {
+                        if (!resource.IsModified)
+                        {
+                            lock (forLock)
+                            {
+                                resWithUnmodifiedData.Add(resource.Name);
+                            }
+                        }
+
                         if (resource.HasHandler)
                         {
                             HandlerExtraData extraData;
                             byte[] data = fmod.GetResourceData(resource);
 
-                            if (m_modifiedRes.TryGetValue(resource.Name, out ResAssetEntry entry) && entry?.ExtraData != null)
+                            if (m_modifiedRes.TryGetValue(resource.Name, out ResAssetEntry entry) && !resWithUnmodifiedData.Contains(resource.Name))
                             {
                                 extraData = (HandlerExtraData)entry.ExtraData;
                             }
                             else
                             {
+                                lock (forLock)
+                                {
+                                    if (resWithUnmodifiedData.Contains(resource.Name))
+                                        resWithUnmodifiedData.Remove(resource.Name);
+                                }
+
                                 entry = new ResAssetEntry();
                                 extraData = new HandlerExtraData();
 
@@ -570,7 +614,10 @@ namespace Frosty.ModSupport
                                 }
 
                                 entry.ExtraData = extraData;
-                                m_modifiedRes.TryAdd(resource.Name, entry);
+                                if (m_modifiedRes.ContainsKey(resource.Name))
+                                    m_modifiedRes[resource.Name] = entry;
+                                else
+                                    m_modifiedRes.TryAdd(resource.Name, entry);
                             }
 
                             // merge new and old data together
@@ -585,6 +632,12 @@ namespace Frosty.ModSupport
                                     goto label_add_bundles;
                                 if (existingEntry.Sha1 == resource.Sha1)
                                     goto label_add_bundles;
+
+                                lock (forLock)
+                                {
+                                    if (resWithUnmodifiedData.Contains(resource.Name))
+                                        resWithUnmodifiedData.Remove(resource.Name);
+                                }
 
                                 if (!m_archiveData.ContainsKey(existingEntry.Sha1))
                                 {

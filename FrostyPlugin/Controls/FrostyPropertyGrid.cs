@@ -679,7 +679,7 @@ namespace Frosty.Core.Controls
                 }
             }
 
-            bool retVal = true;
+        bool retVal = true;
 
             foreach (var item in Children)
             {
@@ -743,6 +743,61 @@ namespace Frosty.Core.Controls
                 }
             }
 
+            if (!retVal)
+            {
+                IsHidden = false;
+            }
+            return retVal;
+        }
+
+        public bool FilterAsset(string asset, List<object> refObjects, bool doNotHideSubObjects = false)
+        {
+            if (_value is PointerRef pRef)
+            {
+                if (pRef.Type == PointerRefType.Internal)
+                {
+                    if (GetCustomAttribute<IsReferenceAttribute>() == null)
+                    {
+                        if (refObjects.Contains(pRef.Internal))
+                            return true;
+                        refObjects.Add(pRef.Internal);
+                    }
+                }
+            }
+
+            bool retVal = true;
+
+            foreach (var item in Children)
+            {
+                if (new List<string>() { "PropertyConnection", "EventConnection", "LinkConnection" }.Contains(item.Value.GetType().Name))
+                {
+                    item.IsHidden = true;
+                    foreach (PointerRef pr in new List<dynamic> { (PointerRef)((dynamic)item.Value).Source, (PointerRef)((dynamic)item.Value).Target })
+                    {
+                        if (pr.Type == PointerRefType.External)
+                        {
+                            if (App.AssetManager.GetEbxEntry(pr.External.FileGuid).Name == asset)
+                                item.IsHidden = false;
+                        }
+                    }
+                    if (retVal && !item.IsHidden)
+                        retVal = false;
+                }
+                else
+                {
+                    item.IsHidden = !doNotHideSubObjects;
+                    if (item.Value is PointerRef pr)
+                    {
+                        if (pr.Type == PointerRefType.External)
+                        {
+                            if (App.AssetManager.GetEbxEntry(pr.External.FileGuid) != null && App.AssetManager.GetEbxEntry(pr.External.FileGuid).Name == asset)
+                                item.IsHidden = false;
+                        }
+                    }
+                    if (!item.FilterAsset(asset, refObjects, !item.IsHidden) || !item.IsHidden)
+                        retVal = false;
+                }
+            }
             if (!retVal)
             {
                 IsHidden = false;
@@ -1787,7 +1842,24 @@ namespace Frosty.Core.Controls
             {
                 List<object> refObjects = new List<object>();
 
-                if (filterText.StartsWith("guid:"))
+                Guid outGuid;
+                if (filterText.Length == 36 && Guid.TryParse(filterText, out outGuid))
+                {
+                    foreach (var item in items)
+                    {
+                        if (item.FilterGuid(filterText.ToLower(), refObjects))
+                            item.IsHidden = true;
+                    }
+                }
+                else if (filterText.Contains("/") && App.AssetManager.GetEbxEntry(filterText) != null)
+                {
+                    foreach (var item in items)
+                    {
+                        if (item.FilterAsset(filterText, refObjects))
+                            item.IsHidden = true;
+                    }
+                }
+                else if (filterText.StartsWith("guid:"))
                 {
                     string[] arr = filterText.Split(new char[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
                     string guidValue = (arr.Length > 1) ? arr[1] : "0";
@@ -1795,6 +1867,14 @@ namespace Frosty.Core.Controls
                     foreach (var item in items)
                     {
                         if (item.FilterGuid(guidValue.ToLower(), refObjects))
+                            item.IsHidden = true;
+                    }
+                }
+                else if (filterText.StartsWith("asset:") && App.AssetManager.GetEbxEntry(filterText.Substring(6)) != null)
+                {
+                    foreach (var item in items)
+                    {
+                        if (item.FilterAsset(filterText.Substring(6), refObjects))
                             item.IsHidden = true;
                     }
                 }

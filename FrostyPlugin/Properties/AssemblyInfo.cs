@@ -54,7 +54,7 @@ using System.Windows;
 [assembly: RegisterGlobalTypeEditor("Vec3", typeof(FrostyVec3Editor))]
 [assembly: RegisterGlobalTypeEditor("Vec4", typeof(FrostyVec4Editor))]
 
-[assembly: RegisterTypeOverride("RawFileDataAsset", typeof(RawFileDataAssetOverride))]
-[assembly: RegisterTypeOverride("LocalizedStringId", typeof(LocalizedStringIdOverride))]
-[assembly: RegisterTypeOverride("LinearTransform", typeof(LinearTransformOverride))]
+[assembly: RegisterTypeOverride("RawFileDataAsset", typeof(RawFileDataAssetOverride), false, 0)]
+[assembly: RegisterTypeOverride("LocalizedStringId", typeof(LocalizedStringIdOverride), false, 0)]
+[assembly: RegisterTypeOverride("LinearTransform", typeof(LinearTransformOverride), false, 0)]
 

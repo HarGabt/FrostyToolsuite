@@ -12,12 +12,14 @@ using TestPlugin.Resources;
 
 namespace TestPlugin.Handlers
 {
-    public class SvgImageCustomActionHandler : ICustomActionHandler
+    public class SvgImageCustomActionHandler : ICustomActionHandler 
     {
         // This is purely for the mod managers action view and has no impact on how the handler actually executes.
         // It tells the mod manager actions view what type of action this handler performs, wether it replaces (Modify)
         // data from one mod with another, or does it merge the two together.
         public HandlerUsage Usage => HandlerUsage.Modify;
+
+        public bool ModifiesAddedAssets => false;
 
         // A mod is comprised of a series of base resources, embedded, ebx, res, and chunks. Embedded are used internally
         // for the icon and images of a mod. Ebx/Res/Chunks are the core resources used for applying data to the game.

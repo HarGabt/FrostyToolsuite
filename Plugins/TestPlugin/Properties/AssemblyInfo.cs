@@ -102,5 +102,5 @@ using TestPlugin.TypeOverrides;
 // Allows saving to mods for custom assets
 [assembly: RegisterCustomHandler(CustomHandlerType.CustomAsset, typeof(InitFsCustomActionHandler), customType: "fs")]
 
-[assembly: RegisterTypeOverride("UnlockDataCollection", typeof(UnlockDataCollectionTypeOverride))]
-[assembly: RegisterTypeOverride("SubWorldReferenceObjectData", typeof(SubworldTypeOverride))]
+[assembly: RegisterTypeOverride("UnlockDataCollection", typeof(UnlockDataCollectionTypeOverride), false, 0)]
+[assembly: RegisterTypeOverride("SubWorldReferenceObjectData", typeof(SubworldTypeOverride), false, 0)]
