@@ -13,3 +13,9 @@
 [submodule "Plugins/CopyFilePathPlugin"]
 	path = Plugins/CopyFilePathPlugin
 	url = https://github.com/HarGabt/CopyFilePathPlugin
+[submodule "Plugins/FrostyFlammenwerferPlugin"]
+	path = Plugins/FrostyFlammenwerferPlugin
+	url = https://github.com/HarGabt/FrostyFlammenwerferPlugin
+[submodule "Plugins/FrostyBetterLocalizedStringPlugin"]
+	path = Plugins/FrostyBetterLocalizedStringPlugin
+	url = https://github.com/HarGabt/FrostyBetterLocalizedStringPlugin
