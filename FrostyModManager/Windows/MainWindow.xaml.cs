@@ -679,7 +679,7 @@ namespace FrostyModManager
             Frosty.Core.App.FileSystemManager = new FileSystemManager(Config.Get<string>("GamePath", "", ConfigScope.Game));
             foreach (FileSystemSource source in ProfilesLibrary.Sources)
                 Frosty.Core.App.FileSystemManager.AddSource(source.Path, source.SubDirs);
-            Frosty.Core.App.FileSystemManager.Initialize();
+            Frosty.Core.App.FileSystemManager.Initialize(KeyManager.Instance.GetKey("Key1"));
 
             // Set selected pack
             App.SelectedPack = selectedPack.Name;
