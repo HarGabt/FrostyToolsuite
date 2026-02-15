@@ -550,108 +550,97 @@ namespace LocalizedStringPlugin
         {
 
             FrostySaveFileDialog sfd = new FrostySaveFileDialog("Save Localized Strings Usage List", "*.txt (Text File)|*.txt", "LocalizedStringsUsage");
-            if (sfd.ShowDialog())
+            if (!sfd.ShowDialog()) return;
+
+            FrostyTaskWindow.Show("Exporting Localized Strings Usage", "", (task) =>
             {
-                FrostyTaskWindow.Show("Exporting Localized Strings Usage", "", (task) =>
+            List<EbxAssetEntry> entries = App.AssetManager.EnumerateEbx().ToList();
+            int count = entries.Count;
+
+            HashSet<string> stringIdSet = new HashSet<string>(stringIds.Select(id => id.ToString("X").ToLower()));
+            Dictionary<string, StringBuilder> stringInfo = new Dictionary<string, StringBuilder>(StringComparer.OrdinalIgnoreCase);
+
+            foreach (uint stringId in stringIds)
+            {
+                    string key = stringId.ToString("X").ToLower();
+                    string displayText = db.GetString(stringId) ?? string.Empty;
+                    stringInfo[key] = new StringBuilder($"{stringId:X8}, \"{displayText.Replace("\r", "").Replace("\n", " ")}\"");
+                }
+
+                for (int idx = 0; idx < count; idx++)
                 {
-                    List<EbxAssetEntry> ebxAssets = App.AssetManager.EnumerateEbx().ToList();
-                    uint totalCount = (uint)ebxAssets.Count;
-                    uint idx = 0;
-                    Dictionary<string, StringBuilder> StringInfo = new Dictionary<string, StringBuilder>();
-                    foreach (uint stringId in stringIds)
-                    {
-                        string hexStringId = stringId.ToString("X");
-                        StringBuilder sb = new StringBuilder(hexStringId);
-                        sb.Append(", \"")
-                            .Append(db.GetString(stringId)
-                                .Replace("\r", "")
-                                .Replace("\n", " "))
-                            .Append("\"");
+                    EbxAssetEntry refEntry = entries[idx];
+                    task.Update($"Checking: {refEntry.Name}", (idx / (double)count) * 100.0);
 
-                        StringInfo.Add(hexStringId.ToLower(), sb);
-                    }
+                    EbxAsset refAsset = App.AssetManager.GetEbx(refEntry);
+                    if (refAsset?.Objects == null) continue;
 
-                    foreach (EbxAssetEntry refEntry in ebxAssets)
-                    {
-                        task.Update("Checking: " + refEntry.Name, (idx++ / (double)totalCount) * 100.0d);
-                        EbxAsset refAsset = App.AssetManager.GetEbx(refEntry);
-                        ISet<string> alreadyDone = new HashSet<string>();
-                        try
-                        {
-                            foreach (dynamic obj in refAsset.Objects)
-                            {
-                                if (HasProperty(obj, "StringHash"))
-                                {
-                                    string tempString = obj.StringHash.ToString("X").ToLower();
-                                    RecordStringUsage(StringInfo, tempString, alreadyDone, refEntry.Name);
-                                }
-                                
-								if (HasProperty(obj, "StringId"))
-                                {
-                                    if (obj.StringId != null)
-                                    {
-                                        if (obj.StringId is CString cString)
-                                        {
-                                            RecordDefaultCString(StringInfo, alreadyDone, refEntry.Name, cString);
-                                        }
-                                        else
-                                        {
-                                            string tempString = obj.StringId.ToString("X").ToLower();
-                                            RecordStringUsage(StringInfo, tempString, alreadyDone, refEntry.Name);
-                                        }
-                                    }
-                                }
-                                
-								foreach (PropertyInfo pi in obj.GetType().GetProperties())
-                                {
-                                    if (pi.PropertyType == typeof(CString))
-                                    {
-                                        RecordDefaultCString(StringInfo, alreadyDone, refEntry.Name, pi.GetValue(obj));
-                                    }
-                                    else if (pi.PropertyType == typeof(List<CString>))
-                                    {
-                                    RecordStringList(StringInfo, alreadyDone, refEntry.Name, pi.GetValue(obj));
-                                    }
-                                    else if ("BWLocalizedStringReference".Equals(pi.PropertyType.Name))
-                                    {
-                                        // used in DA:V
-                                        dynamic stringReference = pi.GetValue(obj);
-                                        RecordLocalizedStringReference(StringInfo, alreadyDone, refEntry.Name, stringReference.StringId);
-                                    }
-                                    else if ("LocalizedStringReference".Equals(pi.PropertyType.Name))
-                                    {
-                                        // used in DA:I and ME:A
-                                        dynamic stringReference = pi.GetValue(obj);
-                                        RecordLocalizedStringReference(StringInfo, alreadyDone, refEntry.Name, stringReference.StringId);
-                                    }
-                                    else if (typeof(IList).IsAssignableFrom(pi.PropertyType))
-                                    {
-                                        // still does not find ui menu entries
-                                        Type[] genericArguments = pi.PropertyType.GetGenericArguments();
-                                        if (genericArguments.Length > 0 && "LocalizedStringReference".Equals(genericArguments[0].Name))
-                                        {
-                                            RecordLocalizedStringReferenceList(StringInfo, alreadyDone, refEntry.Name, pi.GetValue(obj));
-                                        }
-                                    }
-                                }
-                            }
-                        }
-						catch
-                        {
-                            App.Logger.Log("Skipping ebx asset '{0}' due to an error recording strings.", refEntry.Name);
-                        }
-                    }
+                    HashSet<string> complete = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
-                    using (StreamWriter writer = new StreamWriter(sfd.FileName))
-                    {
-                        foreach (StringBuilder stringData in StringInfo.Values)
-                        {
-                            writer.WriteLine(stringData.ToString());
-                        }
-                    }
-                });
+                    foreach (object obj in refAsset.Objects)
+                        if (obj != null)
+                            ProcessObject(obj, refEntry.Name, stringInfo, complete);
+                }
 
-                App.Logger.Log("Localized strings usage saved to {0}", sfd.FileName);
+                using (StreamWriter writer = new StreamWriter(sfd.FileName))
+                    foreach (StringBuilder sb in stringInfo.Values)
+                        writer.WriteLine(sb.ToString());
+            });
+
+            App.Logger.Log("Localized strings usage saved to {0}", sfd.FileName);
+        }
+
+        private void ProcessObject(object obj, string assetName,
+            Dictionary<string, StringBuilder> stringInfo,
+            HashSet<string> alreadyDone)
+        {
+            Type type = obj.GetType();
+
+            PropertyInfo stringHashProp = type.GetProperty("StringHash");
+            if (stringHashProp != null)
+            {
+                object hashValue = stringHashProp.GetValue(obj);
+                if (hashValue is uint uintHash)
+                {
+                    string key = uintHash.ToString("X").ToLower();
+                    if (stringInfo.ContainsKey(key) && alreadyDone.Add(key))
+                        stringInfo[key].AppendLine().Append($"           -{assetName}");
+                }
+            }
+
+            foreach (PropertyInfo prop in type.GetProperties())
+            {
+                if (!prop.CanRead) continue;
+
+                if (prop.PropertyType == typeof(CString))
+                {
+                    string stringValue = ((CString)prop.GetValue(obj)).ToString();
+                    if (string.IsNullOrEmpty(stringValue)) continue;
+
+                    string key = HashStringId(stringValue).ToString("X").ToLower();
+                    if (stringInfo.ContainsKey(key) && alreadyDone.Add(key))
+                        stringInfo[key].AppendLine().Append($"          -{assetName}");
+
+                    continue;
+                }
+
+                if (prop.PropertyType != typeof(List<CString>)) continue;
+
+                object value = prop.GetValue(obj);
+                if (value == null) continue;
+
+                List<CString> cStringList = (List<CString>)value;
+                foreach (CString cString in cStringList)
+                {
+                    if (cString == null) continue;
+
+                    string stringValue = cString.ToString();
+                    if (string.IsNullOrEmpty(stringValue)) continue;
+
+                    string key = HashStringId(stringValue).ToString("X").ToLower();
+                    if (stringInfo.ContainsKey(key) && alreadyDone.Add(key))
+                        stringInfo[key].AppendLine().Append($"          -{assetName}");
+                }
             }
         }
 
