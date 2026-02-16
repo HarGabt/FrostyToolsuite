@@ -25,7 +25,7 @@ namespace FrostySdk.Ebx
             typeGuid = guid;
             typeName = TypeLibrary.Reflection.LookupType(guid);
             // type is likely using a signed GUID
-            if (typeName == guid.ToString())
+            /*if (typeName == guid.ToString())
             {
                 Type refType = TypeLibrary.GetType(guid);
                 if (refType == null)
@@ -33,7 +33,7 @@ namespace FrostySdk.Ebx
                     throw new Exception($"Could not find a type with the GUID {guid}");
                 }
                 typeName = refType.Name;
-            }
+            }*/
         }
 
         public Type GetReferencedType()

@@ -528,7 +528,7 @@ namespace DuplicationPlugin
                 {
                     writer.WriteAsset(asset, App.AssetManager.GetAsset(entry));
                     byte[] buf = writer.ToByteArray();
-                    using (EbxReader reader = EbxReader.CreateReader(new MemoryStream(buf)))
+                    using (EbxReader reader = EbxReader.CreateReader(new MemoryStream(buf), App.FileSystemManager))
                         newAsset = reader.ReadAsset<EbxAsset>();
                 }
             }
