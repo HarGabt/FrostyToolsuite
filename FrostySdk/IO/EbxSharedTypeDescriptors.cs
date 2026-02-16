@@ -19,7 +19,6 @@ namespace FrostySdk.IO
 
         public EbxSharedTypeDescriptors(FileSystemManager fs, string name)
         {
-            File.WriteAllBytes(name, fs.GetFileFromMemoryFs(name));
             bool patch = name.Contains("patch");
             using (NativeReader reader = new NativeReader(new MemoryStream(fs.GetFileFromMemoryFs(name))))
             {
