@@ -20,7 +20,12 @@ namespace FrostySdk.IO
     {
         public static EbxBaseWriter CreateProjectWriter(Stream inStream, EbxWriteFlags inFlags = EbxWriteFlags.None, bool leaveOpen = false)
         {
-            if (ProfilesLibrary.EbxVersion >= 4)
+            if (ProfilesLibrary.EbxVersion == 6)
+            {
+                return new EbxWriterRiff(inStream, inFlags, leaveOpen);
+            }
+
+            if (ProfilesLibrary.EbxVersion == 4)
             {
                 return new EbxWriterV2(inStream, inFlags, leaveOpen);
             }
@@ -30,6 +35,11 @@ namespace FrostySdk.IO
 
         public static EbxBaseWriter CreateWriter(Stream inStream, EbxWriteFlags inFlags = EbxWriteFlags.None, bool leaveOpen = false)
         {
+            if (ProfilesLibrary.EbxVersion == 6)
+            {
+                return new EbxWriterRiff(inStream, inFlags, leaveOpen);
+            }
+
             if ((ProfilesLibrary.EbxVersion & 1) != 0)
             {
                 return new EbxWriterV2(inStream, inFlags, leaveOpen);

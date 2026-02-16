@@ -227,7 +227,9 @@ namespace FrostySdk.IO
                     classType = std.GetClass(attr.Guid);
 
                     if (classType.HasValue)
+                    {
                         break;
+                    }
                 }
             }
             return classType.Value;
