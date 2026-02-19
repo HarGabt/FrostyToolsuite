@@ -215,7 +215,10 @@ namespace FrostySdk.IO
                     {
                         classType = patchStd.GetClass(attr.Guid);
 
-                        if (classType.HasValue) return classType.Value;
+                        if (classType.HasValue)
+                        {
+                            return classType.Value;
+                        }
                     }
                 }
             }
