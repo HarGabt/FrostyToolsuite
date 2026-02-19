@@ -93,6 +93,15 @@ namespace MeshSetPlugin
         {
         }
     }
+
+    public class FBXImportNotTriangulatedException : Exception
+    {
+        public FBXImportNotTriangulatedException(string sectionName)
+            : base(string.Format("Encountered face that wasn't triangulated on imported object {0}. Make sure to triangulate your mesh before importing!", sectionName))
+        {
+        }
+    }
+
     public class FBXImportMissingWeightsException : Exception
     {
         public FBXImportMissingWeightsException()
@@ -734,6 +743,11 @@ namespace MeshSetPlugin
 
                 for (int i = 0; i < fmesh.PolygonCount; i++)
                 {
+                    //check if polygon is comprised of more than 3 vertices
+                    if (fmesh.GetPolygonSize(i) != 3)
+                    {
+                        throw new FBXImportNotTriangulatedException(sectionNode.Name);
+                    }
                     for (int j = 0; j < 3; j++)
                     {
                         //int index = (i * 3) + j;
