@@ -18,7 +18,7 @@
                 <ControlTemplate TargetType="{x:Type local:BundleEditor}">
                     <Grid Background="{StaticResource ControlBackground}">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
 
@@ -28,9 +28,12 @@
                                     <RowDefinition Height="25"/>
                                     <RowDefinition Height="24"/>
                                     <RowDefinition Height="*"/>
+                                    <RowDefinition Height="26"/>
+                                    <RowDefinition Height="26"/>
+                                    <RowDefinition Height="0.50*"/>
                                 </Grid.RowDefinitions>
 
-                                <Grid Background="{StaticResource WindowBackground}">
+                                <Grid Grid.Row="0" Background="{StaticResource WindowBackground}">
                                     <ComboBox x:Name="PART_BundleTypeComboBox" Height="22" Margin="1">
                                         <ComboBoxItem Content="SubLevel Bundles"/>
                                         <ComboBoxItem Content="Blueprint Bundles"/>
@@ -49,7 +52,102 @@
                                         </DataTemplate>
                                     </ListBox.ItemTemplate>
                                 </ListBox>
+                                
+                                <Grid Grid.Row="3" Background="{StaticResource ControlBackground}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
 
+                                    <ComboBox x:Name="PART_MarkedComboBox" Height="22" Margin="0,1,0,1">
+                                        <ComboBoxItem Content="Marked Assets"/>
+                                        <ComboBoxItem Content="Marked Bundles"/>
+                                    </ComboBox>
+
+                                    <StackPanel Grid.Column="1" Orientation="Horizontal" Margin="0,1,0,1">
+                                        <Button Margin="4,0,0,0" Command="{Binding Path=MarkAssetCommand, RelativeSource={RelativeSource AncestorType={x:Type local:BundleEditor}}}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <Image Source="/FrostyCore;component/Images/Tick.png" Width="16"/>
+                                                <TextBlock Text="Mark Asset" Margin="2,0,0,2" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                        </Button>
+                                        <Button Margin="4,0,0,0" Command="{Binding Path=UnmarkAssetCommand, RelativeSource={RelativeSource AncestorType={x:Type local:BundleEditor}}}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <Image Source="/FrostyCore;component/Images/Cross.png" Width="16"/>
+                                                <TextBlock Text="Unmark Asset" Margin="2,0,0,2" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                        </Button>
+                                        <Button Margin="4,0,0,0" Command="{Binding Path=MarkBundleCommand, RelativeSource={RelativeSource AncestorType={x:Type local:BundleEditor}}}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <Image Source="/FrostyCore;component/Images/Tick.png" Width="16"/>
+                                                <TextBlock Text="Mark Bundle" Margin="2,0,0,2" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                        </Button>
+                                        <Button Margin="4,0,0,0" Command="{Binding Path=UnmarkBundleCommand, RelativeSource={RelativeSource AncestorType={x:Type local:BundleEditor}}}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <Image Source="/FrostyCore;component/Images/Cross.png" Width="16"/>
+                                                <TextBlock Text="Unmark Bundle" Margin="2,0,0,2" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                        </Button>
+                                        <Button Margin="4,0,0,0" Command="{Binding Path=MarkBundleFromAssetCommand, RelativeSource={RelativeSource AncestorType={x:Type local:BundleEditor}}}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <Image Source="/FrostyCore;component/Images/Tick.png" Width="16"/>
+                                                <TextBlock Text="Mark Bundles from Asset" Margin="2,0,0,2" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                        </Button>
+                                    </StackPanel>
+                                </Grid>
+
+                                <Grid Grid.Row="4" Background="{StaticResource ControlBackground}">
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,1,1,1">
+                                        <!-- Add -->
+                                        <Button ToolTip="Add Selected Asset to Marked Bundles" Command="{Binding Path=AddToMarkedBundleCommand, RelativeSource={RelativeSource AncestorType={x:Type local:BundleEditor}}}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <Image Source="/FrostyCore;component/Images/Add.png" Width="16"/>
+                                                <TextBlock Text="Add to Marked Bundles" Margin="2,0,0,2" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                        </Button>
+                                        <Button ToolTip="Add Marked Assets to Selected Bundle" Command="{Binding Path=AddMarkedToBundleCommand, RelativeSource={RelativeSource AncestorType={x:Type local:BundleEditor}}}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <Image Source="/FrostyCore;component/Images/Add.png" Width="16"/>
+                                                <TextBlock Text="Add Marked to Bundle" Margin="2,0,0,2" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                        </Button>
+                                        <Button ToolTip="Added Marked Assets to Marked Bundles" Command="{Binding Path=AddMarkedToMarkedBundleCommand, RelativeSource={RelativeSource AncestorType={x:Type local:BundleEditor}}}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <Image Source="/FrostyCore;component/Images/Add.png" Width="16"/>
+                                                <TextBlock Text="Add Marked to Marked Bundles" Margin="2,0,0,2" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                        </Button>
+                                        <!-- Remove -->
+                                        <Button ToolTip="Remove Selected Asset from Marked Bundles" Command="{Binding Path=RemoveFromMarkedBundleCommand, RelativeSource={RelativeSource AncestorType={x:Type local:BundleEditor}}}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <Image Source="/FrostyEditor;component/Images/Remove.png" Width="16"/>
+                                                <TextBlock Text="Remove from Marked Bundles" Margin="2,0,0,2" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                        </Button>
+                                        <Button ToolTip="Remove Marked Assets from Selected Bundle" Command="{Binding Path=RemoveMarkedFromBundleCommand, RelativeSource={RelativeSource AncestorType={x:Type local:BundleEditor}}}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <Image Source="/FrostyEditor;component/Images/Remove.png" Width="16"/>
+                                                <TextBlock Text="Remove Marked from Bundle" Margin="2,0,0,2" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                        </Button>
+                                        <Button ToolTip="Remove Marked Assets from Marked Bundles" Command="{Binding Path=RemoveMarkedFromMarkedBundleCommand, RelativeSource={RelativeSource AncestorType={x:Type local:BundleEditor}}}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <Image Source="/FrostyEditor;component/Images/Remove.png" Width="16"/>
+                                                <TextBlock Text="Remove Marked from Marked Bundles" Margin="2,0,0,2" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                        </Button>
+                                    </StackPanel>
+                                </Grid>
+
+                                <ListBox Grid.Row="5" x:Name="PART_MarkedListBox">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding DisplayName}" VerticalAlignment="Center" Foreground="{StaticResource FontColor}" FontFamily="MS Reference Sans Serif"/>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
                             </Grid>
                         </ctrl:FrostyDockablePanel>
 
@@ -62,21 +160,29 @@
                                     <RowDefinition Height="22"/>
                                     <RowDefinition Height="*"/>
                                 </Grid.RowDefinitions>
-                                
+
                                 <Border Background="{StaticResource ControlBackground}" Margin="1">
                                     <StackPanel Orientation="Horizontal" Margin="6,0" DockPanel.Dock="Left">
-                                        <Button Content="Add to Bundle" Command="{Binding Path=AddToBundleCommand, RelativeSource={RelativeSource AncestorType={x:Type local:BundleEditor}}}"/>
-                                        <Button Content="Remove from Bundle" Command="{Binding Path=RemoveFromBundleCommand, RelativeSource={RelativeSource AncestorType={x:Type local:BundleEditor}}}"/>
+                                        <Button Command="{Binding Path=AddToBundleCommand, RelativeSource={RelativeSource AncestorType={x:Type local:BundleEditor}}}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <Image Source="/FrostyCore;component/Images/Add.png" Width="16"/>
+                                                <TextBlock Text="Add to Bundle" Margin="2,0,0,2" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                        </Button>
+                                        <Button Margin="4,0,0,0" Command="{Binding Path=RemoveFromBundleCommand, RelativeSource={RelativeSource AncestorType={x:Type local:BundleEditor}}}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <Image Source="/FrostyEditor;component/Images/Remove.png" Width="16"/>
+                                                <TextBlock Text="Remove from Bundle" Margin="2,0,0,2" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                        </Button>
                                     </StackPanel>
                                 </Border>
 
                                 <TextBox x:Name="PART_SuperBundleTextBox" Grid.Row="1" Margin="1,0,1,0" VerticalContentAlignment="Center" Height="22" BorderThickness="1" FontFamily="MS Reference Sans Serif" IsReadOnly="True"/>
-                                
+
                                 <core:FrostyDataExplorer x:Name="PART_DataExplorer" Grid.Row="2"/>
                             </Grid>
                         </ctrl:FrostyDockablePanel>
-                        
-
                     </Grid>
                 </ControlTemplate>
             </Setter.Value>

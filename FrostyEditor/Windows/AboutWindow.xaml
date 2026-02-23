@@ -4,7 +4,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ctrl="clr-namespace:Frosty.Controls;assembly=FrostyControls"
-        xmlns:local="clr-namespace:FrostyEditor.Windows"
         xmlns:ext="clr-namespace:FrostyEditor.Extensions"
         mc:Ignorable="d"
         Title="About Frosty Editor" Height="450" Width="350"

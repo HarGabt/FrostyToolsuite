@@ -3,7 +3,6 @@
                            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                            xmlns:ctrl="clr-namespace:Frosty.Controls;assembly=FrostyControls"
-                           xmlns:core="clr-namespace:Frosty.Core.Controls;assembly=FrostyCore"
                            xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
                            mc:Ignorable="d"
                            Icon="/FrostyCore;component/AppIcon.ico"

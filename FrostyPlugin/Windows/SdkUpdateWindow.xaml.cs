@@ -1,5 +1,4 @@
-﻿using Frosty.Controls;
-using Frosty.Core.Sdk;
+﻿using Frosty.Core.Sdk;
 using Frosty.Core.IO;
 using FrostySdk;
 using System;
@@ -57,7 +56,7 @@ namespace Frosty.Core.Windows
     /// <summary>
     /// Interaction logic for SdkUpdateWindow.xaml
     /// </summary>
-    public partial class SdkUpdateWindow : FrostyDockableWindow
+    public partial class SdkUpdateWindow
     {
         public string ProfileName => ProfilesLibrary.DisplayName;
         private SdkUpdateTask failedTask = null;
@@ -140,7 +139,7 @@ namespace Frosty.Core.Windows
                     {
                         if (process.ProcessName.IndexOf(ProfilesLibrary.ProfileName, StringComparison.OrdinalIgnoreCase) >= 0)
                         {
-                            task.FailMessage = string.Format("Unable to access the specified process");
+                            task.FailMessage = "Unable to access the specified process";
                             task.StatusMessage = process.ProcessName;
                             task.State = SdkUpdateTaskState.CompletedFail;
                             return false;

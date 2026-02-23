@@ -59,7 +59,7 @@ namespace Frosty.Core.Windows
                     {
                         configurations.Add(new FrostyConfiguration(profile));
                     }
-                    catch (System.IO.FileNotFoundException)
+                    catch (FileNotFoundException)
                     {
                         Config.RemoveGame(profile); // couldn't find the exe, so remove it from the profile list
                         Config.Save();

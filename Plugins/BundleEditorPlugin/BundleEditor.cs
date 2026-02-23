@@ -8,6 +8,7 @@ using FrostySdk.Resources;
 using MeshSetPlugin.Resources;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
@@ -607,6 +608,8 @@ namespace BundleEditPlugin
     [TemplatePart(Name = PART_DataExplorer, Type = typeof(FrostyDataExplorer))]
     [TemplatePart(Name = PART_SuperBundleTextBox, Type = typeof(TextBox))]
     [TemplatePart(Name = PART_BundleFilterTextBox, Type = typeof(TextBox))]
+    [TemplatePart(Name = PART_MarkedComboBox, Type = typeof(ComboBox))]
+    [TemplatePart(Name = PART_MarkedListBox, Type = typeof(ListBox))]
     public class BundleEditor : FrostyBaseEditor
     {
         private const string PART_BundleTypeComboBox = "PART_BundleTypeComboBox";
@@ -614,16 +617,33 @@ namespace BundleEditPlugin
         private const string PART_DataExplorer = "PART_DataExplorer";
         private const string PART_SuperBundleTextBox = "PART_SuperBundleTextBox";
         private const string PART_BundleFilterTextBox = "PART_BundleFilterTextBox";
+        private const string PART_MarkedComboBox = "PART_MarkedComboBox";
+        private const string PART_MarkedListBox = "PART_MarkedListBox";
 
         public override ImageSource Icon => BundleEditorMenuExtension.iconImageSource;
         public RelayCommand AddToBundleCommand { get; }
         public RelayCommand RemoveFromBundleCommand { get; }
+        public RelayCommand MarkAssetCommand { get; }
+        public RelayCommand UnmarkAssetCommand { get; }
+        public RelayCommand MarkBundleCommand { get; }
+        public RelayCommand UnmarkBundleCommand { get; }
+        public RelayCommand AddMarkedToBundleCommand { get; }
+        public RelayCommand AddToMarkedBundleCommand { get; }
+        public RelayCommand AddMarkedToMarkedBundleCommand { get; }
+        public RelayCommand RemoveMarkedFromBundleCommand { get; }
+        public RelayCommand RemoveFromMarkedBundleCommand { get; }
+        public RelayCommand RemoveMarkedFromMarkedBundleCommand { get; }
+        public RelayCommand MarkBundleFromAssetCommand { get; }
 
         private ComboBox bundleTypeComboBox;
         private ListBox bundlesListBox;
         private FrostyDataExplorer dataExplorer;
         private TextBox superBundleTextBox;
         private TextBox bundleFilterTextBox;
+        private List<EbxAssetEntry> MarkedAssets = new List<EbxAssetEntry>();
+        private List<BundleEntry> MarkedBundles = new List<BundleEntry>();
+        private ComboBox markedComboBox;
+        private ListBox markedListBox;
 
         private BundleType selectedBundleType = BundleType.SharedBundle;
         private Dictionary<string, AddToBundleExtension> addToBundleExtensions = new Dictionary<string, AddToBundleExtension>();
@@ -684,12 +704,127 @@ namespace BundleEditPlugin
                     RefreshExplorer();
                     App.EditorWindow.DataExplorer.RefreshItems();
 
-                    dataExplorer.SelectAsset(entry);
+                    App.EditorWindow.DataExplorer.SelectAsset(entry);
                 },
                 (o) =>
                 {
                     return App.EditorWindow.DataExplorer.SelectedAsset != null && bundlesListBox.SelectedItem != null;
                 });
+
+            AddMarkedToBundleCommand = new RelayCommand( //Add MARKED assets to ONE bundle
+                (o) =>
+                {
+                    BundleEntry bentry = bundlesListBox.SelectedItem as BundleEntry;
+
+                    foreach (var mentry in MarkedAssets)
+                    {
+                        if (!mentry.Bundles.Contains(App.AssetManager.GetBundleId(bentry)) && !mentry.AddedBundles.Contains(App.AssetManager.GetBundleId(bentry)))
+                        {
+                            string key = mentry.Type;
+                            if (!addToBundleExtensions.ContainsKey(mentry.Type))
+                            {
+                                key = "null";
+                                foreach (string typekey in addToBundleExtensions.Keys)
+                                {
+                                    if (TypeLibrary.IsSubClassOf(mentry.Type, typekey))
+                                    {
+                                        key = typekey;
+                                        break;
+                                    }
+                                }
+                            }
+                            addToBundleExtensions[key].AddToBundle(mentry, bentry);
+                        }
+                        else
+                        {
+                            App.Logger.LogError("{0} is already in {1}", mentry.Name, bentry.Name);
+                        }
+                    }
+
+                    RefreshExplorer();
+                    App.EditorWindow.DataExplorer.RefreshItems();
+                },
+                (o) =>
+                {
+                    return MarkedAssets.Any() && bundlesListBox.SelectedItem != null;
+                });
+
+            AddToMarkedBundleCommand = new RelayCommand( //Add ONE asset to MARKED bundles
+                (o) =>
+                {
+                    EbxAssetEntry entry = App.EditorWindow.DataExplorer.SelectedAsset as EbxAssetEntry;
+
+                    foreach (var mentry in MarkedBundles)
+                    {
+                        if (!entry.Bundles.Contains(App.AssetManager.GetBundleId(mentry)) && !entry.AddedBundles.Contains(App.AssetManager.GetBundleId(mentry)))
+                        {
+                            string key = entry.Type;
+                            if (!addToBundleExtensions.ContainsKey(entry.Type))
+                            {
+                                key = "null";
+                                foreach (string typekey in addToBundleExtensions.Keys)
+                                {
+                                    if (TypeLibrary.IsSubClassOf(entry.Type, typekey))
+                                    {
+                                        key = typekey;
+                                        break;
+                                    }
+                                }
+                            }
+                            addToBundleExtensions[key].AddToBundle(entry, mentry);
+                        }
+                        else
+                        {
+                            App.Logger.LogError("Asset is already in {0}", mentry.Name);
+                        }
+                    }
+
+                    RefreshExplorer();
+                    App.EditorWindow.DataExplorer.RefreshItems();
+
+                    App.EditorWindow.DataExplorer.SelectAsset(entry);
+                },
+                (o) =>
+                {
+                    return App.EditorWindow.DataExplorer.SelectedAsset != null && MarkedBundles.Any();
+                });
+
+            AddMarkedToMarkedBundleCommand = new RelayCommand( //Add MARKED assets to MARKED bundles
+                (o) =>
+                {
+                    foreach (var mentry in MarkedBundles)
+                    {
+                        foreach (var maentry in MarkedAssets)
+                        {
+                            if (!maentry.Bundles.Contains(App.AssetManager.GetBundleId(mentry)) && !maentry.AddedBundles.Contains(App.AssetManager.GetBundleId(mentry)))
+                            {
+                                string key = maentry.Type;
+                                if (!addToBundleExtensions.ContainsKey(maentry.Type))
+                                {
+                                    key = "null";
+                                    foreach (string typekey in addToBundleExtensions.Keys)
+                                    {
+                                        if (TypeLibrary.IsSubClassOf(maentry.Type, typekey))
+                                        {
+                                            key = typekey;
+                                            break;
+                                        }
+                                    }
+                                }
+                                addToBundleExtensions[key].AddToBundle(maentry, mentry);
+                            }
+                            else
+                            {
+                                App.Logger.LogError("Asset is already in {0}", mentry.Name);
+                            }
+                        }
+                    }
+
+                    RefreshExplorer();
+                    App.EditorWindow.DataExplorer.RefreshItems();
+                },
+                (o) => MarkedBundles.Any() && MarkedAssets.Any());
+
             RemoveFromBundleCommand = new RelayCommand(
                 (o) =>
                 {
@@ -726,6 +861,239 @@ namespace BundleEditPlugin
                 {
                     return App.EditorWindow.DataExplorer.SelectedAsset != null && bundlesListBox.SelectedItem != null;
                 });
+
+            RemoveMarkedFromBundleCommand = new RelayCommand( //Remove MARKED assets from ONE bundle
+                (o) =>
+                {
+                    BundleEntry bentry = bundlesListBox.SelectedItem as BundleEntry;
+
+                    foreach (var mentry in MarkedAssets)
+                    {
+                        if (mentry.AddedBundles.Contains(App.AssetManager.GetBundleId(bentry)))
+                        {
+                            string key = mentry.Type;
+                            if (!removeFromBundleExtensions.ContainsKey(mentry.Type))
+                            {
+                                key = "null";
+                                foreach (string typekey in removeFromBundleExtensions.Keys)
+                                {
+                                    if (TypeLibrary.IsSubClassOf(mentry.Type, typekey))
+                                    {
+                                        key = typekey;
+                                        break;
+                                    }
+                                }
+                            }
+                            removeFromBundleExtensions[key].RemoveFromBundle(mentry, bentry);
+                        }
+                        else
+                        {
+                            App.Logger.LogError("{0} cannot be removed from {1}, are you sure its an added bundle?", bentry.Name, mentry.Name);
+                        }
+                    }
+
+                    RefreshExplorer();
+                    App.EditorWindow.DataExplorer.RefreshItems();
+                },
+                (o) =>
+                {
+                    return MarkedAssets.Any() && bundlesListBox.SelectedItem != null;
+                });
+
+            RemoveFromMarkedBundleCommand = new RelayCommand( //Remove ONE asset from MARKED bundles
+                (o) =>
+                {
+                    EbxAssetEntry entry = App.EditorWindow.DataExplorer.SelectedAsset as EbxAssetEntry;
+
+                    foreach (var mentry in MarkedBundles)
+                    {
+                        if (entry.AddedBundles.Contains(App.AssetManager.GetBundleId(mentry)))
+                        {
+                            string key = entry.Type;
+                            if (!removeFromBundleExtensions.ContainsKey(entry.Type))
+                            {
+                                key = "null";
+                                foreach (string typekey in removeFromBundleExtensions.Keys)
+                                {
+                                    if (TypeLibrary.IsSubClassOf(entry.Type, typekey))
+                                    {
+                                        key = typekey;
+                                        break;
+                                    }
+                                }
+                            }
+                            removeFromBundleExtensions[key].RemoveFromBundle(entry, mentry);
+                        }
+                        else
+                        {
+                            App.Logger.LogError("{0} cannot be removed from this asset, are you sure its an added bundle?", mentry.Name);
+                        }
+                    }
+
+                    RefreshExplorer();
+                    App.EditorWindow.DataExplorer.RefreshItems();
+
+                    App.EditorWindow.DataExplorer.SelectAsset(entry);
+                },
+                (o) =>
+                {
+                    return App.EditorWindow.DataExplorer.SelectedAsset != null && MarkedBundles.Any();
+                });
+
+            RemoveMarkedFromMarkedBundleCommand = new RelayCommand( //Remove MARKED assets from MARKED bundles
+                (o) =>
+                {
+                    foreach (var mentry in MarkedBundles)
+                    {
+                        foreach (var maentry in MarkedAssets)
+                        {
+                            if (maentry.AddedBundles.Contains(App.AssetManager.GetBundleId(mentry)))
+                            {
+                                string key = maentry.Type;
+                                if (!removeFromBundleExtensions.ContainsKey(maentry.Type))
+                                {
+                                    key = "null";
+                                    foreach (string typekey in removeFromBundleExtensions.Keys)
+                                    {
+                                        if (TypeLibrary.IsSubClassOf(maentry.Type, typekey))
+                                        {
+                                            key = typekey;
+                                            break;
+                                        }
+                                    }
+                                }
+                                removeFromBundleExtensions[key].RemoveFromBundle(maentry, mentry);
+                            }
+                            else
+                            {
+                                App.Logger.LogError("{0} cannot be removed from this asset, are you sure its an added bundle?", mentry.Name);
+                            }
+                        }
+                    }
+
+                    RefreshExplorer();
+                    App.EditorWindow.DataExplorer.RefreshItems();
+                },
+                (o) => MarkedBundles.Any() && MarkedAssets.Any());
+
+
+            MarkAssetCommand = new RelayCommand(
+                (o) =>
+                {
+                    EbxAssetEntry entry = App.EditorWindow.DataExplorer.SelectedAsset as EbxAssetEntry;
+
+                    if (!MarkedAssets.Contains(entry))
+                    {
+                        MarkedAssets.Add(entry);
+                        App.Logger.Log("Marked: {0}", entry.Name);
+
+                        markedComboBox.SelectedIndex = 0;
+                        RefreshMarkedList();
+                    }
+                    else
+                    {
+                        App.Logger.LogError("{0} has already been marked.", entry.Name);
+                    }
+                },
+                (o) =>
+                {
+                    return App.EditorWindow.DataExplorer.SelectedAsset != null;
+                });
+
+            UnmarkAssetCommand = new RelayCommand(
+                (o) =>
+                {
+                    EbxAssetEntry entry = markedListBox.SelectedItem as EbxAssetEntry;
+                    int index = markedListBox.SelectedIndex;
+
+                    if (MarkedAssets.Contains(entry))
+                    {
+                        MarkedAssets.Remove(entry);
+                        App.Logger.Log("Unmarked: {0}", entry.Name);
+
+                        markedComboBox.SelectedIndex = 0;
+                        RefreshMarkedList(true, index);
+                    }
+                },
+                (o) =>
+                {
+                    return markedListBox.SelectedItem != null && markedComboBox.SelectedIndex == 0;
+                });
+
+            MarkBundleCommand = new RelayCommand(
+                (o) =>
+                {
+                    BundleEntry bentry = bundlesListBox.SelectedItem as BundleEntry;
+
+                    if (!MarkedBundles.Contains(bentry))
+                    {
+                        MarkedBundles.Add(bentry);
+                        App.Logger.Log("Marked: {0}", bentry.Name);
+
+                        markedComboBox.SelectedIndex = 1;
+                        RefreshMarkedList();
+                    }
+                    else
+                    {
+                        App.Logger.LogError("{0} has already been marked.", bentry.Name);
+                    }
+                },
+                (o) =>
+                {
+                    return bundlesListBox.SelectedItem != null;
+                });
+
+            UnmarkBundleCommand = new RelayCommand(
+                (o) =>
+                {
+                    BundleEntry bentry = markedListBox.SelectedItem as BundleEntry;
+                    int index = markedListBox.SelectedIndex;
+
+                    if (MarkedBundles.Contains(bentry))
+                    {
+                        MarkedBundles.Remove(bentry);
+                        App.Logger.Log("Unmarked: {0}", bentry.Name);
+
+                        markedComboBox.SelectedIndex = 1;
+                        RefreshMarkedList(true, index);
+                    }
+                },
+                (o) =>
+                {
+                    return markedListBox.SelectedItem != null && markedComboBox.SelectedIndex == 1;
+                });
+
+            MarkBundleFromAssetCommand = new RelayCommand(
+                (o) =>
+                {
+                    EbxAssetEntry entry = App.EditorWindow.DataExplorer.SelectedAsset as EbxAssetEntry;
+
+                    List<int> bundleIds = new List<int>();
+
+                    bundleIds.AddRange(entry.EnumerateBundles());
+
+                    foreach (int bundleId in bundleIds)
+                    {
+                        BundleEntry bentry = App.AssetManager.GetBundleEntry(bundleId);
+
+                        if (!MarkedBundles.Contains(bentry))
+                        {
+                            MarkedBundles.Add(bentry);
+                            App.Logger.Log("Marked: {0}", bentry.Name);
+                        }
+                        else
+                        {
+                            App.Logger.LogError("{0} has already been marked.", bentry.Name);
+                        }
+                    }
+
+                    markedComboBox.SelectedIndex = 1;
+                    RefreshMarkedList();
+                },
+                (o) =>
+                {
+                    return App.EditorWindow.DataExplorer.SelectedAsset != null;
+                });
         }
 
         public override void OnApplyTemplate()
@@ -737,15 +1105,19 @@ namespace BundleEditPlugin
             dataExplorer = GetTemplateChild(PART_DataExplorer) as FrostyDataExplorer;
             superBundleTextBox = GetTemplateChild(PART_SuperBundleTextBox) as TextBox;
             bundleFilterTextBox = GetTemplateChild(PART_BundleFilterTextBox) as TextBox;
+            markedComboBox = GetTemplateChild(PART_MarkedComboBox) as ComboBox;
+            markedListBox = GetTemplateChild(PART_MarkedListBox) as ListBox;
 
             bundleTypeComboBox.SelectionChanged += bundleTypeComboBox_SelectionChanged;
             bundlesListBox.SelectionChanged += bundlesListBox_SelectionChanged;
             dataExplorer.SelectedAssetDoubleClick += dataExplorer_SelectedAssetDoubleClick;
+            markedComboBox.SelectionChanged += markedComboBox_SelectionChanged;
 
             bundleFilterTextBox.KeyUp += BundleFilterTextBox_KeyUp;
             bundleFilterTextBox.LostFocus += BundleFilterTextBox_LostFocus;
 
             bundleTypeComboBox.SelectedIndex = 2;
+            markedComboBox.SelectedIndex = 0;
         }
 
         private void BundleFilterTextBox_LostFocus(object sender, RoutedEventArgs e)
@@ -782,10 +1154,36 @@ namespace BundleEditPlugin
             RefreshList();
         }
 
+        private void markedComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            RefreshMarkedList();
+        }
+
         private void RefreshList()
         {
             bundlesListBox.ItemsSource = App.AssetManager.EnumerateBundles(selectedBundleType);
             bundlesListBox.Items.SortDescriptions.Add(new System.ComponentModel.SortDescription("DisplayName", System.ComponentModel.ListSortDirection.Ascending));
+        }
+
+        private void RefreshMarkedList(bool isUnmarked = false, int index = 0)
+        {
+            if (isUnmarked && index == markedListBox.Items.Count - 1)
+            {
+                index -= 1;
+            }
+
+            if (markedComboBox.SelectedIndex == 0)
+            {
+                markedListBox.ItemsSource = App.AssetManager.EnumerateMarkedEbx(MarkedAssets);
+                markedListBox.SelectedIndex = index;
+            }
+            else if (markedComboBox.SelectedIndex == 1)
+            {
+                markedListBox.ItemsSource = App.AssetManager.EnumerateMarkedBundles(MarkedBundles);
+                markedListBox.SelectedIndex = index;
+            }
+
+            markedListBox.Items.SortDescriptions.Add(new System.ComponentModel.SortDescription("DisplayName", System.ComponentModel.ListSortDirection.Ascending));
         }
 
         private void RefreshExplorer()
