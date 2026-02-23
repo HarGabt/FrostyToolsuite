@@ -388,7 +388,7 @@ namespace Frosty.Core.Windows
     /// <summary>
     /// Interaction logic for OptionsWindow.xaml
     /// </summary>
-    public partial class OptionsWindow : FrostyDockableWindow
+    public partial class OptionsWindow
     {
         private List<OptionsExtension> optionDataList = new List<OptionsExtension>();
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace FrostyEditor
+namespace FrostyModManager
 {
     static class FileUnblocker
     {
