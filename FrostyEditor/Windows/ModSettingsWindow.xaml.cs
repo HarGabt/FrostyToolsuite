@@ -12,7 +12,7 @@ namespace FrostyEditor.Windows
     /// <summary>
     /// Interaction logic for ModSettingsWindow.xaml
     /// </summary>
-    public partial class ModSettingsWindow : FrostyDockableWindow
+    public partial class ModSettingsWindow
     {
         private ModSettings ModSettings => project.GetModSettings();
         private FrostyProject project;

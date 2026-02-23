@@ -1,5 +1,4 @@
-﻿using Frosty.Controls;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
@@ -8,7 +7,7 @@ namespace Frosty.Core.Windows
     /// <summary>
     /// Interaction logic for RenameInstanceWindow.xaml
     /// </summary>
-    public partial class RenameInstanceWindow : FrostyDockableWindow
+    public partial class RenameInstanceWindow
     {
         public string InstanceName { get; private set; } = "";
         public RenameInstanceWindow(string currentName)

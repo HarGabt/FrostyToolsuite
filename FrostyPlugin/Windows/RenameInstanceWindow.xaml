@@ -4,7 +4,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ctrl="clr-namespace:Frosty.Controls;assembly=FrostyControls"
-        xmlns:local="clr-namespace:Frosty.Core.Windows"
         mc:Ignorable="d"
         Title="Rename Instance" Height="120" Width="300"
         ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
@@ -15,8 +14,8 @@
                 <RowDefinition Height="30"/>
             </Grid.RowDefinitions>
             <StackPanel Grid.Row="0" Orientation="Vertical" Margin="4,7,4,4" VerticalAlignment="Top">
-                <TextBlock Grid.Column="0" Text="Please enter a new name:" Foreground="{StaticResource FontColor}" VerticalAlignment="Center" Margin="2,0,2,6"/>
-                <TextBox Grid.Column="1" x:Name="instanceNameTextBox" BorderThickness="1" VerticalContentAlignment="Center" Height="22" TextChanged="InstanceNameTextBox_TextChanged" KeyDown="InstanceNameTextBox_KeyDown"/>
+                <TextBlock Text="Please enter a new name:" Foreground="{StaticResource FontColor}" VerticalAlignment="Center" Margin="2,0,2,6"/>
+                <TextBox x:Name="instanceNameTextBox" BorderThickness="1" VerticalContentAlignment="Center" Height="22" TextChanged="InstanceNameTextBox_TextChanged" KeyDown="InstanceNameTextBox_KeyDown"/>
             </StackPanel>
 
             <Grid Grid.Row="1" Margin="4">

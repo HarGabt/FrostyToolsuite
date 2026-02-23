@@ -28,26 +28,26 @@
                     <StackPanel Orientation="Horizontal" Margin="6,0,6,0">
                         <Button x:Name="createInstanceButton" Margin="0,0,0,0" Height="20" Click="CreateInstanceButton_Click" >
                             <StackPanel Orientation="Horizontal" Margin="4 0 4 0">
-                                <Image Grid.Column="0" Source="/FrostyCore;component/Images/Add.png" Width="16"/>
-                                <TextBlock Grid.Column="1" Text="Create Instance" VerticalAlignment="Center" Margin="4 0 0 0"/>
+                                <Image Source="/FrostyCore;component/Images/Add.png" Width="16"/>
+                                <TextBlock Text="Create Instance" VerticalAlignment="Center" Margin="4 0 0 0"/>
                             </StackPanel>
                         </Button>
                         <Button x:Name="deleteInstanceButton" Margin="4,0,0,0" Height="20" IsEnabled="False" Click="DeleteInstanceButton_Click">
                             <StackPanel Orientation="Horizontal" Margin="4 0 4 0">
-                                <Image Grid.Column="0" Source="/FrostyCore;component/Images/Clear.png" Width="16"/>
-                                <TextBlock Grid.Column="1" Text="Delete Instance" VerticalAlignment="Center" Margin="4 0 0 0"/>
+                                <Image Source="/FrostyCore;component/Images/Clear.png" Width="16"/>
+                                <TextBlock Text="Delete Instance" VerticalAlignment="Center" Margin="4 0 0 0"/>
                             </StackPanel>
                         </Button>
                         <Button x:Name="renameInstanceButton" Margin="4,0,0,0" Height="20" IsEnabled="False" Click="RenameInstanceButton_Click">
                             <StackPanel Orientation="Horizontal" Margin="4 0 4 0">
-                                <Image Grid.Column="0" Source="/FrostyCore;component/Images/Rename.png" Width="16"/>
-                                <TextBlock Grid.Column="1" Text="Rename Instance" VerticalAlignment="Center" Margin="4 0 0 0"/>
+                                <Image Source="/FrostyCore;component/Images/Rename.png" Width="16"/>
+                                <TextBlock Text="Rename Instance" VerticalAlignment="Center" Margin="4 0 0 0"/>
                             </StackPanel>
                         </Button>
                         <Button x:Name="duplicateInstanceButton" Margin="4,0,0,0" Height="20" IsEnabled="False" Click="DuplicateInstanceButton_Click">
                             <StackPanel Orientation="Horizontal" Margin="4 0 4 0">
                                 <!--<Image Grid.Column="0" Source="../Images/Rename.png" Width="16"/>-->
-                                <TextBlock Grid.Column="1" Text="Duplicate Instance" VerticalAlignment="Center" Margin="4 0 0 0"/>
+                                <TextBlock Text="Duplicate Instance" VerticalAlignment="Center" Margin="4 0 0 0"/>
                             </StackPanel>
                         </Button>
                     </StackPanel>

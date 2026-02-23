@@ -1,5 +1,4 @@
-﻿using Frosty.Controls;
-using Frosty.Core.Controls;
+﻿using Frosty.Core.Controls;
 using FrostySdk;
 using FrostySdk.Attributes;
 using System;
@@ -13,7 +12,7 @@ namespace Frosty.Core.Windows
     /// <summary>
     /// Interaction logic for ClassSelector.xaml
     /// </summary>
-    public partial class ClassSelector : FrostyDockableWindow
+    public partial class ClassSelector
     {
         public Type SelectedClass => classSelector.SelectedClass;
         private List<Type> types = new List<Type>();

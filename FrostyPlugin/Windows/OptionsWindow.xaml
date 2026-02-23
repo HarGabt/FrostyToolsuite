@@ -4,8 +4,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ctrl="clr-namespace:Frosty.Controls;assembly=FrostyControls"
-        xmlns:core="clr-namespace:Frosty.Core.Controls;assembly=FrostyCore"
-        xmlns:local="clr-namespace:Frosty.Core.Windows"
         mc:Ignorable="d"
         Title="Options" Height="720" Width="600" Loaded="OptionsWindow_Loaded"
         ResizeMode="NoResize" WindowStartupLocation="CenterScreen" SnapsToDevicePixels="True">

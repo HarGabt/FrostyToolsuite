@@ -25,7 +25,7 @@ namespace FrostyEditor.Windows
     /// <summary>
     /// Interaction logic for SplashWindow.xaml
     /// </summary>
-    public partial class SplashWindow : Window
+    public partial class SplashWindow
     {
         private class SplashWindowLogger : ILogger, INotifyPropertyChanged
         {

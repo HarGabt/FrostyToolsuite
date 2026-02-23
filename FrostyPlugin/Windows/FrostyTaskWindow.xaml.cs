@@ -18,7 +18,7 @@ namespace Frosty.Core.Windows
     /// <summary>
     /// Interaction logic for FrostyTaskWindow.xaml
     /// </summary>
-    public partial class FrostyTaskWindow : Window, INotifyPropertyChanged
+    public partial class FrostyTaskWindow : INotifyPropertyChanged
     {
         private FrostyTaskCallback _callback;
 
@@ -119,7 +119,7 @@ namespace Frosty.Core.Windows
                 _callback(this);
             });
 
-            Application.Current.MainWindow.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.None;
+            Application.Current.MainWindow.TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
 
             Close();
         }
@@ -143,7 +143,7 @@ namespace Frosty.Core.Windows
             Application.Current.Dispatcher.Invoke(() =>
             {
                 taskProgressBar.IsIndeterminate = newIndeterminate;
-                Application.Current.MainWindow.TaskbarItemInfo.ProgressState = (newIndeterminate) ? System.Windows.Shell.TaskbarItemProgressState.Indeterminate : System.Windows.Shell.TaskbarItemProgressState.Normal;
+                Application.Current.MainWindow.TaskbarItemInfo.ProgressState = (newIndeterminate) ? TaskbarItemProgressState.Indeterminate : TaskbarItemProgressState.Normal;
             });
         }
 

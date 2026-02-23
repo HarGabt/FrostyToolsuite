@@ -3,7 +3,6 @@ using Frosty.Core.Commands;
 using Frosty.Core.Controls;
 using FrostySdk;
 using FrostySdk.IO;
-using FrostySdk.Managers;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -37,7 +36,7 @@ namespace Frosty.Core.Windows
     /// <summary>
     /// Interaction logic for AssetInstancesWindow.xaml
     /// </summary>
-    public partial class AssetInstancesWindow : FrostyDockableWindow
+    public partial class AssetInstancesWindow
     {
         public object SelectedItem { get; private set; }
         public ItemDoubleClickCommand DoubleClickCommand { get; private set; }

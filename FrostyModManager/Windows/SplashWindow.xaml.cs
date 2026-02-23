@@ -19,7 +19,7 @@ namespace FrostyModManager.Windows
     /// <summary>
     /// Interaction logic for SplashWindow.xaml
     /// </summary>
-    public partial class SplashWindow : Window
+    public partial class SplashWindow
     {
         private bool isRefreshed = false;
         private class SplashWindowLogger : ILogger
