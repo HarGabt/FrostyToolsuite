@@ -179,13 +179,13 @@ namespace FrostyModManager.Windows
 
             // show the main editor window
             MainWindow win = new MainWindow();
-            App.Current.MainWindow = win;
+            Application.Current.MainWindow = win;
             win.Show();
 
             Close();
         }
 
-        private BitmapImage LoadBanner(byte[] banner)
+        private static BitmapImage LoadBanner(byte[] banner)
         {
             if(banner == null || banner.Length == 0)
             {
@@ -206,7 +206,7 @@ namespace FrostyModManager.Windows
             return bmp;
         }
 
-        private async Task<int> LoadData(ILogger logger)
+        private static async Task<int> LoadData(ILogger logger)
         {
             await Task.Run(() =>
             {

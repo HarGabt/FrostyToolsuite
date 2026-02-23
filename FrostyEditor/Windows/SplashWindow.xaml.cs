@@ -260,7 +260,7 @@ namespace FrostyEditor.Windows
 
             // show the main editor window
             MainWindow win = new MainWindow();
-            App.Current.MainWindow = win;
+            Application.Current.MainWindow = win;
             win.Show();
 
             App.Logger.Log("Initialization complete");
@@ -283,7 +283,7 @@ namespace FrostyEditor.Windows
             }
         }
 
-        private BitmapImage LoadBanner(byte[] banner)
+        private static BitmapImage LoadBanner(byte[] banner)
         {
             if (banner == null || banner.Length == 0)
                 return null;
@@ -301,7 +301,7 @@ namespace FrostyEditor.Windows
             return bmp;
         }
 
-        private async Task<int> LoadData(ILogger logger, byte[] key, AssetManagerImportResult result)
+        private static async Task<int> LoadData(ILogger logger, byte[] key, AssetManagerImportResult result)
         {
             await Task.Run(() =>
             {
@@ -365,7 +365,7 @@ namespace FrostyEditor.Windows
             return 0;
         }
 
-        private async Task<int> LoadLocalizedStringResourceTables(ILogger logger)
+        private static async Task<int> LoadLocalizedStringResourceTables(ILogger logger)
         {
             logger.Log("Loading localized strings");
             await Task.Run(() =>
@@ -376,7 +376,7 @@ namespace FrostyEditor.Windows
             return 0;
         }
 
-        private async Task<int> LoadStringList(ILogger logger)
+        private static async Task<int> LoadStringList(ILogger logger)
         {
             logger.Log("Loading custom strings");
             await Task.Run(() => StringsManager.LoadStringList("strings.txt"));
@@ -395,7 +395,8 @@ namespace FrostyEditor.Windows
             {
                 return true;
             }
-            else if (TypeLibrary.GetSdkVersion() == 0)
+            
+            if (TypeLibrary.GetSdkVersion() == 0)
             {
                 MessageBoxResult result = FrostyMessageBox.Show("Missing SDK.\nPlease generate a SDK for this game.", "Frosty", MessageBoxButton.OK);
                 if (result == MessageBoxResult.OK)
@@ -407,7 +408,7 @@ namespace FrostyEditor.Windows
             return false;
         }
 
-        private async Task<int> FinishLoadingData(ILogger logger, AssetManagerImportResult result)
+        private static async Task<int> FinishLoadingData(ILogger logger, AssetManagerImportResult result)
         {
             await Task.Run(() =>
             {
