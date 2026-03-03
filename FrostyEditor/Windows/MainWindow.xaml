@@ -178,7 +178,7 @@
                             </ItemsControl.ItemsPanel>
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <Button Margin="4,0,0,0" Height="20" ToolTip="{Binding Path=ToolTip}" Command="{Binding Path=Command}">
+                                    <Button Margin="4,0,0,0" Height="20" ToolTip="{Binding Path=ToolTip}" Command="{Binding Path=Command}" IsEnabled="{Binding Path=IsEnabled}">
                                         <StackPanel x:Name="panel" Margin="4 0 4 0" Orientation="Horizontal">
                                             <Image x:Name="icon" Source="{Binding Path=Icon}" Width="16"/>
                                             <TextBlock x:Name="text" Margin="4,0,0,0" Text="{Binding Path=Text}"/>
@@ -654,6 +654,11 @@
                                             <MenuItem Header="Open" Click="contextMenuOpen_Click">
                                                 <MenuItem.Icon>
                                                     <Image Source="/FrostyEditor;component/Images/OpenAsset.png" RenderOptions.BitmapScalingMode="Fant"/>
+                                                </MenuItem.Icon>
+                                            </MenuItem>
+                                            <MenuItem Header="Open Unmodified" Click="contextMenuOpenUnmodified_Click">
+                                                <MenuItem.Icon>
+                                                    <Image Source="/FrostyEditor;component/Images/OpenAsset.png" RenderOptions.BitmapScalingMode="Fant" Opacity="0.5"/>
                                                 </MenuItem.Icon>
                                             </MenuItem>
                                             <MenuItem Header="Revert" Click="contextMenuRevert_Click">

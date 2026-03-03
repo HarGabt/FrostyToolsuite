@@ -154,7 +154,7 @@ namespace TexturePlugin
         {
             List<ToolbarItem> toolbarItems = base.RegisterToolbarItems();
             toolbarItems.Add(new ToolbarItem("Export", "Export Texture", "FrostyEditor;component/Images/Export.png", new RelayCommand((object state) => { ExportButton_Click(this, new RoutedEventArgs()); })));
-            toolbarItems.Add(new ToolbarItem("Import", "Import Texture", "FrostyEditor;component/Images/Import.png", new RelayCommand((object state) => { ImportButton_Click(this, new RoutedEventArgs()); })));
+            toolbarItems.Add(new ToolbarItem("Import", "Import Texture", "FrostyEditor;component/Images/Import.png", new RelayCommand((object state) => { ImportButton_Click(this, new RoutedEventArgs()); }), IsNotReadOnly));
             return toolbarItems;
         }
 

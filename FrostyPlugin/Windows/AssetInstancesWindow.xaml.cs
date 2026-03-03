@@ -52,7 +52,7 @@ namespace Frosty.Core.Windows
         private EbxAsset asset;
         private EbxAssetEntry entry;
 
-        public AssetInstancesWindow(IEnumerable objects, object inSelected, EbxAsset inAsset, EbxAssetEntry inEntry)
+        public AssetInstancesWindow(IEnumerable objects, object inSelected, EbxAsset inAsset, EbxAssetEntry inEntry, bool isReadOnly)
         {
             InitializeComponent();
             DoubleClickCommand = new ItemDoubleClickCommand(DoubleClickSelectedAsset);
@@ -85,6 +85,14 @@ namespace Frosty.Core.Windows
             asset = inAsset;
             entry = inEntry;
             rootObject = asset.RootObject;
+
+            if (isReadOnly)
+            {
+                createInstanceButton.IsEnabled = false;
+                deleteInstanceButton.IsEnabled = false;
+                renameInstanceButton.IsEnabled = false;
+                duplicateInstanceButton.IsEnabled = false;
+            }
         }
 
         private void cancelButton_Click(object sender, RoutedEventArgs e)

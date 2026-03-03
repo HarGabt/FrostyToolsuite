@@ -12,7 +12,7 @@ namespace Frosty.Core.Interfaces
         FrostyDataExplorer VisibleExplorer { get; }
         TabControl MiscTabControl { get; }
 
-        void OpenAsset(AssetEntry asset, bool shouldCreateDefaultEditor = true);
+        void OpenAsset(AssetEntry asset, bool shouldCreateDefaultEditor = true, bool openUnmodifiedData = false);
         void OpenEditor(string title, FrostyBaseEditor editor);
         AssetEntry GetOpenedAssetEntry();
     }
