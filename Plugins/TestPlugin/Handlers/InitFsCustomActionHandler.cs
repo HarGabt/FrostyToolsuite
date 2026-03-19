@@ -63,25 +63,27 @@ namespace TestPlugin.Handlers
             if (type != "fs")
                 return;
 
-            int numItems = reader.ReadInt();
-            for (int i = 0; i < numItems; i++)
+            using (DbReader dbReader = new DbReader(reader.BaseStream, null))
             {
-                DbObject fileStub = null;
-                using (DbReader dbReader = new DbReader(reader.BaseStream, null))
+                int numItems = reader.ReadInt();
+                for (int i = 0; i < numItems; i++)
+                {
+                    DbObject fileStub = null;
                     fileStub = dbReader.ReadDbObject();
 
-                DbObject file = fileStub.GetValue<DbObject>("$file");
-                string name = file.GetValue<string>("name");
+                    DbObject file = fileStub.GetValue<DbObject>("$file");
+                    string name = file.GetValue<string>("name");
 
-                FsFileEntry entry = App.AssetManager.GetCustomAssetEntry<FsFileEntry>("fs", name);
+                    FsFileEntry entry = App.AssetManager.GetCustomAssetEntry<FsFileEntry>("fs", name);
 
-                if (entry != null)
-                {
-                    MemoryStream ms = new MemoryStream();
-                    using (DbWriter dbWriter = new DbWriter(ms))
-                        dbWriter.Write(fileStub);
+                    if (entry != null)
+                    {
+                        MemoryStream ms = new MemoryStream();
+                        using (DbWriter dbWriter = new DbWriter(ms))
+                            dbWriter.Write(fileStub);
 
-                    App.AssetManager.ModifyCustomAsset("fs", name, ms.ToArray());
+                        App.AssetManager.ModifyCustomAsset("fs", name, ms.ToArray());
+                    }
                 }
             }
         }
