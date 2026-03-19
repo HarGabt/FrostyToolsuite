@@ -156,8 +156,8 @@ namespace SoundEditorPlugin.Resources
         public bool IsDay { get; set; }
 
         [DisplayName("7C7F1464")]
-        [EbxFieldMeta(EbxFieldType.UInt32)]
-        public int unk7C7F1464 { get; set; }
+        [EbxFieldMeta(EbxFieldType.Float32)]
+        public float unk7C7F1464 { get; set; }
 
         [DisplayName("0B87C53A")]
         [EbxFieldMeta(EbxFieldType.Float32)]

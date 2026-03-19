@@ -189,6 +189,12 @@ namespace Frosty.Core.Windows
         public bool RememberChoice { get; set; } = false;
 
         [Category("Editor")]
+        [DisplayName("Show All Files on Project Load")]
+        [Description("If true, the show modified files option will not be checked when loading a project.")]
+        [EbxFieldMeta(EbxFieldType.Boolean)]
+        public bool ShowAllFiles { get; set; } = false;
+
+        [Category("Editor")]
         [DisplayName("Set as Default Installation")]
         [Description("Use this installation for .fbproject files.")]
         [EbxFieldMeta(EbxFieldType.Boolean)]
@@ -225,6 +231,7 @@ namespace Frosty.Core.Windows
 
             AssetDisplayModuleInId = Config.Get<bool>("DisplayModuleInId", false);
             RememberChoice = Config.Get<bool>("UseDefaultProfile", false);
+            ShowAllFiles = Config.Get<bool>("ShowAllFiles", false);
 
             //Checks the registry for the current association instead of loading from config
             string KeyName = "frostyproject";
@@ -255,6 +262,7 @@ namespace Frosty.Core.Windows
 
             Config.Add("DisplayModuleInId", AssetDisplayModuleInId);
             Config.Add("UseDefaultProfile", RememberChoice);
+            Config.Add("ShowAllFiles", ShowAllFiles);
 
             if (RememberChoice)
                 Config.Add("DefaultProfile", ProfilesLibrary.ProfileName);

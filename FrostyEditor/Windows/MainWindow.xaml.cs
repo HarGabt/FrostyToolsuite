@@ -699,11 +699,27 @@ namespace FrostyEditor.Windows
 
                 ResetItemsSources();
 
+                bool allFiles = Config.Get("ShowAllFiles", false);
+
                 legacyExplorer.ShowOnlyModified = false;
-                legacyExplorer.ShowOnlyModified = true;
+                if (allFiles)
+                {
+                    legacyExplorer.ShowOnlyModified = false;
+                }
+                else
+                {
+                    legacyExplorer.ShowOnlyModified = true;
+                }
 
                 dataExplorer.ShowOnlyModified = false;
-                dataExplorer.ShowOnlyModified = true;
+                if (allFiles)
+                {
+                    dataExplorer.ShowOnlyModified = false;
+                }
+                else
+                {
+                    dataExplorer.ShowOnlyModified = true;
+                }
 
                 // report success
                 App.Logger.Log("Loaded {0}", m_project.Filename);
