@@ -2276,6 +2276,12 @@ namespace Frosty.ModSupport
             }
             CopyFileIfRequired(m_fs.BasePath + "user.cfg", modDataPath + "user.cfg");
 
+            // Dead Space dataPath argument hijack
+            if (ProfilesLibrary.IsLoaded(ProfileVersion.DeadSpace))
+            {
+                CopyFileIfRequired("ThirdParty/dpapi.dll", m_fs.BasePath + "dpapi.dll");
+            }
+
             // FIFA games require a fifaconfig workaround
             if (ProfilesLibrary.IsLoaded(ProfileVersion.Fifa17,
                 ProfileVersion.Fifa18,
@@ -2295,7 +2301,19 @@ namespace Frosty.ModSupport
             // launch the game (redirecting to the modPath directory)
             Logger.Log("Launching Game");
 
-            try
+            string args = $"-dataPath \"{modDataPath.Trim('\\')}\" {additionalArgs}";
+            if (ProfilesLibrary.IsLoaded(ProfileVersion.DeadSpace))
+            {
+                // Dead Space doesn't give a single one about -dataPath argument. dpapi.dll takes care of it by making the game look at the datapath file.
+                File.WriteAllText(m_fs.BasePath + "datapath", modDataPath.Trim('\\'));
+                args = "";
+            }
+
+            if (ProfilesLibrary.IsLoaded(ProfileVersion.DeadSpace))
+            {
+                ExecuteProcess($"{m_fs.BasePath + ProfilesLibrary.ProfileName}.exe", args);
+            }
+            else try
             {
                 //KillEADesktop();
                 //ModifyInstallerData($"-dataPath \"{modDataPath.Trim('\\')}\" {additionalArgs}");
