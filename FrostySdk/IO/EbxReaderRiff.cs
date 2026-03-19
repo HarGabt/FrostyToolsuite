@@ -142,14 +142,16 @@ namespace FrostySdk.IO
             uint importReferenceCount = ReadUInt();
             for (int i = 0; i < importReferenceCount; i++)
             {
-                imports.Add
-                (
-                    new EbxImportReference
-                    {
-                        FileGuid = ReadGuid(),
-                        ClassGuid = ReadGuid()
-                    }
-                );
+                var import = new EbxImportReference
+                {
+                    FileGuid = ReadGuid(),
+                    ClassGuid = ReadGuid()
+                };
+
+                imports.Add(import);
+
+                if (!dependencies.Contains(import.FileGuid))
+                    dependencies.Add(import.FileGuid);
             }
 
             uint importOffsetCount = ReadUInt();
