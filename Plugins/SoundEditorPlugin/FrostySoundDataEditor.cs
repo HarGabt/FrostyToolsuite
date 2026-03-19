@@ -775,7 +775,13 @@ namespace SoundEditorPlugin
                 App.AssetManager.RevertAsset(existingChunkEntry);
 
                 // add the new chunk to the existing superbundle
-                newAssetEntry.AddToSuperBundle(existingChunkEntry.AddedSuperBundles[0]);
+                foreach (var sb in existingChunkEntry.AddedSuperBundles)
+                {
+                    newAssetEntry.AddToSuperBundle(sb);
+                }
+
+                // add the new chunk to the existing bundles
+                newAssetEntry.AddToBundles(existingChunkEntry.AddedBundles);
             }
             else
             {
@@ -783,7 +789,13 @@ namespace SoundEditorPlugin
                 chunkIndex = originalSoundWave.Chunks.Count - 1;
 
                 // add the new chunk to the existing superbundle
-                newAssetEntry.AddToSuperBundle(existingChunkEntry.SuperBundles[0]);
+                foreach (var sb in existingChunkEntry.SuperBundles)
+                {
+                    newAssetEntry.AddToSuperBundle(sb);
+                }
+
+                // add the new chunk to the existing bundles
+                newAssetEntry.AddToBundles(existingChunkEntry.Bundles);
             }
 
             if (track.SegmentIndex > -1)
