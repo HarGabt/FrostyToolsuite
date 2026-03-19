@@ -38,6 +38,8 @@ namespace SoundEditorPlugin.Resources
         public uint FirstLoopSegmentIndex { get; set; }
         [EbxFieldMeta(EbxFieldType.UInt32)]
         public uint LastLoopSegmentIndex { get; set; }
+        [EbxFieldMeta(EbxFieldType.Boolean)]
+        public bool IsStream { get; set; }
     }
     [EbxClassMeta(EbxFieldType.Struct)]
     public class Segment
@@ -152,6 +154,30 @@ namespace SoundEditorPlugin.Resources
         public int PreDelay { get; set; }
         [EbxFieldMeta(EbxFieldType.Boolean)]
         public bool IsDay { get; set; }
+
+        [DisplayName("7C7F1464")]
+        [EbxFieldMeta(EbxFieldType.UInt32)]
+        public int unk7C7F1464 { get; set; }
+
+        [DisplayName("0B87C53A")]
+        [EbxFieldMeta(EbxFieldType.Float32)]
+        public float unk0B87C53A { get; set; }
+
+        [DisplayName("0B87C535")]
+        [EbxFieldMeta(EbxFieldType.Float32)]
+        public float unk0B87C535 { get; set; }
+
+        [DisplayName("89A17723")]
+        [EbxFieldMeta(EbxFieldType.Float32)]
+        public float unk89A17723 { get; set; }
+
+        [DisplayName("7DB236F2")]
+        [EbxFieldMeta(EbxFieldType.UInt32)]
+        public int unk7DB236F2 { get; set; }
+
+        [DisplayName("41BCDB2D")]
+        [EbxFieldMeta(EbxFieldType.Float32)]
+        public float unk41BCDB2D { get; set; }
     }
     [EbxClassMeta(EbxFieldType.Struct)]
     public class SelectionParameter
@@ -232,14 +258,16 @@ namespace SoundEditorPlugin.Resources
         public List<Persistence> Persistences { get; set; } = new List<Persistence>();
 
         private static Endian endian;
-        private ushort unkown1;
+        private byte alignment;
+        private byte unkown1;
         private ushort dsetCount;
+        private uint key;
+        private uint sbrType;
         private uint unkown2;
-        private ulong unkown3;
-        private uint offset;
+        private uint tableOffset;
         private static uint dataOffset;
         private Dset[] dsets;
-        private static List<byte> data;
+        private static List<byte> data = new List<byte>();
 
         #region DataSet
         internal class SoundBankContainer
@@ -291,8 +319,11 @@ namespace SoundEditorPlugin.Resources
                 RelocPtr ptr = FindRelocPtr(type, obj);
                 if (ptr == null)
                     writer.Write((long)0);
-                ptr.Offset = (uint)writer.Position;
-                writer.Write(0xdeadbeefdeadbeef);
+                else
+                {
+                    ptr.Offset = (uint)writer.Position;
+                    writer.Write(0xdeadbeefdeadbeef);
+                }
             }
 
             public void AddOffset(string type, object data, NativeWriter writer)
@@ -361,16 +392,16 @@ namespace SoundEditorPlugin.Resources
             private uint unknown1;
             private uint elemCount;
 
-            private ushort offset1;
+            private ushort fieldOffset;
             private byte[] array1;
-            private ushort offset2;
+            private ushort indexOffset;
             private byte[] array2;
-            private uint offset3;
+            private uint indexParamArrayOffset;
+            private uint num8;
             private byte[] array3;
 
-            private List<Field> fields;
-
-            private List<UnkownFieldsThing> unkownFieldsThing;
+            private List<Field> fields = new List<Field>();
+            private List<DsetIndex> indexes = new List<DsetIndex>();
 
             public Dset(NativeReader reader)
             {
@@ -388,46 +419,59 @@ namespace SoundEditorPlugin.Resources
                 reader.ReadBytes(0x18);
                 elemCount = reader.ReadUInt(endian);
                 ushort fieldCount = reader.ReadUShort(endian);
-                ushort extraFieldCount = reader.ReadUShort(endian);
-                offset1 = reader.ReadUShort(endian);
-                offset2 = reader.ReadUShort(endian);
-                offset3 = reader.ReadUInt(endian);
+                ushort indexCount = reader.ReadUShort(endian);
+                fieldOffset = reader.ReadUShort(endian);
+                indexOffset = reader.ReadUShort(endian);
+                indexParamArrayOffset = reader.ReadUShort(endian);
+                num8 = reader.ReadUShort(endian);
 
-                if (offset1 != 0)
+                if (fieldCount != 0)
                 {
-                    array1 = reader.ReadBytes((int)(start + offset1 - reader.Position)); // should be empty, but i dont trust dice
+                    if (start + fieldOffset - reader.Position != 0)
+                    {
+                        array1 = reader.ReadBytes((int)(start + fieldOffset - reader.Position)); // should be empty, but i dont trust dice
+                    }
 
-                    fields = new List<Field>(fieldCount);
+                    fields.Capacity = fieldCount;
                     for (int i = 0; i < fieldCount; i++)
                     {
                         Field field = new Field(reader, this);
                         fields.Add(field);
                     }
+
+                    // update elem count
+                    UpdateElemCount();
                 }
 
-                if (offset2 != 0)
+                if (indexCount != 0)
                 {
-                    array2 = reader.ReadBytes((int)(start + offset2 - reader.Position)); // should be empty, but i dont trust dice
-
-                    unkownFieldsThing = new List<UnkownFieldsThing>(extraFieldCount);
-                    for (int i = 0; i < extraFieldCount; i++)
+                    if (start + indexOffset - reader.Position != 0)
                     {
-                        UnkownFieldsThing u = new UnkownFieldsThing(reader);
-                        unkownFieldsThing.Add(u);
+                        array2 = reader.ReadBytes((int)(start + indexOffset - reader.Position)); // should be empty, but i dont trust dice
+                    }
+
+                    indexes.Capacity = indexCount;
+                    for (int i = 0; i < indexCount; i++)
+                    {
+                        DsetIndex u = new DsetIndex(reader);
+                        indexes.Add(u);
                     }
                 }
 
-                if (offset3 != 0)
+                if (indexParamArrayOffset != 0)
                 {
-                    array3 = reader.ReadBytes((int)(start + offset3 - reader.Position)); // should be empty, but i dont trust dice
-
-                    for (int i = 0; i < extraFieldCount; i++)
+                    if (start + indexParamArrayOffset - reader.Position != 0)
                     {
-                        var u = unkownFieldsThing[i];
-                        for (int j = 0; j < u.FieldCount; j++)
+                        array3 = reader.ReadBytes((int)(start + indexParamArrayOffset - reader.Position)); // should be empty, but i dont trust dice
+                    }
+
+                    for (int i = 0; i < indexCount; i++)
+                    {
+                        var index = indexes[i];
+                        for (int j = 0; j < index.FieldCount; j++)
                         {
-                            ExtraField extraField = new ExtraField(reader);
-                            u.Fields.Add(extraField);
+                            IndexParameterArray paramArray = new IndexParameterArray(reader);
+                            index.Fields.Add(paramArray);
                         }
                     }
                 }
@@ -451,8 +495,16 @@ namespace SoundEditorPlugin.Resources
                 foreach (var field in fields)
                     field.PreProcess(sbContainer);
 
-                foreach (var thing in unkownFieldsThing)
-                    thing.PreProcess(sbContainer);
+                if (indexes != null)
+                {
+                    foreach (var thing in indexes)
+                    {
+                        thing.PreProcess(sbContainer);
+
+                        foreach (var extraField in thing.Fields)
+                            extraField.PreProcess(sbContainer);
+                    }
+                }
             }
             internal void Process(NativeWriter writer, SoundBankContainer sbContainer)
             {
@@ -471,46 +523,90 @@ namespace SoundEditorPlugin.Resources
 
                 writer.Write(elemCount, endian);
                 writer.Write((ushort)fields.Count, endian);
-                writer.Write((ushort)unkownFieldsThing.Count, endian);
+
+                if (indexes == null)
+                {
+                    writer.Write((ushort)0, endian);
+                }
+                else
+                {
+                    writer.Write((ushort)indexes.Count, endian);
+                }
 
                 writer.Write(0xdeadbeefdeadbeef);
 
-                writer.Write(array1); // should be empty
+                if (array1 != null)
+                {
+                    writer.Write(array1); // should be empty
+                }
 
                 long curPos = writer.Position;
-                writer.Position = start + 0x40;
-                writer.Write((ushort)(curPos - start), endian);
-                writer.Position = curPos;
 
-                foreach (var field in fields)
-                    field.Process(writer, sbContainer);
-
-                writer.Write(array2); // should be empty
-
-                curPos = writer.Position;
-                writer.Position = start + 0x42;
-                writer.Write((ushort)(curPos - start), endian);
-                writer.Position = curPos;
-
-                foreach (var thing in unkownFieldsThing)
-                    thing.Process(writer, sbContainer);
-
-                writer.Write(array3); // should be empty
-
-                curPos = writer.Position;
-                writer.Position = start + 0x44;
-                writer.Write((uint)(curPos - start), endian);
-                writer.Position = curPos;
-
-                foreach (var thing in unkownFieldsThing)
+                // write fields
+                if (fields.Count > 0)
                 {
-                    foreach (var extraField in thing.Fields)
-                        extraField.Process(writer, sbContainer);
+                    writer.Position = start + 0x40;
+                    writer.Write((ushort)(curPos - start), endian);
+                    writer.Position = curPos;
+
+                    foreach (var field in fields)
+                        field.Process(writer, sbContainer);
+                }
+
+                if (array2 != null)
+                {
+                    writer.Write(array2); // should be empty
+                }
+
+                // write indexes
+                if (indexes != null && indexes.Count > 0)
+                {
+                    curPos = writer.Position;
+                    writer.Position = start + 0x42;
+                    writer.Write((ushort)(curPos - start), endian);
+                    writer.Position = curPos;
+
+                    foreach (var thing in indexes)
+                        thing.Process(writer, sbContainer);
+                }
+                else
+                {
+                    curPos = writer.Position;
+                    writer.Position = start + 0x42;
+                    writer.Write((ushort)0, endian);
+                    writer.Position = curPos;
+                }
+
+                if (array3 != null)
+                {
+                    writer.Write(array3); // should be empty
+                }
+
+                // write index param array
+                if (indexes != null && indexes.Count > 0 && indexes.Find(x => x.Fields.Count > 0) != null)
+                {
+                    curPos = writer.Position;
+                    writer.Position = start + 0x44;
+                    writer.Write((uint)(curPos - start), endian);
+                    writer.Position = curPos;
+
+                    foreach (var thing in indexes)
+                    {
+                        foreach (var extraField in thing.Fields)
+                            extraField.Process(writer, sbContainer);
+                    }
+                }
+                else
+                {
+                    curPos = writer.Position;
+                    writer.Position = start + 0x44;
+                    writer.Write((uint)0, endian);
+                    writer.Position = curPos;
                 }
 
                 curPos = writer.Position;
                 writer.Position = start + 4;
-                writer.Write(curPos - start);
+                writer.Write((uint)(curPos - start), endian);
                 writer.Position = curPos;
 
                 foreach (var field in fields)
@@ -519,13 +615,22 @@ namespace SoundEditorPlugin.Resources
                     field.WriteTable(writer);
                 }
 
-                foreach (var field in fields)
-                    field.WriteDebugTable(writer);
+                //foreach (var field in fields)
+                //field.WriteDebugTable(writer);
 
-                foreach (var thing in unkownFieldsThing)
+                if (indexes != null)
                 {
-                    // TODO: figure out what the indices do
-                    sbContainer.AddOffset("UNKOWNINDICES", thing, writer);
+                    foreach (var thing in indexes)
+                    {
+                        // TODO: figure out what the indices do
+                        //sbContainer.AddOffset("UNKOWNINDICES", thing, writer);
+
+                        foreach (var field in thing.Fields)
+                        {
+                            sbContainer.AddOffset("EXTRAFIELDTABLE", field, writer);
+                            field.WriteTable(writer);
+                        }
+                    }
                 }
             }
 
@@ -538,38 +643,62 @@ namespace SoundEditorPlugin.Resources
                 }
                 return null;
             }
+
+            public void UpdateElemCount()
+            {
+                elemCount = (uint)fields.FirstOrDefault().Values.Count;
+
+                foreach (DsetIndex index in indexes)
+                {
+                    foreach (IndexParameterArray paramArray in index.Fields)
+                    {
+                        paramArray.ElemCount = (int)elemCount;
+                        paramArray.UpdateValuesIfStoreType0();
+                    }
+                }
+            }
         }
-        public class UnkownFieldsThing
+        public class DsetIndex
         {
             public uint Offset { get; set; }
 
             public ushort FieldCount { get; set; }
-            public List<ExtraField> Fields { get; internal set; }
+            public List<IndexParameterArray> Fields { get; internal set; }
 
-            private uint offset;
+            private uint item2;
+            private uint unkOffset;
+            private uint item3;
+
             private uint u1;
             private ushort u2;
-            private ushort fieldCount;
 
-            public UnkownFieldsThing(NativeReader reader)
+            public DsetIndex(NativeReader reader)
             {
-                offset = reader.ReadUInt(endian);
-                reader.ReadBytes(0x14);
+                item2 = reader.ReadUInt(endian);
+                reader.ReadUInt(endian);    // next offset
+
+                unkOffset = reader.ReadUInt(endian);
+                reader.ReadUInt(endian);    // next offset
+
+                item3 = reader.ReadUInt(endian);
+                reader.ReadUInt(endian);    // next offset
+
                 u1 = reader.ReadUInt(endian);
                 u2 = reader.ReadUShort(endian);
-                fieldCount = (ushort)(reader.ReadUShort(endian) >> 8);
-                Fields = new List<ExtraField>(fieldCount);
+
+                FieldCount = (ushort)(reader.ReadUShort(endian) >> 8);
+                Fields = new List<IndexParameterArray>(FieldCount);
             }
 
             public override bool Equals(object obj)
             {
-                UnkownFieldsThing thing = (UnkownFieldsThing)obj;
-                return offset == thing.offset && u1 == thing.u1 && u2 == thing.u2 && fieldCount == thing.fieldCount;
+                DsetIndex thing = (DsetIndex)obj;
+                return item2 == thing.item2 && u1 == thing.u1 && u2 == thing.u2 && FieldCount == thing.FieldCount;
             }
 
             internal void PreProcess(SoundBankContainer sbContainer)
             {
-                if (offset != 0)
+                if (item2 != 0)
                     sbContainer.AddRelocPtr("UNKOWNINDICES", this);
             }
             internal void Process(NativeWriter writer, SoundBankContainer sbConatainer)
@@ -579,10 +708,10 @@ namespace SoundEditorPlugin.Resources
                     writer.Write((long)0);
                 writer.Write(u1, endian);
                 writer.Write(u2, endian);
-                writer.Write(fieldCount << 8, endian);
+                writer.Write((ushort)(FieldCount << 8), endian);
             }
         }
-        public class ExtraField
+        public class IndexParameterArray
         {
             public uint NameHash => nameHash;
             public List<dynamic> Values
@@ -591,30 +720,74 @@ namespace SoundEditorPlugin.Resources
                 set { values = value; }
             }
 
+            public int ElemCount { get { return elemCount; } set { elemCount = value; } }
+            public int StoreParam1 { get { return storeParam1; } set { storeParam1 = value; } }
+            public int StoreParam2 { get { return storeParam2; } set { storeParam2 = value; } }
+
             private uint nameHash;
-            private ushort elemCount;
-            private ushort storeType;
+            private int combinedField;
+            private int elemCount;
+            private byte storeType;
             private int storeParam1;
             private int storeParam2;
             private uint tableOffset;
 
             private byte[] table;
 
-            List<dynamic> values;
+            List<dynamic> values = new List<dynamic>();
 
-            public ExtraField(NativeReader reader)
+            public IndexParameterArray(NativeReader reader)
             {
                 nameHash = reader.ReadUInt(endian);
-                elemCount = reader.ReadUShort(endian);
-                storeType = reader.ReadUShort(endian);
+                combinedField = reader.ReadInt(endian);
+
+                elemCount = combinedField & 0xFFFFFF;
+                storeType = (byte)((uint)(combinedField >> 24) & 0xFF);
+
+                //storeType = reader.ReadUShort(endian);
                 storeParam1 = reader.ReadInt(endian);
                 storeParam2 = reader.ReadInt(endian);
                 tableOffset = reader.ReadUInt(endian);
+
+                if (storeType > 0 && tableOffset > 0)
+                {
+                    long curPos = reader.Position;
+                    reader.Position = tableOffset;
+
+                    for (var i = 0; i < elemCount; i++)
+                    {
+                        dynamic value = 0;
+                        switch (storeType)
+                        {
+                            case 1: value = reader.ReadByte(); break;
+                            case 2: value = reader.ReadUShort(endian); break;
+                            case 4: value = reader.ReadUInt(endian); break;
+                            case 8: value = reader.ReadULong(endian); break;
+                            default: break;
+                        }
+                        values.Add(value + storeParam1);
+                    }
+
+                    reader.Position = curPos;
+                }
+                else
+                {
+                    UpdateValuesIfStoreType0();
+                }
+            }
+
+            public void UpdateValuesIfStoreType0()
+            {
+                if (storeType == 0)
+                {
+                    values = (from k in Enumerable.Range(0, elemCount)
+                              select (dynamic)(storeParam1 + k)).ToList();
+                }
             }
 
             public override bool Equals(object obj)
             {
-                ExtraField field = (ExtraField)obj;
+                IndexParameterArray field = (IndexParameterArray)obj;
                 return nameHash == field.NameHash && Values == field.Values;
             }
 
@@ -625,19 +798,101 @@ namespace SoundEditorPlugin.Resources
                     sbContainer.AddRelocPtr("EXTRAFIELDTABLE", this);
             }
 
+            internal void StoreValues()
+            {
+                CalculateMinAndMaxValues();
+                CalculateTable();
+            }
+
+            private void CalculateMinAndMaxValues()
+            {
+                long min = long.MaxValue;
+                long max = long.MinValue;
+
+                foreach (long num in values)
+                {
+                    if (num < min)
+                    {
+                        min = num;
+                    }
+                    if (num > max)
+                    {
+                        max = num;
+                    }
+                }
+
+                storeParam1 = (int)min;
+                storeParam2 = (int)max;
+            }
+
+            private void CalculateTable()
+            {
+                bool isSequential = true;
+                for (int i = 0; i < values.Count; i++)
+                {
+                    if (values[i] != values[0] + i)
+                    {
+                        isSequential = false;
+                        break;
+                    }
+                }
+
+                if (isSequential)
+                {
+                    table = null;
+                    return;
+                }
+
+                int byteWidth = ((long)(storeParam2 - storeParam1)).GetUnsignedWidth();
+
+                using (NativeWriter writer = new NativeWriter(new MemoryStream()))
+                {
+                    for (int i = 0; i < values.Count; i++)
+                    {
+                        long num = values[i] - storeParam1; // subtract min value
+
+                        switch (byteWidth)
+                        {
+                            case 1:
+                                writer.Write((byte)num);
+                                break;
+                            case 2:
+                                writer.Write((ushort)num);
+                                break;
+                            case 4:
+                                writer.Write((uint)num);
+                                break;
+                            case 8:
+                            default:
+                                writer.Write((ulong)num);
+                                break;
+                        }
+                    }
+
+                    table = writer.ToByteArray();
+                }
+            }
+
             internal void Process(NativeWriter writer, SoundBankContainer sbContainer)
             {
                 writer.Write(nameHash, endian);
-                writer.Write(elemCount, endian);
-                writer.Write(storeType, endian);
+                //writer.Write(elemCount, endian);
+                //writer.Write(storeType, endian);
+
+                byte[] elemCountBytes = BitConverter.GetBytes(elemCount);
+                elemCountBytes[3] = storeType;
+                combinedField = BitConverter.ToInt32(elemCountBytes, 0);
+
+                writer.Write(combinedField, endian);
                 writer.Write(storeParam1, endian);
                 writer.Write(storeParam2, endian);
                 sbContainer.WriteRelocPtr("EXTRAFIELDTABLE", this, writer);
             }
 
-            internal void StoreValues()
+            internal void WriteTable(NativeWriter writer)
             {
-
+                if (table != null)
+                    writer.Write(table);
             }
         }
         public class Field
@@ -783,8 +1038,8 @@ namespace SoundEditorPlugin.Resources
             internal void Process(NativeWriter writer, SoundBankContainer sbContainer)
             {
                 writer.Write(nameHash, endian);
-                writer.Write((byte)dataType, endian);
-                writer.Write(storeType, endian);
+                writer.Write((byte)dataType);
+                writer.Write(storeType);
                 writer.Write(storeParam1, endian);
                 writer.Write(storeParam2, endian);
                 sbContainer.WriteRelocPtr("FIELDTABLE", this, writer);
@@ -792,9 +1047,11 @@ namespace SoundEditorPlugin.Resources
 
             internal void WriteTable(NativeWriter writer)
             {
-                writer.WritePadding(0x04);
                 if (table != null)
+                {
+                    //writer.WritePadding(0x04);
                     writer.Write(table);
+                }
             }
 
             internal void WriteDebugTable(NativeWriter writer)
@@ -816,7 +1073,7 @@ namespace SoundEditorPlugin.Resources
                 List<long> newValues = new List<long>(values.Count);
                 foreach (var item in values)
                 {
-                    if (storeType == 7 || storeType == 8)
+                    if (dataType == SbDataType.Guid || dataType == SbDataType.String)
                     {
                         using (NativeWriter writer = new NativeWriter(new MemoryStream()))
                         {
@@ -839,9 +1096,12 @@ namespace SoundEditorPlugin.Resources
                         break;
                     }
 
-                    byte[] value = new byte[8];
-                    BitConverter.GetBytes(item).CopyTo(value, 0);
-                    newValues.Add(BitConverter.ToInt64(value, 0));
+                    else
+                    {
+                        byte[] value = new byte[8];
+                        BitConverter.GetBytes(item).CopyTo(value, 0);
+                        newValues.Add(BitConverter.ToInt64(value, 0));
+                    }
                 }
 
                 #region StoreTypes
@@ -926,30 +1186,33 @@ namespace SoundEditorPlugin.Resources
 
                         using (NativeWriter writer = new NativeWriter(new MemoryStream()))
                         {
-                            writer.Write(keyValuePairs.Keys.ToArray().ConvertToBytes(endian));
+                            long[] keys = keyValuePairs.Keys.ToArray();
+                            Array.Sort(keys);
+                            writer.Write(keys.ConvertToBytes(endian));
 
                             List<int> idx = new List<int>();
                             for (int j = 0; j < values.Count; j++)
                             {
-                                for (int i = 0; i < keyValuePairs.Count; i++)
+                                for (int i = 0; i < keys.Length; i++)
                                 {
-                                    if (newValues[j] == keyValuePairs[i])
+                                    if (newValues[j] == keys[i])
                                         idx.Add(i);
                                 }
                             }
 
-                            int length = (idx.Count % (8 / size3)) == 0 ? idx.Count / (8 / size3) : (idx.Count / (8 / size3)) + 1;
+                            int length = (idx.Count % (8 / bits)) == 0 ? idx.Count / (8 / bits) : (idx.Count / (8 / bits)) + 1;
                             byte[] idxes = new byte[length];
                             for (int j = 0; j < values.Count; j++)
                             {
-                                idxes[j / (8 / size3)] |= (byte)(idx[j] << ((j * size3) % 8));
+                                //idxes[j / (8 / size3)] |= (byte)(idx[j] << ((j * size3) % 8));
+                                idxes[j / (8 / bits)] |= (byte)(idx[j] << ((j % (8 / bits)) * bits));
                             }
 
                             writer.Write(idxes);
 
                             byte[] result3 = writer.ToByteArray();
 
-                            if (result3.Length < result2.Length)
+                            if (storeType != 0x02 && (storeType == 0x03 || result3.Length < result2.Length))
                             {
                                 storeType = 0x03;
                                 storeParam1 = (short)((size3 << 8) | bits);
@@ -1055,15 +1318,18 @@ namespace SoundEditorPlugin.Resources
             base.Read(reader, am, entry, modifiedData);
             endian = reader.ReadSizedString(4).Equals("SBle") ? Endian.Little : Endian.Big;
             reader.ReadInt(endian); // size of bank
-            unkown1 = reader.ReadUShort(endian);
+            alignment = reader.ReadByte();
+            unkown1 = reader.ReadByte();
             dsetCount = reader.ReadUShort(endian);
+            key = reader.ReadUInt(endian);
+            sbrType = reader.ReadUInt(endian);
             unkown2 = reader.ReadUInt(endian);
-            unkown3 = reader.ReadULong(endian);
-            offset = reader.ReadUInt(endian);
+            tableOffset = reader.ReadUInt(endian);
             reader.ReadInt(endian); // offset for the next offset
             dataOffset = reader.ReadUInt(endian);
             reader.ReadInt(endian); // offset for the next offset
-            reader.Position = offset;
+
+            reader.Position = tableOffset;
             uint[] dsetOffsets = new uint[dsetCount];
             dsets = new Dset[dsetCount];
             for (int i = 0; i < dsetCount; i++)
@@ -1111,7 +1377,13 @@ namespace SoundEditorPlugin.Resources
                                 case 0x0CD87DC3: se.IsDay = field.Values[j]; break;
                                 case 0x9DA8ED37: se.PreDelay = field.Values[j]; break;
                                 case 0x80268F2E: se.unkown = field.Values[j]; break;
-                                default: App.Logger.LogWarning("Unkown field: " + field.NameHash.ToString("X8") + "Dset: Selection"); break;
+                                case 0x7C7F1464: se.unk7C7F1464 = field.Values[j]; break;
+                                case 0x0B87C53A: se.unk0B87C53A = field.Values[j]; break;
+                                case 0x0B87C535: se.unk0B87C535 = field.Values[j]; break;
+                                case 0x89A17723: se.unk89A17723 = field.Values[j]; break;
+                                case 0x7DB236F2: se.unk7DB236F2 = field.Values[j]; break;
+                                case 0x41BCDB2D: se.unk41BCDB2D = field.Values[j]; break;
+                                default: App.Logger.LogWarning("Unknown field: " + field.NameHash.ToString("X8") + " Dset: Selection"); break;
                             }
                         }
                         Selections.Add(se);
@@ -1123,12 +1395,21 @@ namespace SoundEditorPlugin.Resources
                     for (int j = 0; j < dsets[i].ElemCount; j++)
                     {
                         Variation v = new Variation();
+                        bool isStream = false;
+
                         foreach (var field in dsets[i].Fields)
                         {
                             switch (field.NameHash)
                             {
                                 case 0xF5F914D9: v.VariationId = field.Values[j]; break;
-                                case 0x678C1CBC: v.StreamChunkIndex = field.Values[j] >> 1; break;
+                                case 0x678C1CBC:
+                                    if ((field.Values[j] & 1) == 1)
+                                    {
+                                        isStream = true;
+                                    }
+
+                                    v.StreamChunkIndex = field.Values[j] >> 1;
+                                    break;
                                 case 0x4E5B3721: v.MemoryChunkIndex = field.Values[j] >> 1; break;
                                 case 0xE4660A62: v.FirstSegmentIndex = field.Values[j]; break;
                                 case 0x6B89F83E: v.FirstLoopSegmentIndex = field.Values[j]; break;
@@ -1139,6 +1420,8 @@ namespace SoundEditorPlugin.Resources
                                 default: App.Logger.LogWarning("Unkown field: " + field.NameHash.ToString("X8") + "Dset: Variations"); break;
                             }
                         }
+
+                        v.IsStream = isStream;
                         Variations.Add(v);
                     }
                 }
@@ -1248,6 +1531,7 @@ namespace SoundEditorPlugin.Resources
         }
         public override byte[] SaveBytes()
         {
+            data.Clear();
             UpdateDSETS();
 
             SoundBankContainer sbContainer = new SoundBankContainer();
@@ -1258,13 +1542,18 @@ namespace SoundEditorPlugin.Resources
             {
                 Process(writer, sbContainer);
 
+                writer.WritePadding(0x10);
+
                 // write data for guids and strings
                 sbContainer.AddDataOffset(writer);
-                writer.Write(data.ToArray());
 
-                sbContainer.FixupRelocPtrs(writer);
+                if (data != null)
+                {
+                    writer.Write(data.ToArray());
+                }
 
                 uint size = (uint)writer.Position;
+                sbContainer.FixupRelocPtrs(writer);
 
                 writer.Position = 4;
                 writer.Write(size);
@@ -1279,7 +1568,7 @@ namespace SoundEditorPlugin.Resources
 
             sbContainer.AddRelocPtr("DSETOFFSETS", dsets);
 
-            sbContainer.AddRelocPtr("DATA", "BANKDATA");
+            //sbContainer.AddRelocPtr("DATA", "BANKDATA");
 
             foreach (var dset in dsets)
             {
@@ -1292,16 +1581,20 @@ namespace SoundEditorPlugin.Resources
         {
             writer.Write(endian == Endian.Little ? 0x53426c65 : 0x53426265, Endian.Big);
             writer.Write(0xdeadbeef);
-            writer.Write(unkown1, endian);
+            writer.Write(alignment);
+            writer.Write(unkown1);
             writer.Write(dsetCount, endian);
+            writer.Write(key, endian);
+            writer.Write(sbrType, endian);
             writer.Write(unkown2, endian);
-            writer.Write(unkown3, endian);
+            //writer.Write(tableOffset, endian);
+            //writer.Write((uint)0x20, endian);
 
             sbContainer.WriteRelocPtr("DSETOFFSETS", dsets, writer);
             sbContainer.WriteDataPtr(writer);
 
-            for (int i = 0; i < 3; i++)
-                writer.Write(0);
+            for (int i = 0; i < 5; i++)
+                writer.Write((long)0);
 
             sbContainer.AddOffset("DSETOFFSETS", dsets, writer);
             foreach (var dset in dsets)
@@ -1310,6 +1603,7 @@ namespace SoundEditorPlugin.Resources
             foreach (var dset in dsets)
             {
                 writer.WritePadding(0x10);
+                sbContainer.AddOffset("DSET", dset, writer);
                 dset.Process(writer, sbContainer);
             }
         }
@@ -1320,6 +1614,7 @@ namespace SoundEditorPlugin.Resources
             UpdateVariations();
             UpdateSegments();
             UpdateChunks();
+            UpdateElemCounts();
         }
 
         internal void UpdateVariations()
@@ -1334,8 +1629,17 @@ namespace SoundEditorPlugin.Resources
             foreach (var vari in Variations)
             {
                 variIds.Add(vari.VariationId);
-                mchunkIdxs.Add((uint)((vari.MemoryChunkIndex << 1) | 0x1)); // used flag i think
-                schunkIdxs.Add((uint)((vari.StreamChunkIndex << 1) | 0x1));
+                if (vari.IsStream)
+                {
+                    schunkIdxs.Add((uint)((vari.StreamChunkIndex << 1) | 0x1));
+                    mchunkIdxs.Add((uint)0);
+                }
+                else
+                {
+                    mchunkIdxs.Add((uint)((vari.MemoryChunkIndex << 1) | 0x1)); // used flag i think
+                    schunkIdxs.Add((uint)0);
+                }
+
                 firstIdxs.Add(vari.FirstSegmentIndex);
                 segCounts.Add(vari.SegmentCount);
                 firstLoops.Add(vari.FirstLoopSegmentIndex);
@@ -1436,6 +1740,13 @@ namespace SoundEditorPlugin.Resources
                 size.Values = sizes;
             }
         }
+        internal void UpdateElemCounts()
+        {
+            foreach (Dset dset in dsets)
+            {
+                dset.UpdateElemCount();
+            }
+        }
     }
 
     public static class SoundBankUtils
@@ -1459,29 +1770,49 @@ namespace SoundEditorPlugin.Resources
         // TODO: check if these work
         public static byte GetBiggestSize(this long[] array)
         {
-            byte result = 0;
+            byte biggestSize = 1;
             foreach (var item in array)
             {
-                byte[] buffer = BitConverter.GetBytes(item);
-                Array.Reverse(buffer);
-                byte c = 0;
-                foreach (byte b in buffer)
+                if (item > byte.MaxValue)
                 {
-                    if (c != 0)
-                        break;
-                    c++;
+                    if (biggestSize < 2)
+                    {
+                        biggestSize = 2;
+                    }
+
+                    if (item > ushort.MaxValue)
+                    {
+                        if (biggestSize < 4)
+                        {
+                            biggestSize = 4;
+                        }
+
+                        if (item > uint.MaxValue)
+                        {
+                            return 8;
+                        }
+                    }
                 }
-                c = (byte)(8 - c);
-                if (c > result)
-                    result = c;
+                //    byte[] buffer = BitConverter.GetBytes(item);
+                //    Array.Reverse(buffer);
+                //    byte c = 0;
+                //    foreach (byte b in buffer)
+                //    {
+                //        if (c != 0)
+                //            break;
+                //        c++;
+                //    }
+                //    c = (byte)(8 - c);
+                //    if (c > result)
+                //        result = c;
             }
-            if (result > 4)
-                result = 8;
-            else if (result > 2)
-                result = 4;
-            else if (result > 1)
-                result = 2;
-            return result;
+            //if (result > 4)
+            //    result = 8;
+            //else if (result > 2)
+            //    result = 4;
+            //else if (result > 1)
+            //    result = 2;
+            return biggestSize;
         }
         public static byte GetShift(this long[] array, out long[] outArray)
         {
@@ -1524,7 +1855,7 @@ namespace SoundEditorPlugin.Resources
             for (int i = 0; i < array.Length; i++)
             {
                 byte[] buffer = BitConverter.GetBytes(array[i]);
-                for (int j = 0; i < size; j++)
+                for (int j = 0; j < size; j++)
                 {
                     if (endian == Endian.Little)
                         outArray[i * size + j] = buffer[j];
@@ -1533,6 +1864,23 @@ namespace SoundEditorPlugin.Resources
                 }
             }
             return outArray;
+        }
+        public static int GetUnsignedWidth(this long value)
+        {
+            if (value <= 255)
+            {
+                return 1;
+            }
+            else if (value <= 65535)
+            {
+                return 2;
+            }
+            else if (value <= uint.MaxValue)
+            {
+                return 4;
+            }
+
+            return 8;
         }
     }
 

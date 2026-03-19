@@ -10,6 +10,7 @@
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <UseWPF>true</UseWPF>
     <OutputType>Library</OutputType>
+	<NeutralLanguage>en</NeutralLanguage>
   </PropertyGroup>
   
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Developer - Debug|x64'">
@@ -39,8 +40,22 @@
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="xcopy /Y &quot;$(TargetPath)&quot; &quot;$(SolutionDir)$(OutDir)Plugins\&quot;" />
   </Target>
-  
-  <ItemGroup>
+
+	<ItemGroup>
+		<None Remove="Resources\eaxmaenc.dll" />
+		<None Remove="Resources\libatrac9.dll" />
+		<None Remove="Resources\libmp3lame.dll" />
+		<None Remove="Resources\Tool" />
+		<None Remove="Resources\Tool.lib.zip" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Include="Resources\Tool.lib.zip">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</EmbeddedResource>
+	</ItemGroup>
+
+	<ItemGroup>
     <PackageReference Include="System.Drawing.Common" Version="8.0.10" />
   </ItemGroup>
   
@@ -61,6 +76,7 @@
       <HintPath>..\..\FrostyEditor\ThirdParty\SharpDX.XAudio2.dll</HintPath>
       <Private>False</Private>
     </Reference>
+	  <Reference Include="System.IO.Compression" />
   </ItemGroup>
   
   <ItemGroup>
@@ -79,4 +95,10 @@
   <ItemGroup>
     <Resource Include="Images\SoundFileType.png" />
   </ItemGroup>
+
+	<ItemGroup>
+		<None Update="Resources\90467cb7b85c4a8c89d09610e10114f5">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
 </Project>

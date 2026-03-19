@@ -1,22 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using FrostySdk.Interfaces;
-using System.Windows;
-using FrostySdk.IO;
-using System.IO;
-using FrostySdk;
-using FrostySdk.Managers;
-using FrostySdk.Ebx;
-using WaveFormRendererLib;
-using System.Drawing.Imaging;
-using System.Windows.Media.Imaging;
-using System.Windows.Media;
-using NAudio.Wave;
+﻿using Frosty.Core;
 using Frosty.Core.Controls;
-using Frosty.Core;
 using Frosty.Core.Windows;
+using FrostySdk;
+using FrostySdk.Ebx;
+using FrostySdk.Interfaces;
+using FrostySdk.IO;
+using FrostySdk.Managers;
 using FrostySdk.Managers.Entries;
+using NAudio.Wave;
 using SoundEditorPlugin.Resources;
+using System;
+using System.Collections.Generic;
+using System.Drawing.Imaging;
+using System.IO;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using WaveFormRendererLib;
 
 namespace SoundEditorPlugin
 {
@@ -93,6 +94,8 @@ namespace SoundEditorPlugin
                             case 0xE: track.Codec = "MultiStream Opus"; break;
                             case 0xF: track.Codec = "MultiStream Opus (Uncoupled)"; break;
                         }
+
+                        track.CodecUnformatted = codec;
 
                         if (i == runtimeVariation.FirstLoopSegmentIndex && runtimeVariation.SegmentCount > 1)
                         {
@@ -250,23 +253,324 @@ namespace SoundEditorPlugin
             dynamic root = RootObject;
             NewWaveResource newWave = App.AssetManager.GetResAs<NewWaveResource>(App.AssetManager.GetResEntry(((string)(root.Name)).ToLower()));
 
+            Dictionary<Guid, Stream> chunkStreams = new Dictionary<Guid, Stream>();
+
+            foreach (Chunk chunk in newWave.Chunks)
+            {
+                ChunkAssetEntry chunkEntry = App.AssetManager.GetChunkEntry(chunk.ChunkId);
+                Stream stream = App.AssetManager.GetChunk(chunkEntry);
+                chunkStreams.Add(chunk.ChunkId, stream);
+            }
+
             int index = 0;
             int totalCount = newWave.Variations.Count;
+
+            List<Task> loadSoundDataTasks = new List<Task>();
 
             foreach (dynamic runtimeVariation in newWave.Variations)
             {
                 task.Update(status: "Loading track #" + (index + 1), progress: ((index + 1) / (double)totalCount) * 100.0d);
                 SoundDataTrack track = new SoundDataTrack { Name = "Track #" + ((index++) + 1) };
+                loadSoundDataTasks.Add(LoadTrackFromNewWave(index, newWave, track, runtimeVariation, chunkStreams));
 
-                int chunkIndex = newWave.Segments[(int)runtimeVariation.FirstSegmentIndex].SamplesOffsetFlag == 1 ? (int)runtimeVariation.MemoryChunkIndex : (int)runtimeVariation.StreamChunkIndex;
-                dynamic soundDataChunk = newWave.Chunks[chunkIndex];
-                ChunkAssetEntry chunkEntry = App.AssetManager.GetChunkEntry(soundDataChunk.ChunkId);
-                if (chunkEntry == null)
+                //int chunkIndex = newWave.Segments[(int)runtimeVariation.FirstSegmentIndex].SamplesOffsetFlag == 1 ? (int)runtimeVariation.MemoryChunkIndex : (int)runtimeVariation.StreamChunkIndex;
+                //dynamic soundDataChunk = newWave.Chunks[chunkIndex];
+
+                //track.ChunkIndex = chunkIndex;
+                //track.ChunkId = soundDataChunk.ChunkId;
+                //track.SegmentIndex = (int)runtimeVariation.FirstSegmentIndex;
+                //track.VariationIndex = index - 1;
+                //track.SegmentCount = (int)runtimeVariation.SegmentCount;
+
+                //using (NativeReader reader = new NativeReader(chunkStreams[track.ChunkId]))
+                //{
+                //    reader.KeepUnderlyingStreamOpen = true;
+                //    reader.Position = newWave.Segments[(int)runtimeVariation.FirstSegmentIndex].SamplesOffset;
+
+                //    if (reader.ReadUShort() != 0x48)
+                //    {
+                //        logger.LogError("Wrong Sample Offset at Variation {0}, Segment {1}", index, runtimeVariation.FirstSegmentIndex);
+                //        return retVal;
+                //    }
+
+                //    ushort headersize = reader.ReadUShort(Endian.Big);
+                //    byte codec = (byte)(reader.ReadByte() & 0xF);
+                //    switch (codec)
+                //    {
+                //        case 0x1: track.Codec = "Unknown"; break;
+                //        case 0x2: track.Codec = "PCM 16 Big"; break;
+                //        case 0x3: track.Codec = "EA-XMA"; break;
+                //        case 0x4: track.Codec = "XAS Interleaved v1"; break;
+                //        case 0x5: track.Codec = "EALayer3 Interleaved v1"; break;
+                //        case 0x6: track.Codec = "EALayer3 Interleaved v2 PCM"; break;
+                //        case 0x7: track.Codec = "EALayer3 Interleaved v2 Spike"; break;
+                //        case 0x9: track.Codec = "EASpeex"; break;
+                //        case 0xA: track.Codec = "Unknown"; break;
+                //        case 0xB: track.Codec = "EA-MP3"; break;
+                //        case 0xC: track.Codec = "EAOpus"; break;
+                //        case 0xD: track.Codec = "EAAtrac9"; break;
+                //        case 0xE: track.Codec = "MultiStream Opus"; break;
+                //        case 0xF: track.Codec = "MultiStream Opus (Uncoupled)"; break;
+                //    }
+
+                //    track.CodecUnformatted = codec;
+                //}
+
+
+                //// async task to load the sound data
+                //loadSoundDataTasks.Add(new Task(() =>
+                //{
+                //    using (NativeReader reader = new NativeReader(chunkStreams[track.ChunkId]))
+                //    {
+                //        reader.KeepUnderlyingStreamOpen = true;
+
+                //        List<short> decodedSoundBuf = new List<short>();
+                //        double startLoopingTime = 0.0;
+                //        double loopingDuration = 0.0;
+
+                //        for (int i = 0; i < runtimeVariation.SegmentCount; i++)
+                //        {
+                //            var segment = newWave.Segments[(int)runtimeVariation.FirstSegmentIndex + i];
+                //            reader.Position = segment.SamplesOffset;
+
+                //            if (reader.ReadUShort() != 0x48)
+                //            {
+                //                logger.LogError("Wrong Sample Offset at Variation {0}, Segment {1}", index, i);
+                //                return;
+                //            }
+
+                //            ushort headersize = reader.ReadUShort(Endian.Big);
+                //            byte codec = (byte)(reader.ReadByte() & 0xF);
+                //            int channels = (reader.ReadByte() >> 2) + 1;
+                //            ushort sampleRate = reader.ReadUShort(Endian.Big);
+                //            uint sampleCount = reader.ReadUInt(Endian.Big) & 0xFFFFFFF;
+                //            //reader.Position += headersize - 0x0C;
+
+                //            if (i == runtimeVariation.FirstLoopSegmentIndex && runtimeVariation.SegmentCount > 1)
+                //            {
+                //                startLoopingTime = (decodedSoundBuf.Count / channels) / (double)sampleRate;
+                //                track.LoopStart = (uint)decodedSoundBuf.Count;
+                //            }
+
+                //            reader.Position = segment.SamplesOffset;
+                //            byte[] soundBuf = reader.ReadToEnd();
+                //            double duration = 0.0;
+
+                //            if (codec == 0x2)
+                //            {
+                //                short[] data = Pcm16b.Decode(soundBuf);
+                //                decodedSoundBuf.AddRange(data);
+                //                duration += (data.Length / channels) / (double)sampleRate;
+                //                sampleCount = (uint)data.Length;
+                //            }
+                //            else if (codec == 0x4)
+                //            {
+                //                short[] data = XAS.Decode(soundBuf);
+                //                decodedSoundBuf.AddRange(data);
+                //                duration += (data.Length / channels) / (double)sampleRate;
+                //                sampleCount = (uint)data.Length;
+                //            }
+                //            else if (codec == 0x5 || codec == 0x6 || codec == 0xC)
+                //            {
+                //                sampleCount = 0;
+                //                try
+                //                {
+                //                    EALayer3.Decode(soundBuf, soundBuf.Length, (short[] data, int count, EALayer3.StreamInfo info) =>
+                //                    {
+                //                        if (info.streamIndex == -1)
+                //                            return;
+                //                        sampleCount += (uint)data.Length;
+                //                        decodedSoundBuf.AddRange(data);
+                //                    });
+                //                    duration += (sampleCount / channels) / (double)sampleRate;
+                //                }
+                //                catch (Exception ex)
+                //                {
+                //                    logger.LogError("Error decoding track #" + index);
+                //                }
+                //            }
+
+                //            if (runtimeVariation.SegmentCount > 1)
+                //            {
+                //                if (i < runtimeVariation.FirstLoopSegmentIndex)
+                //                {
+                //                    startLoopingTime += duration;
+                //                    track.LoopStart += sampleCount;
+                //                }
+                //                if (i >= runtimeVariation.FirstLoopSegmentIndex && i <= runtimeVariation.LastLoopSegmentIndex)
+                //                {
+                //                    loopingDuration += duration;
+                //                    track.LoopEnd += sampleCount;
+                //                }
+                //            }
+
+                //            track.SampleRate = sampleRate;
+                //            track.ChannelCount = channels;
+                //            track.Duration += duration;
+                //        }
+
+                //        track.LoopEnd += track.LoopStart;
+                //        track.Samples = decodedSoundBuf.ToArray();
+
+                //        var maxPeakProvider = new MaxPeakProvider();
+                //        var rmsPeakProvider = new RmsPeakProvider(200); // e.g. 200
+                //        var samplingPeakProvider = new SamplingPeakProvider(200); // e.g. 200
+                //        var averagePeakProvider = new AveragePeakProvider(4); // e.g. 4
+
+                //        var topSpacerColor = System.Drawing.Color.FromArgb(64, 83, 22, 3);
+                //        var soundCloudOrangeTransparentBlocks = new SoundCloudBlockWaveFormSettings(System.Drawing.Color.FromArgb(255, 218, 218, 218), topSpacerColor, System.Drawing.Color.FromArgb(255, 109, 109, 109),
+                //                                                                                    System.Drawing.Color.FromArgb(64, 79, 79, 79))
+                //        {
+                //            Name = "SoundCloud Orange Transparent Blocks",
+                //            PixelsPerPeak = 2,
+                //            SpacerPixels = 1,
+                //            TopSpacerGradientStartColor = topSpacerColor,
+                //            BackgroundColor = System.Drawing.Color.FromArgb(128, 0, 0, 0),
+                //            Width = 800,
+                //            TopHeight = 49,
+                //            BottomHeight = 29,
+                //        };
+
+                //        try
+                //        {
+                //            var renderer = new WaveFormRenderer();
+                //            var image = renderer.Render(track.Samples, maxPeakProvider, soundCloudOrangeTransparentBlocks);
+
+                //            using (var ms = new MemoryStream())
+                //            {
+                //                image.Save(ms, ImageFormat.Png);
+                //                ms.Seek(0, SeekOrigin.Begin);
+
+                //                var bitmapImage = new BitmapImage();
+                //                bitmapImage.BeginInit();
+                //                bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+                //                bitmapImage.StreamSource = ms;
+                //                bitmapImage.EndInit();
+
+                //                var target = new RenderTargetBitmap(bitmapImage.PixelWidth, bitmapImage.PixelHeight, bitmapImage.DpiX, bitmapImage.DpiY, PixelFormats.Pbgra32);
+                //                var visual = new DrawingVisual();
+
+                //                using (var r = visual.RenderOpen())
+                //                {
+                //                    visual.SetValue(RenderOptions.EdgeModeProperty, EdgeMode.Aliased);
+                //                    r.DrawImage(bitmapImage, new Rect(0, 0, bitmapImage.Width, bitmapImage.Height));
+
+                //                    if (loopingDuration > 0)
+                //                    {
+                //                        r.DrawLine(new Pen(Brushes.White, 1.0),
+                //                            new Point((int)((startLoopingTime / track.Duration) * soundCloudOrangeTransparentBlocks.Width), soundCloudOrangeTransparentBlocks.TopHeight),
+                //                            new Point((int)((startLoopingTime / track.Duration) * soundCloudOrangeTransparentBlocks.Width), (int)bitmapImage.Height));
+                //                        r.DrawLine(new Pen(Brushes.White, 1.0),
+                //                            new Point((int)(((startLoopingTime + loopingDuration) / track.Duration) * soundCloudOrangeTransparentBlocks.Width), soundCloudOrangeTransparentBlocks.TopHeight),
+                //                            new Point((int)(((startLoopingTime + loopingDuration) / track.Duration) * soundCloudOrangeTransparentBlocks.Width), (int)bitmapImage.Height));
+                //                        r.DrawLine(new Pen(Brushes.White, 1.0),
+                //                            new Point((int)((startLoopingTime / track.Duration) * soundCloudOrangeTransparentBlocks.Width), (int)bitmapImage.Height),
+                //                            new Point((int)(((startLoopingTime + loopingDuration) / track.Duration) * soundCloudOrangeTransparentBlocks.Width), (int)bitmapImage.Height));
+                //                    }
+                //                }
+
+                //                target.Render(visual);
+                //                target.Freeze();
+                //                track.WaveForm = target;
+                //            }
+                //        }
+                //        catch (Exception e)
+                //        {
+                //        }
+                //    }
+
+                //    track.IsLoaded = true;
+                //}));
+
+                retVal.Add(track);
+            }
+
+            Task.Run(() =>
+            {
+                foreach (Task t in loadSoundDataTasks)
                 {
-                    continue;
+                    t.RunSynchronously();
                 }
-                using (NativeReader reader = new NativeReader(App.AssetManager.GetChunk(chunkEntry)))
+                // clean up all streams after all sounds loaded
+                foreach (var chunkStream in chunkStreams)
                 {
+                    chunkStream.Value.Dispose();
+                }
+            });
+
+            return retVal;
+        }
+
+        protected override Task ReloadTrack(NewWaveResource newWave, SoundDataTrack track)
+        {
+            Dictionary<Guid, Stream> chunkStreams = new Dictionary<Guid, Stream>();
+
+            dynamic runtimeVariation = newWave.Variations[track.VariationIndex];
+            int chunkIndex = newWave.Segments[(int)runtimeVariation.FirstSegmentIndex].SamplesOffsetFlag == 1 ? (int)runtimeVariation.MemoryChunkIndex : (int)runtimeVariation.StreamChunkIndex;
+            dynamic soundDataChunk = newWave.Chunks[chunkIndex];
+
+            ChunkAssetEntry chunkEntry = App.AssetManager.GetChunkEntry(soundDataChunk.ChunkId);
+            Stream stream = App.AssetManager.GetChunk(chunkEntry);
+            chunkStreams.Add(soundDataChunk.ChunkId, stream);
+
+            track.Duration = 0;
+
+            return LoadTrackFromNewWave(track.VariationIndex + 1, newWave, track, runtimeVariation, chunkStreams);
+        }
+
+        public Task LoadTrackFromNewWave(int index, NewWaveResource newWave, SoundDataTrack track, Variation runtimeVariation, Dictionary<Guid, Stream> chunkStreams)
+        {
+            int chunkIndex = newWave.Segments[(int)runtimeVariation.FirstSegmentIndex].SamplesOffsetFlag == 1 ? (int)runtimeVariation.MemoryChunkIndex : (int)runtimeVariation.StreamChunkIndex;
+            dynamic soundDataChunk = newWave.Chunks[chunkIndex];
+
+            track.ChunkIndex = chunkIndex;
+            track.ChunkId = soundDataChunk.ChunkId;
+            track.SegmentIndex = (int)runtimeVariation.FirstSegmentIndex;
+            track.VariationIndex = index - 1;
+            track.SegmentCount = (int)runtimeVariation.SegmentCount;
+
+            using (NativeReader2 reader = new NativeReader2(chunkStreams[track.ChunkId]))
+            {
+                reader.KeepUnderlyingStreamOpen = true;
+                reader.Position = newWave.Segments[(int)runtimeVariation.FirstSegmentIndex].SamplesOffset & 0xFFFFFFFC;
+
+                if (reader.ReadUShort() != 0x48)
+                {
+                    logger.LogError("Wrong Sample Offset at Variation {0}, Segment {1}", index, runtimeVariation.FirstSegmentIndex);
+                    return null;
+                }
+
+                ushort headersize = reader.ReadUShort(Endian.Big);
+                byte codec = (byte)(reader.ReadByte() & 0xF);
+                switch (codec)
+                {
+                    case 0x1: track.Codec = "Unknown"; break;
+                    case 0x2: track.Codec = "PCM 16 Big"; break;
+                    case 0x3: track.Codec = "EA-XMA"; break;
+                    case 0x4: track.Codec = "XAS Interleaved v1"; break;
+                    case 0x5: track.Codec = "EALayer3 Interleaved v1"; break;
+                    case 0x6: track.Codec = "EALayer3 Interleaved v2 PCM"; break;
+                    case 0x7: track.Codec = "EALayer3 Interleaved v2 Spike"; break;
+                    case 0x9: track.Codec = "EASpeex"; break;
+                    case 0xA: track.Codec = "Unknown"; break;
+                    case 0xB: track.Codec = "EA-MP3"; break;
+                    case 0xC: track.Codec = "EAOpus"; break;
+                    case 0xD: track.Codec = "EAAtrac9"; break;
+                    case 0xE: track.Codec = "MultiStream Opus"; break;
+                    case 0xF: track.Codec = "MultiStream Opus (Uncoupled)"; break;
+                }
+
+                track.CodecUnformatted = codec;
+            }
+
+
+            // async task to load the sound data
+            return new Task(() =>
+            {
+                using (NativeReader2 reader = new NativeReader2(chunkStreams[track.ChunkId]))
+                {
+                    reader.KeepUnderlyingStreamOpen = true;
+
                     List<short> decodedSoundBuf = new List<short>();
                     double startLoopingTime = 0.0;
                     double loopingDuration = 0.0;
@@ -274,12 +578,12 @@ namespace SoundEditorPlugin
                     for (int i = 0; i < runtimeVariation.SegmentCount; i++)
                     {
                         var segment = newWave.Segments[(int)runtimeVariation.FirstSegmentIndex + i];
-                        reader.Position = segment.SamplesOffset;
+                        reader.Position = segment.SamplesOffset & 0xFFFFFFFC;
 
                         if (reader.ReadUShort() != 0x48)
                         {
                             logger.LogError("Wrong Sample Offset at Variation {0}, Segment {1}", index, i);
-                            return retVal;
+                            return;
                         }
 
                         ushort headersize = reader.ReadUShort(Endian.Big);
@@ -288,31 +592,14 @@ namespace SoundEditorPlugin
                         ushort sampleRate = reader.ReadUShort(Endian.Big);
                         uint sampleCount = reader.ReadUInt(Endian.Big) & 0xFFFFFFF;
                         //reader.Position += headersize - 0x0C;
-                        switch (codec)
-                        {
-                            case 0x1: track.Codec = "Unknown"; break;
-                            case 0x2: track.Codec = "PCM 16 Big"; break;
-                            case 0x3: track.Codec = "EA-XMA"; break;
-                            case 0x4: track.Codec = "XAS Interleaved v1"; break;
-                            case 0x5: track.Codec = "EALayer3 Interleaved v1"; break;
-                            case 0x6: track.Codec = "EALayer3 Interleaved v2 PCM"; break;
-                            case 0x7: track.Codec = "EALayer3 Interleaved v2 Spike"; break;
-                            case 0x9: track.Codec = "EASpeex"; break;
-                            case 0xA: track.Codec = "Unknown"; break;
-                            case 0xB: track.Codec = "EA-MP3"; break;
-                            case 0xC: track.Codec = "EAOpus"; break;
-                            case 0xD: track.Codec = "EAAtrac9"; break;
-                            case 0xE: track.Codec = "MultiStream Opus"; break;
-                            case 0xF: track.Codec = "MultiStream Opus (Uncoupled)"; break;
-                        }
-
+                        
                         if (i == runtimeVariation.FirstLoopSegmentIndex && runtimeVariation.SegmentCount > 1)
                         {
                             startLoopingTime = (decodedSoundBuf.Count / channels) / (double)sampleRate;
                             track.LoopStart = (uint)decodedSoundBuf.Count;
                         }
 
-                        reader.Position = segment.SamplesOffset;
+                        reader.Position = segment.SamplesOffset & 0xFFFFFFFC;
                         byte[] soundBuf = reader.ReadToEnd();
                         double duration = 0.0;
 
@@ -333,15 +620,21 @@ namespace SoundEditorPlugin
                         else if (codec == 0x5 || codec == 0x6 || codec == 0xC)
                         {
                             sampleCount = 0;
-                            EALayer3.Decode(soundBuf, soundBuf.Length, (short[] data, int count, EALayer3.StreamInfo info) =>
+                            try
                             {
-                                if (info.streamIndex == -1)
-                                    return;
-                                sampleCount += (uint)data.Length;
-                                channels = info.numChannels;
-                                decodedSoundBuf.AddRange(data);
-                            });
-                            duration += (sampleCount / channels) / (double)sampleRate;
+                                EALayer3.Decode(soundBuf, soundBuf.Length, (short[] data, int count, EALayer3.StreamInfo info) =>
+                                {
+                                    if (info.streamIndex == -1)
+                                        return;
+                                    sampleCount += (uint)data.Length;
+                                    decodedSoundBuf.AddRange(data);
+                                });
+                                duration += (sampleCount / channels) / (double)sampleRate;
+                            }
+                            catch (Exception ex)
+                            {
+                                logger.LogError("Error decoding track #" + index);
+                            }
                         }
 
                         if (runtimeVariation.SegmentCount > 1)
@@ -432,13 +725,10 @@ namespace SoundEditorPlugin
                     {
                     }
 
-                    track.SegmentCount = (int)runtimeVariation.SegmentCount;
                 }
 
-                retVal.Add(track);
-            }
-
-            return retVal;
+                track.IsLoaded = true;
+            });
         }
     }
 

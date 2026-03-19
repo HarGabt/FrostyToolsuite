@@ -23,6 +23,11 @@ using FrostySdk.Managers.Entries;
 using NAudio.Wave;
 using NAudio.Wave.SampleProviders;
 using WaveFormatExtensible = SharpDX.Multimedia.WaveFormatExtensible;
+using FrostySdk;
+using SoundEditorPlugin.Resources;
+using System.Diagnostics;
+using FrostySdk.Ebx;
+using System.Collections;
 
 namespace SoundEditorPlugin
 {
@@ -193,19 +198,46 @@ namespace SoundEditorPlugin
     public class SoundDataTrack : INotifyPropertyChanged
     {
         public string Name { get; set; }
-        public string Codec { get; set; }
-        public double Duration { get; set; }
+        public string ExtraName
+        {
+            get
+            {
+                if (!IsLoaded)
+                {
+                    return " - Loading...";
+                }
+                else
+                {
+                    return "";
+                }
+            }
+        }
+        public int CodecUnformatted { get; set; }
+        private string codec;
+        public string Codec { get => codec; set { codec = value; NotifyPropertyChanged(); } }
+        private double duration;
+        public double Duration { get => duration; set { duration = value; NotifyPropertyChanged(); } }
         public int SegmentCount { get; set; }
         public string Language { get; set; }
-        public ImageSource WaveForm { get; set; }
-        public int SampleRate { get; set; }
-        public int ChannelCount { get; set; }
+        private ImageSource waveform;
+        public ImageSource WaveForm { get => waveform; set { waveform = value; NotifyPropertyChanged(); } }
+        private int samplerate;
+        public int SampleRate { get => samplerate; set { samplerate = value; NotifyPropertyChanged(); } }
+        private int channelcount;
+        public int ChannelCount { get => channelcount; set { channelcount = value; NotifyPropertyChanged(); } }
         public short[] Samples { get; set; }
         public uint LoopStart { get; set; }
         public uint LoopEnd { get; set; }
+        public int ChunkIndex { get; set; }
+        public Guid ChunkId { get; set; }
+        public int SegmentIndex { get; set; }
+        public int VariationIndex { get; set; }
+        private bool isloaded;
+        public bool IsLoaded { get => isloaded; set { isloaded = value; NotifyPropertyChanged(); NotifyPropertyChanged("ExtraName"); } }
 
-        public double Progress { get => progress; set { progress = value; NotifyPropertyChanged(); } }
         private double progress;
+        public double Progress { get => progress; set { progress = value; NotifyPropertyChanged(); } }
+
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
@@ -376,7 +408,7 @@ namespace SoundEditorPlugin
         private AudioPlayer audioPlayer;
         private bool bFirstTime = true;
 
-        public FrostySoundDataEditor(ILogger inLogger) 
+        public FrostySoundDataEditor(ILogger inLogger)
             : base(inLogger)
         {
         }
@@ -425,7 +457,7 @@ namespace SoundEditorPlugin
 
         private async void PlayButton_Click(object sender, RoutedEventArgs e)
         {
-            if (!(tracksListBox.SelectedItem is SoundDataTrack currentTrack))
+            if (!(tracksListBox.SelectedItem is SoundDataTrack currentTrack) || !currentTrack.IsLoaded)
                 return;
 
             audioPlayer.OutputVoice.SetVolume((float)(volumeSlider.Value / 100.0));
@@ -465,7 +497,16 @@ namespace SoundEditorPlugin
                 return;
 
             if (!IsPlaying)
-                playButton.IsEnabled = true;
+            {
+                if (tracksListBox.SelectedItem is SoundDataTrack currentTrack && currentTrack.IsLoaded)
+                {
+                    playButton.IsEnabled = true;
+                }
+                else
+                {
+                    playButton.IsEnabled = false;
+                }
+            }
         }
 
         public override void Closed()
@@ -497,6 +538,11 @@ namespace SoundEditorPlugin
             return new List<SoundDataTrack>();
         }
 
+        protected virtual Task ReloadTrack(NewWaveResource newWave, SoundDataTrack track)
+        {
+            return null;
+        }
+
         private void SoundExportMenuItem_Click(object sender, RoutedEventArgs e)
         {
             if (!(tracksListBox.SelectedItem is SoundDataTrack track))
@@ -509,7 +555,7 @@ namespace SoundEditorPlugin
 
             for (int trackIndex = 0; trackIndex < tracksListBox.SelectedItems.Count; trackIndex++)
             {
-                SoundDataTrack indexedTrack = (SoundDataTrack) tracksListBox.SelectedItems[trackIndex];
+                SoundDataTrack indexedTrack = (SoundDataTrack)tracksListBox.SelectedItems[trackIndex];
                 String indexedFilename = sfd.FileName.Replace(".wav", " " + trackIndex + ".wav");
                 SoundExportMenuItem_Export(indexedTrack, indexedFilename);
                 logger.Log("Exported {0} to {1}", AssetEntry.Name, indexedFilename);
@@ -543,6 +589,8 @@ namespace SoundEditorPlugin
                     main.Write(writer, new List<WAV.IRIFFChunk>(new WAV.IRIFFChunk[] { fmt, data }));
                 }
             });
+
+            logger.Log("Exported {0} to {1}", AssetEntry.Name, filename);
         }
 
         private void SoundImportMenuItem_Click(object sender, RoutedEventArgs e)
@@ -557,7 +605,11 @@ namespace SoundEditorPlugin
                 {
                     FrostyTaskWindow.Show("Importing track", "", (task) =>
                     {
-                        ImportSound(ofd, task);
+                        Dispatcher.Invoke(delegate
+                        {
+                            SoundDataTrack indexedTrack = (SoundDataTrack)tracksListBox.SelectedItem;
+                            ImportSound(ofd.FileName, indexedTrack, task);
+                        });
                     });
                 }
                 catch (Exception exp)
@@ -568,189 +620,248 @@ namespace SoundEditorPlugin
             }
         }
 
-        private void ImportSound(FrostyOpenFileDialog ofd, FrostyTaskWindow task)
+        private string GetFormat(int? codec)
         {
-            //WaveFormat waveFormat = null;
-            MemoryStream ms = new MemoryStream();
-
-            if (ofd.FileName.EndsWith(".wav", StringComparison.OrdinalIgnoreCase))
+            switch (codec)
             {
-                // force stereo for .wav files if needed
-                using (var reader = new AudioFileReader(ofd.FileName))
-                {
-                    //waveFormat = reader.WaveFormat;
+                case 2: return "s16b_int";
+                case 3: return "eaxma";
+                case 4: return "xas_int";
+                case 5: return "ealayer3_int";
+                case 6: return "ealayer3pcm_int";
+                case 7: return "ealayer3spike_int";
+                case 9: return "easpeex";
+                case 11: return "eamp3";
+                case 12: return "eaopus";
+                case 13: return "eaatrac9";
+                case 14: return "multistreamopus";
+                case 15: return "multistreamopusuncoupled";
+                default: return "multistreamopus";
+            }
+            ;
+        }
 
-                    if (reader.WaveFormat.Channels == 1)
-                    {
-                        var stereo = new MonoToStereoSampleProvider(reader) { LeftVolume = 1.0f, RightVolume = 1.0f };
-                        //waveFormat = stereo.WaveFormat;
-                        WaveFileWriter.WriteWavFileToStream(ms, new SampleToWaveProvider16(stereo));
-                    }
-                    else
-                    {
-                        WaveFileWriter.WriteWavFileToStream(ms, reader);
-                    }
+        private static uint GetSegmentOffsetFlags(bool isValid, bool isStreaming)
+        {
+            if (isValid && isStreaming)
+            {
+                return 3;
+            }
+            if (isValid)
+            {
+                return 1;
+            }
+            return 0;
+        }
+
+        private static int AlignTo(int value, int alignment)
+        {
+            int remainder = value % alignment;
+            if (remainder == 0)
+            {
+                return value;
+            }
+            int padding = alignment - remainder;
+            return value + padding;
+        }
+
+        private async void ImportSound(string importFileName, SoundDataTrack track, FrostyTaskWindow task)
+        {
+            if (!ToolHelper.IsInitialized)
+            {
+                await ToolHelper.InitializeAsync();
+            }
+
+            string tempOutput = Path.GetTempPath() + Guid.NewGuid();
+            bool isSeekable = ((dynamic)Asset.RootObject).IsSeekable;
+
+            byte[] spsData;
+            byte[] seekTableData;
+            bool hasStreamPool = ((PointerRef)((dynamic)base.Asset.RootObject).StreamPool).Type != PointerRefType.Null;
+
+            try
+            {
+                Process process = new Process();
+                ProcessStartInfo processStartInfo = new ProcessStartInfo(ToolHelper.ResoucePath + ".");
+
+                processStartInfo.Arguments = $"-sndplayer -fileformatversion1 -{GetFormat(track.CodecUnformatted)} " +
+                    $"{(isSeekable ? "-seekable" : "")} \"{importFileName}\" -=\"{tempOutput}\"";
+
+                processStartInfo.UseShellExecute = false;
+                processStartInfo.CreateNoWindow = true;
+                process.StartInfo = processStartInfo;
+                process.EnableRaisingEvents = true;
+
+                process.Start();
+                process.WaitForExit();
+
+                if (process.ExitCode != 0 && !File.Exists(tempOutput + ".sps"))
+                {
+                    throw new FileFormatException($"Failed to import the file. Error: {process.ExitCode}");
                 }
             }
-            else if (ofd.FileName.EndsWith(".mp3", StringComparison.OrdinalIgnoreCase))
+            finally
             {
-                using (var reader = new MediaFoundationReader(ofd.FileName))
+                string tempSpsFileName = tempOutput + ".sps";
+                string tempSekFileName = tempOutput + ".sek";
+                string tempSphFileName = tempOutput + ".sph";
+
+                spsData = File.ReadAllBytes(tempSpsFileName);
+                seekTableData = isSeekable ? File.ReadAllBytes(tempSekFileName) : null;
+
+                try
                 {
-                    //waveFormat = reader.WaveFormat;
-                    WaveFileWriter.WriteWavFileToStream(ms, reader);
-                }
-            }
-
-            byte[] resultBuf;
-            using (var reader = new StreamMediaFoundationReader(ms))
-            {
-                int totalSamples = 0;
-                using (var writer = new NativeWriter(new MemoryStream()))
-                {
-                    writer.Write(0x4800000c, Endian.Big);
-                    writer.Write((byte)0x12); // codec, Pcm16Big
-                    writer.Write((byte)((reader.WaveFormat.Channels - 1) << 2));
-                    writer.Write((ushort)(reader.WaveFormat.SampleRate), Endian.Big);
-
-                    long pos = writer.Position;
-                    writer.Write(0x40000000, Endian.Big);
-
-                    while (reader.Position < reader.Length)
+                    if (File.Exists(tempSpsFileName))
                     {
-                        int bufLength = 0x2600 * 2 * reader.WaveFormat.Channels;
-                        if (totalSamples + 0x2600 > 0x00ffffff)
-                            break;
-
-                        byte[] buf = new byte[bufLength];
-
-                        int actualRead = reader.Read(buf, 0, bufLength);
-                        if (actualRead == 0)
-                            break;
-
-                        writer.Write((actualRead + 8) | 0x44000000, Endian.Big);
-                        writer.Write(((actualRead / reader.WaveFormat.Channels) / 2), Endian.Big);
-
-                        for (int i = 0; i < actualRead / 2; i++)
-                        {
-                            short s = BitConverter.ToInt16(buf, i * 2);
-                            writer.Write(s, Endian.Big);
-                        }
-
-                        totalSamples += ((actualRead / reader.WaveFormat.Channels) / 2);
+                        File.Delete(tempSpsFileName);
                     }
 
-                    writer.Write(0x45000004, Endian.Big);
-                    writer.Position = pos;
-                    writer.Write(totalSamples | 0x40000000, Endian.Big);
+                    if (File.Exists(tempSekFileName))
+                    {
+                        File.Delete(tempSekFileName);
+                    }
 
-                    resultBuf = writer.ToByteArray();
+                    if (File.Exists(tempSphFileName))
+                    {
+                        File.Delete(tempSphFileName);
+                    }
                 }
+                catch (Exception ex) { }
             }
+
+            byte[] chunkData;
+            uint seekTableOffset, samplesOffset;
+            dynamic originalSoundWave = RootObject;
+
+            if (seekTableData != null)
+            {
+                int alignedSampleOffset = AlignTo(seekTableData.Length, 4);
+                chunkData = new byte[alignedSampleOffset + spsData.Length];
+                Array.Copy(seekTableData, chunkData, seekTableData.Length);
+                Array.Copy(spsData, 0, chunkData, alignedSampleOffset, spsData.Length);
+                seekTableOffset = 0u | GetSegmentOffsetFlags(isValid: true, hasStreamPool);
+                samplesOffset = (uint)alignedSampleOffset | GetSegmentOffsetFlags(isValid: true, hasStreamPool);
+            }
+            else
+            {
+                chunkData = spsData;
+                samplesOffset = 0u | GetSegmentOffsetFlags(isValid: true, hasStreamPool);
+                seekTableOffset = 0u | GetSegmentOffsetFlags(isValid: false, hasStreamPool);
+            }
+
+            Guid newGuid = App.AssetManager.AddChunk(chunkData);
+
+            float durationInSeconds = ToolHelper.GetDurationInSecondsFromBuffer(spsData);
+            int chunkIndex = track.ChunkIndex;
+
+            NewWaveResource newWave = App.AssetManager.GetResAs<NewWaveResource>(App.AssetManager.GetResEntry(((string)originalSoundWave.Name).ToLower()));
 
             int index = 0;
             Dispatcher?.Invoke(() => { index = tracksListBox.SelectedIndex; });
 
-            dynamic soundWave = RootObject;
-            dynamic variation = soundWave.RuntimeVariations[index];
-            dynamic soundDataChunk = soundWave.Chunks[variation.ChunkIndex];
-            ChunkAssetEntry chunkEntry = App.AssetManager.GetChunkEntry(soundDataChunk.ChunkId);
+            dynamic soundDataChunk = originalSoundWave.Chunks[track.ChunkIndex];
+            ChunkAssetEntry existingChunkEntry = App.AssetManager.GetChunkEntry(track.ChunkId);
 
-            int[] variationsPerChunk = new int[(int)soundWave.Chunks.Count];
-            foreach (var rtVariation in soundWave.RuntimeVariations)
+            bool chunkIsAlreadyModified = existingChunkEntry != null && existingChunkEntry.IsAdded && track.ChunkId != null;
+            dynamic chunkToModify = chunkIsAlreadyModified ? soundDataChunk : Activator.CreateInstance(originalSoundWave.Chunks[0].GetType());
+
+            chunkToModify.ChunkId = newGuid;
+            chunkToModify.ChunkSize = (uint)chunkData.Length;
+
+            ChunkAssetEntry newAssetEntry = App.AssetManager.GetChunkEntry(newGuid);
+
+            if (chunkIsAlreadyModified)
             {
-                variationsPerChunk[rtVariation.ChunkIndex]++;
+                App.AssetManager.RevertAsset(existingChunkEntry);
+
+                // add the new chunk to the existing superbundle
+                newAssetEntry.AddToSuperBundle(existingChunkEntry.AddedSuperBundles[0]);
+            }
+            else
+            {
+                originalSoundWave.Chunks.Add(chunkToModify);
+                chunkIndex = originalSoundWave.Chunks.Count - 1;
+
+                // add the new chunk to the existing superbundle
+                newAssetEntry.AddToSuperBundle(existingChunkEntry.SuperBundles[0]);
             }
 
-            //bool modify = true;
-            //if (modify)
-            //{
-            if (variationsPerChunk[variation.ChunkIndex] > 1)
+            if (track.SegmentIndex > -1)
             {
-                using (NativeReader chunkReader = new NativeReader(App.AssetManager.GetChunk(chunkEntry)))
+                newWave.Segments[track.SegmentIndex].SamplesOffset = samplesOffset;
+                newWave.Segments[track.SegmentIndex].SeekTableOffset = seekTableOffset;
+                newWave.Segments[track.SegmentIndex].SegmentLength = durationInSeconds;
+            }
+
+            if (track.VariationIndex > -1)
+            {
+                if (hasStreamPool)
                 {
-                    IEnumerable<byte> buf;
-                    if (variation.SegmentCount == soundWave.Segments.Count) // variation contains the only segments
-                    {
-                        buf = chunkReader.ReadToEnd();
-                    }
-                    else
-                    {
-                        buf = variation.FirstSegmentIndex != 0 ? chunkReader.ReadBytes((int)soundWave.Segments[variation.FirstSegmentIndex].SamplesOffset).Concat(resultBuf) : resultBuf;
+                    //    // ensure all variations point to the same chunk if using a stream
+                    //    foreach(var variation in newWave.Variations)
+                    //    {
+                    //      variation.StreamChunkIndex = (uint)chunkIndex;
+                    //    }
 
-                        if (variation.FirstSegmentIndex + variation.SegmentCount < soundWave.Segments.Count) // variation does not contain the final segments
-                        {
-                            chunkReader.Position = soundWave.Segments[variation.FirstSegmentIndex + variation.SegmentCount].SamplesOffset;
-                            buf = buf.Concat(chunkReader.ReadToEnd()); // append the rest of the data
-
-                            int sizeDiff = resultBuf.Length - ((int)soundWave.Segments[variation.FirstSegmentIndex + variation.SegmentCount].SamplesOffset - (int)soundWave.Segments[variation.FirstSegmentIndex].SamplesOffset);
-
-                            for (int i = variation.FirstSegmentIndex + 1; i < soundWave.Segments.Count; i++)
-                            {
-                                if (soundWave.Segments[i].SamplesOffset == 0)
-                                    break;
-
-                                soundWave.Segments[i].SamplesOffset += sizeDiff;
-                            }
-                        }
-                    }
-
-                    resultBuf = buf.ToArray();
+                    newWave.Variations[track.VariationIndex].StreamChunkIndex = (uint)chunkIndex;
+                }
+                else
+                {
+                    newWave.Variations[track.VariationIndex].MemoryChunkIndex = (uint)chunkIndex;
                 }
             }
 
-            App.AssetManager.ModifyChunk(chunkEntry.Id, resultBuf);
-            soundDataChunk.ChunkSize = (uint)resultBuf.Length;
+            Dictionary<Guid, uint> uniqueChunks = new Dictionary<Guid, uint>();
+            for (int i = 0; i < originalSoundWave.Chunks.Count; i++)
+            {
+                Guid guid = originalSoundWave.Chunks[i].ChunkId;
+                if (!uniqueChunks.ContainsKey(guid))
+                {
+                    uniqueChunks[guid] = originalSoundWave.Chunks[i].ChunkSize;
+                }
+            }
 
-            // disable seekable data, not supported
-            soundWave.Seekable = false;
-            soundWave.Segments[variation.FirstSegmentIndex].SamplesOffset = 0;
-            soundWave.Segments[variation.FirstSegmentIndex].SeekTableOffset = 4294967295;
+            object chunks = newWave.Chunks;
+            IList chunksList = (IList)chunks;
+            chunksList.Clear();
 
-            variation.SegmentCount = (byte)1;
-            variation.FirstLoopSegmentIndex = (byte)0;
-            variation.LastLoopSegmentIndex = (byte)0;
-
-            //}
-            //else // new chunk code
-            //{
-            //    Guid chunkId = App.AssetManager.AddChunk(resultBuf);
-
-            //    ChunkAssetEntry newEntry = App.AssetManager.GetChunkEntry(chunkId);
-            //    newEntry.AddToBundles(chunkEntry.Bundles);
-
-            //    soundDataChunk = TypeLibrary.CreateObject("SoundDataChunk");
-            //    soundDataChunk.ChunkId = chunkId;
-
-            //    soundWave.Chunks.Add(soundDataChunk);
-
-            //    dynamic segment = TypeLibrary.CreateObject("SoundWaveVariationSegment");
-            //    segment.SeekTableOffset = 4294967295;
-            //    soundWave.Segments.Add(segment);
-
-            //    dynamic variation = TypeLibrary.CreateObject("SoundWaveRuntimeVariation");
-            //    variation.FirstSegmentIndex = (ushort)(soundWave.Segments.Count - 1);
-            //    variation.SegmentCount = (byte)1;
-            //    variation.ChunkIndex = (byte)(soundWave.Chunks.Count - 1);
-            //    variation.Weight = (byte)100;
-            //    soundWave.RuntimeVariations.Add(variation);
-            //}
+            foreach (KeyValuePair<Guid, uint> item in uniqueChunks)
+            {
+                dynamic chunk = Activator.CreateInstance(newWave.Chunks.GetType().GetGenericArguments()[0]);
+                chunk.ChunkId = item.Key;
+                chunk.ChunkSize = Convert.ChangeType(item.Value, chunk.ChunkSize.GetType());
+                chunksList.Add(chunk);
+            }
 
             audioPlayer.Dispose();
             audioPlayer = new AudioPlayer();
 
-            List<SoundDataTrack> tracks = InitialLoad(task);
-
             Dispatcher?.Invoke(() =>
             {
+                Asset.Update();
+                App.AssetManager.ModifyEbx(AssetEntry.Name, Asset);
+                App.AssetManager.ModifyRes(((string)originalSoundWave.Name).ToLower(), newWave);
+
+                App.AssetManager.GetResEntry(AssetEntry.Name).LinkAsset(App.AssetManager.GetChunkEntry(newGuid));
+
+                EbxAssetEntry assetEntry = AssetEntry as EbxAssetEntry;
+                assetEntry.LinkAsset(App.AssetManager.GetResEntry(AssetEntry.Name));
+
                 // mark asset as modified and link the chunk
                 AssetModified = true;
                 InvokeOnAssetModified();
-                EbxAssetEntry assetEntry = AssetEntry as EbxAssetEntry;
-                assetEntry.LinkAsset(chunkEntry);
 
-                TracksList.Clear();
-                foreach (var track in tracks)
-                    TracksList.Add(track);
+                Task reloadTrackData = ReloadTrack(newWave, track);
+                if (reloadTrackData != null)
+                {
+                    reloadTrackData.RunSynchronously();
+                }
+
+                //List<SoundDataTrack> tracks = InitialLoad(task);
+
+                //TracksList.Clear();
+                //foreach (var theTrack in tracks)
+                //    TracksList.Add(theTrack);
             });
         }
     }

@@ -23,8 +23,8 @@ using System.Windows;
 [assembly: Guid("5fdd1243-084e-42dc-99bb-394a169d988f")]
 
 [assembly: PluginDisplayName("Sound Editor")]
-[assembly: PluginAuthor("GalaxyMan2015 & wannkunstbeikor")]
-[assembly: PluginVersion("1.0.0.1")]
+[assembly: PluginAuthor("GalaxyMan2015 & wannkunstbeikor, MMC modding community")]
+[assembly: PluginVersion("1.1.0.0")]
 
 [assembly: RegisterOptionsExtension(typeof(SoundOptions))]
 

@@ -84,7 +84,14 @@
                                                         <DataTemplate>
                                                             <Grid Height="80">
                                                                 <StackPanel Orientation="Vertical" VerticalAlignment="Center">
-                                                                    <TextBlock Text="{Binding Path=Name}" VerticalAlignment="Center" FontWeight="Bold"/>
+                                                                    <TextBlock VerticalAlignment="Center" FontWeight="Bold">
+                                                                        <TextBlock.Text>
+                                                                            <MultiBinding StringFormat="{}{0}{1}">
+                                                                                <Binding Path="Name" />
+                                                                                <Binding Path="ExtraName" />
+                                                                            </MultiBinding>
+                                                                        </TextBlock.Text>
+                                                                    </TextBlock>
                                                                     <TextBlock Text="{Binding Path=Duration, StringFormat=N2}" VerticalAlignment="Center"/>
                                                                     <TextBlock VerticalAlignment="Center">
                                                                         <TextBlock.Text>
@@ -103,9 +110,12 @@
                                                 <GridViewColumn Header="WaveForm">
                                                     <GridViewColumn.CellTemplate>
                                                         <DataTemplate>
+                                                            <DataTemplate.Resources>
+                                                                <conv:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+                                                            </DataTemplate.Resources>
                                                             <Grid>
-                                                                <Image Source="{Binding Path=WaveForm}" Width="800"/>
-                                                                <Canvas Width="800" Height="80">
+                                                                <Image Source="{Binding Path=WaveForm}" Width="800" />
+                                                                <Canvas Width="800" Height="80" >
                                                                     <Line X1="{Binding Path=Progress}" X2="{Binding Path=Progress}" Y1="0" Y2="80" StrokeThickness="1" Stroke="White" RenderOptions.EdgeMode="Aliased" SnapsToDevicePixels="True"/>
                                                                 </Canvas>
                                                             </Grid>
