@@ -588,7 +588,7 @@ namespace SoundEditorPlugin
 
                         ushort headersize = reader.ReadUShort(Endian.Big);
                         byte codec = (byte)(reader.ReadByte() & 0xF);
-                        int channels = (reader.ReadByte() >> 2) + 1;
+                        int channels = Math.Min((reader.ReadByte() >> 2) + 1, 2);
                         ushort sampleRate = reader.ReadUShort(Endian.Big);
                         uint sampleCount = reader.ReadUInt(Endian.Big) & 0xFFFFFFF;
                         //reader.Position += headersize - 0x0C;
