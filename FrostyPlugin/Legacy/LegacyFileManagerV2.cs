@@ -221,31 +221,70 @@ namespace Frosty.Core.Legacy
 
             App.AssetManager.RevertAsset(lfe);
 
-            ChunkAssetEntry orig = App.AssetManager.GetChunkEntry(lfe.ChunkId);
-
-            Guid guid = App.AssetManager.AddChunk(data, GenerateDeterministicGuid(lfe));
-            foreach (LegacyFileEntry.ChunkCollectorInstance inst in lfe.CollectorInstances)
+            if (lfe.Filename == "portraits" || lfe.Filename == "portraits_256")
             {
-                // add new chunk
-                inst.ModifiedEntry = new LegacyFileEntry.ChunkCollectorInstance();
-                ChunkAssetEntry assetChunkEntry = App.AssetManager.GetChunkEntry(guid);
+                Guid originalChunkId = lfe.ChunkId;
+                ChunkAssetEntry orig = App.AssetManager.GetChunkEntry(lfe.ChunkId);
 
-                inst.ModifiedEntry.ChunkId = guid;
-                inst.ModifiedEntry.Offset = 0;
-                inst.ModifiedEntry.CompressedOffset = 0;
-                inst.ModifiedEntry.Size = data.Length;
-                inst.ModifiedEntry.CompressedSize = assetChunkEntry.ModifiedEntry.Data.Length;
+                App.AssetManager.ModifyChunk(originalChunkId, data);
 
-                // @temp
-                foreach (int sbId in orig.SuperBundles)
+                Guid guid = originalChunkId;
+                foreach (LegacyFileEntry.ChunkCollectorInstance inst in lfe.CollectorInstances)
                 {
-                    assetChunkEntry.AddToSuperBundle(sbId);
-                }
-                assetChunkEntry.ModifiedEntry.UserData = "legacy;" + lfe.Name;
+                    // add new chunk
+                    inst.ModifiedEntry = new LegacyFileEntry.ChunkCollectorInstance();
+                    ChunkAssetEntry assetChunkEntry = App.AssetManager.GetChunkEntry(guid);
 
-                // link to main ebx
-                lfe.LinkAsset(assetChunkEntry);
-                inst.Entry.LinkAsset(lfe);
+                    inst.ModifiedEntry.ChunkId = guid;
+                    inst.ModifiedEntry.Offset = 0;
+                    inst.ModifiedEntry.CompressedOffset = 0;
+                    inst.ModifiedEntry.Size = data.Length;
+                    inst.ModifiedEntry.CompressedSize = assetChunkEntry.ModifiedEntry.Data.Length;
+
+                    // @temp
+                    foreach (int sbId in orig.SuperBundles)
+                    {
+                        assetChunkEntry.AddToSuperBundle(sbId);
+                    }
+                    assetChunkEntry.ModifiedEntry.AddToChunkBundle = true;
+                    assetChunkEntry.ModifiedEntry.UserData = "legacy;" + lfe.Name;
+
+                    // link to main ebx
+                    lfe.LinkAsset(assetChunkEntry);
+                    inst.Entry.LinkAsset(lfe);
+                }
+            }
+            else
+            {
+                // Use old new chunk method for these assets
+                ChunkAssetEntry orig = App.AssetManager.GetChunkEntry(lfe.ChunkId);
+
+                Guid guid = App.AssetManager.AddChunk(data, GenerateDeterministicGuid(lfe));
+                foreach (LegacyFileEntry.ChunkCollectorInstance inst in lfe.CollectorInstances)
+                {
+                    // add new chunk
+                    inst.ModifiedEntry = new LegacyFileEntry.ChunkCollectorInstance();
+                    ChunkAssetEntry assetChunkEntry = App.AssetManager.GetChunkEntry(guid);
+
+                    inst.ModifiedEntry.ChunkId = guid;
+                    inst.ModifiedEntry.Offset = 0;
+                    inst.ModifiedEntry.CompressedOffset = 0;
+                    inst.ModifiedEntry.Size = data.Length;
+                    inst.ModifiedEntry.CompressedSize = assetChunkEntry.ModifiedEntry.Data.Length;
+
+                    // @temp
+                    foreach (int sbId in orig.SuperBundles)
+                    {
+                        assetChunkEntry.AddToSuperBundle(sbId);
+                    }
+                    assetChunkEntry.ModifiedEntry.AddToChunkBundle = true;
+                    assetChunkEntry.ModifiedEntry.UserData = "legacy;" + lfe.Name;
+
+                    // link to main ebx
+                    lfe.LinkAsset(assetChunkEntry);
+                    inst.Entry.LinkAsset(lfe);
+                }
+
             }
 
             lfe.IsDirty = true;
