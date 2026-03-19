@@ -113,15 +113,27 @@ namespace Frosty.Core.Windows
             RefreshButton.IsEnabled = false;
 
 
-            await Task.Run((() =>
+            try
             {
-                using (RegistryKey lmKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\\WOW6432Node"))
+                await Task.Run(() =>
                 {
-                    int totalCount = 0;
+                    using (RegistryKey lmKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\\WOW6432Node"))
+                    {
+                        if (lmKey == null)
+                        {
+                            // Log an error or notify the user
+                            return;
+                        }
 
-                    IterateSubKeys(lmKey, ref totalCount);
-                }
-            }));
+                        int totalCount = 0;
+                        IterateSubKeys(lmKey, ref totalCount);
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                // Log the exception and notify the user
+            }
 
             RefreshButton.IsEnabled = true;
         }
@@ -157,16 +169,23 @@ namespace Frosty.Core.Windows
 
                         if (ProfilesLibrary.HasProfile(nameWithoutExt))
                         {
+                            bool exists = false;
                             Application.Current.Dispatcher.Invoke(() =>
                             {
                                 foreach (FrostyConfiguration config in configurations)
                                 {
                                     if (config.ProfileName == fi.Name.Remove(fi.Name.Length - 4))
-                                        return;
+                                    {
+                                        exists = true;
+                                        break;
+                                    }
                                 }
-
-                                Config.AddGame(fi.Name.Remove(fi.Name.Length - 4), fi.DirectoryName);
-                                configurations.Add(new FrostyConfiguration(fi.Name.Remove(fi.Name.Length - 4)));
+                                if (!exists)
+                                    Dispatcher.Invoke(() =>
+                                    {
+                                        Config.AddGame(fi.Name.Remove(fi.Name.Length - 4), fi.DirectoryName);
+                                        configurations.Add(new FrostyConfiguration(fi.Name.Remove(fi.Name.Length - 4)));
+                                    });
                             });
 
                             totalCount++;
