@@ -41,7 +41,7 @@ namespace FrostySdk.BaseProfile
                 magic = (BaseBinarySb.Magic)(reader.ReadUInt(endian) ^ BaseBinarySb.GetSalt());
 
                 if (!BaseBinarySb.IsValidMagic(magic))
-                    throw new InvalidDataException("magic");
+                    throw new InvalidDataException("Magic error. This error is usually caused by corrupted game files. Please repair/reinstall the game and try again.");
             }
 
             bool containsSha1 = !(magic == BaseBinarySb.Magic.Fifa || magic == BaseBinarySb.Magic.Encrypted);
