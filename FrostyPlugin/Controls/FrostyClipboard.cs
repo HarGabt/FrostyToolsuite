@@ -63,7 +63,7 @@ namespace Frosty.Core.Controls
                 return data;
 
             dynamic newData;
-            if (dataType.GetCustomAttribute<EbxClassMetaAttribute>().Type == EbxFieldType.Pointer)
+            if (dataType.GetCustomAttribute<EbxClassMetaAttribute>()?.Type == EbxFieldType.Pointer)
             {
                 if (oldNewMapping.ContainsKey(data))
                     return oldNewMapping[data];
@@ -107,7 +107,7 @@ namespace Frosty.Core.Controls
 
             foreach (PropertyInfo pi in dataType.GetProperties(BindingFlags.Instance | BindingFlags.Public))
             {
-                if (pi.Name.StartsWith("__"))
+                if (pi.Name.StartsWith("__") || !pi.CanWrite)
                     continue;
 
                 dynamic oldValue = pi.GetValue(data);

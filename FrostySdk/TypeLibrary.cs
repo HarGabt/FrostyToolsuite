@@ -1272,6 +1272,8 @@ namespace FrostySdk
         internal static dynamic CreateObject(Type inType)
         {
             EbxClassMetaAttribute attr = inType.GetCustomAttribute<EbxClassMetaAttribute>();
+            object[] args = null;
+
             if (attr != null)
             {
                 switch (attr.Type)
@@ -1288,7 +1290,7 @@ namespace FrostySdk
                     case EbxFieldType.Int8: inType = typeof(sbyte); break;
                     case EbxFieldType.ResourceRef: inType = typeof(ResourceRef); break;
                     case EbxFieldType.Sha1: inType = typeof(Sha1); break;
-                    case EbxFieldType.String: inType = typeof(string); break;
+                    case EbxFieldType.String: inType = typeof(String); args = new object[1] { new char[1] { ' ' } }; break;
                     case EbxFieldType.TypeRef: inType = typeof(TypeRef); break;
                     case EbxFieldType.UInt16: inType = typeof(ushort); break;
                     case EbxFieldType.UInt32: inType = typeof(uint); break;
@@ -1298,7 +1300,16 @@ namespace FrostySdk
                 }
             }
 
-            object obj = Activator.CreateInstance(inType);
+            object obj;
+
+            if (args != null)
+            {
+                obj = Activator.CreateInstance(inType, args);
+            }
+            else
+            {
+                obj = Activator.CreateInstance(inType);
+            }
             return obj;
         }
 
