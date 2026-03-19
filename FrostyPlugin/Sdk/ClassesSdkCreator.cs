@@ -1377,15 +1377,15 @@ namespace Frosty.Core.Sdk
             m_classMappings = new Dictionary<string, Tuple<EbxClass, DbObject>>();
             m_fieldMappings = new Dictionary<string, List<EbxField>>();
 
+            List<Guid> guids = new List<Guid>();
+            if (App.FileSystemManager.HasFileInMemoryFs("SharedTypeDescriptors_patch.ebx"))
+            {
+                LoadSharedTypeDescriptors("SharedTypeDescriptors_patch.ebx", m_classMappings, guids);
+            }
+
             if (App.FileSystemManager.HasFileInMemoryFs("SharedTypeDescriptors.ebx"))
             {
-                List<Guid> guids = new List<Guid>();
-
                 LoadSharedTypeDescriptors("SharedTypeDescriptors.ebx", m_classMappings, guids);
-                if (App.FileSystemManager.HasFileInMemoryFs("SharedTypeDescriptors_patch.ebx"))
-                {
-                    LoadSharedTypeDescriptors("SharedTypeDescriptors_patch.ebx", m_classMappings, guids);
-                }
             }
             else
             {
@@ -1606,6 +1606,12 @@ namespace Frosty.Core.Sdk
                 if (classMapping.ContainsKey(theClass.NameHash))
                 {
                     DbObject classObj = classMapping[theClass.NameHash];
+                    var theName = classObj.GetValue<string>("name");
+
+                    if (theName != null && mapping.ContainsKey(theName))
+                    {
+                        continue;
+                    }
 
                     if (mapping.ContainsKey(classObj.GetValue("name", "")))
                     {
