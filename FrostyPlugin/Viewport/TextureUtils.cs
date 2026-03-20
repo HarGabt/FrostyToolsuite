@@ -581,6 +581,7 @@ namespace Frosty.Core.Viewport
                 case "BC7_UNORM": return SharpDX.DXGI.Format.BC7_Typeless;
                 case "R8_UNORM": return SharpDX.DXGI.Format.R8_Typeless;
                 case "R16G16B16A16_FLOAT": return SharpDX.DXGI.Format.R16G16B16A16_Float;
+                case "R16G16B16A16_UNORM": return SharpDX.DXGI.Format.R16G16B16A16_UNorm;
                 case "ARGB32F": return SharpDX.DXGI.Format.R32G32B32A32_Float;
                 case "R32G32B32A32_FLOAT": return SharpDX.DXGI.Format.R32G32B32A32_Float;
                 case "R9G9B9E5F": return SharpDX.DXGI.Format.R9G9B9E5_Sharedexp;
@@ -633,6 +634,7 @@ namespace Frosty.Core.Viewport
                 case "BC7_UNORM": return SharpDX.DXGI.Format.BC7_UNorm;
                 case "R8_UNORM": return SharpDX.DXGI.Format.R8_UNorm;
                 case "R16G16B16A16_FLOAT": return SharpDX.DXGI.Format.R16G16B16A16_Float;
+                case "R16G16B16A16_UNORM": return SharpDX.DXGI.Format.R16G16B16A16_UNorm;
                 case "ARGB32F": return SharpDX.DXGI.Format.R32G32B32A32_Float;
                 case "R32G32B32A32_FLOAT": return SharpDX.DXGI.Format.R32G32B32A32_Float;
                 case "R9G9B9E5F": return SharpDX.DXGI.Format.R9G9B9E5_Sharedexp;
@@ -826,6 +828,7 @@ namespace Frosty.Core.Viewport
             {
                 case "R8_UNORM":
                 case "R16G16B16A16_FLOAT":
+                case "R16G16B16A16_UNORM":
                 case "R32G32B32A32_FLOAT":
                 case "R9G9B9E5_FLOAT":
                 case "R8G8B8A8_UNORM":
@@ -879,6 +882,7 @@ namespace Frosty.Core.Viewport
                     break;
 
                 case "R16G16B16A16_FLOAT":
+                case "R16G16B16A16_UNORM":
                     blockSize = 64;
                     break;
 

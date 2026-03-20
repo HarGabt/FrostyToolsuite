@@ -358,6 +358,8 @@ namespace Frosty.Core.Controls
                     pixelFormat = "R8_UNORM";
                 else if (header.ExtendedHeader.dxgiFormat == SharpDX.DXGI.Format.R16G16B16A16_Float)
                     pixelFormat = "R16G16B16A16_FLOAT";
+                else if (header.ExtendedHeader.dxgiFormat == SharpDX.DXGI.Format.R16G16B16A16_UNorm)
+                    pixelFormat = "R16G16B16A16_UNORM";
                 else if (header.ExtendedHeader.dxgiFormat == SharpDX.DXGI.Format.R32G32B32A32_Float)
                     pixelFormat = "R32G32B32A32_FLOAT";
                 else if (header.ExtendedHeader.dxgiFormat == SharpDX.DXGI.Format.R9G9B9E5_Sharedexp)

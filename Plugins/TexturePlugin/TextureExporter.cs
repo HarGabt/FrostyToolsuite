@@ -206,6 +206,7 @@ namespace TexturePlugin
                 case "BC7_UNORM": header.HasExtendedHeader = true; header.ExtendedHeader.dxgiFormat = SharpDX.DXGI.Format.BC7_UNorm; break;
                 case "R8_UNORM": header.HasExtendedHeader = true; header.ExtendedHeader.dxgiFormat = SharpDX.DXGI.Format.R8_UNorm; break;
                 case "R16G16B16A16_FLOAT": header.HasExtendedHeader = true; header.ExtendedHeader.dxgiFormat = SharpDX.DXGI.Format.R16G16B16A16_Float; break;
+                case "R16G16B16A16_UNORM": header.HasExtendedHeader = true; header.ExtendedHeader.dxgiFormat = SharpDX.DXGI.Format.R16G16B16A16_UNorm; break;
                 case "ARGB32F": header.HasExtendedHeader = true; header.ExtendedHeader.dxgiFormat = SharpDX.DXGI.Format.R32G32B32A32_Float; break;
                 case "R32G32B32A32_FLOAT": header.HasExtendedHeader = true; header.ExtendedHeader.dxgiFormat = SharpDX.DXGI.Format.R32G32B32A32_Float; break;
                 case "R9G9B9E5F": header.HasExtendedHeader = true; header.ExtendedHeader.dxgiFormat = SharpDX.DXGI.Format.R9G9B9E5_Sharedexp; break;
