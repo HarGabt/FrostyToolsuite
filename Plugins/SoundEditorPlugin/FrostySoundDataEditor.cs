@@ -28,6 +28,7 @@ using SoundEditorPlugin.Resources;
 using System.Diagnostics;
 using FrostySdk.Ebx;
 using System.Collections;
+using SoundEditorPlugin.Helpers;
 
 namespace SoundEditorPlugin
 {
@@ -667,68 +668,11 @@ namespace SoundEditorPlugin
 
         private async void ImportSound(string importFileName, SoundDataTrack track, FrostyTaskWindow task)
         {
-            if (!ToolHelper.IsInitialized)
-            {
-                await ToolHelper.InitializeAsync();
-            }
-
-            string tempOutput = Path.GetTempPath() + Guid.NewGuid();
+            string codec = GetFormat(track.CodecUnformatted);
             bool isSeekable = ((dynamic)Asset.RootObject).IsSeekable;
+            (byte[] spsData, byte[] seekTableData) = await ToolHelper.Instance.ImportSound(importFileName, codec, isSeekable);
 
-            byte[] spsData;
-            byte[] seekTableData;
             bool hasStreamPool = ((PointerRef)((dynamic)base.Asset.RootObject).StreamPool).Type != PointerRefType.Null;
-
-            try
-            {
-                Process process = new Process();
-                ProcessStartInfo processStartInfo = new ProcessStartInfo(ToolHelper.ResoucePath + ".");
-
-                processStartInfo.Arguments = $"-sndplayer -fileformatversion1 -{GetFormat(track.CodecUnformatted)} " +
-                    $"{(isSeekable ? "-seekable" : "")} \"{importFileName}\" -=\"{tempOutput}\"";
-
-                processStartInfo.UseShellExecute = false;
-                processStartInfo.CreateNoWindow = true;
-                process.StartInfo = processStartInfo;
-                process.EnableRaisingEvents = true;
-
-                process.Start();
-                process.WaitForExit();
-
-                if (process.ExitCode != 0 && !File.Exists(tempOutput + ".sps"))
-                {
-                    throw new FileFormatException($"Failed to import the file. Error: {process.ExitCode}");
-                }
-            }
-            finally
-            {
-                string tempSpsFileName = tempOutput + ".sps";
-                string tempSekFileName = tempOutput + ".sek";
-                string tempSphFileName = tempOutput + ".sph";
-
-                spsData = File.ReadAllBytes(tempSpsFileName);
-                seekTableData = isSeekable ? File.ReadAllBytes(tempSekFileName) : null;
-
-                try
-                {
-                    if (File.Exists(tempSpsFileName))
-                    {
-                        File.Delete(tempSpsFileName);
-                    }
-
-                    if (File.Exists(tempSekFileName))
-                    {
-                        File.Delete(tempSekFileName);
-                    }
-
-                    if (File.Exists(tempSphFileName))
-                    {
-                        File.Delete(tempSphFileName);
-                    }
-                }
-                catch (Exception ex) { }
-            }
-
             byte[] chunkData;
             uint seekTableOffset, samplesOffset;
             dynamic originalSoundWave = RootObject;
@@ -751,7 +695,7 @@ namespace SoundEditorPlugin
 
             Guid newGuid = App.AssetManager.AddChunk(chunkData);
 
-            float durationInSeconds = ToolHelper.GetDurationInSecondsFromBuffer(spsData);
+            float durationInSeconds = ToolHelper.Instance.GetDurationInSecondsFromBuffer(spsData);
             int chunkIndex = track.ChunkIndex;
 
             NewWaveResource newWave = App.AssetManager.GetResAs<NewWaveResource>(App.AssetManager.GetResEntry(((string)originalSoundWave.Name).ToLower()));

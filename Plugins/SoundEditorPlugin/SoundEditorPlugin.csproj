@@ -47,10 +47,14 @@
 		<None Remove="Resources\libmp3lame.dll" />
 		<None Remove="Resources\Tool" />
 		<None Remove="Resources\Tool.lib.zip" />
+		<None Remove="Resources\vgmstream.zip" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<EmbeddedResource Include="Resources\Tool.lib.zip">
+			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
+		</EmbeddedResource>
+		<EmbeddedResource Include="Resources\vgmstream.zip">
 			<CopyToOutputDirectory>Never</CopyToOutputDirectory>
 		</EmbeddedResource>
 	</ItemGroup>

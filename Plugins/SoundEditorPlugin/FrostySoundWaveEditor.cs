@@ -1,23 +1,28 @@
-﻿using Frosty.Core;
-using Frosty.Core.Controls;
-using Frosty.Core.Windows;
-using FrostySdk;
-using FrostySdk.Ebx;
-using FrostySdk.Interfaces;
-using FrostySdk.IO;
-using FrostySdk.Managers;
-using FrostySdk.Managers.Entries;
-using NAudio.Wave;
-using SoundEditorPlugin.Resources;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Drawing.Imaging;
-using System.IO;
-using System.Threading.Tasks;
+using FrostySdk.Interfaces;
 using System.Windows;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
+using FrostySdk.IO;
+using System.IO;
+using FrostySdk;
+using FrostySdk.Managers;
+using FrostySdk.Ebx;
 using WaveFormRendererLib;
+using System.Drawing.Imaging;
+using System.Windows.Media.Imaging;
+using System.Windows.Media;
+using NAudio.Wave;
+using Frosty.Core.Controls;
+using Frosty.Core;
+using Frosty.Core.Windows;
+using FrostySdk.Managers.Entries;
+using SoundEditorPlugin.Resources;
+using System.Threading;
+using System.Diagnostics;
+using FrostyCore;
+using System.Threading.Tasks;
+using System.Reflection;
+using SoundEditorPlugin.Helpers;
 
 namespace SoundEditorPlugin
 {
@@ -128,6 +133,13 @@ namespace SoundEditorPlugin
                                 sampleCount += (uint)data.Length;
                                 decodedSoundBuf.AddRange(data);
                             });
+                        }
+                        else if (codec == 0xE || codec == 0xF)
+                        {
+                            Task<short[]> theTask = Task.Run(async () => await VgmStreamHelper.Instance.Decode(soundBuf));
+                            short[] data = theTask.Result;
+                            sampleCount = (uint)data.Length;
+                            decodedSoundBuf.AddRange(data);
                         }
 
                         if (i == runtimeVariation.LastLoopSegmentIndex && runtimeVariation.SegmentCount > 1)
@@ -491,6 +503,7 @@ namespace SoundEditorPlugin
                 {
                     t.RunSynchronously();
                 }
+
                 // clean up all streams after all sounds loaded
                 foreach (var chunkStream in chunkStreams)
                 {
@@ -563,9 +576,8 @@ namespace SoundEditorPlugin
                 track.CodecUnformatted = codec;
             }
 
-
             // async task to load the sound data
-            return new Task(() =>
+            return new Task(async () =>
             {
                 using (NativeReader2 reader = new NativeReader2(chunkStreams[track.ChunkId]))
                 {
@@ -588,11 +600,11 @@ namespace SoundEditorPlugin
 
                         ushort headersize = reader.ReadUShort(Endian.Big);
                         byte codec = (byte)(reader.ReadByte() & 0xF);
-                        int channels = Math.Min((reader.ReadByte() >> 2) + 1, 2);
+                        int channels = (reader.ReadByte() >> 2) + 1;
                         ushort sampleRate = reader.ReadUShort(Endian.Big);
                         uint sampleCount = reader.ReadUInt(Endian.Big) & 0xFFFFFFF;
                         //reader.Position += headersize - 0x0C;
-                        
+
                         if (i == runtimeVariation.FirstLoopSegmentIndex && runtimeVariation.SegmentCount > 1)
                         {
                             startLoopingTime = (decodedSoundBuf.Count / channels) / (double)sampleRate;
@@ -619,6 +631,7 @@ namespace SoundEditorPlugin
                         }
                         else if (codec == 0x5 || codec == 0x6 || codec == 0xC)
                         {
+                            channels = Math.Min(channels, 2); // Clamp channels because EALayer3 decode has issues with more than 2 channels
                             sampleCount = 0;
                             try
                             {
@@ -629,12 +642,19 @@ namespace SoundEditorPlugin
                                     sampleCount += (uint)data.Length;
                                     decodedSoundBuf.AddRange(data);
                                 });
-                                duration += (sampleCount / channels) / (double)sampleRate;
+                                duration += (sampleCount / channels / (double)sampleRate);
                             }
                             catch (Exception ex)
                             {
                                 logger.LogError("Error decoding track #" + index);
                             }
+                        }
+                        else if (codec == 0xE || codec == 0xF)
+                        {
+                            short[] data = await VgmStreamHelper.Instance.Decode(soundBuf);
+                            sampleCount = (uint)data.Length;
+                            duration += (sampleCount / channels) / (double)sampleRate;
+                            decodedSoundBuf.AddRange(data);
                         }
 
                         if (runtimeVariation.SegmentCount > 1)
@@ -724,7 +744,6 @@ namespace SoundEditorPlugin
                     catch (Exception e)
                     {
                     }
-
                 }
 
                 track.IsLoaded = true;
@@ -938,7 +957,7 @@ namespace SoundEditorPlugin
         {
         }
 
-        private static int[] EA_XA_TABLE = 
+        private static int[] EA_XA_TABLE =
         {
             0,  240,  460,  392,
             0,    0, -208, -220,
