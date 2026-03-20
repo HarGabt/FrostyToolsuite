@@ -166,7 +166,11 @@ namespace Frosty.Core.Controls.Editors
             base.OnApplyTemplate();
 
             FrostyPropertyGridItemData p = GetPropertyItem();
-            baseType = p.GetCustomAttribute<EbxFieldMetaAttribute>().BaseType;
+
+            var ebxAttribute = p.GetCustomAttribute<EbxFieldMetaAttribute>();
+
+            // External pointer does not have an EbxField metadata attribute - so it shouldnt be editable.
+            baseType = ebxAttribute?.BaseType;
 
             Focusable = false;
 
