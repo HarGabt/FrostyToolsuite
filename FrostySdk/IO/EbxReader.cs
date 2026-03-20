@@ -722,7 +722,7 @@ namespace FrostySdk.IO
 
                 int hash = ReadInt();
                 classType.FieldIndex = ReadInt();
-                classType.FieldCount = ReadByte();
+                classType.FieldCount = ReadUShort();
                 classType.Alignment = ReadByte();
                 classType.Type = (magic == EbxVersion.Version2) ? (ushort)(ReadUShort()) : (ushort)(ReadUShort() >> 1);
                 classType.Size = ReadUShort();

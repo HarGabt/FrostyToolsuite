@@ -280,7 +280,7 @@ namespace FrostySdk.IO
 
                 Write(HashString(classType.Name));
                 Write(classType.FieldIndex);
-                Write((byte)classType.FieldCount);
+                Write(classType.FieldCount);
                 Write(classType.Alignment);
                 Write(type);
                 Write(classType.Size);
@@ -500,7 +500,7 @@ namespace FrostySdk.IO
                 pis.Add(pi);
             }
 
-            index = AddClass(objType.Name, fieldTypes.Count, (byte)(pis.Count + ((inherited) ? 1 : 0)),
+            index = AddClass(objType.Name, fieldTypes.Count, (ushort)(pis.Count + ((inherited) ? 1 : 0)),
                 cta.Alignment, cta.Flags, cta.Size, 0, objType);
 
             // Inherited
@@ -623,7 +623,7 @@ namespace FrostySdk.IO
                     pis.Add(pi);
                 }
 
-                classType.FieldCount = (byte)pis.Count;
+                classType.FieldCount = (ushort)pis.Count;
 
                 if (type.BaseType != typeof(object) && type.BaseType != typeof(ValueType))
                 {
@@ -986,7 +986,7 @@ namespace FrostySdk.IO
             typeNames.Add(inName);
         }
 
-        private int AddClass(string name, int fieldIndex, byte fieldCount, byte alignment, ushort type, ushort size, ushort secondSize, Type classType)
+        private int AddClass(string name, int fieldIndex, ushort fieldCount, byte alignment, ushort type, ushort size, ushort secondSize, Type classType)
         {
             classTypes.Add(new EbxClass()
             {
