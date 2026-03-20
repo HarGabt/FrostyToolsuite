@@ -762,7 +762,14 @@ namespace FrostySdk.IO
                     {
                         object tmpValue = value;
                         EbxClass enumClass = GetClass(null, boxedValue.ClassRef);
-                        value = Enum.Parse(GetType(enumClass), tmpValue.ToString());
+                        try
+                        {
+                            value = Enum.Parse(GetType(enumClass), tmpValue.ToString());
+                        }
+                        catch (ArgumentNullException e)
+                        {
+                            value = tmpValue;
+                        }
                     }
                 }
                 
