@@ -25,7 +25,7 @@ namespace SoundEditorPlugin.Helpers
             ToolName = "Tool";
         }
 
-        public async Task<(byte[] spsData, byte[] seekTableData)> ImportSound(string importFileName, string codec, bool isSeekable)
+        public async Task<(byte[] spsData, byte[] seekTableData)> ImportSound(string importFileName, string codec, bool isSeekable, int channelCount, bool remix)
         {
             if (State == InitializedState.NotInitialized)
             {
@@ -43,7 +43,8 @@ namespace SoundEditorPlugin.Helpers
                 ProcessStartInfo processStartInfo = new ProcessStartInfo(ResourcePath + ".");
 
                 processStartInfo.Arguments = $"-sndplayer -fileformatversion1 -{codec} " +
-                    $"{(isSeekable ? "-seekable" : "")} \"{importFileName}\" -=\"{tempOutput}\"";
+                    $"{(isSeekable ? "-seekable" : "")} {(remix == true ? $"-remix{(channelCount == 1 ? "mono" : "stereo")}" : "")} " +
+                    $"\"{importFileName}\" -=\"{tempOutput}\"";
 
                 processStartInfo.UseShellExecute = false;
                 processStartInfo.CreateNoWindow = true;

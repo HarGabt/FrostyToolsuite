@@ -687,7 +687,9 @@ namespace SoundEditorPlugin
         {
             string codec = GetFormat(track.CodecUnformatted);
             bool isSeekable = ((dynamic)Asset.RootObject).IsSeekable;
-            (byte[] spsData, byte[] seekTableData) = await ToolHelper.Instance.ImportSound(importFileName, codec, isSeekable);
+            bool shouldRemix = Config.Get<bool>("AutoRemixOnImport", true);
+
+            (byte[] spsData, byte[] seekTableData) = await ToolHelper.Instance.ImportSound(importFileName, codec, isSeekable, track.ChannelCount, shouldRemix);
 
             bool hasStreamPool = ((PointerRef)((dynamic)base.Asset.RootObject).StreamPool).Type != PointerRefType.Null;
             byte[] chunkData;

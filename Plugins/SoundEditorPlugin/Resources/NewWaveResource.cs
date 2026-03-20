@@ -1190,7 +1190,7 @@ namespace SoundEditorPlugin.Resources
                         else if (keyValuePairs.Count > 2)
                             bits = 0x2;
 
-                        byte size3 = newValues.ToArray().GetBiggestSize();
+                        byte size3 = newValues.ToArray().GetBiggestSignedSize();
 
 
                         using (NativeWriter writer = new NativeWriter(new MemoryStream()))
@@ -1825,36 +1825,67 @@ namespace SoundEditorPlugin.Resources
             //    result = 2;
             return biggestSize;
         }
-        public static byte GetShift(this long[] array, out long[] outArray)
-        {
-            byte size = GetBiggestSize(array);
-            Dictionary<int, List<long>> shifts = new Dictionary<int, List<long>>();
 
+        public static byte GetBiggestSignedSize(this long[] array)
+        {
+            byte biggestSize = 1;
             foreach (var item in array)
             {
-                for (int i = 0; i <= byte.MaxValue; i++)
+                if (item > byte.MaxValue)
                 {
-                    double b = (double)item / Math.Pow(2, i);
-                    if (b % 1 == 0)
+                    if (biggestSize < 2)
                     {
-                        if (!shifts.ContainsKey(i))
-                            shifts.Add(i, new List<long>());
-                        shifts[i].Add(Convert.ToInt64(b));
+                        biggestSize = 2;
+                    }
+
+                    if (item > short.MaxValue)
+                    {
+                        if (biggestSize < 4)
+                        {
+                            biggestSize = 4;
+                        }
+
+                        if (item > int.MaxValue)
+                        {
+                            return 8;
+                        }
                     }
                 }
             }
-            List<long> bytes = new List<long>(byte.MaxValue);
-            foreach (var item in shifts)
+            return biggestSize;
+        }
+
+        public static byte GetShift(this long[] array, out long[] outArray)
+        {
+            int commonShift = byte.MaxValue;
+            foreach (var value in array)
             {
-                if (item.Value.Count != array.Length)
-                    continue;
-                bytes.Add(item.Key);
+                int shift = 0;
+                ulong uValue = (ulong)value;
+
+                while (shift < byte.MaxValue && (uValue & 1) == 0)
+                {
+                    shift++;
+                    uValue >>= 1;
+                }
+
+                if (shift < commonShift)
+                    commonShift = shift;
+
+                if (commonShift == 0)
+                    break;
             }
-            byte result = (byte)bytes.GetLowest();
-            if (shifts[result].ToArray().GetBiggestSize() < size)
+            if (commonShift > 0)
             {
-                outArray = shifts[result].ToArray();
-                return result;
+                long[] reduced = array.Select(val => val >> commonShift).ToArray();
+                byte originalSize = GetBiggestSize(array);
+                byte reducedSize = GetBiggestSize(reduced);
+
+                if (reducedSize < originalSize)
+                {
+                    outArray = reduced;
+                    return (byte)commonShift;
+                }
             }
             outArray = array;
             return 0;
@@ -1949,12 +1980,22 @@ namespace SoundEditorPlugin.Resources
                 }
             }
 
-            if (item.Item.Name == "StreamChunkIndex")
+            if (item.Item.Name == "StreamChunkIndex" || item.Item.Name == "MemoryChunkIndex")
             {
                 for (int i = 0; i < item.Item.Parent.Parent.Children.Count; i++)
                 {
                     var child = item.Item.Parent.Parent.Children[i];
                     resource.Variations[i] = child.Value as Variation;
+                }
+            }
+
+            if (item.Item.Name == "ChunkSize" || item.Item.Name == "ChunkId")
+            {
+                for (int i = 0; i < item.Item.Parent.Parent.Children.Count; i++)
+                {
+                    var child = item.Item.Parent.Parent.Children[i];
+                    resource.Chunks[i].ChunkId = ((dynamic)child.Value).ChunkId;
+                    resource.Chunks[i].ChunkSize = ((dynamic)child.Value).ChunkSize;
                 }
             }
 
