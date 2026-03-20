@@ -370,7 +370,7 @@ namespace Frosty.Core.IO
                     if (entry.HasModifiedData)
                     {
                         ICustomActionHandler actionHandler = App.PluginManager.GetCustomHandler((ResourceType)entry.ResType);
-                        if (actionHandler != null && !entry.IsAdded)
+                        if (actionHandler != null && !entry.IsAdded && entry.ModifiedEntry.DataObject != null)
                         {
                             // use custom action handler to save resource to mod
                             actionHandler.SaveToMod(this, entry);
