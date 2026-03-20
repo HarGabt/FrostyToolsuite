@@ -66,6 +66,37 @@ namespace DuplicationPlugin
         }
     }
 
+    public class RimeTtfFontExtension : DuplicateAssetExtension
+    {
+        public override string AssetType => "RimeTtfAsset";
+
+        public override EbxAssetEntry DuplicateAsset(EbxAssetEntry entry, string newName, bool createNew, Type newType)
+        {
+            // Duplicate the ebx
+            EbxAssetEntry newEntry = base.DuplicateAsset(entry, newName, createNew, newType);
+            EbxAsset newAsset = App.AssetManager.GetEbx(newEntry);
+
+            // Get the original asset root object data
+            EbxAsset asset = App.AssetManager.GetEbx(entry);
+            dynamic fontAsset = asset.RootObject;
+
+            // Get the original res entry
+            ResAssetEntry resEntry = App.AssetManager.GetResEntry(fontAsset.FontResource);
+
+            // Duplicate the res
+            ResAssetEntry newResEntry = DuplicateRes(resEntry, newName, ResourceType.RimeTtfFontFile);
+            ((dynamic)newAsset.RootObject).FontResource = newResEntry.ResRid;
+
+            // Link the newly duplicates ebx and res entries together
+            newEntry.LinkAsset(newResEntry);
+
+            // Modify ebx and res
+            App.AssetManager.ModifyEbx(newEntry.Name, newAsset);
+
+            return newEntry;
+        }
+    }
+
     public class AtlasTextureExtension : DuplicateAssetExtension
     {
         public override string AssetType => "AtlasTextureAsset";
