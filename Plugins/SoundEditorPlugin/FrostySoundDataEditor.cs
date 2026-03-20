@@ -275,6 +275,23 @@ namespace SoundEditorPlugin
 
             voice = new SourceVoice(player.AudioSystem, format, true);
             voice.SetOutputVoices(new VoiceSendDescriptor(player.OutputVoice));
+
+            bool ForceStereo = Config.Get<bool>("ForceStereo", true);
+            if (ForceStereo)
+            {
+                // To force stereo (2-channel) output: take input channel count (track channel count) * output channel count (2)
+                // make an array of floats representing volume level (range is 0-100%, where 100 = 1.0f) and turn every channel up to 100%
+                List<float> fMatrix = new List<float>();
+
+                for (int i = 0; i < track.ChannelCount; i++)
+                {
+                    fMatrix.Add(1.0f); // L channel
+                    fMatrix.Add(1.0f); // R channel
+                }
+
+                voice.SetOutputMatrix(track.ChannelCount, 2, fMatrix.ToArray());
+            }
+
             voice.BufferEnd += Voice_BufferEnd;
 
             Voice_BufferEnd(IntPtr.Zero);

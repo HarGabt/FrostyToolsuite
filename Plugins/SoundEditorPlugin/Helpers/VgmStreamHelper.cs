@@ -21,8 +21,6 @@ namespace SoundEditorPlugin.Helpers
 {
     public class VgmStreamHelper : HelperBase<VgmStreamHelper>
     {
-        private readonly SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
-
         public VgmStreamHelper()
         {
             BasePath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
@@ -34,8 +32,7 @@ namespace SoundEditorPlugin.Helpers
         {
             if (State == InitializedState.Initializing)
             {
-                await _semaphore.WaitAsync();
-                _semaphore.Release();
+                await WaitForSemaphore();
             }
             else if (State == InitializedState.NotInitialized)
             {

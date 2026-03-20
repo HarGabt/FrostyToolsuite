@@ -16,14 +16,21 @@ namespace SoundEditorPlugin
         [EbxFieldMeta(EbxFieldType.Float32)]
         public float Volume { get; set; } = 20.0f;
 
+        [Category("Editor")]
+        [DisplayName("Force Stereo Output")]
+        [Description("Force stereo (2-channel) output for all sounds. Enabling this may fix some track output in Frosty (like pursuit music or cutscenes SFXs).")]
+        public bool ForceStereo { get; set; } = true;
+
         public override void Load()
         {
             Volume = Config.Get<float>("SoundVolume", 20.0f);
+            ForceStereo = Config.Get<bool>("ForceStereo", true);
         }
 
         public override void Save()
         {
             Config.Add("SoundVolume", Volume);
+            Config.Add("ForceStereo", ForceStereo);
             Config.Save();
         }
 
