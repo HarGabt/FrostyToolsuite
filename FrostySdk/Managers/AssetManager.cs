@@ -705,6 +705,10 @@ namespace FrostySdk.Managers
         public ResAssetEntry AddRes(string name, ResourceType resType, byte[] resMeta, byte[] buffer, params int[] bundles)
         {
             name = name.ToLower();
+
+            byte[] newMeta = new byte[resMeta.Length];
+            Array.Copy(resMeta, newMeta, resMeta.Length);
+
             if (m_resList.ContainsKey(name))
             {
                 return m_resList[name];
@@ -715,7 +719,7 @@ namespace FrostySdk.Managers
                 Name = name,
                 ResRid = Utils.GenerateResourceId(),
                 ResType = (uint)resType,
-                ResMeta = resMeta,
+                ResMeta = newMeta,
                 IsAdded = true,
                 IsDirty = true
             };
@@ -728,13 +732,16 @@ namespace FrostySdk.Managers
                 entry.ResRid = Utils.GenerateResourceId();
             }
 
+            byte[] modifiedEntryMeta = new byte[entry.ResMeta.Length];
+            Array.Copy(entry.ResMeta, modifiedEntryMeta, entry.ResMeta.Length);
+
             entry.AddedBundles.AddRange(bundles);
             entry.ModifiedEntry = new ModifiedAssetEntry
             {
                 Data = Utils.CompressFile(buffer, resType: resType, compressionOverride: compressType),
                 OriginalSize = buffer.Length,
                 IsInline = false,
-                ResMeta = entry.ResMeta
+                ResMeta = modifiedEntryMeta
             };
 
             entry.ModifiedEntry.Sha1 = GenerateSha1(entry.ModifiedEntry.Data);
@@ -861,7 +868,10 @@ namespace FrostySdk.Managers
 
             if (meta != null)
             {
-                entry.ModifiedEntry.ResMeta = meta;
+                byte[] newMeta = new byte[meta.Length];
+                Array.Copy(meta, newMeta, meta.Length);
+
+                entry.ModifiedEntry.ResMeta = newMeta;
             }
 
             entry.IsDirty = true;
@@ -874,6 +884,10 @@ namespace FrostySdk.Managers
             }
 
             object modifiedResource = resource.SaveModifiedResource();
+
+            byte[] newMeta = new byte[resource.ResourceMeta.Length];
+            Array.Copy(resource.ResourceMeta, newMeta, resource.ResourceMeta.Length);
+
             if (modifiedResource != null && !m_resRidList[resRid].IsAdded)
             {
                 ResAssetEntry entry = m_resRidList[resRid];
@@ -881,12 +895,12 @@ namespace FrostySdk.Managers
                     entry.ModifiedEntry = new ModifiedAssetEntry();
 
                 entry.ModifiedEntry.DataObject = modifiedResource;
-                entry.ModifiedEntry.ResMeta = resource.ResourceMeta;
+                entry.ModifiedEntry.ResMeta = newMeta;
                 entry.IsDirty = true;
             }
             else
             {
-                ModifyRes(resRid, resource.SaveBytes(), resource.ResourceMeta);
+                ModifyRes(resRid, resource.SaveBytes(), newMeta);
             }
         }
 
@@ -916,7 +930,10 @@ namespace FrostySdk.Managers
 
             if (meta != null)
             {
-                entry.ModifiedEntry.ResMeta = meta;
+                byte[] newMeta = new byte[meta.Length];
+                Array.Copy(meta, newMeta, meta.Length);
+
+                entry.ModifiedEntry.ResMeta = newMeta;
             }
 
             entry.IsDirty = true;
@@ -929,6 +946,10 @@ namespace FrostySdk.Managers
             }
 
             object modifiedResource = resource.SaveModifiedResource();
+
+            byte[] newMeta = new byte[resource.ResourceMeta.Length];
+            Array.Copy(resource.ResourceMeta, newMeta, resource.ResourceMeta.Length);
+
             if (modifiedResource != null && !m_resList[resName].IsAdded)
             {
                 ResAssetEntry entry = m_resList[resName];
@@ -936,12 +957,12 @@ namespace FrostySdk.Managers
                     entry.ModifiedEntry = new ModifiedAssetEntry();
 
                 entry.ModifiedEntry.DataObject = modifiedResource;
-                entry.ModifiedEntry.ResMeta = resource.ResourceMeta;
+                entry.ModifiedEntry.ResMeta = newMeta;
                 entry.IsDirty = true;
             }
             else
             {
-                ModifyRes(resName, resource.SaveBytes(), resource.ResourceMeta);
+                ModifyRes(resName, resource.SaveBytes(), newMeta);
             }
         }
 
