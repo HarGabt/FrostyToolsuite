@@ -546,7 +546,23 @@ namespace Frosty.Core.Controls
             SetValue(ShowOnlyModifiedProperty, false);
             ClearFilter();
 
-            AssetPath selectedPath = m_assetPathMapping["/" + entry.Path];
+            string currentPath = "/" + entry.Path;
+            AssetPath selectedPath = null;
+
+            while (!m_assetPathMapping.TryGetValue(currentPath, out selectedPath))
+            {
+                int lastSlashIndex = currentPath.LastIndexOf('/');
+                if (lastSlashIndex <= 0)
+                {
+                    // No parent left to check; handle as needed (e.g., throw, log, or break)
+
+                    m_assetPathMapping.TryGetValue("/", out selectedPath);
+                    break;
+                }
+
+                currentPath = currentPath.Substring(0, lastSlashIndex);
+            }
+
             if (selectedPath.FullPath != "")
             {
                 string[] tmp = selectedPath.FullPath.Split(new char[] { '/' }, StringSplitOptions.RemoveEmptyEntries);
