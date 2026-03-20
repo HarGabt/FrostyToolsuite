@@ -757,6 +757,7 @@ namespace SoundEditorPlugin.Resources
                 storeParam1 = reader.ReadInt(endian);
                 storeParam2 = reader.ReadInt(endian);
                 tableOffset = reader.ReadUInt(endian);
+                reader.ReadUInt(endian); // next reference offset (not needed)
 
                 if (storeType > 0 && tableOffset > 0)
                 {
@@ -1197,7 +1198,7 @@ namespace SoundEditorPlugin.Resources
                         {
                             long[] keys = keyValuePairs.Keys.ToArray();
                             Array.Sort(keys);
-                            writer.Write(keys.ConvertToBytes(endian));
+                            writer.Write(keys.ConvertToBytes(endian, true));
 
                             List<int> idx = new List<int>();
                             for (int j = 0; j < values.Count; j++)
@@ -1890,9 +1891,9 @@ namespace SoundEditorPlugin.Resources
             outArray = array;
             return 0;
         }
-        public static byte[] ConvertToBytes(this long[] array, Endian endian)
+        public static byte[] ConvertToBytes(this long[] array, Endian endian, bool signed = false)
         {
-            byte size = array.GetBiggestSize();
+            byte size = signed ? array.GetBiggestSignedSize() : array.GetBiggestSize();
             byte[] outArray = new byte[size * array.Length];
             for (int i = 0; i < array.Length; i++)
             {
