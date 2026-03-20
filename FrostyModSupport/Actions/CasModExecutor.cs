@@ -691,7 +691,7 @@ namespace Frosty.ModSupport
                                 ChunkInfo chunkInfo = new ChunkInfo()
                                 {
                                     Guid = chunkId,
-                                    SplitIndex = -1,
+                                    SplitIndex = SuperBundleInfo.SplitSuperBundles.Count > 0 ? 0 : -1,
                                     SbName = SuperBundleInfo.Name
                                 };
 

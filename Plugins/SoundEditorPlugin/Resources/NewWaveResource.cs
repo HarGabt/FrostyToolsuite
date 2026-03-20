@@ -1,10 +1,12 @@
 ﻿using Frosty.Core;
+using Frosty.Core.Controls;
 using Frosty.Hash;
 using FrostySdk;
 using FrostySdk.Attributes;
 using FrostySdk.Ebx;
 using FrostySdk.IO;
 using FrostySdk.Managers;
+using FrostySdk.Managers.Entries;
 using FrostySdk.Resources;
 using System;
 using System.Collections.Generic;
@@ -12,7 +14,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using FrostySdk.Managers.Entries;
 
 namespace SoundEditorPlugin.Resources
 {
@@ -40,6 +41,14 @@ namespace SoundEditorPlugin.Resources
         public uint LastLoopSegmentIndex { get; set; }
         [EbxFieldMeta(EbxFieldType.Boolean)]
         public bool IsStream { get; set; }
+
+        [DisplayName("B7126493")]
+        [EbxFieldMeta(EbxFieldType.UInt32)]
+        public uint unkB7126493 { get; set; }
+
+        [DisplayName("65610234")]
+        [EbxFieldMeta(EbxFieldType.UInt32)]
+        public uint unk65610234 { get; set; }
     }
     [EbxClassMeta(EbxFieldType.Struct)]
     public class Segment
@@ -1417,6 +1426,8 @@ namespace SoundEditorPlugin.Resources
                                 case 0xD00A6005: v.SegmentCount = field.Values[j]; break;
                                 case 0x4AF36C62: v.SubtitleCount = field.Values[j]; break;
                                 case 0xD7C152C5: v.FirstSubtitleIndex = field.Values[j]; break;
+                                case 0xB7126493: v.unkB7126493 = field.Values[j]; break;
+                                case 0x65610234: v.unk65610234 = field.Values[j]; break;
                                 default: App.Logger.LogWarning("Unkown field: " + field.NameHash.ToString("X8") + "Dset: Variations"); break;
                             }
                         }
@@ -1919,6 +1930,36 @@ namespace SoundEditorPlugin.Resources
             RuntimeVariations = res.Variations;
             Segments = res.Segments;
             Persistence = res.Persistences;
+        }
+
+        public override void Save(object e)
+        {
+            dynamic og = Original;
+            EbxAssetEntry ebxEntry = App.AssetManager.GetEbxEntry((string)og.Name);
+            ResAssetEntry resEntry = App.AssetManager.GetResEntry((string)og.Name);
+            NewWaveResource resource = App.AssetManager.GetResAs<NewWaveResource>(resEntry);
+
+            ItemModifiedEventArgs item = e as ItemModifiedEventArgs;
+            if (item.Item.Name == "SamplesOffset" || item.Item.Name == "SegmentLength")
+            {
+                for (int i = 0; i < item.Item.Parent.Parent.Children.Count; i++)
+                {
+                    var child = item.Item.Parent.Parent.Children[i];
+                    resource.Segments[i] = child.Value as Segment;
+                }
+            }
+
+            if (item.Item.Name == "StreamChunkIndex")
+            {
+                for (int i = 0; i < item.Item.Parent.Parent.Children.Count; i++)
+                {
+                    var child = item.Item.Parent.Parent.Children[i];
+                    resource.Variations[i] = child.Value as Variation;
+                }
+            }
+
+            App.AssetManager.ModifyRes(((string)og.Name).ToLower(), resource);
+            ebxEntry.LinkAsset(resEntry);
         }
     }
     public class LocalizedWaveAssetOverride : BaseTypeOverride

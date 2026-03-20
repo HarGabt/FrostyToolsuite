@@ -1,16 +1,18 @@
-﻿using FrostySdk.Interfaces;
+﻿using Frosty.Core;
+using Frosty.Core.Controls;
+using Frosty.Core.Windows;
+using FrostySdk.Interfaces;
 using FrostySdk.IO;
 using FrostySdk.Managers;
+using FrostySdk.Managers.Entries;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using Frosty.Core.Controls;
-using Frosty.Core.Windows;
-using Frosty.Core;
 using System.Windows.Media;
-using FrostySdk.Managers.Entries;
 
 namespace ChunkResEditorPlugin
 {
@@ -376,6 +378,14 @@ namespace ChunkResEditorPlugin
 
         public void ExportChunk()
         {
+            IList<ChunkAssetEntry> selectedChunks = chunksListBox.SelectedItems.Cast<ChunkAssetEntry>().ToList();
+
+            if (selectedChunks.Count == 0)
+            {
+                logger?.Log("[Core] No chunks selected for export.");
+                return;
+            }
+
             ChunkAssetEntry selectedAsset = chunksListBox.SelectedItem as ChunkAssetEntry;
             FrostySaveFileDialog sfd = new FrostySaveFileDialog("Save Chunk", "*.chunk (Chunk Files)|*.chunk", "Chunk", selectedAsset.Filename);
 
