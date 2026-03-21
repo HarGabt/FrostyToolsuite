@@ -794,8 +794,14 @@ namespace SoundEditorPlugin
                     newAssetEntry.AddToSuperBundle(sb);
                 }
 
+                foreach (var sb in existingChunkEntry.AddedSuperBundles)
+                {
+                    newAssetEntry.AddToSuperBundle(sb);
+                }
+
                 // add the new chunk to the existing bundles
                 newAssetEntry.AddToBundles(existingChunkEntry.Bundles);
+                newAssetEntry.AddToBundles(existingChunkEntry.AddedBundles);
             }
 
             if (track.SegmentIndex > -1)
