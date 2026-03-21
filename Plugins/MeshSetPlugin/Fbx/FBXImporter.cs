@@ -1451,8 +1451,36 @@ namespace MeshSetPlugin
 
                                         case VertexElementUsage.RadiosityTexCoord:
                                             {
-                                                chunkWriter.Write(HalfUtils.Pack(0.0f));
-                                                chunkWriter.Write(HalfUtils.Pack(0.0f));
+                                                switch (elem.Format)
+                                                {
+                                                    case VertexElementFormat.Float3:
+                                                        chunkWriter.Write(0.0f);
+                                                        chunkWriter.Write(0.0f);
+                                                        chunkWriter.Write(0.0f);
+                                                        break;
+
+                                                    case VertexElementFormat.Float2:
+                                                        chunkWriter.Write(0.0f);
+                                                        chunkWriter.Write(0.0f);
+                                                        break;
+
+                                                    case VertexElementFormat.Half2:
+                                                        chunkWriter.Write(HalfUtils.Pack(0.0f));
+                                                        chunkWriter.Write(HalfUtils.Pack(0.0f));
+                                                        break;
+
+                                                    case VertexElementFormat.Half3:
+                                                        chunkWriter.Write(HalfUtils.Pack(0.0f));
+                                                        chunkWriter.Write(HalfUtils.Pack(0.0f));
+                                                        chunkWriter.Write(HalfUtils.Pack(0.0f));
+                                                        break;
+
+                                                    default:
+                                                        // Fallback: pad with zeros to preserve alignment.
+                                                        for (int k = 0; k < elem.Size; k++)
+                                                            chunkWriter.Write((byte)0);
+                                                        break;
+                                                }
                                             }
                                             break;
 
