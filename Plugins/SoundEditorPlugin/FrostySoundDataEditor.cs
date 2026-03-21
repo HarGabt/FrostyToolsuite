@@ -702,9 +702,26 @@ namespace SoundEditorPlugin
             ChunkAssetEntry existingChunkEntry = App.AssetManager.GetChunkEntry(track.ChunkId);
             NativeReader existingChunkData = new NativeReader(App.AssetManager.GetChunk(existingChunkEntry));
 
+            // For assets with streampools, we want to add as few chunks as possible, so if there's already a chunk added for new tracks, use that
+            bool hasExistingNewChunk = false;
+
+            // As far as we know, no vanilla assets with streampools have more than one chunk,
+            // so if the asset has more than one chunk, it is safe to assume the user has already added a new chunk from a previous import
+            if (hasStreamPool && originalSoundWave.Chunks.Count > 1)
+            {
+                soundDataChunk = originalSoundWave.Chunks[originalSoundWave.Chunks.Count - 1];
+                existingChunkEntry = App.AssetManager.GetChunkEntry(soundDataChunk.ChunkId);
+                existingChunkData = new NativeReader(App.AssetManager.GetChunk(existingChunkEntry));
+
+                chunkIndex = originalSoundWave.Chunks.Count - 1;
+
+                hasExistingNewChunk = true;
+            }
+
             if (seekTableData != null)
             {
-                uint seekTableStart = hasStreamPool ? (uint)existingChunkData.Length : 0u;
+                // Adjust offsets depending on whether we are using an existing chunk or a new one
+                uint seekTableStart = hasExistingNewChunk ? (uint)existingChunkData.Length : 0u;
 
                 seekTableOffset = seekTableStart | GetSegmentOffsetFlags(isValid: true, hasStreamPool);
                 int alignedSampleOffset = AlignTo((int)seekTableOffset + seekTableData.Length, 4);
@@ -715,8 +732,9 @@ namespace SoundEditorPlugin
             }
             else
             {
+                // Adjust offsets depending on whether we are using an existing chunk or a new one
                 chunkData = spsData;
-                uint offsetStart = hasStreamPool ? (uint)existingChunkData.Length : 0u;
+                uint offsetStart = hasExistingNewChunk ? (uint)existingChunkData.Length : 0u;
                 samplesOffset = offsetStart | GetSegmentOffsetFlags(isValid: true, hasStreamPool);
                 seekTableOffset = 0 | GetSegmentOffsetFlags(isValid: false, hasStreamPool);
             }
@@ -731,9 +749,9 @@ namespace SoundEditorPlugin
             Dispatcher?.Invoke(() => { index = tracksListBox.SelectedIndex; });
 
             bool chunkIsAlreadyModified = existingChunkEntry != null && existingChunkEntry.IsAdded && track.ChunkId != null && !hasStreamPool;
-            dynamic chunkToModify = chunkIsAlreadyModified || hasStreamPool ? soundDataChunk : Activator.CreateInstance(originalSoundWave.Chunks[0].GetType());
+            dynamic chunkToModify = chunkIsAlreadyModified || (hasStreamPool && hasExistingNewChunk) ? soundDataChunk : Activator.CreateInstance(originalSoundWave.Chunks[0].GetType());
 
-            if (!hasStreamPool)
+            if (!hasStreamPool || !hasExistingNewChunk)
             {
                 chunkToModify.ChunkId = newGuid;
                 chunkToModify.ChunkSize = (uint)chunkData.Length;
@@ -765,7 +783,7 @@ namespace SoundEditorPlugin
                 // add the new chunk to the existing bundles
                 newAssetEntry.AddToBundles(existingChunkEntry.AddedBundles);
             }
-            else if (!hasStreamPool)
+            else if (!hasExistingNewChunk)
             {
                 originalSoundWave.Chunks.Add(chunkToModify);
                 chunkIndex = originalSoundWave.Chunks.Count - 1;
