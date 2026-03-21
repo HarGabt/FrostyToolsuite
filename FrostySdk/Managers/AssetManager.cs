@@ -343,6 +343,7 @@ namespace FrostySdk.Managers
                 return;
             }
 
+            m_resourceManager.UseCache = true;
             List<EbxAssetEntry> ebxToRemove = new List<EbxAssetEntry>();
             int assetCount = m_ebxList.Count;
             int count = 0;
@@ -457,6 +458,8 @@ namespace FrostySdk.Managers
 
             WriteToCache();
             WriteToLog("Initial load - Indexing complete");
+            m_resourceManager.ClearNativeReaderCache();
+            m_resourceManager.UseCache = false;
         }
 
         public uint GetModifiedCount()

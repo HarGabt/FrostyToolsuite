@@ -16,6 +16,8 @@ namespace FrostySdk.Managers
         private Dictionary<Sha1, CatPatchEntry> m_patchEntries = new Dictionary<Sha1, CatPatchEntry>();
         private Dictionary<int, string> m_casFiles = new Dictionary<int, string>();
         //private Dictionary<string, byte[]> keys = new Dictionary<string, byte[]>();
+        private Dictionary<string, NativeReader> m_cachedReaders = new Dictionary<string, NativeReader>();
+        private bool useCache = false;
 
         public ResourceManager(FileSystemManager inFileSystem)
         {
@@ -75,6 +77,37 @@ namespace FrostySdk.Managers
                     }
                 }
             }
+        }
+
+        private NativeReader GetNativeReader(string path)
+        {
+            NativeReader reader = null;
+
+            if (useCache && m_cachedReaders.ContainsKey(path))
+            {
+                // use cached file stream if available
+                reader = m_cachedReaders[path];
+            }
+            else
+            {
+                reader = new NativeReader(
+                    new FileStream(
+                        m_fileSystem.ResolvePath(
+                            string.Format("{0}", path)),
+                            FileMode.Open,
+                            FileAccess.Read,
+                            FileShare.Read,
+                            bufferSize: 65536
+                    )
+                );
+
+                if (useCache)
+                {
+                    m_cachedReaders.Add(path, reader);
+                }
+            }
+
+            return reader;
         }
 
         // unpatched data from cas
@@ -178,12 +211,16 @@ namespace FrostySdk.Managers
         public Stream GetResourceData(string superBundleName, long offset, long size)
         {
             byte[] buffer = null;
-            using (NativeReader bufferReader = new NativeReader(new FileStream(m_fileSystem.ResolvePath(string.Format("{0}", superBundleName)), FileMode.Open, FileAccess.Read)))
+            NativeReader bufferReader = GetNativeReader(superBundleName);
+
+            using (CasReader reader = new CasReader(bufferReader.CreateViewStream(offset, size)))
             {
-                using (CasReader reader = new CasReader(bufferReader.CreateViewStream(offset, size)))
-                {
-                    buffer = reader.Read();
-                }
+                buffer = reader.Read();
+            }
+
+            if (!useCache)
+            {
+                bufferReader.Dispose();
             }
 
             return (buffer != null) ? new MemoryStream(buffer) : null;
@@ -277,6 +314,23 @@ namespace FrostySdk.Managers
         public void SetLogger(ILogger inLogger) => m_logger = inLogger;
 
         public void ClearLogger() => m_logger = null;
+
+        public void ClearNativeReaderCache()
+        {
+            foreach (var reader in m_cachedReaders.Values)
+            {
+                reader.Dispose();
+            }
+
+            m_cachedReaders.Clear();
+        }
+
+        public bool UseCache {
+            get => useCache;
+            set {
+                useCache = value;
+            }
+        }
 
         // adds catalog entires to manager
         private void LoadCatalog(string filename)
