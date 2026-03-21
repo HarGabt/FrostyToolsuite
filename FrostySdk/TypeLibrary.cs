@@ -585,7 +585,7 @@ namespace FrostySdk
                     foreach (Type type in GetConcreteTypes())
                     {
                         GuidAttribute attr = type.GetCustomAttribute<GuidAttribute>();
-                        if (attr != null)
+                        if (attr != null && !typeInfos.ContainsKey(attr.Guid))
                         {
                             string name = type.Name;
                             if (type.GetCustomAttribute<DisplayNameAttribute>() != null)
