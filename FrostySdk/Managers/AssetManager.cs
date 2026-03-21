@@ -600,7 +600,8 @@ namespace FrostySdk.Managers
         public void AddChunk(ChunkAssetEntry entry)
         {
             entry.IsAdded = true;
-            m_chunkList.Add(entry.Id, entry);
+            if (!m_chunkList.ContainsKey(entry.Id))
+                m_chunkList.Add(entry.Id, entry);
         }
         public void AddRes(ResAssetEntry entry)
         {
