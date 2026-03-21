@@ -99,6 +99,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BundleEditorPlugin", "..\Plugins\BundleEditorPlugin\BundleEditorPlugin.csproj", "{712463CE-5B7D-4F61-B760-00012BC9174A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DuplicationPlugin", "..\Plugins\DuplicationPlugin\DuplicationPlugin.csproj", "{21444577-C2B3-46BE-B914-EAEF25C6331F}"
+    ProjectSection(ProjectDependencies) = postProject
+		{5FDD1243-084E-42DC-99BB-394A169D988F} = {5FDD1243-084E-42DC-99BB-394A169D988F}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReferencesPlugin", "..\Plugins\ReferencesPlugin\ReferencesPlugin.csproj", "{B1FE3166-BBD2-4112-8618-1C5587E32CC4}"
 EndProject
