@@ -149,6 +149,11 @@ namespace FrostySdk.IO
 
         public void WritePadding(byte alignment)
         {
+            if (alignment == 0)
+            {
+                return;
+            }
+
             while (Position % alignment != 0)
                 Write((byte)0x00);
         }

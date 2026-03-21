@@ -870,10 +870,13 @@ namespace FrostySdk.IO
                                 default: alignment = arrayClass.Alignment; break;
                             }
                         }
-                        writer.WritePadding(alignment);
+                        if (alignment != 0)
+                        {
+                            writer.WritePadding(alignment);
+                        }
                         // shift where the count is so that the array data is properly aligned
                         long dataPos = writer.Position + 4;
-                        if (alignment != 4)
+                        if (alignment != 4 && alignment != 0)
                         {
                             while (dataPos % alignment != 0)
                             {
