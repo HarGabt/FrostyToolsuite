@@ -266,6 +266,10 @@ namespace SoundEditorPlugin.Resources
         public List<Subtitle> Subtitles { get; set; } = new List<Subtitle>();
         public List<Persistence> Persistences { get; set; } = new List<Persistence>();
 
+        public uint BankKey { get => key; set => key = value; }
+
+        public Dset[] Dsets { get => dsets; }
+
         private static Endian endian;
         private byte alignment;
         private byte unkown1;
@@ -397,6 +401,12 @@ namespace SoundEditorPlugin.Resources
                 set { fields = value; }
             }
 
+            public uint DsetKey
+            {
+                get { return unknown1; }
+                set { unknown1 = value; }
+            }
+
             private uint nameHash;
             private uint unknown1;
             private uint elemCount;
@@ -419,7 +429,7 @@ namespace SoundEditorPlugin.Resources
                     throw new FileFormatException("Wrong format of DataSet");
                 reader.ReadInt(); // size
                 nameHash = reader.ReadUInt(endian);
-                unknown1 = reader.ReadUInt(endian);
+                unknown1 = reader.ReadUInt(endian); // generally the same as the main bank key
                 reader.ReadInt(); // always 0?? offset for bank start maybe?
                 reader.ReadInt();
                 if (dataOffset != reader.ReadUInt(endian))
@@ -1331,7 +1341,7 @@ namespace SoundEditorPlugin.Resources
             alignment = reader.ReadByte();
             unkown1 = reader.ReadByte();
             dsetCount = reader.ReadUShort(endian);
-            key = reader.ReadUInt(endian);
+            key = reader.ReadUInt(endian); // hash of the newwaveasset's primary instance guid
             sbrType = reader.ReadUInt(endian);
             unkown2 = reader.ReadUInt(endian);
             tableOffset = reader.ReadUInt(endian);
