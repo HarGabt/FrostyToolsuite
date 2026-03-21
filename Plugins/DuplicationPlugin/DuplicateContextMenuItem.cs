@@ -4,6 +4,7 @@ using Frosty.Controls;
 using Frosty.Core;
 using Frosty.Core.Viewport;
 using Frosty.Core.Windows;
+using Frosty.Hash;
 using FrostySdk;
 using FrostySdk.Ebx;
 using FrostySdk.IO;
@@ -124,6 +125,13 @@ namespace DuplicationPlugin
                     newWave.Chunks[trackChunk].ChunkId = newSoundChunk.Id;
                 }
                 chk.ChunkId = newSoundChunk.Id;
+            }
+
+            newWave.BankKey = (uint)Fnv1.HashString(refAsset.RootInstanceGuid.ToString().Replace("{", "").Replace("}", "").Replace("\"", ""));
+
+            foreach (NewWaveResource.Dset dataSet in newWave.Dsets)
+            {
+                dataSet.DsetKey = newWave.BankKey;
             }
 
             App.AssetManager.ModifyRes(newRes.Name, newWave);
@@ -727,15 +735,18 @@ namespace DuplicationPlugin
             if (App.AssetManager.GetResEntry(name) == null)
             {
                 ResAssetEntry newEntry;
+                byte[] newMeta = new byte[entry.ResMeta.Length];
+                Array.Copy(entry.ResMeta, newMeta, entry.ResMeta.Length);
+
                 using (NativeReader reader = new NativeReader(App.AssetManager.GetRes(entry)))
                 {
                     if (dupeResult == true)
                     {
-                        newEntry = App.AssetManager.AddRes(name, resType, entry.ResMeta, reader.ReadToEnd(), entry.EnumerateBundles().ToArray());
+                        newEntry = App.AssetManager.AddRes(name, resType, newMeta, reader.ReadToEnd(), entry.EnumerateBundles().ToArray());
                     }
                     else
                     {
-                        newEntry = App.AssetManager.AddRes(name, resType, entry.ResMeta, reader.ReadToEnd());
+                        newEntry = App.AssetManager.AddRes(name, resType, newMeta, reader.ReadToEnd());
                     }  
                 }
 
