@@ -99,7 +99,7 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BundleEditorPlugin", "..\Plugins\BundleEditorPlugin\BundleEditorPlugin.csproj", "{712463CE-5B7D-4F61-B760-00012BC9174A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DuplicationPlugin", "..\Plugins\DuplicationPlugin\DuplicationPlugin.csproj", "{21444577-C2B3-46BE-B914-EAEF25C6331F}"
-    ProjectSection(ProjectDependencies) = postProject
+	ProjectSection(ProjectDependencies) = postProject
 		{5FDD1243-084E-42DC-99BB-394A169D988F} = {5FDD1243-084E-42DC-99BB-394A169D988F}
 	EndProjectSection
 EndProject
@@ -126,6 +126,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CopyFilePathPlugin", "..\Plugins\CopyFilePathPlugin\CopyFilePathPlugin.csproj", "{A25C4A40-40F8-CECF-5228-0EECD08112CF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FrostyStringGeneration", "..\FrostyStringGeneration\FrostyStringGeneration.csproj", "{56980B5A-1E2E-43F9-86BA-D670CF413F9E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FontPlugin", "..\Plugins\FontPlugin\FontPlugin.csproj", "{11188037-DD32-DBE8-C0D5-215A5AF84B4F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -626,6 +628,16 @@ Global
 		{56980B5A-1E2E-43F9-86BA-D670CF413F9E}.Release - Final|x64.Build.0 = Release - Final|x64
 		{56980B5A-1E2E-43F9-86BA-D670CF413F9E}.Release|x64.ActiveCfg = Release - Final|x64
 		{56980B5A-1E2E-43F9-86BA-D670CF413F9E}.Release|x64.Build.0 = Release - Final|x64
+		{11188037-DD32-DBE8-C0D5-215A5AF84B4F}.Developer - Debug|x64.ActiveCfg = Developer - Debug|x64
+		{11188037-DD32-DBE8-C0D5-215A5AF84B4F}.Developer - Debug|x64.Build.0 = Developer - Debug|x64
+		{11188037-DD32-DBE8-C0D5-215A5AF84B4F}.Release - Alpha|x64.ActiveCfg = Release - Alpha|x64
+		{11188037-DD32-DBE8-C0D5-215A5AF84B4F}.Release - Alpha|x64.Build.0 = Release - Alpha|x64
+		{11188037-DD32-DBE8-C0D5-215A5AF84B4F}.Release - Beta|x64.ActiveCfg = Release - Beta|x64
+		{11188037-DD32-DBE8-C0D5-215A5AF84B4F}.Release - Beta|x64.Build.0 = Release - Beta|x64
+		{11188037-DD32-DBE8-C0D5-215A5AF84B4F}.Release - Final|x64.ActiveCfg = Release - Final|x64
+		{11188037-DD32-DBE8-C0D5-215A5AF84B4F}.Release - Final|x64.Build.0 = Release - Final|x64
+		{11188037-DD32-DBE8-C0D5-215A5AF84B4F}.Release|x64.ActiveCfg = Release - Alpha|x64
+		{11188037-DD32-DBE8-C0D5-215A5AF84B4F}.Release|x64.Build.0 = Release - Alpha|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -671,6 +683,7 @@ Global
 		{7C22D1BF-0282-8BD4-4B8F-5600B3520CC4} = {492048B6-848D-4675-A9BF-34A4751303F2}
 		{940F28C6-3F67-54FB-E4EE-06287F7B7C61} = {492048B6-848D-4675-A9BF-34A4751303F2}
 		{A25C4A40-40F8-CECF-5228-0EECD08112CF} = {492048B6-848D-4675-A9BF-34A4751303F2}
+		{11188037-DD32-DBE8-C0D5-215A5AF84B4F} = {492048B6-848D-4675-A9BF-34A4751303F2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C0B22EF1-4C3F-45B9-9F08-9793ED912199}
