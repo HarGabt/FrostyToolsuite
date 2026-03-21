@@ -237,15 +237,14 @@ namespace FrostySdk.IO
 
         public string ReadNullTerminatedString()
         {
-            using (var ms = new MemoryStream())
+            StringBuilder sb = new StringBuilder();
+            while (true)
             {
-                byte b;
-                while ((b = ReadByte()) != 0)
-                {
-                    ms.WriteByte(b);
-                }
+                char c = (char)ReadByte();
+                if (c == 0x00)
+                    return sb.ToString();
 
-                return Encoding.UTF8.GetString(ms.GetBuffer(), 0, (int)ms.Length);
+                sb.Append(c);
             }
         }
 

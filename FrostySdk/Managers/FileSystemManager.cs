@@ -108,7 +108,6 @@ namespace FrostySdk
         private Dictionary<string, byte[]> memoryFs = new Dictionary<string, byte[]>();
         private List<string> casFiles = new List<string>();
         private readonly Type deobfuscatorType;
-        private Dictionary<string, string> m_cachedPaths = new Dictionary<string, string>();
 
         public FileSystemManager(string inBasePath)
         {
@@ -161,8 +160,6 @@ namespace FrostySdk
                 return "";
             }
 #endif
-            if (m_cachedPaths.ContainsKey(filename))
-                return m_cachedPaths[filename];
 
             if (filename.StartsWith("native_patch/") && paths.Count == 1)
                 return string.Empty;
@@ -183,11 +180,7 @@ namespace FrostySdk
             {
                 if (File.Exists(BasePath + paths[i] + filename) || Directory.Exists(BasePath + paths[i] + filename))
                 {
-                    {
-                        var path = (BasePath + paths[i] + filename).Replace("\\\\", "\\");
-                        m_cachedPaths[filename] = path;
-                        return path;
-                    }
+                    return (BasePath + paths[i] + filename).Replace("\\\\", "\\");
                 }
                 else
                 {

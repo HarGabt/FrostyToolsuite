@@ -42,10 +42,9 @@ namespace FrostySdk.Managers
         internal class CasAssetLoader : IAssetLoader
         {
             internal Dictionary<string, MemoryMappedFileWrapper> tocCache = new Dictionary<string, MemoryMappedFileWrapper>();
-            internal Dictionary<string, FileStream> fileStreamCache = new Dictionary<string, FileStream>();
             internal Dictionary<string, BaseBundleInfo> bundleInfoMap = new Dictionary<string, BaseBundleInfo>();
 
-            private MemoryMappedViewStream GetMemoryMappedFile(string path)
+            private MemoryMappedViewStream GetFileStream(string path)
             {
                 if (tocCache.ContainsKey(path))
                 {
@@ -59,21 +58,6 @@ namespace FrostySdk.Managers
                     return mmf.CreateViewStream(0, 0, MemoryMappedFileAccess.Read);
                 }
             }
-
-            private FileStream GetFileStream(string path)
-            {
-                if (fileStreamCache.ContainsKey(path))
-                {
-                    return fileStreamCache[path];
-                }
-                else
-                {
-                    var fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read);
-                    fileStreamCache[path] = fs;
-                    return fs;
-                }
-            }
-
             public void Load(AssetManager parent, BinarySbDataHelper helper)
             {
                 // load superbundles
@@ -100,7 +84,7 @@ namespace FrostySdk.Managers
 
                     if (!tocPath.Equals(string.Empty))
                     {
-                        using (var stream = GetMemoryMappedFile(tocPath))
+                        using (var stream = GetFileStream(tocPath))
                         using (NativeReader reader = new NativeReader(stream, parent.m_fileSystem.CreateDeobfuscator()))
                             ReadToc(parent, sbName, reader, ref bundles, isPatch);
                     }
@@ -123,7 +107,7 @@ namespace FrostySdk.Managers
 
                         if (!tocPath.Equals(string.Empty))
                         {
-                            using (var stream = GetMemoryMappedFile(tocPath))
+                            using (var stream = GetFileStream(tocPath))
                             using (NativeReader reader = new NativeReader(stream, parent.m_fileSystem.CreateDeobfuscator()))
                                 ReadToc(parent, sbPath, reader, ref bundles, isPatch);
                         }
@@ -138,12 +122,6 @@ namespace FrostySdk.Managers
                 {
                     mmf.Dispose();
                 }
-
-                foreach (FileStream fs in fileStreamCache.Values)
-                {
-                    fs.Dispose();
-                }
-
             }
 
             private void ReadToc(AssetManager parent, string sbName, NativeReader reader, ref List<BaseBundleInfo> bundles, bool patch)
@@ -373,11 +351,11 @@ namespace FrostySdk.Managers
                             patchReader?.Dispose();
                             if (flag == 1)
                             {
-                                patchReader = new NativeReader(GetMemoryMappedFile(parent.m_fileSystem.ResolvePath(string.Format("native_patch/{0}.toc", patchSbPath))), parent.m_fileSystem.CreateDeobfuscator());
+                                patchReader = new NativeReader(GetFileStream(parent.m_fileSystem.ResolvePath(string.Format("native_patch/{0}.toc", patchSbPath))), parent.m_fileSystem.CreateDeobfuscator());
                             }
                             else
                             {
-                                patchReader = new NativeReader(GetMemoryMappedFile(parent.m_fileSystem.ResolvePath(string.Format("native_patch/{0}.sb", patchSbPath))), parent.m_fileSystem.CreateDeobfuscator());
+                                patchReader = new NativeReader(GetFileStream(parent.m_fileSystem.ResolvePath(string.Format("native_patch/{0}.sb", patchSbPath))), parent.m_fileSystem.CreateDeobfuscator());
                             }
                         }
                         reader = patchReader;
@@ -390,11 +368,11 @@ namespace FrostySdk.Managers
                             baseReader?.Dispose();
                             if (flag == 1)
                             {
-                                baseReader = new NativeReader(GetMemoryMappedFile(parent.m_fileSystem.ResolvePath(string.Format("native_data/{0}.toc", baseSbPath))), parent.m_fileSystem.CreateDeobfuscator());
+                                baseReader = new NativeReader(GetFileStream(parent.m_fileSystem.ResolvePath(string.Format("native_data/{0}.toc", baseSbPath))), parent.m_fileSystem.CreateDeobfuscator());
                             }
                             else
                             {
-                                baseReader = new NativeReader(GetMemoryMappedFile(parent.m_fileSystem.ResolvePath(string.Format("native_data/{0}.sb", baseSbPath))), parent.m_fileSystem.CreateDeobfuscator());
+                                baseReader = new NativeReader(GetFileStream(parent.m_fileSystem.ResolvePath(string.Format("native_data/{0}.sb", baseSbPath))), parent.m_fileSystem.CreateDeobfuscator());
                             }
                         }
                         reader = baseReader;
@@ -463,18 +441,20 @@ namespace FrostySdk.Managers
                             size = bundleReader.ReadInt(Endian.Big);
 
                             string path = parent.m_fileSystem.GetFilePath(catalogIndex, casIndex, isPatch);
-                            FileStream casStream = GetFileStream(parent.m_fileSystem.ResolvePath(path));
-                            byte[] buffer = new byte[size];
-                            casStream.Position = offset;
-                            casStream.Read(buffer, 0, size);
 
-                            using (BinarySbReader casBundleReader = new BinarySbReader(new MemoryStream(buffer), parent.m_fileSystem.CreateDeobfuscator()))
+                            using (Stream casStream = new FileStream(parent.m_fileSystem.ResolvePath(path), FileMode.Open, FileAccess.Read))
                             {
-                                bundle = casBundleReader.ReadDbObject();
+                                byte[] buffer = new byte[size];
+                                casStream.Position = offset;
+                                casStream.Read(buffer, 0, size);
+
+                                using (BinarySbReader casBundleReader = new BinarySbReader(new MemoryStream(buffer), parent.m_fileSystem.CreateDeobfuscator()))
+                                {
+                                    bundle = casBundleReader.ReadDbObject();
 #if FROSTY_DEVELOPER
                                     Debug.Assert(casBundleReader.TotalCount == totalCount - 1);
 #endif
-
+                                }
                             }
                         }
 
