@@ -599,15 +599,27 @@ namespace FrostySdk.Managers
             entry.IsAdded = true;
             if (!m_chunkList.ContainsKey(entry.Id))
                 m_chunkList.Add(entry.Id, entry);
+            else
+                RevertAsset(GetChunkEntry(entry.Id));
         }
         public void AddRes(ResAssetEntry entry)
         {
+            if (m_resList.ContainsKey(entry.Name.ToLower()) || m_resRidList.ContainsKey(entry.ResRid))
+            {
+                RevertAsset(GetResEntry(entry.Name.ToLower()));
+                return;
+            }
             entry.IsAdded = true;
             m_resList.Add(entry.Name.ToLower(), entry);
             m_resRidList.Add(entry.ResRid, entry);
         }
         public void AddEbx(EbxAssetEntry entry)
         {
+            if (m_ebxList.ContainsKey(entry.Name.ToLower()) || m_ebxGuidList.ContainsKey(entry.Guid))
+            {
+                RevertAsset(GetEbxEntry(entry.Name.ToLower()));
+                return;
+            }
             entry.IsAdded = true;
             m_ebxList.Add(entry.Name.ToLower(), entry);
             m_ebxGuidList.Add(entry.Guid, entry);
