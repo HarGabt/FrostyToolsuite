@@ -35,8 +35,18 @@ namespace LegacyDatabasePlugin.IO
         public LegacyDb ReadDb()
         {
             uint magic = ReadUInt();
-            if (magic != 0x08004244)
+            if (magic != 0x08004244 && magic != 0x00014443)
                 return null;
+
+            if (magic == 0x00014443)
+            {
+                // Combined database (CDB) format, skip the CDB header bytes, they're not relevant because we're only reading and not writing
+                Position += 16;
+
+                uint dbMagic = ReadUInt();
+                if (dbMagic != 0x08004244) // If somehow the first file isn't a regular DB, return null
+                    return null;
+            }
 
             Endian endian = (Endian)ReadInt();
             uint totalDataLength = ReadUInt(endian);
