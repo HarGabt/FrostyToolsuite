@@ -785,6 +785,45 @@ namespace FrostySdk.Managers
                 entry.ModifiedEntry.FirstMip = texture.FirstMip;
             }
 
+            if (overrideGuid.HasValue)
+            {
+                entry.Id = overrideGuid.Value;
+            }
+            else
+            {
+                // @todo: Deterministic guid to reduce conflicts
+                byte[] guidBuf = Guid.NewGuid().ToByteArray();
+                guidBuf[15] |= 1;
+
+                entry.Id = new Guid(guidBuf);
+            }
+
+            m_chunkList.Add(entry.Id, entry);
+            return entry.Id;
+        }
+
+        public Guid AddChunk(byte[] buffer, CompressionType compressionOverride, Guid? overrideGuid = null, Texture texture = null, params int[] bundles)
+        {
+            ChunkAssetEntry entry = new ChunkAssetEntry { IsAdded = true, IsDirty = true };
+            CompressionType compressType = compressionOverride;
+
+            entry.ModifiedEntry = new ModifiedAssetEntry
+            {
+                Data = (texture != null) ? Utils.CompressTexture(buffer, texture, compressType) : Utils.CompressFile(buffer, compressionOverride: compressType),
+                LogicalSize = (uint)buffer.Length,
+                FirstMip = -1
+            };
+            entry.ModifiedEntry.Sha1 = GenerateSha1(entry.ModifiedEntry.Data);
+
+            entry.AddedBundles.AddRange(bundles);
+            if (texture != null)
+            {
+                entry.ModifiedEntry.LogicalOffset = texture.LogicalOffset;
+                entry.ModifiedEntry.LogicalSize = texture.LogicalSize;
+                entry.ModifiedEntry.RangeStart = texture.RangeStart;
+                entry.ModifiedEntry.RangeEnd = texture.RangeEnd;
+                entry.ModifiedEntry.FirstMip = texture.FirstMip;
+            }
 
             if (overrideGuid.HasValue)
             {
@@ -819,6 +858,42 @@ namespace FrostySdk.Managers
             CompressionType compressType = ProfilesLibrary.IsLoaded(ProfileVersion.Fifa18, ProfileVersion.Fifa20,
                 ProfileVersion.Fifa21, ProfileVersion.Madden22,
                 ProfileVersion.Fifa22, ProfileVersion.Madden23) ? CompressionType.Oodle : CompressionType.Default;
+
+            if (entry.ModifiedEntry == null)
+            {
+                entry.ModifiedEntry = new ModifiedAssetEntry();
+            }
+
+            entry.ModifiedEntry.Data = (texture != null)
+                ? Utils.CompressTexture(buffer, texture: texture, compressionOverride: compressType)
+                : Utils.CompressFile(buffer, compressionOverride: compressType);
+
+            entry.ModifiedEntry.Sha1 = GenerateSha1(entry.ModifiedEntry.Data);
+            entry.ModifiedEntry.LogicalSize = (uint)buffer.Length;
+
+            if (texture != null)
+            {
+                entry.ModifiedEntry.LogicalOffset = texture.LogicalOffset;
+                entry.ModifiedEntry.LogicalSize = texture.LogicalSize;
+                entry.ModifiedEntry.RangeStart = texture.RangeStart;
+                entry.ModifiedEntry.RangeEnd = (uint)entry.ModifiedEntry.Data.Length;
+                entry.ModifiedEntry.FirstMip = texture.FirstMip;
+            }
+
+            entry.IsDirty = true;
+
+            return true;
+        }
+
+        public bool ModifyChunk(Guid chunkId, byte[] buffer, CompressionType compressionOverride, Texture texture = null)
+        {
+            if (!m_chunkList.ContainsKey(chunkId))
+            {
+                return false;
+            }
+
+            ChunkAssetEntry entry = m_chunkList[chunkId];
+            CompressionType compressType = compressionOverride;
 
             if (entry.ModifiedEntry == null)
             {

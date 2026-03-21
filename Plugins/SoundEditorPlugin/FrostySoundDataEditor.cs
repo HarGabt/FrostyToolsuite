@@ -696,40 +696,59 @@ namespace SoundEditorPlugin
             uint seekTableOffset, samplesOffset;
             dynamic originalSoundWave = RootObject;
 
+            int chunkIndex = track.ChunkIndex;
+
+            dynamic soundDataChunk = originalSoundWave.Chunks[track.ChunkIndex];
+            ChunkAssetEntry existingChunkEntry = App.AssetManager.GetChunkEntry(track.ChunkId);
+            NativeReader existingChunkData = new NativeReader(App.AssetManager.GetChunk(existingChunkEntry));
+
             if (seekTableData != null)
             {
-                int alignedSampleOffset = AlignTo(seekTableData.Length, 4);
-                chunkData = new byte[alignedSampleOffset + spsData.Length];
+                uint seekTableStart = hasStreamPool ? (uint)existingChunkData.Length : 0u;
+
+                seekTableOffset = seekTableStart | GetSegmentOffsetFlags(isValid: true, hasStreamPool);
+                int alignedSampleOffset = AlignTo((int)seekTableOffset + seekTableData.Length, 4);
+                chunkData = new byte[(alignedSampleOffset - seekTableStart) + spsData.Length];
                 Array.Copy(seekTableData, chunkData, seekTableData.Length);
-                Array.Copy(spsData, 0, chunkData, alignedSampleOffset, spsData.Length);
-                seekTableOffset = 0u | GetSegmentOffsetFlags(isValid: true, hasStreamPool);
+                Array.Copy(spsData, 0, chunkData, alignedSampleOffset - seekTableStart, spsData.Length);
                 samplesOffset = (uint)alignedSampleOffset | GetSegmentOffsetFlags(isValid: true, hasStreamPool);
             }
             else
             {
                 chunkData = spsData;
-                samplesOffset = 0u | GetSegmentOffsetFlags(isValid: true, hasStreamPool);
-                seekTableOffset = 0u | GetSegmentOffsetFlags(isValid: false, hasStreamPool);
+                uint offsetStart = hasStreamPool ? (uint)existingChunkData.Length : 0u;
+                samplesOffset = offsetStart | GetSegmentOffsetFlags(isValid: true, hasStreamPool);
+                seekTableOffset = 0 | GetSegmentOffsetFlags(isValid: false, hasStreamPool);
             }
 
-            Guid newGuid = App.AssetManager.AddChunk(chunkData);
+            Guid newGuid = !hasStreamPool ? App.AssetManager.AddChunk(chunkData, CompressionType.None) : soundDataChunk.ChunkId;
 
             float durationInSeconds = ToolHelper.Instance.GetDurationInSecondsFromBuffer(spsData);
-            int chunkIndex = track.ChunkIndex;
 
             NewWaveResource newWave = App.AssetManager.GetResAs<NewWaveResource>(App.AssetManager.GetResEntry(((string)originalSoundWave.Name).ToLower()));
 
             int index = 0;
             Dispatcher?.Invoke(() => { index = tracksListBox.SelectedIndex; });
 
-            dynamic soundDataChunk = originalSoundWave.Chunks[track.ChunkIndex];
-            ChunkAssetEntry existingChunkEntry = App.AssetManager.GetChunkEntry(track.ChunkId);
+            bool chunkIsAlreadyModified = existingChunkEntry != null && existingChunkEntry.IsAdded && track.ChunkId != null && !hasStreamPool;
+            dynamic chunkToModify = chunkIsAlreadyModified || hasStreamPool ? soundDataChunk : Activator.CreateInstance(originalSoundWave.Chunks[0].GetType());
 
-            bool chunkIsAlreadyModified = existingChunkEntry != null && existingChunkEntry.IsAdded && track.ChunkId != null;
-            dynamic chunkToModify = chunkIsAlreadyModified ? soundDataChunk : Activator.CreateInstance(originalSoundWave.Chunks[0].GetType());
-
-            chunkToModify.ChunkId = newGuid;
-            chunkToModify.ChunkSize = (uint)chunkData.Length;
+            if (!hasStreamPool)
+            {
+                chunkToModify.ChunkId = newGuid;
+                chunkToModify.ChunkSize = (uint)chunkData.Length;
+            }
+            else
+            {
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    byte[] existingChunkBytes = existingChunkData.ReadToEnd();
+                    ms.Write(existingChunkBytes, 0, existingChunkBytes.Length);
+                    ms.Write(chunkData, 0, chunkData.Length);
+                    App.AssetManager.ModifyChunk(newGuid, ms.ToArray(), CompressionType.None);
+                    chunkToModify.ChunkSize = (uint)ms.Length;
+                }
+            }
 
             ChunkAssetEntry newAssetEntry = App.AssetManager.GetChunkEntry(newGuid);
 
@@ -746,7 +765,7 @@ namespace SoundEditorPlugin
                 // add the new chunk to the existing bundles
                 newAssetEntry.AddToBundles(existingChunkEntry.AddedBundles);
             }
-            else
+            else if (!hasStreamPool)
             {
                 originalSoundWave.Chunks.Add(chunkToModify);
                 chunkIndex = originalSoundWave.Chunks.Count - 1;
