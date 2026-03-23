@@ -1336,6 +1336,12 @@ namespace SoundEditorPlugin.Resources
         public override void Read(NativeReader reader, AssetManager am, ResAssetEntry entry, ModifiedResource modifiedData)
         {
             base.Read(reader, am, entry, modifiedData);
+
+            if (entry.HasModifiedData && entry.ModifiedEntry.ResMeta != null)
+            {
+                resMeta = entry.ModifiedEntry.ResMeta;
+            }
+
             endian = reader.ReadSizedString(4).Equals("SBle") ? Endian.Little : Endian.Big;
             reader.ReadInt(endian); // size of bank
             alignment = reader.ReadByte();
