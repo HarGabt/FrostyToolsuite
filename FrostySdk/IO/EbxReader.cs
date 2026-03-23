@@ -373,7 +373,13 @@ namespace FrostySdk.IO
             int z = 0;
 
             // count refs for all pointers
-            objsToProcess.AddRange(RootObjects);
+            foreach (object rootObject in RootObjects)
+            {
+                if (rootObject == null || !mapping.ContainsKey(rootObject))
+                    continue;
+
+                objsToProcess.Add(rootObject);
+            }
             nonRootObjs.Add(0);
 
             while (objsToProcess.Count > 0)
@@ -441,6 +447,9 @@ namespace FrostySdk.IO
                 else
                 {
                     System.Collections.IList list = (System.Collections.IList)refProp.Item1.GetValue(refProp.Item2);
+                    if (list == null)
+                        continue;
+
                     int count = list.Count;
                     bool requiresChange = false;
 
@@ -472,6 +481,9 @@ namespace FrostySdk.IO
         //private void CountRefs(object obj, int objIndex, ref List<int> newRefCnts, ref Dictionary<object, int> mapping, ref List<Tuple<PropertyInfo, object>> refProps, ref List<Tuple<object, Guid>> externalProps)
         private void CountRefs(object obj, object classObj, ref List<int> newRefCnts, ref Dictionary<object, int> mapping, ref List<Tuple<PropertyInfo, object>> refProps, ref List<Tuple<object, Guid>> externalProps, ref List<object> objsToProcess)
         {
+            if (obj == null)
+                return;
+
             PropertyInfo[] pis = obj.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public);
             foreach (PropertyInfo pi in pis)
             {
@@ -479,15 +491,21 @@ namespace FrostySdk.IO
                     continue;
                 if (pi.PropertyType.IsEnum)
                     continue;
+                if (pi.GetIndexParameters().Length != 0)
+                    continue;
 
                 Type pType = pi.PropertyType;
+                object value = pi.GetValue(obj);
+
+                if (value == null)
+                    continue;
 
                 // Pointers
                 if (pType == PointerType)
                 {
                     bool isRef = pi.GetCustomAttribute<IsReferenceAttribute>() != null;
 
-                    PointerRef pr = (PointerRef)pi.GetValue(obj);
+                    PointerRef pr = (PointerRef)value;
                     if (pr.Type == PointerRefType.Internal)
                     {
                         if (isRef)
@@ -517,7 +535,10 @@ namespace FrostySdk.IO
                 {
                     Type arrayType = pType.GenericTypeArguments[0];
 
-                    System.Collections.IList list = (System.Collections.IList)pi.GetValue(obj);
+                    System.Collections.IList list = value as System.Collections.IList;
+                    if (list == null)
+                        continue;
+
                     int count = list.Count;
 
                     if (count > 0)
@@ -563,15 +584,15 @@ namespace FrostySdk.IO
 
                 else if (pType == BoxedValueType)
                 {
-                    BoxedValueRef boxedValue = pi.GetValue(obj) as BoxedValueRef;
-                    if (boxedValue.Value != null)
+                    BoxedValueRef boxedValue = value as BoxedValueRef;
+                    if (boxedValue?.Value != null)
                         CountRefs(boxedValue.Value, classObj, ref newRefCnts, ref mapping, ref refProps, ref externalProps, ref objsToProcess);
                 }
 
                 // Structures
                 else if (pType != ValueType)
                 {
-                    CountRefs(pi.GetValue(obj), classObj, ref newRefCnts, ref mapping, ref refProps, ref externalProps, ref objsToProcess);
+                    CountRefs(value, classObj, ref newRefCnts, ref mapping, ref refProps, ref externalProps, ref objsToProcess);
                 }
             }
         }
@@ -1140,16 +1161,15 @@ namespace FrostySdk.IO
 
         internal virtual PointerRef ReadPointerRef(bool dontRefCount)
         {
-            uint index = ReadUInt();
-            if ((index >> 0x1F) == 1)
-            {
-                EbxImportReference import = imports[(int)(index & 0x7FFFFFFF)];
+            int index = (int)ReadULong();
 
-                return new PointerRef(import);
-            }
-            else if (index == 0)
+            if (index == 0)
             {
                 return new PointerRef();
+            }
+            else if ((index & 1) == 1)
+            {
+                return new PointerRef(imports[index >> 1]);
             }
             else
             {

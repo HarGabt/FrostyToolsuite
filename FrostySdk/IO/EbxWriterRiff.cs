@@ -367,14 +367,12 @@ namespace FrostySdk.IO
                 if (pi.PropertyType == typeof(PointerRef))
                 {
                     PointerRef value = (PointerRef)pi.GetValue(obj);
-                    if (value.Type == PointerRefType.Internal)
-                    {
-                        retObjects.Add(value.Internal);
-                    }
-                    else if (value.Type == PointerRefType.External && !m_imports.Contains(value.External))
-                    {
-                        m_imports.Add(value.External);
-                    }
+                    ExtractPointerRef(value, retObjects);
+                }
+                else if (pi.PropertyType == typeof(BoxedValueRef))
+                {
+                    BoxedValueRef boxedValueRef = (BoxedValueRef)pi.GetValue(obj);
+                    retObjects.AddRange(ExtractBoxedValue(boxedValueRef));
                 }
                 else if (pi.PropertyType.Namespace == "FrostySdk.Ebx" && pi.PropertyType.BaseType != typeof(Enum))
                 {
@@ -419,6 +417,69 @@ namespace FrostySdk.IO
             if (type.BaseType != typeof(object) && type.BaseType != typeof(ValueType))
             {
                 retObjects.AddRange(ExtractClass(type.BaseType, obj, false));
+            }
+
+            return retObjects;
+        }
+
+        private void ExtractPointerRef(PointerRef value, List<object> retObjects)
+        {
+            if (value.Type == PointerRefType.Internal)
+            {
+                if (value.Internal != null)
+                {
+                    retObjects.Add(value.Internal);
+                }
+            }
+            else if (value.Type == PointerRefType.External && !m_imports.Contains(value.External))
+            {
+                m_imports.Add(value.External);
+            }
+        }
+
+        private List<object> ExtractBoxedValue(BoxedValueRef boxedValueRef)
+        {
+            List<object> retObjects = new List<object>();
+            if (boxedValueRef == null || boxedValueRef.Value == null)
+            {
+                return retObjects;
+            }
+
+            switch (boxedValueRef.Type)
+            {
+                case EbxFieldType.Pointer:
+                    ExtractPointerRef((PointerRef)boxedValueRef.Value, retObjects);
+                    break;
+
+                case EbxFieldType.Struct:
+                    retObjects.AddRange(ExtractClass(boxedValueRef.Value.GetType(), boxedValueRef.Value, false));
+                    break;
+
+                case EbxFieldType.Array:
+                    if (boxedValueRef.Value is IList arrayObj)
+                    {
+                        foreach (object arrayValue in arrayObj)
+                        {
+                            if (arrayValue == null)
+                            {
+                                continue;
+                            }
+
+                            if (boxedValueRef.ArrayType == EbxFieldType.Pointer && arrayValue is PointerRef pointer)
+                            {
+                                ExtractPointerRef(pointer, retObjects);
+                            }
+                            else if (boxedValueRef.ArrayType == EbxFieldType.Struct)
+                            {
+                                retObjects.AddRange(ExtractClass(arrayValue.GetType(), arrayValue, false));
+                            }
+                            else if (arrayValue is BoxedValueRef nestedBoxedValue)
+                            {
+                                retObjects.AddRange(ExtractBoxedValue(nestedBoxedValue));
+                            }
+                        }
+                    }
+                    break;
             }
 
             return retObjects;
@@ -1173,6 +1234,17 @@ namespace FrostySdk.IO
                 return (0, 0);
             }
 
+            if (TryGetPrimitiveTypeRef(typeRef.Name, out EbxFieldType primitiveType, out EbxFieldCategory primitiveCategory))
+            {
+                uint primitiveTypeFlags = (uint)primitiveType << 5;
+                primitiveTypeFlags |= (uint)primitiveCategory << 1;
+                primitiveTypeFlags |= 1;
+
+                writer.Write(primitiveTypeFlags | 0x80000000);
+                writer.Write(-1);
+                return ((ushort)primitiveTypeFlags, ushort.MaxValue);
+            }
+
             Type typeRefType = typeRef.GetReferencedType();
             int typeIdx = FindExistingClass(typeRefType);
             EbxClassMetaAttribute cta = typeRefType.GetCustomAttribute<EbxClassMetaAttribute>();
@@ -1218,6 +1290,109 @@ namespace FrostySdk.IO
             writer.Write(typeFlags);
             writer.Write(typeIdx);
             return tiPair;
+        }
+
+        private static bool TryGetPrimitiveTypeRef(string typeName, out EbxFieldType type, out EbxFieldCategory category)
+        {
+            category = EbxFieldCategory.PrimitiveType;
+
+            string simpleName = typeName;
+            int namespaceIndex = typeName.LastIndexOf('.');
+            if (namespaceIndex != -1 && namespaceIndex + 1 < typeName.Length)
+            {
+                simpleName = typeName.Substring(namespaceIndex + 1);
+            }
+
+            switch (simpleName)
+            {
+                case "Boolean":
+                case "Bool":
+                    type = EbxFieldType.Boolean;
+                    return true;
+
+                case "SByte":
+                case "Int8":
+                    type = EbxFieldType.Int8;
+                    return true;
+
+                case "Byte":
+                case "UInt8":
+                    type = EbxFieldType.UInt8;
+                    return true;
+
+                case "Int16":
+                    type = EbxFieldType.Int16;
+                    return true;
+
+                case "UInt16":
+                    type = EbxFieldType.UInt16;
+                    return true;
+
+                case "Int32":
+                    type = EbxFieldType.Int32;
+                    return true;
+
+                case "UInt32":
+                    type = EbxFieldType.UInt32;
+                    return true;
+
+                case "Int64":
+                    type = EbxFieldType.Int64;
+                    return true;
+
+                case "UInt64":
+                    type = EbxFieldType.UInt64;
+                    return true;
+
+                case "Single":
+                case "Float32":
+                    type = EbxFieldType.Float32;
+                    return true;
+
+                case "Double":
+                case "Float64":
+                    type = EbxFieldType.Float64;
+                    return true;
+
+                case "Guid":
+                    type = EbxFieldType.Guid;
+                    return true;
+
+                case "Sha1":
+                    type = EbxFieldType.Sha1;
+                    return true;
+
+                case "String":
+                    type = EbxFieldType.String;
+                    return true;
+
+                case "CString":
+                    type = EbxFieldType.CString;
+                    return true;
+
+                case "FileRef":
+                    type = EbxFieldType.FileRef;
+                    return true;
+
+                case "TypeRef":
+                    type = EbxFieldType.TypeRef;
+                    return true;
+
+                case "ResourceRef":
+                    type = EbxFieldType.ResourceRef;
+                    return true;
+
+                case "Pointer":
+                case "PointerRef":
+                    type = EbxFieldType.Pointer;
+                    category = EbxFieldCategory.Pointer;
+                    return true;
+
+                default:
+                    type = EbxFieldType.Inherited;
+                    category = EbxFieldCategory.None;
+                    return false;
+            }
         }
 
         private void WritePointer(PointerRef pointer, bool isReference, NativeWriter writer)
