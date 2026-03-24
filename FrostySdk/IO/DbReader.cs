@@ -75,6 +75,10 @@ namespace FrostySdk.IO
 
                             if (subValue == null)
                                 break;
+                            if (values.ContainsKey(tmpName))
+                            {
+                                continue;
+                            }
 
                             values.Add(tmpName, subValue);
                         }

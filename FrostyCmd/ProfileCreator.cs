@@ -1249,18 +1249,17 @@ namespace FrostyCmd
             string key = "Skate";
             using (NativeWriter writer = new NativeWriter(new MemoryStream()))
             {
-                writer.WriteObfuscatedString("skate.™");
+                writer.WriteObfuscatedString("Skate");
                 writer.Write((int)ProfileVersion.Skate);
                 writer.WriteObfuscatedString("skate");
                 writer.WriteObfuscatedString(typeof(NullDeobfuscator).Name);
                 writer.WriteObfuscatedString(AssetManager.GetLoaderName("CasAssetLoader"));
                 writer.Write(CreateSources("Patch;false", "Data;false"));
                 writer.WriteObfuscatedString("SkateSDK");
-                writer.Write(CreateBanner("skate"));
-                //writer.WriteObfuscatedString("Common/Shaders/Textures/Debug/T_Debug_Black");
-                //writer.WriteObfuscatedString("Common/Shaders/Textures/Debug/T_Debug_D");
-                //writer.WriteObfuscatedString("Common/Shaders/Textures/Debug/T_Debug_N");
-                //writer.WriteObfuscatedString("Common/Shaders/Textures/Debug/T_Debug_R");
+                writer.WriteObfuscatedString("content/common/textures/debug/debug_texture_color");
+                writer.WriteObfuscatedString("ContentShared/common/textures/debug/debug_texture_norm");
+                writer.WriteObfuscatedString("content/Common/textures/debug/debug_texture_coeff");
+                writer.WriteObfuscatedString("content/common/textures/debug/debug_texture_alpha");
                 writer.Write(0); // shared bundle names
                 writer.Write(0); // ignored res types
 

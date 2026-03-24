@@ -52,7 +52,7 @@ namespace FrostySdk
         DeadSpace = 20230127,
         DragonAgeVeilguard = 20241031,
         Battlefield6 = 20250809,
-        Skate = 20250916
+        Skate = 20250901
     }
 
     public struct Profile

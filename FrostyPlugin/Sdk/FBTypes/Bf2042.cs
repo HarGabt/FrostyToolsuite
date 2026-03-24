@@ -140,6 +140,12 @@ namespace Frosty.Core.Sdk.Bf2042
             {
                 Name = reader.ReadNullTerminatedString();
             }
+
+            if (Name == "MasterDataInterface" || Name == "CreateRealmInstanceDelegate")
+            {
+                return;
+            }
+
             m_nameHash = reader.ReadUInt();
 
             Flags = reader.ReadUShort();
