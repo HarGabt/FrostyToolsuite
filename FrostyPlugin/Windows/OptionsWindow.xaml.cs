@@ -75,10 +75,22 @@ namespace Frosty.Core.Windows
         public bool DisableLaunchProcessCheck { get; set; } = false;
 
         [Category("General")]
+        [DisplayName("Alternate SymLink Method")]
+        [Description("An alternate method of creating Symbolic Links for ModData")]
+        [EbxFieldMeta(EbxFieldType.Boolean)]
+        public bool UseAltSymLink { get; set; } = false;
+
+        [Category("General")]
         [DisplayName("Launch Game Using Steam Protocol")]
         [Description("An alternate launch method that uses the Steam Protocol for launching the game with mods")]
         [EbxFieldMeta(EbxFieldType.Boolean)]
         public bool UseSteamProtocol { get; set; } = true;
+
+        [Category("General")]
+        [DisplayName("Disable Shader Compilation At Launch")]
+        [Description("Disables the shader compilation or verification done by the game at launch")]
+        [EbxFieldMeta(EbxFieldType.Boolean)]
+        public bool DisableShaderCacheSymLink { get; set; } = false;
 
         public override void Load()
         {
@@ -94,7 +106,9 @@ namespace Frosty.Core.Windows
             MaxCasFileSize.SelectedIndex = sizes.IndexOf(Config.Get<string>("MaxCasFileSize", "1GB"));
 
             DisableLaunchProcessCheck = Config.Get<bool>("DisableLaunchProcessCheck", false);
+            DisableShaderCacheSymLink = Config.Get<bool>("DisableShaderCacheSymLink", false);
             UseSteamProtocol = Config.Get<bool>("UseSteamProtocol", true);
+            UseAltSymLink = Config.Get<bool>("UseAltSymLink", false);
         }
 
         public override void Save()
@@ -108,7 +122,9 @@ namespace Frosty.Core.Windows
             Config.Add("MaxCasFileSize", MaxCasFileSize.SelectedName);
 
             Config.Add("DisableLaunchProcessCheck", DisableLaunchProcessCheck);
+            Config.Add("DisableShaderCacheSymLink", DisableShaderCacheSymLink);
             Config.Add("UseSteamProtocol", UseSteamProtocol);
+            Config.Add("UseAltSymLink", UseAltSymLink);
         }
     }
     

@@ -321,6 +321,12 @@ namespace MeshSetPlugin
         [DisplayName("Skeleton")]
         [Editor(typeof(FrostySkeletonEditor))]
         public string SkeletonAsset { get; set; } = "";
+
+        [DisplayName("Single Depth Section")]
+        public bool SingleDepthSection { get; set; }
+
+        [DisplayName("Kill Depth Sections")]
+        public bool KillDepthSections { get; set; }
     }
 
     [TemplatePart(Name = PART_LodComboBox, Type = typeof(ComboBox))]
@@ -1477,6 +1483,7 @@ namespace MeshSetPlugin
             bool flattenHierarchy = Config.Get<bool>("MeshSetExportFlattenHierarchy", false, ConfigScope.Game);
             bool exportSingleLod = Config.Get<bool>("MeshSetExportExportSingleLod", false, ConfigScope.Game);
             bool exportAdditionalMeshes = Config.Get<bool>("MeshSetExportExportAdditionalMeshes", false, ConfigScope.Game);
+            bool exportNonRenderable = Config.Get<bool>("MeshSetExportExportNonRenderable", false, ConfigScope.Game);
             string skeleton = Config.Get<string>("MeshSetExportSkeleton", "", ConfigScope.Game);
 
             settings.Version = (MeshExportVersion)Enum.Parse(typeof(MeshExportVersion), Version);
@@ -1484,6 +1491,7 @@ namespace MeshSetPlugin
             settings.FlattenHierarchy = flattenHierarchy;
             settings.ExportSingleLod = exportSingleLod;
             settings.ExportAdditionalMeshes = exportAdditionalMeshes;
+            settings.ExportNonRenderable = exportNonRenderable;
 
             if (settings is SkinnedMeshExportSettings exportSettings)
             {
@@ -1528,7 +1536,7 @@ namespace MeshSetPlugin
                     FrostyTaskWindow.Show("Exporting MeshSet", "", (task) =>
                     {
                         FBXExporter exporter = new FBXExporter(task);
-                        exporter.ExportFBX(RootObject, sfd.FileName, settings.Version.ToString().Replace("FBX_", ""), settings.Scale.ToString(), settings.FlattenHierarchy, settings.ExportSingleLod, skeleton, fileTypes[sfd.FilterIndex - 1], meshSets.ToArray());
+                        exporter.ExportFBX(RootObject, sfd.FileName, settings.Version.ToString().Replace("FBX_", ""), settings.Scale.ToString(), settings.FlattenHierarchy, settings.ExportSingleLod, settings.ExportNonRenderable, skeleton, fileTypes[sfd.FilterIndex - 1], meshSets.ToArray());
                     });
 
                     logger.Log("Exported {0} to {1}", entry.Name, sfd.FileName);
@@ -1539,6 +1547,7 @@ namespace MeshSetPlugin
                     Config.Add("MeshSetExportFlattenHierarchy", settings.FlattenHierarchy, ConfigScope.Game);
                     Config.Add("MeshSetExportExportSingleLod", settings.ExportSingleLod, ConfigScope.Game);
                     Config.Add("MeshSetExportExportAdditionalMeshes", settings.ExportAdditionalMeshes, ConfigScope.Game);
+                    Config.Add("MeshSetExportExportNonRenderable", settings.ExportNonRenderable, ConfigScope.Game);
 
                     if (settings is SkinnedMeshExportSettings meshExportSettings)
                     {
@@ -1556,19 +1565,28 @@ namespace MeshSetPlugin
         {
             m_viewport.SetPaused(true);
 
+            FrostyMeshImportSettings settings = new FrostyMeshImportSettings();
+
+            bool singleDepthSection = Config.Get<bool>("MeshSetImportSingleDepthSection", false, ConfigScope.Game);
+            bool killDepthSections = Config.Get<bool>("MeshSetImportKillDepthSections", false, ConfigScope.Game);
+            string skeleton = Config.Get<string>("MeshSetImportSkeleton", "", ConfigScope.Game);
+
+            settings.SingleDepthSection = singleDepthSection;
+            settings.KillDepthSections = killDepthSections;
+            settings.SkeletonAsset = skeleton;
+
             FrostyOpenFileDialog ofd = new FrostyOpenFileDialog("Import MeshSet", "*.fbx (FBX Files)|*.fbx", "Mesh");
             if (ofd.ShowDialog())
             {
-                FrostyMeshImportSettings settings = null;
                 bool bOk = false;
 
                 if (m_meshSet.Type == MeshType.MeshType_Skinned)
                 {
-                    settings = new FrostyMeshImportSettings { SkeletonAsset = Config.Get<string>("MeshSetImportSkeleton", "", ConfigScope.Game) };
-
                     if (FrostyImportExportBox.Show<FrostyMeshImportSettings>("Import Skinned Mesh", FrostyImportExportType.Import, settings) == MessageBoxResult.OK)
                     {
                         bOk = true;
+                        Config.Add("MeshSetImportSingleDepthSection", settings.SingleDepthSection, ConfigScope.Game);
+                        Config.Add("MeshSetImportKillDepthSections", settings.KillDepthSections, ConfigScope.Game);
                         Config.Add("MeshSetImportSkeleton", settings.SkeletonAsset, ConfigScope.Game);
                     }
                 }
@@ -1587,15 +1605,15 @@ namespace MeshSetPlugin
                     EbxAssetEntry localEntry = AssetEntry as EbxAssetEntry;
                     //List<ShaderBlockEntry> tmpShaderBlockEntries = new List<ShaderBlockEntry>();
 
-                    FrostyTaskWindow.Show("Importing", "", (task) =>
+                    Application.Current.Dispatcher.Invoke(() =>
                     {
-                        Application.Current.Dispatcher.Invoke(() =>
+                        FrostyTaskWindow.Show("Importing", $"{Path.GetFileName(ofd.FileName)}", (task) =>
                         {
                             try
                             {
                                 // import
                                 FBXImporter importer = new FBXImporter(logger);
-                                importer.ImportFBX(ofd.FileName, m_meshSet, localAsset, localEntry, settings);
+                                importer.ImportFBX(ofd.FileName, m_meshSet, localAsset, localEntry, settings, task);
                             }
                             catch (Exception exp)
                             {

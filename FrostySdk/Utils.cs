@@ -6,6 +6,7 @@ using FrostySdk.Managers.Entries;
 using FrostySdk.Resources;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -458,6 +459,70 @@ namespace FrostySdk
         [DllImport("kernel32.dll", EntryPoint = "FreeLibrary", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool FreeLibrary(IntPtr hModule);
+    }
+
+    public class SymbolicLinkException : Exception
+    {
+        public string LinkPath { get; }
+        public string TargetPath { get; }
+
+        public SymbolicLinkException(string linkPath, string targetPath, string message) : base(message)
+        {
+            LinkPath = linkPath;
+            TargetPath = targetPath;
+        }
+
+        public SymbolicLinkException(string linkPath, string targetPath, string message, Exception innerException) : base(message, innerException)
+        {
+            LinkPath = linkPath;
+            TargetPath = targetPath;
+        }
+    }
+
+    internal static class SymbolicLink
+    {
+        [DllImport("kernel32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+        private static extern bool CreateSymbolicLink(string lpSymlinkFileName, string lpTargetFileName, int dwFlags);
+
+        private const int SYMBOLIC_LINK_FLAG_FILE = 0x0;
+        private const int SYMBOLIC_LINK_FLAG_DIRECTORY = 0x1;
+        private const int ERROR_PRIVILEGE_NOT_HELD = 1314;
+
+        public static FileSystemInfo CreateFileLink(string linkPath, string targetPath)
+        {
+            if (!CreateSymbolicLink(linkPath, targetPath, SYMBOLIC_LINK_FLAG_FILE))
+            {
+                var errorCode = Marshal.GetLastWin32Error();
+                var win32Error = new System.ComponentModel.Win32Exception(Marshal.GetLastWin32Error());
+
+                if (errorCode == ERROR_PRIVILEGE_NOT_HELD)
+                {
+                    throw new SymbolicLinkException(linkPath, targetPath, "Creating symbolic links requires administrator privileges. Please restart Frosty as Administrator and try again.", win32Error);
+                }
+
+                throw new SymbolicLinkException(linkPath, targetPath, $"Failed to create file symbolic link: {win32Error.Message}", win32Error);
+            }
+
+            return new FileInfo(linkPath);
+        }
+
+        public static FileSystemInfo CreateDirectoryLink(string linkPath, string targetPath)
+        {
+            if (!CreateSymbolicLink(linkPath, targetPath, SYMBOLIC_LINK_FLAG_DIRECTORY))
+            {
+                var errorCode = Marshal.GetLastWin32Error();
+                var win32Error = new System.ComponentModel.Win32Exception(Marshal.GetLastWin32Error());
+
+                if (errorCode == ERROR_PRIVILEGE_NOT_HELD)
+                {
+                    throw new SymbolicLinkException(linkPath, targetPath, "Creating symbolic links requires administrator privileges. Please restart Frosty as Administrator and try again.", win32Error);
+                }
+
+                throw new SymbolicLinkException(linkPath, targetPath, $"Failed to create directory symbolic link: {win32Error.Message}", win32Error);
+            }
+
+            return new DirectoryInfo(linkPath);
+        }
     }
 
     internal class LoadLibraryHandle
@@ -1294,5 +1359,78 @@ namespace FrostySdk
 
             return (uint)((int)((part1 & 0xFFFF0000) + (part1 << 16)) | ((ushort)part2 + (part2 >> 16)));
         }
+
+        public static class File
+        {
+            public static FileSystemInfo CreateSymbolicLink(string inPath, string inPathToTarget)
+            {
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    // windows is ass and needs admin rights for symlinks
+                    ProcessStartInfo startInfo = new ProcessStartInfo
+                    {
+                        FileName = "cmd.exe",
+                        Arguments = $"/c mklink \"{inPath}\" \"{inPathToTarget}\"",
+                        RedirectStandardOutput = true,
+                        RedirectStandardError = true,
+                        UseShellExecute = false,
+                        CreateNoWindow = true,
+                        Verb = "runas"
+                    };
+
+                    using (Process process = Process.Start(startInfo))
+                    {
+                        process?.WaitForExit();
+
+                        if (process?.ExitCode != 0)
+                        {
+                            string error = process?.StandardError.ReadToEnd();
+                            throw new SymbolicLinkException(inPath, inPathToTarget, $"Failed to create file symbolic link: {error}");
+                        }
+
+                        return new FileInfo(inPath);
+                    }
+                }
+
+                return SymbolicLink.CreateFileLink(inPath, inPathToTarget);
+            }
+        }
+
+        public static class Directory
+        {
+            public static FileSystemInfo CreateSymbolicLink(string inPath, string inPathToTarget)
+            {
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    // windows is ass and needs admin rights for symlinks
+                    ProcessStartInfo startInfo = new ProcessStartInfo
+                    {
+                        FileName = "cmd.exe",
+                        Arguments = $"/c mklink /D \"{inPath}\" \"{inPathToTarget}\"",
+                        RedirectStandardOutput = true,
+                        RedirectStandardError = true,
+                        UseShellExecute = false,
+                        CreateNoWindow = true,
+                        Verb = "runas"
+                    };
+
+                    using (Process process = Process.Start(startInfo))
+                    {
+                        process?.WaitForExit();
+
+                        if (process?.ExitCode != 0)
+                        {
+                            string error = process?.StandardError.ReadToEnd().Trim();
+                            throw new SymbolicLinkException(inPath, inPathToTarget, $"Failed to create directory symbolic link: {error}");
+                        }
+
+                        return new DirectoryInfo(inPath);
+                    }
+                }
+
+                return SymbolicLink.CreateDirectoryLink(inPath, inPathToTarget);
+            }
+        }
+
     }
 }

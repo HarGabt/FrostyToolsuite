@@ -1,5 +1,7 @@
 ﻿using Frosty.Core;
+using Frosty.Core.Windows;
 using FrostySdk;
+using FrostySdk.Ebx;
 using FrostySdk.Interfaces;
 using FrostySdk.IO;
 using FrostySdk.Managers.Entries;
@@ -130,7 +132,7 @@ namespace MeshSetPlugin
             m_logger = inLogger;
         }
 
-        public void ImportFBX(string filename, MeshSet inMeshSet, EbxAsset asset, EbxAssetEntry entry, FrostyMeshImportSettings inSettings)
+        public void ImportFBX(string filename, MeshSet inMeshSet, EbxAsset asset, EbxAssetEntry entry, FrostyMeshImportSettings inSettings, FrostyTaskWindow task)
         {
             ulong resRid = ((dynamic)asset.RootObject).MeshSetResource;
             m_resEntry = App.AssetManager.GetResEntry(resRid);
@@ -219,9 +221,70 @@ namespace MeshSetPlugin
                 }
 
                 // process each lod
+                bool hasDepth = m_meshSet.Lods[0].Sections.Any(s =>
+                    m_meshSet.Lods[0].IsSectionInCategory(s, MeshSubsetCategory.MeshSubsetCategory_ZOnly) && string.IsNullOrEmpty(s.Name)) && !m_settings.KillDepthSections;
+
+                Dictionary<string, Guid> materialShaderMap = new Dictionary<string, Guid>();
+
+                if (hasDepth)
+                {
+                    foreach (PointerRef matRef in ((dynamic)asset.RootObject).Materials)
+                    {
+                        string id = ((dynamic)matRef.Internal).__Id;
+                        Guid matGuid = ((dynamic)matRef.Internal).Shader.Shader.External.FileGuid;
+
+                        materialShaderMap[id] = matGuid;
+                    }
+                }
+
+                FbxGeometryConverter converter = new FbxGeometryConverter(manager);
+
+                int progress = 0;
+
                 for (int i = 0; i < m_meshSet.Lods.Count; i++)
                 {
-                    ProcessLod(lodNodes[i], i);
+                    List<FbxNode> depthNodes = new List<FbxNode>();
+
+                    if (hasDepth)
+                    {
+                        task.Update($"Creating depth section for LOD {i}", progress += 10);
+
+                        if (materialShaderMap.Count > 0 && !m_settings.SingleDepthSection)
+                        {
+                            Dictionary<Guid, List<FbxNode>> shaderGroups = new Dictionary<Guid, List<FbxNode>>();
+
+                            foreach (FbxNode node in lodNodes[i])
+                            {
+                                string nodeName = node.Name;
+                                if (nodeName.Contains(':'))
+                                {
+                                    nodeName = nodeName.Remove(nodeName.IndexOf(':'));
+                                }
+
+                                if (materialShaderMap.TryGetValue(nodeName, out Guid shaderGuid))
+                                {
+                                    if (!shaderGroups.ContainsKey(shaderGuid))
+                                    {
+                                        shaderGroups[shaderGuid] = new List<FbxNode>();
+                                    }
+
+                                    shaderGroups[shaderGuid].Add(node);
+                                }
+                            }
+
+                            foreach (var group in shaderGroups.Values)
+                            {
+                                depthNodes.Add(converter.MergeMeshes(group, scene));
+                            }
+                        }
+                        else
+                        {
+                            depthNodes.Add(converter.MergeMeshes(lodNodes[i], scene));
+                        }
+                    }
+
+                    task.Update($"Processing LOD {i}", progress += hasDepth ? 5 : 15);
+                    ProcessLod(lodNodes[i], i, depthNodes);
                 }
             }
 
@@ -288,7 +351,7 @@ namespace MeshSetPlugin
             FbxDocumentInfo info = scene.SceneInfo;
         }
 
-        private void ProcessLod(List<FbxNode> nodes, int lodIndex)
+        private void ProcessLod(List<FbxNode> nodes, int lodIndex, List<FbxNode> depthNodes)
         {
             MeshSetLod meshLod = m_meshSet.Lods[lodIndex];
             List<FbxNode> sectionNodes = new List<FbxNode>();
@@ -406,7 +469,7 @@ namespace MeshSetPlugin
             {
                 int sectionIndex = meshLod.Sections.IndexOf(depthSections[i]);
 
-                if (i == 0)
+                if (i < depthNodes.Count)
                 {
                     MemoryStream vertices = new MemoryStream();
                     List<uint> indices = new List<uint>();
@@ -439,7 +502,7 @@ namespace MeshSetPlugin
                     MemoryStream vertices = new MemoryStream();
                     List<uint> indices = new List<uint>();
 
-                    ProcessSection(allNodes.ToArray(), meshLod, sectionIndex, vertices, indices, vertexBufferSize, ref totalIndices);
+                    ProcessSection(new FbxNode[] { depthNodes[i] }, meshLod, sectionIndex, vertices, indices, vertexBufferSize, ref totalIndices);
 
                     sectionsVertices.Add(vertices.ToArray());
                     sectionsIndices.Add(indices);

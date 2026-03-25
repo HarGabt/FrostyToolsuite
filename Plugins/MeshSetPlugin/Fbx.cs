@@ -1445,6 +1445,22 @@ namespace MeshSetPlugin.Fbx
         [DllImport("thirdparty/libfbxsdk", EntryPoint = "?ComputeEdgeSmoothingFromNormals@FbxGeometryConverter@fbxsdk@@QEBA_NPEAVFbxMesh@2@@Z")]
         private static extern bool ComputeEdgeSmoothingFromNormalsInternal(IntPtr handle, IntPtr mesh);
 
+        [DllImport("thirdparty/libfbxsdk", EntryPoint = "?MergeMeshes@FbxGeometryConverter@fbxsdk@@QEAAPEAVFbxNode@2@AEAV?$FbxArray@PEAVFbxNode@fbxsdk@@$0BA@@2@PEBDPEAVFbxScene@2@@Z")]
+        //[DllImport("thirdparty/libfbxsdk", EntryPoint = "?MergeMeshes@FbxGeometryConverter@fbxsdk@@QEAAPEAVFbxNode@2@AEAV?$FbxArray@PEAVFbxNode@fbxsdk@@@2@PEBDPEAVFbxScene@2@@Z")]
+        private static extern IntPtr MergeMeshesInternal(IntPtr handle, IntPtr pMeshNodes, [MarshalAs(UnmanagedType.LPStr)] string pNodeName, IntPtr pScene);
+
+        [DllImport("thirdparty/libfbxsdk", EntryPoint = "??0?$FbxArray@PEAVKFCurve@fbxsdk@@$0BA@@fbxsdk@@QEAA@H@Z")]
+        //[DllImport("thirdparty/libfbxsdk", EntryPoint = "??0?$FbxArray@PEAVKFCurve@fbxsdk@@@fbxsdk@@QEAA@H@Z")]
+        private static extern void FbxNodeArrayConstruct(IntPtr handle, int initialSize);
+
+        [DllImport("thirdparty/libfbxsdk", EntryPoint = "??1?$FbxArray@PEAVKFCurve@fbxsdk@@$0BA@@fbxsdk@@QEAA@XZ")]
+        //[DllImport("thirdparty/libfbxsdk", EntryPoint = "??1?$FbxArray@PEAVKFCurve@fbxsdk@@@fbxsdk@@QEAA@XZ")]
+        private static extern void FbxNodeArrayDestroy(IntPtr handle);
+
+        [DllImport("thirdparty/libfbxsdk", EntryPoint = "?Add@?$FbxArray@PEAVKFCurve@fbxsdk@@$0BA@@fbxsdk@@QEAAHAEBQEAVKFCurve@2@@Z")]
+        //[DllImport("thirdparty/libfbxsdk", EntryPoint = "?Add@?$FbxArray@PEAVKFCurve@fbxsdk@@@fbxsdk@@QEAAHAEBQEAVKFCurve@2@@Z")]
+        private static extern int FbxNodeArrayAdd(IntPtr handle, ref IntPtr nodePtr);
+
         public FbxGeometryConverter(FbxManager mgr)
         {
             pHandle = FbxUtils.FbxMalloc(16);
@@ -1454,6 +1470,27 @@ namespace MeshSetPlugin.Fbx
         public bool ComputeEdgeSmoothingFromNormals(FbxMesh pMesh)
         {
             return ComputeEdgeSmoothingFromNormalsInternal(pHandle, pMesh.Handle);
+        }
+
+        public FbxNode MergeMeshes(IEnumerable<FbxNode> meshNodes, FbxScene scene, string mergedNodeName = "MergedNode")
+        {
+            const int arrayNativeSize = 24;
+            IntPtr arrayHandle = FbxUtils.FbxMalloc(arrayNativeSize);
+
+            FbxNodeArrayConstruct(arrayHandle, 0);
+
+            foreach (FbxNode node in meshNodes)
+            {
+                IntPtr nodeHandle = node.Handle;
+                FbxNodeArrayAdd(arrayHandle, ref nodeHandle);
+            }
+
+            IntPtr result = MergeMeshesInternal(pHandle, arrayHandle, mergedNodeName, scene.Handle);
+
+            FbxNodeArrayDestroy(arrayHandle);
+            FbxUtils.FbxFree(arrayHandle);
+
+            return result == IntPtr.Zero ? null : new FbxNode(result);
         }
 
         public void Dispose()

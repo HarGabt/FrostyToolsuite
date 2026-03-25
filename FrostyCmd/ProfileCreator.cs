@@ -1142,7 +1142,7 @@ namespace FrostyCmd
                 writer.WriteObfuscatedString("nfsunbound");
                 writer.WriteObfuscatedString(typeof(NullDeobfuscator).Name);
                 writer.WriteObfuscatedString(AssetManager.GetLoaderName("CasAssetLoader"));
-                writer.Write(CreateSources("Patch;false", "Data;false"));
+                writer.Write(CreateSources("Data;false"));
                 writer.WriteObfuscatedString("NFSUnboundSDK");
                 writer.Write(CreateBanner("nfsunbound"));
                 writer.WriteObfuscatedString("shaders/generictextures/ut_defaultwhite_d");
@@ -1170,7 +1170,7 @@ namespace FrostyCmd
                 writer.WriteObfuscatedString("deadspace");
                 writer.WriteObfuscatedString(typeof(NullDeobfuscator).Name);
                 writer.WriteObfuscatedString(AssetManager.GetLoaderName("CasAssetLoader"));
-                writer.Write(CreateSources("Patch;false", "Data;false"));
+                writer.Write(CreateSources("Data;false"));
                 writer.WriteObfuscatedString("DeadSpaceSDK");
                 writer.Write(CreateBanner("deadspace"));
                 writer.WriteObfuscatedString("Game/_Shared/Textures/T_Default_Color_White_BC");

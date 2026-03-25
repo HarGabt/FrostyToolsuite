@@ -1338,7 +1338,7 @@
                             <RowDefinition Height="38"/>
                         </Grid.RowDefinitions>
 
-                        <local:FrostyPropertyGrid Grid.Row="0" x:Name="PART_PropertyGrid" ClassViewVisible="False" InitialWidth="150" Classes="{Binding Path=OptionsData, RelativeSource={RelativeSource AncestorType={x:Type local:FrostyImportExportBox}}}"/>
+                        <local:FrostyPropertyGrid Grid.Row="0" x:Name="PART_PropertyGrid" ClassViewVisible="False" InitialWidth="*" Classes="{Binding Path=OptionsData, RelativeSource={RelativeSource AncestorType={x:Type local:FrostyImportExportBox}}}"/>
 
                         <Border Grid.Row="1" Background="{StaticResource ListBackground}">
                             <Grid Margin="8">

@@ -714,7 +714,7 @@ namespace FrostyModManager
                     foreach (var executionAction in App.PluginManager.ExecutionActions)
                         executionAction.PostLaunchAction(task.TaskLogger, PluginManagerType.ModManager, cancelToken.Token);
                 }
-                catch (OperationCanceledException)
+                catch (Exception ex) when (ex is OperationCanceledException || ex is SymbolicLinkException)
                 {
                     retCode = -1;
 
@@ -723,6 +723,25 @@ namespace FrostyModManager
 
                     // process was cancelled
                     App.Logger.Log("Launch Cancelled");
+
+                    string modDataPath = $"{fs.BasePath}ModData\\{App.SelectedPack}";
+
+                    if (Directory.Exists(modDataPath))
+                    {
+                        Directory.Delete(modDataPath, true);
+                    }
+
+                    if (ex is SymbolicLinkException symEx)
+                    {
+                        FrostyMessageBox.Show(symEx.Message, "Failed to Create Symbolic Link");
+                        App.Logger.LogError(symEx.Message);
+                        App.Logger.LogError($"Link: {symEx.LinkPath} -> Target: {symEx.TargetPath}");
+
+                        if (symEx.InnerException is Win32Exception win32Ex)
+                        {
+                            App.Logger.LogError($"Win32 error code: {win32Ex.NativeErrorCode}");
+                        }
+                    }
                 }
 
             }, showCancelButton: true, cancelCallback: (task) => cancelToken.Cancel());

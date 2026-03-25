@@ -25,6 +25,7 @@ namespace MeshSetPlugin
         private FbxGeometryConverter m_geomConverter;
         private bool m_flattenHierarchy = true;
         private bool m_exportSingleLod = false;
+        private bool m_exportNonRenderable = false;
         private FrostyTaskWindow m_task;
 
         public FBXExporter(FrostyTaskWindow inTask)
@@ -35,10 +36,11 @@ namespace MeshSetPlugin
         /// <summary>
         /// Exports the specified mesh to a FBX file
         /// </summary>
-        public void ExportFBX(dynamic meshAsset, string filename, string fbxVersion, string units, bool inFlattenHierarchy, bool inExportSingleLod, string skeleton, string fileType, params MeshSet[] meshSets)
+        public void ExportFBX(dynamic meshAsset, string filename, string fbxVersion, string units, bool inFlattenHierarchy, bool inExportSingleLod, bool inExportNonRenderable, string skeleton, string fileType, params MeshSet[] meshSets)
         {
             m_flattenHierarchy = inFlattenHierarchy;
             m_exportSingleLod = inExportSingleLod;
+            m_exportNonRenderable = inExportNonRenderable;
             using (FbxManager manager = new FbxManager())
             {
                 FbxIOSettings settings = new FbxIOSettings(manager, FbxIOSettings.IOSROOT);
@@ -436,7 +438,7 @@ namespace MeshSetPlugin
             {
                 foreach (MeshSetSection section in lod.Sections)
                 {
-                    if (!lod.IsSectionRenderable(section))
+                    if (!lod.IsSectionRenderable(section) && !m_exportNonRenderable)
                     {
                         continue;
                     }
