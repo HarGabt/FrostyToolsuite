@@ -1651,8 +1651,8 @@ namespace Frosty.ModSupport
                 }
 
                 // if there is a gamedir/shader_cache folder, symlink it
-                string baseShaderCachePath = Path.Combine(m_fs.BasePath, "shader_cache");
-                string shaderCacheLinkPath = Path.Combine(modDataPath, "shader_cache");
+                string baseShaderCachePath = Path.Combine(m_fs.BasePath, "shadercache");
+                string shaderCacheLinkPath = Path.Combine(modDataPath, "shadercache");
                 if (Directory.Exists(baseShaderCachePath))
                 {
                     DirectoryInfo shaderCacheLink = new DirectoryInfo(shaderCacheLinkPath);
