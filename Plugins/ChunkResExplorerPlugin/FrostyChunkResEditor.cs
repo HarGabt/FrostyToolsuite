@@ -359,20 +359,52 @@ namespace ChunkResEditorPlugin
 
         public void ImportChunk()
         {
-            ChunkAssetEntry selectedAsset = chunksListBox.SelectedItem as ChunkAssetEntry;
-            FrostyOpenFileDialog ofd = new FrostyOpenFileDialog("Open Chunk", "*.chunk (Chunk Files)|*.chunk", "Chunk");
+            IList<ChunkAssetEntry> selectedChunks = chunksListBox.SelectedItems.Cast<ChunkAssetEntry>().ToList();
+
+            if (selectedChunks.Count == 0)
+            {
+                logger?.Log("[Core] No chunks selected for import.");
+                return;
+            }
+
+            FrostyOpenFileDialog ofd = new FrostyOpenFileDialog("Open Chunk", "*.chunk (Chunk Files)|*.chunk", "Chunk")
+            {
+                Multiselect = true
+            };
 
             if (ofd.ShowDialog())
             {
-                FrostyTaskWindow.Show("Importing Chunk", "", (task) =>
+                // Assuming you have a method to derive a file identifier from a ChunkAssetEntry
+                // For example, if chunks are named after their IDs or have a unique name property you can match against
+                Dictionary<string, ChunkAssetEntry> chunkDict = selectedChunks.ToDictionary(c => c.Id.ToString().ToLower(), c => c);
+
+                foreach (var fileName in ofd.FileNames)
                 {
-                    using (NativeReader reader = new NativeReader(new FileStream(ofd.FileName, FileMode.Open, FileAccess.Read)))
+                    // Derive the fileKey from the fileName, assuming the fileName contains the chunk's ID or name
+                    string fileKey = Path.GetFileNameWithoutExtension(fileName).ToLower();
+
+                    if (chunkDict.ContainsKey(fileKey))
                     {
-                        byte[] buffer = reader.ReadToEnd();
-                        App.AssetManager.ModifyChunk(selectedAsset.Id, buffer);
+                        ChunkAssetEntry matchedChunk = chunkDict[fileKey];
+                        logger?.Log("[Core] Attempting to import file: {0}", fileName);
+
+                        FrostyTaskWindow.Show("Importing Chunk", "", (task) =>
+                        {
+                            using (NativeReader reader = new NativeReader(new FileStream(fileName, FileMode.Open, FileAccess.Read)))
+                            {
+                                byte[] buffer = reader.ReadToEnd();
+                                App.AssetManager.ModifyChunk(matchedChunk.Id, buffer);
+                            }
+                        });
+
+                        logger?.Log("{0} imported to {1}", fileName, matchedChunk.Id); // Adjust logging as needed
                     }
-                });
-                RefreshChunksListBox(selectedAsset);
+                    else
+                    {
+                        logger?.Log("[Core] No matching chunk found for file: {0}", fileName);
+                    }
+                }
+                RefreshChunksListBox(null); // Refresh logic as needed
             }
         }
 
