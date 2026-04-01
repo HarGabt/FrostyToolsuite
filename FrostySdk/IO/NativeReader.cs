@@ -248,6 +248,25 @@ namespace FrostySdk.IO
             }
         }
 
+        /*public string ReadNullTerminatedString()
+        {
+            using (var ms = new MemoryStream())
+
+            {
+                byte b;
+                while ((b = ReadByte()) != 0)
+                {
+                    ms.WriteByte(b);
+                }
+
+                return Encoding.UTF8.GetString(ms.GetBuffer(), 0, (int)ms.Length);
+            }
+        }*/ 
+        
+        // Replace the instance above with this one once one figures out how to apply this one for localization plugin as well
+        // As of now doing so to NativeReader will cause Editor to crash when loading a profile that uses localization plugin
+        // Dayum. One step closer to seeing `Rüdiger` instead of `RÃ¼diger`
+
         public string ReadNullTerminatedWideString()
         {
             StringBuilder sb = new StringBuilder();
