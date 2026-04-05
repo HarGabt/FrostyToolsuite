@@ -3,17 +3,12 @@ using Frosty.Core;
 using Frosty.Core.Controls;
 using Frosty.Core.Managers;
 using FrostyCore;
-using FrostyModManager.Windows;
 using FrostySdk;
 using FrostySdk.Interfaces;
-using FrostySdk.IO;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Net;
-using System.Net.Cache;
 using System.Reflection;
 using System.Text;
 using System.Windows;
@@ -29,8 +24,7 @@ namespace FrostyModManager
 
         public static string SelectedPack { get => Frosty.Core.App.SelectedPack; set => Frosty.Core.App.SelectedPack = value; }
 
-        public static bool LaunchGameImmediately 
-        { 
+        public static bool LaunchGameImmediately {
             get => launchGameImmediately;
             set => launchGameImmediately = value;
         }
@@ -53,6 +47,10 @@ namespace FrostyModManager
         {
             Assembly entryAssembly = Assembly.GetEntryAssembly();
             Frosty.Core.App.Version = entryAssembly.GetName().Version + " — HarGabt's Fork" + Frosty.Core.App.AlphaVersion;
+
+            CultureInfo defaultCulture = CultureInfo.InvariantCulture;
+            CultureInfo.DefaultThreadCurrentCulture = defaultCulture;
+            CultureInfo.DefaultThreadCurrentUICulture = defaultCulture;
 
             Frosty.Core.App.IsEditor = false;
 
