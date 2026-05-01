@@ -147,6 +147,7 @@ namespace BiowareLocalizationPlugin.LocalizedResources
             if (m_modifiedResource != null)
             {
                 m_modifiedResource.InitResourceId(resRid);
+                m_modifiedResource.SaveListener += (s, e) => OnSaveModifiedResource();
             }
 
             // keep informed about changes...
@@ -736,6 +737,7 @@ namespace BiowareLocalizationPlugin.LocalizedResources
             if (newModifiedResource != m_modifiedResource)
             {
                 m_modifiedResource = newModifiedResource;
+                m_modifiedResource.SaveListener += (s, e) => OnSaveModifiedResource();
                 ResourceEventHandlers?.Invoke(this, new EventArgs());
             }
 
@@ -1249,6 +1251,7 @@ namespace BiowareLocalizationPlugin.LocalizedResources
             {
                 m_modifiedResource = new ModifiedLocalizationResource();
                 m_modifiedResource.InitResourceId(resRid);
+                m_modifiedResource.SaveListener += (s, e) => OnSaveModifiedResource();
 
                 // might need to change this, when exporting the resouce it never exports the current value!
                 App.AssetManager.ModifyRes(resRid, this);
@@ -1262,6 +1265,8 @@ namespace BiowareLocalizationPlugin.LocalizedResources
                 && m_modifiedResource.AlteredTexts.Count == 0
                 && m_modifiedResource.AlteredDeclinatedCraftingAdjectives.Count == 0)
             {
+                m_modifiedResource.SaveListener -= (s, e) => OnSaveModifiedResource();
+
                 // remove this resource, it isn't needed anymore
                 // This is also done via the listener, but whatever
                 m_modifiedResource = null;
@@ -1308,7 +1313,18 @@ namespace BiowareLocalizationPlugin.LocalizedResources
             m_modifiedResource.SetDeclinatedCraftingAdjective(adjectiveId, declinations);
         }
 
+        /// <summary>
+        /// Called when the modified resource is saved, i.e., the project. At this time we might overwrite the resources modified data byte array without affecting performance that much...
+        /// </summary>
+        private void OnSaveModifiedResource()
+        {
+            App.Logger.Log("OnSaveModifiedResource called for " + this.Name);
+
+            byte[] modifiedRes = (m_modifiedResource != null) ? SaveBytes() : new byte[0];
+            App.AssetManager.ModifyRes(resRid, modifiedRes, resMeta);
+        }
     }
+
 
 
     /// <summary>
@@ -1316,6 +1332,11 @@ namespace BiowareLocalizationPlugin.LocalizedResources
     /// </summary>
     public class ModifiedLocalizationResource : ModifiedResource
     {
+
+        ///<summary>
+        /// Event listener triggered when the saveInternal method was called
+        /// </summary>
+        public event EventHandler SaveListener;
 
         /// <summary>
         /// The dictionary of altered or new texts in this modified resource.
@@ -1485,6 +1506,16 @@ namespace BiowareLocalizationPlugin.LocalizedResources
             else
             {
                 SaveVersion2TextsWithAdjectives(writer);
+            }
+
+            // call the listener
+            if (SaveListener != null)
+            {
+                SaveListener.Invoke(this, EventArgs.Empty);
+            }
+            else
+            {
+                App.Logger.LogWarning("No SaveListener for resource with Id: " + m_resRid);
             }
         }
 
