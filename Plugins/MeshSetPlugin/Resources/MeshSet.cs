@@ -1911,6 +1911,7 @@ namespace MeshSetPlugin.Resources
         private short m_shaderDrawOrder;
         private short m_shaderDrawOrderUserSlot;
         private short m_shaderDrawOrderSubOrder;
+        private uint m_deadSpaceUnknownUInt;
         private List<MeshSetLod> m_lods = new List<MeshSetLod>();
 
         private ushort m_unknownUShort;
@@ -2062,7 +2063,7 @@ namespace MeshSetPlugin.Resources
 
                     if (ProfilesLibrary.IsLoaded(ProfileVersion.DeadSpace))
                     {
-                        innerReader.ReadUInt();
+                        m_deadSpaceUnknownUInt = innerReader.ReadUInt();
                     }
                 }
 
@@ -2464,6 +2465,11 @@ namespace MeshSetPlugin.Resources
                     writer.Write((byte)m_shaderDrawOrderUserSlot);
                 }
                 writer.Write(m_shaderDrawOrderSubOrder);
+
+                if (ProfilesLibrary.IsLoaded(ProfileVersion.DeadSpace))
+                {
+                    writer.Write(m_deadSpaceUnknownUInt);
+                }
             }
 
             if (ProfilesLibrary.IsLoaded(ProfileVersion.NeedForSpeedEdge, ProfileVersion.Madden20))

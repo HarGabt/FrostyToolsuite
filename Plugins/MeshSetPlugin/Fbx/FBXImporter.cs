@@ -534,6 +534,8 @@ namespace MeshSetPlugin
                             meshParams.SetParameterValue("!primitiveCount", meshLod.Sections[i].PrimitiveCount);
                             meshParams.SetParameterValue("!vertexStreamOffsets0", meshLod.Sections[i].VertexOffset);
                             meshParams.SetParameterValue("!startIndex", meshLod.Sections[i].StartIndex);
+                            meshParams.SetParameterValue("!vertexBufferSize", meshLod.VertexBufferSize);
+                            meshParams.SetParameterValue("!indexBufferSize", meshLod.IndexBufferSize);
                             meshParams.IsModified = true;
                         }
                     }
