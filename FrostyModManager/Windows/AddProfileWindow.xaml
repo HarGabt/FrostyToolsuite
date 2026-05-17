@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:FrostyModManager"
         xmlns:ctrl="clr-namespace:Frosty.Controls;assembly=FrostyControls"
         mc:Ignorable="d"
-        Title="Add Profile" Height="115" Width="300"
+        Title="{DynamicResource mm_AddProfile_Title}" Height="115" Width="300"
         ResizeMode="NoResize" WindowStartupLocation="CenterOwner">
     <Grid Background="{StaticResource ListBackground}">
         <Grid.RowDefinitions>
@@ -14,7 +14,7 @@
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Orientation="Vertical" Margin="4,7,4,4">
-            <TextBlock Grid.Column="0" Text="Profile Name:" Foreground="{StaticResource FontColor}" VerticalAlignment="Center" Height="16" Margin="2,1"/>
+            <TextBlock Grid.Column="0" Text="{DynamicResource mm_AddProfile_NameLabel}" Foreground="{StaticResource FontColor}" VerticalAlignment="Center" Height="16" Margin="2,1"/>
             <TextBox Grid.Column="1" x:Name="profileNameTextBox" BorderThickness="1" VerticalContentAlignment="Center" Height="22"/>
         </StackPanel>
 
@@ -24,8 +24,8 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
 
-            <Button Grid.Column="0" x:Name="cancelButton" Content="Cancel" Width="50" Height="22" HorizontalAlignment="Left" Click="cancelButton_Click"/>
-            <Button Grid.Column="1" x:Name="addButton" Content="Add" Width="50" Height="22" HorizontalAlignment="Right" Click="addButton_Click"/>
+            <Button Grid.Column="0" x:Name="cancelButton" Content="{DynamicResource mm_Btn_Cancel}" Width="50" Height="22" HorizontalAlignment="Left" Click="cancelButton_Click"/>
+            <Button Grid.Column="1" x:Name="addButton" Content="{DynamicResource mm_Btn_Add}" Width="50" Height="22" HorizontalAlignment="Right" Click="addButton_Click"/>
         </Grid>
     </Grid>
 </ctrl:FrostyDockableWindow>

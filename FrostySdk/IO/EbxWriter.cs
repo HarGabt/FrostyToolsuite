@@ -144,7 +144,7 @@ namespace FrostySdk.IO
         private List<EbxField> fieldTypes = new List<EbxField>();
         private List<string> typeNames = new List<string>();
         
-        private HashSet<EbxImportReference> imports = new HashSet<EbxImportReference>();
+        private List<EbxImportReference> imports = new List<EbxImportReference>();
         private Dictionary<EbxImportReference, int> importOrderFw = new Dictionary<EbxImportReference, int>();
         private Dictionary<int, EbxImportReference> importOrderBw = new Dictionary<int, EbxImportReference>();
         
@@ -429,7 +429,8 @@ namespace FrostySdk.IO
                     //ExtractClass(value.Internal.GetType(), value.Internal);
                     else if (value.Type == PointerRefType.External)
                     {
-                        imports.Add(value.External);
+                        if (!imports.Contains(value.External))
+                            imports.Add(value.External);
                     }
                 }
                 else if (pi.PropertyType.Namespace == "FrostySdk.Ebx" && pi.PropertyType.BaseType != typeof(Enum))
@@ -454,7 +455,8 @@ namespace FrostySdk.IO
                                 //ExtractClass(value.Internal.GetType(), value.Internal);
                                 else if (value.Type == PointerRefType.External)
                                 {
-                                    imports.Add(value.External);
+                                    if (!imports.Contains(value.External))
+                                        imports.Add(value.External);
                                 }
                             }
                         }

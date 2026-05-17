@@ -344,7 +344,11 @@ namespace FrostyModManager
             }
 
             Config.Save();
-            Title = "Frosty Mod Manager - " + Frosty.Core.App.Version + " (" + ProfilesLibrary.DisplayName + ")";
+            string appTitle = Application.Current.TryFindResource("mm_AppTitle") as string ?? "Frosty Mod Manager";
+            Title = $"{appTitle} - {Frosty.Core.App.Version} ({ProfilesLibrary.DisplayName})";
+
+            // Sync language menu checkmarks with active locale.
+            UpdateLanguageMenuChecks();
 
             LoadMenuExtensions();
 
@@ -498,13 +502,19 @@ namespace FrostyModManager
             GridViewColumn appliedBindingColumn = (availableModsList.View as GridView).Columns[2];
             appliedBindingColumn.CellTemplate = dt;
 			
-            availableModsTabHeaderThing.Header = "Available Mods (" + availableMods.Count + ")";
+            availableModsTabHeaderThing.Header = string.Format(
+                Application.Current.TryFindResource("mm_Tab_AvailableModsFmt") as string ?? "Available Mods ({0})",
+                availableMods.Count);
 
             if (Environment.CurrentDirectory.Contains("OneDrive"))
             {
                 SystemSounds.Exclamation.Play();
                 FrostyMessageBox.Show($"Your Frosty Mod Manager installation is located within OneDrive.\n\n{Environment.CurrentDirectory.ToString()}\n\nThis is known to cause issues when creating symbolic links for ModData. Please move your installation to another location.", "Frosty Mod Manager");
             }
+
+            // Dead Space: show Restore Vanilla button
+            if (ProfilesLibrary.IsLoaded(ProfileVersion.DeadSpace))
+                restoreVanillaButton.Visibility = Visibility.Visible;
         }
 
         private void addProfileButton_Click(object sender, RoutedEventArgs e)
@@ -536,11 +546,11 @@ namespace FrostyModManager
         {
             if (packsComboBox.Items.Count == 1)
             {
-                FrostyMessageBox.Show("There must be at least one active pack", "Frosty Mod Manager");
+                FrostyMessageBox.Show(Application.Current.TryFindResource("mm_Msg_AtLeastOnePack") as string ?? "There must be at least one active pack", "Frosty Mod Manager");
                 return;
             }
 
-            if (FrostyMessageBox.Show("Are you sure you want to delete this pack?", "Frosty Mod Manager", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            if (FrostyMessageBox.Show(Application.Current.TryFindResource("mm_Msg_ConfirmDeletePack") as string ?? "Are you sure you want to delete this pack?", "Frosty Mod Manager", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
                 Config.Remove(selectedPack.Name, ConfigScope.Pack);
                 packs.Remove(selectedPack);
@@ -585,7 +595,7 @@ namespace FrostyModManager
                     packsComboBox.SelectedItem = newPack;
                 }
                 else
-                    FrostyMessageBox.Show("A pack with the same name already exists", "Frosty Mod Manager");
+                    FrostyMessageBox.Show(Application.Current.TryFindResource("mm_Msg_PackExists") as string ?? "A pack with the same name already exists", "Frosty Mod Manager");
 
             }
         }
@@ -619,7 +629,7 @@ namespace FrostyModManager
                     packsComboBox.SelectedItem = newPack;
                 }
                 else
-                    FrostyMessageBox.Show("A pack with the same name already exists", "Frosty Mod Manager");
+                    FrostyMessageBox.Show(Application.Current.TryFindResource("mm_Msg_PackExists") as string ?? "A pack with the same name already exists", "Frosty Mod Manager");
             }
         }
         private void removeButton_Click(object sender, RoutedEventArgs e)
@@ -708,6 +718,9 @@ namespace FrostyModManager
                     foreach (var executionAction in App.PluginManager.ExecutionActions)
                         executionAction.PreLaunchAction(task.TaskLogger, PluginManagerType.ModManager, cancelToken.Token);
 
+                    // Dead Space: use the Mod Manager's own backup path config key
+                    DeadSpaceBackupManager.CurrentConfigKey = "DS_MM_BackupPath";
+
                     FrostyModExecutor modExecutor = new FrostyModExecutor();
                     retCode = modExecutor.Run(fs, cancelToken.Token, task.TaskLogger, $"Mods/{ProfilesLibrary.ProfileName}/", App.SelectedPack, additionalArgs.Trim(), modPaths.ToArray());
 
@@ -746,14 +759,54 @@ namespace FrostyModManager
 
             }, showCancelButton: true, cancelCallback: (task) => cancelToken.Cancel());
 
-            if (retCode != -1)
+            // Dead Space: mods are copied directly into the game folder — don't minimize or auto-close
+            if (retCode != -1 && !ProfilesLibrary.IsLoaded(ProfileVersion.DeadSpace))
                 WindowState = WindowState.Minimized;
 
             // kill the application if launched from the command line
-            if (App.LaunchGameImmediately)
+            if (App.LaunchGameImmediately && !ProfilesLibrary.IsLoaded(ProfileVersion.DeadSpace))
                 Close();
 
             GC.Collect();
+        }
+
+        private void restoreVanillaButton_Click(object sender, RoutedEventArgs e)
+        {
+            DeadSpaceBackupManager.CurrentConfigKey = "DS_MM_BackupPath";
+
+            if (!DeadSpaceBackupManager.BackupExists())
+            {
+                FrostyMessageBox.Show(
+                    "No backup found at the configured path.\n\nPlease set a backup path under Options → Dead Space → Data Backup Path and apply mods at least once to create a backup.",
+                    "Dead Space: No Backup Found");
+                return;
+            }
+
+            restoreVanillaButton.IsEnabled = false;
+            launchButton.IsEnabled = false;
+
+            string gamePath = Config.Get<string>("GamePath", "", ConfigScope.Game);
+
+            FrostyTaskWindow.Show("Restoring Dead Space Data", "", task =>
+            {
+                try
+                {
+                    task.Update("Restoring vanilla files from backup...");
+                    DeadSpaceBackupManager.RestoreFromBackup(gamePath);
+
+                    task.Update("Removing mod-generated CAS files...");
+                    DeadSpaceBackupManager.DeleteModCasFiles(gamePath);
+                }
+                catch (Exception ex)
+                {
+                    App.Logger.LogError($"Dead Space restore failed: {ex.Message}");
+                }
+            });
+
+            restoreVanillaButton.IsEnabled = true;
+            launchButton.IsEnabled = true;
+
+            FrostyMessageBox.Show("Vanilla restore complete. The game's Data folder has been restored to its unmodded state.", "Dead Space: Restore Complete");
         }
 
         private void FrostyWindow_Closing(object sender, CancelEventArgs e)
@@ -780,7 +833,7 @@ namespace FrostyModManager
             }
             else
             {
-                FrostyMessageBox.Show("A pack with the same name already exists", "Frosty Mod Manager");
+                FrostyMessageBox.Show(Application.Current.TryFindResource("mm_Msg_PackExists") as string ?? "A pack with the same name already exists", "Frosty Mod Manager");
 
                 return false;
             }
@@ -793,7 +846,7 @@ namespace FrostyModManager
             OpenFileDialog ofd = new OpenFileDialog
             {
                 Filter = "(All supported formats)|*.fbmod;*.rar;*.zip;*.7z;*.daimod" + "|*.fbmod (Frostbite Mod)|*.fbmod" + "|*.rar (Rar File)|*.rar" + "|*.zip (Zip File)|*.zip" + "|*.7z (7z File)|*.7z" + "|*.daimod (DragonAge Mod)|*.daimod",
-                Title = "Install Mod",
+                Title = Application.Current.TryFindResource("mm_DlgTitle_InstallMod") as string ?? "Install Mod",
                 Multiselect = true
             };
 
@@ -805,7 +858,9 @@ namespace FrostyModManager
             ICollectionView view = CollectionViewSource.GetDefaultView(availableModsList.ItemsSource);
             view.Refresh();
 			
-            availableModsTabHeaderThing.Header = "Available Mods (" + availableMods.Count + ")";
+            availableModsTabHeaderThing.Header = string.Format(
+                Application.Current.TryFindResource("mm_Tab_AvailableModsFmt") as string ?? "Available Mods ({0})",
+                availableMods.Count);
         }
 
         private void uninstallModButton_Click(object sender, RoutedEventArgs e)
@@ -845,12 +900,14 @@ namespace FrostyModManager
             ICollectionView view = CollectionViewSource.GetDefaultView(availableModsList.ItemsSource);
             view.Refresh();
 			
-            availableModsTabHeaderThing.Header = "Available Mods (" + availableMods.Count + ")";
+            availableModsTabHeaderThing.Header = string.Format(
+                Application.Current.TryFindResource("mm_Tab_AvailableModsFmt") as string ?? "Available Mods ({0})",
+                availableMods.Count);
 
             selectedPack.Refresh();
             appliedModsList.Items.Refresh();
 
-            FrostyMessageBox.Show("Mod(s) has been successfully uninstalled", "Frosty Mod Manager");
+            FrostyMessageBox.Show(Application.Current.TryFindResource("mm_Msg_ModsUninstalled") as string ?? "Mod(s) has been successfully uninstalled", "Frosty Mod Manager");
         }
 
         private int VerifyMod(Stream stream)
@@ -1026,6 +1083,41 @@ namespace FrostyModManager
 
         private void exitMenuItem_Click(object sender, RoutedEventArgs e)
             => Close();
+
+        private void langMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is MenuItem item && item.Tag is string locale)
+            {
+                LocalizationManager.SetLanguage("FrostyModManager", locale);
+                Config.Add("Language", locale);
+                Config.Save();
+
+                // Update title with new language.
+                string appTitle = Application.Current.TryFindResource("mm_AppTitle") as string ?? "Frosty Mod Manager";
+                Title = $"{appTitle} - {Frosty.Core.App.Version} ({ProfilesLibrary.DisplayName})";
+
+                UpdateLanguageMenuChecks();
+
+                // Refresh code-set strings that are not driven by DynamicResource.
+                RefreshFilter(); // updates status bar
+
+                availableModsTabHeaderThing.Header = string.Format(
+                    Application.Current.TryFindResource("mm_Tab_AvailableModsFmt") as string ?? "Available Mods ({0})",
+                    availableMods.Count);
+
+                if (selectedPack != null)
+                    appliedModsTabItem.Header = string.Format(
+                        Application.Current.TryFindResource("mm_Tab_AppliedModsFmt") as string ?? "Applied Mods ({0})",
+                        selectedPack.AppliedMods.Count);
+            }
+        }
+
+        private void UpdateLanguageMenuChecks()
+        {
+            string current = LocalizationManager.CurrentLanguage;
+            langEnglish.IsChecked = string.Equals(current, "en-US", StringComparison.OrdinalIgnoreCase);
+            langGerman.IsChecked  = string.Equals(current, "de-DE", StringComparison.OrdinalIgnoreCase);
+        }
 
         private void availableModsList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -1577,7 +1669,7 @@ namespace FrostyModManager
                     // focus on tab item
                     appliedModsTabItem.IsSelected = true;
                     updateAppliedModButtons();
-                    FrostyMessageBox.Show("Pack has been successfully imported", "Frosty Mod Manager");
+                    FrostyMessageBox.Show(Application.Current.TryFindResource("mm_Msg_PackImported") as string ?? "Pack has been successfully imported", "Frosty Mod Manager");
                 }
             }
 
@@ -1622,7 +1714,9 @@ namespace FrostyModManager
                 downButton.IsEnabled = false;
             }
 			
-            appliedModsTabItem.Header = "Applied Mods (" + selectedPack.AppliedMods.Count + ")";
+            appliedModsTabItem.Header = string.Format(
+                Application.Current.TryFindResource("mm_Tab_AppliedModsFmt") as string ?? "Applied Mods ({0})",
+                selectedPack.AppliedMods.Count);
         }
 
         private void availableModsList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -1961,19 +2055,27 @@ namespace FrostyModManager
             // J-Lyt | Changed text based on applied filter.
             if (availableModsFilterTextBox.Text != "")
             {
-                availableModsStatusBar.Text = string.Format("{0} Filtered Mod(s)", availableModsList.Items.Count);
+                availableModsStatusBar.Text = string.Format(
+                    Application.Current.TryFindResource("mm_Status_FilteredMods") as string ?? "{0} Filtered Mod(s)",
+                    availableModsList.Items.Count);
             }
             else if (appliedModsFilterButton.IsChecked.GetValueOrDefault())
             {
-                availableModsStatusBar.Text = string.Format("{0} Applied Mod(s)", availableModsList.Items.Count);
+                availableModsStatusBar.Text = string.Format(
+                    Application.Current.TryFindResource("mm_Status_AppliedMods") as string ?? "{0} Applied Mod(s)",
+                    availableModsList.Items.Count);
             }
             else if (notAppliedModsFilterButton.IsChecked.GetValueOrDefault())
             {
-                availableModsStatusBar.Text = string.Format("{0} Mod(s) Not Applied", availableModsList.Items.Count);
+                availableModsStatusBar.Text = string.Format(
+                    Application.Current.TryFindResource("mm_Status_NotAppliedMods") as string ?? "{0} Mod(s) Not Applied",
+                    availableModsList.Items.Count);
             }
             else
             {
-                availableModsStatusBar.Text = string.Format("{0} Available Mod(s)", availableModsList.Items.Count);
+                availableModsStatusBar.Text = string.Format(
+                    Application.Current.TryFindResource("mm_Status_AvailableMods") as string ?? "{0} Available Mod(s)",
+                    availableModsList.Items.Count);
             }
         }
 
@@ -1984,12 +2086,12 @@ namespace FrostyModManager
             if (appliedModsFilterButton.IsChecked.GetValueOrDefault())
             {
                 notAppliedModsFilterButton.IsChecked = false;
-                appliedModsFilterButton.ToolTip = "Show Available Mod(s)";
-                notAppliedModsFilterButton.ToolTip = "Hide Applied Mod(s)";
+                appliedModsFilterButton.ToolTip = Application.Current.TryFindResource("mm_Tip_ShowAvailable") as string ?? "Show Available Mod(s)";
+                notAppliedModsFilterButton.ToolTip = Application.Current.TryFindResource("mm_Tip_HideApplied") as string ?? "Hide Applied Mod(s)";
             }
-            else 
+            else
             {
-                appliedModsFilterButton.ToolTip = "Show Applied Mod(s)";
+                appliedModsFilterButton.ToolTip = Application.Current.TryFindResource("mm_Tip_ShowApplied") as string ?? "Show Applied Mod(s)";
             }
 
             RefreshFilter();
@@ -2002,12 +2104,12 @@ namespace FrostyModManager
             if (notAppliedModsFilterButton.IsChecked.GetValueOrDefault())
             {
                 appliedModsFilterButton.IsChecked = false;
-                notAppliedModsFilterButton.ToolTip = "Show Available Mod(s)";
-                appliedModsFilterButton.ToolTip = "Show Applied Mod(s)";
+                notAppliedModsFilterButton.ToolTip = Application.Current.TryFindResource("mm_Tip_ShowAvailable") as string ?? "Show Available Mod(s)";
+                appliedModsFilterButton.ToolTip = Application.Current.TryFindResource("mm_Tip_ShowApplied") as string ?? "Show Applied Mod(s)";
             }
             else
             {
-                notAppliedModsFilterButton.ToolTip = "Hide Applied Mod(s)";
+                notAppliedModsFilterButton.ToolTip = Application.Current.TryFindResource("mm_Tip_HideApplied") as string ?? "Hide Applied Mod(s)";
             }
 
             RefreshFilter();
@@ -2023,7 +2125,7 @@ namespace FrostyModManager
 
         private void PART_ShowOnlyReplacementsCheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
-            MessageBoxResult result = FrostyMessageBox.Show("Are you sure you want to show all resources?\n\nThis may take a while if you have a lot of mods applied.", "Resources", MessageBoxButton.YesNo);
+            MessageBoxResult result = FrostyMessageBox.Show(Application.Current.TryFindResource("mm_Msg_ShowAllResources") as string ?? "Are you sure you want to show all resources?\n\nThis may take a while if you have a lot of mods applied.", "Resources", MessageBoxButton.YesNo);
 
             if (result == MessageBoxResult.Yes)
             {
@@ -2097,7 +2199,7 @@ namespace FrostyModManager
             OpenFileDialog ofd = new OpenFileDialog
             {
                 Filter = "*.fbpack;*.zip (Frostbite Pack) | *.fbpack;*.zip",
-                Title = "Import Pack",
+                Title = Application.Current.TryFindResource("mm_DlgTitle_ImportPack") as string ?? "Import Pack",
                 Multiselect = false
             };
 
@@ -2113,7 +2215,7 @@ namespace FrostyModManager
             if (sfd.ShowDialog())
             {
                 if (File.Exists(sfd.FileName))
-                    FrostyMessageBox.Show("A file with the same name already exists", "Frosty Mod Manager");
+                    FrostyMessageBox.Show(Application.Current.TryFindResource("mm_Msg_PackFileExists") as string ?? "A file with the same name already exists", "Frosty Mod Manager");
                 else
                     ZipPack(sfd.FileName);
             }

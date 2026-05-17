@@ -80,6 +80,7 @@
   <ItemGroup>
     <Compile Include="Actions\CasModExecutor.cs" />
     <Compile Include="Actions\HeatModExecutor.cs" />
+    <Compile Include="DeadSpaceBackupManager.cs" />
     <Compile Include="FrostyLegacyScripting.cs" />
     <Compile Include="FrostyModExecutor.cs" />
     <Compile Include="Actions\FifaModExecutor.cs" />

@@ -28,6 +28,38 @@ namespace SoundEditorPlugin.Helpers
             ToolName = "vgmstream-cli.exe";
         }
 
+        /// <summary>
+        /// Converts any vgmstream-supported audio file (e.g. .opus) to a temporary WAV file.
+        /// The caller is responsible for deleting the returned file when done.
+        /// Returns null if the conversion fails.
+        /// </summary>
+        public async Task<string> ConvertToWav(string inputFilePath)
+        {
+            if (State == InitializedState.Initializing)
+                await WaitForSemaphore();
+            else if (State == InitializedState.NotInitialized)
+                await InitializeAsync();
+
+            string tempOutputFileName = BasePath + Guid.NewGuid() + ".wav";
+
+            Process process = new Process();
+            ProcessStartInfo psi = new ProcessStartInfo(ResourcePath + ".")
+            {
+                Arguments = $"-o \"{tempOutputFileName}\" \"{inputFilePath}\"",
+                UseShellExecute = false,
+                CreateNoWindow = true
+            };
+            process.StartInfo = psi;
+            process.EnableRaisingEvents = true;
+            process.Start();
+            process.WaitForExit();
+
+            if (process.ExitCode != 0 && !File.Exists(tempOutputFileName))
+                return null;
+
+            return tempOutputFileName;
+        }
+
         public async Task<short[]> Decode(byte[] soundBuffer)
         {
             if (State == InitializedState.Initializing)

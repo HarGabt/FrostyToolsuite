@@ -21,12 +21,12 @@
         <conv:BooleanToVisibilityConverter x:Key="booleanToVisibilityConverter"/>
         <cmd:ExportModMenuItemCommand x:Key="exportModMenuItemCommand"/>
         <ContextMenu x:Key="bookmarksContextMenu">
-            <MenuItem Header="Open asset" Click="contextMenuBookmarkItemOpen_Click">
+            <MenuItem Header="{DynamicResource fe_CtxMenu_OpenAsset}" Click="contextMenuBookmarkItemOpen_Click">
                 <MenuItem.Icon>
                     <Image Source="/FrostyEditor;component/Images/OpenAsset.png" RenderOptions.BitmapScalingMode="Fant"/>
                 </MenuItem.Icon>
             </MenuItem>
-            <MenuItem Header="Find in explorer" Click="contextMenuBookmarkItemFind_Click"/>
+            <MenuItem Header="{DynamicResource fe_CtxMenu_FindInExplorer}" Click="contextMenuBookmarkItemFind_Click"/>
         </ContextMenu>
     </ctrl2:FrostyWindow.Resources>
 
@@ -45,56 +45,61 @@
             </Grid.ColumnDefinitions>
 
             <Menu x:Name="menu" Height="22" Grid.Column="0" VerticalAlignment="Top">
-                <MenuItem Header="File" Height="22">
-                    <MenuItem x:Name="NewModMenuItem" Header="New" Height="22" InputGestureText="Ctrl+N" Click="newModMenuItem_Click">
+                <MenuItem Header="{DynamicResource fe_Menu_File}" Height="22">
+                    <MenuItem x:Name="NewModMenuItem" Header="{DynamicResource fe_MenuItem_New}" Height="22" InputGestureText="Ctrl+N" Click="newModMenuItem_Click">
                         <MenuItem.Icon>
                             <Image Source="/FrostyEditor;component/Images/New.png" RenderOptions.BitmapScalingMode="Fant"/>
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem x:Name="OpenModMenuItem" Header="Open" Height="22" InputGestureText="Ctrl+O" Click="openModMenuItem_Click">
+                    <MenuItem x:Name="OpenModMenuItem" Header="{DynamicResource fe_MenuItem_Open}" Height="22" InputGestureText="Ctrl+O" Click="openModMenuItem_Click">
                         <MenuItem.Icon>
                             <Image Source="/FrostyEditor;component/Images/Open.png" RenderOptions.BitmapScalingMode="Fant"/>
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem x:Name="recentProjectsMenuItem" Header="Recent Projects" Height="22" InputGestureText="Ctrl+R">
+                    <MenuItem x:Name="recentProjectsMenuItem" Header="{DynamicResource fe_MenuItem_RecentProjects}" Height="22" InputGestureText="Ctrl+R">
                         <MenuItem.Icon>
                             <Image Source="/FrostyEditor;component/Images/Recent.png" RenderOptions.BitmapScalingMode="Fant"/>
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem x:Name="SaveModMenuItem" Header="Save" Height="22" InputGestureText="Ctrl+S" Click="saveModMenuItem_Click">
+                    <MenuItem x:Name="SaveModMenuItem" Header="{DynamicResource fe_MenuItem_Save}" Height="22" InputGestureText="Ctrl+S" Click="saveModMenuItem_Click">
                         <MenuItem.Icon>
                             <Image Source="/FrostyEditor;component/Images/Save.png" RenderOptions.BitmapScalingMode="Fant"/>
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem x:Name="SaveAsModMenuItem" Header="Save As" Height="22" InputGestureText="Ctrl+Shift+S" Click="saveAsModMenuItem_Click">
+                    <MenuItem x:Name="SaveAsModMenuItem" Header="{DynamicResource fe_MenuItem_SaveAs}" Height="22" InputGestureText="Ctrl+Shift+S" Click="saveAsModMenuItem_Click">
                         <MenuItem.Icon>
                             <Image Source="/FrostyEditor;component/Images/SaveAs.png" RenderOptions.BitmapScalingMode="Fant"/>
                         </MenuItem.Icon>
                     </MenuItem>
                     <Separator/>
-                    <MenuItem x:Name="ExportModMenuItem" Header="Export to Mod" Height="22" Command="{StaticResource exportModMenuItemCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}">
+                    <MenuItem x:Name="ExportModMenuItem" Header="{DynamicResource fe_MenuItem_ExportMod}" Height="22" Command="{StaticResource exportModMenuItemCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}">
                         <MenuItem.Icon>
                             <Image Source="/FrostyEditor;component/Images/Compile.png" RenderOptions.BitmapScalingMode="Fant"/>
                         </MenuItem.Icon>
                     </MenuItem>
                     <Separator/>
-                    <MenuItem x:Name="ExitMenuItem" Header="Exit" InputGestureText="Alt+F4" Height="22" Click="exitMenuItem_Click">
+                    <MenuItem x:Name="ExitMenuItem" Header="{DynamicResource fe_MenuItem_Exit}" InputGestureText="Alt+F4" Height="22" Click="exitMenuItem_Click">
                         <MenuItem.Icon>
                             <Image Source="/FrostyEditor;component/Images/Exit.png" RenderOptions.BitmapScalingMode="Fant"/>
                         </MenuItem.Icon>
                     </MenuItem>
                 </MenuItem>
-                <MenuItem x:Name="ToolsMenuItem" Header="Tools" Height="22">
+                <MenuItem x:Name="ToolsMenuItem" Header="{DynamicResource fe_Menu_Tools}" Height="22">
+                    <Separator/>
+                    <MenuItem Header="{DynamicResource fe_Menu_Language}">
+                        <MenuItem x:Name="langEnglish" Header="English" IsCheckable="True" Click="langMenuItem_Click" Tag="en-US"/>
+                        <MenuItem x:Name="langGerman" Header="Deutsch" IsCheckable="True" Click="langMenuItem_Click" Tag="de-DE"/>
+                    </MenuItem>
                 </MenuItem>
-                <MenuItem Header="Window" Height="22">
-                    <MenuItem x:Name="CloseAllDocumentsMenuItem" Header="Close All Documents" InputGestureText="Ctrl + D" Click="closeAllDocumentsMenuItem_Click">
+                <MenuItem Header="{DynamicResource fe_Menu_Window}" Height="22">
+                    <MenuItem x:Name="CloseAllDocumentsMenuItem" Header="{DynamicResource fe_MenuItem_CloseAllDocs}" InputGestureText="Ctrl + D" Click="closeAllDocumentsMenuItem_Click">
                         <MenuItem.Icon>
                             <Image Source="/FrostyEditor;component/Images/CloseAll.png" RenderOptions.BitmapScalingMode="Fant"/>
                         </MenuItem.Icon>
                     </MenuItem>
                 </MenuItem>
-                <MenuItem Header="Help" Height="22">
-                    <MenuItem x:Name="AboutMenuItem" Header="About Frosty Editor" Click="aboutMenuItem_Click"/>
+                <MenuItem Header="{DynamicResource fe_Menu_Help}" Height="22">
+                    <MenuItem x:Name="AboutMenuItem" Header="{DynamicResource fe_MenuItem_About}" Click="aboutMenuItem_Click"/>
                 </MenuItem>
             </Menu>
         </Grid>
@@ -110,16 +115,16 @@
                     <!-- Editor -->
                     <Border Background="{StaticResource ControlBackground}" HorizontalAlignment="Left" DockPanel.Dock="Left" RenderOptions.EdgeMode="Aliased">
                         <StackPanel Orientation="Horizontal" Margin="6,0,6,0">
-                            <Button Margin="0,0,0,0" Height="20" Width="20" ToolTip="New Project" Click="newModMenuItem_Click">
+                            <Button Margin="0,0,0,0" Height="20" Width="20" ToolTip="{DynamicResource fe_Tip_NewProject}" Click="newModMenuItem_Click">
                                 <Image Source="/FrostyEditor;component/Images/New.png" Width="16"/>
                             </Button>
-                            <Button Margin="4,0,0,0" Height="20" Width="20" ToolTip="Open Project" Click="openModMenuItem_Click">
+                            <Button Margin="4,0,0,0" Height="20" Width="20" ToolTip="{DynamicResource fe_Tip_OpenProject}" Click="openModMenuItem_Click">
                                 <Image Source="/FrostyEditor;component/Images/Open.png" Width="16"/>
                             </Button>
-                            <Button Margin="4,0,0,0" Height="20" Width="20" ToolTip="Save Project" Click="saveModMenuItem_Click">
+                            <Button Margin="4,0,0,0" Height="20" Width="20" ToolTip="{DynamicResource fe_Tip_SaveProject}" Click="saveModMenuItem_Click">
                                 <Image Source="/FrostyEditor;component/Images/Save.png" Width="16"/>
                             </Button>
-                            <Button Margin="4,0,0,0" Height="20" Width="20" ToolTip="Save Project As" Click="saveAsModMenuItem_Click">
+                            <Button Margin="4,0,0,0" Height="20" Width="20" ToolTip="{DynamicResource fe_Tip_SaveProjectAs}" Click="saveAsModMenuItem_Click">
                                 <Image Source="/FrostyEditor;component/Images/SaveAs.png" Width="16"/>
                             </Button>
                             <!--<Border Width="1" Background="#D0D0D0" Margin="8,3,2,3"/>-->
@@ -210,10 +215,16 @@
                     <!-- Launch -->
                     <Border Background="{StaticResource ControlBackground}" Margin="1 0 0 0" DockPanel.Dock="Left" RenderOptions.EdgeMode="Aliased">
                         <StackPanel Orientation="Horizontal" Margin="6,2,6,2">
-                            <Button x:Name="LaunchButton" Margin="0" Click="launchButton_Click" ToolTip="Launch game with current project" IsEnabled="false">
+                            <Button x:Name="LaunchButton" Margin="0" Click="launchButton_Click" ToolTip="{DynamicResource fe_Tip_LaunchGame}" IsEnabled="false">
                                 <StackPanel Orientation="Horizontal" Margin="4 0 4 0">
                                     <Image Grid.Column="0" Source="../Images/Play.png" Width="16"/>
-                                    <TextBlock Grid.Column="1" Text="Launch" VerticalAlignment="Center" Margin="4 0 0 0"/>
+                                    <TextBlock Grid.Column="1" Text="{DynamicResource fe_Btn_Compile}" VerticalAlignment="Center" Margin="4 0 0 0"/>
+                                </StackPanel>
+                            </Button>
+                            <Button x:Name="RestoreBackupButton" Margin="6 0 0 0" Click="restoreBackupButton_Click" ToolTip="{DynamicResource fe_Tip_RestoreVanilla}" Visibility="Collapsed">
+                                <StackPanel Orientation="Horizontal" Margin="4 0 4 0">
+                                    <Image Source="../Images/RestoreVanilla.png" Width="16"/>
+                                    <TextBlock Text="{DynamicResource fe_Btn_RestoreVanilla}" VerticalAlignment="Center" Margin="4 0 0 0"/>
                                 </StackPanel>
                             </Button>
                         </StackPanel>
@@ -339,7 +350,7 @@
                         <EventSetter Event="DragOver" Handler="TabItem_Move"/>
                     </Style>
                 </ctrl2:FrostyTabControl.Resources>
-                <ctrl2:FrostyTabItem Header="Home Page" CloseButtonVisible="False" Icon="/FrostyEditor;component/Images/Home.png">
+                <ctrl2:FrostyTabItem Header="{DynamicResource fe_Tab_Home}" CloseButtonVisible="False" Icon="/FrostyEditor;component/Images/Home.png">
                     <Grid Background="{StaticResource ControlBackground}">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="64"/>
@@ -370,7 +381,7 @@
                                 <Grid Grid.Row="0" Margin="2" Background="{StaticResource ListBackground}">
                                     <ScrollViewer Grid.Row="0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Padding="4">
                                         <StackPanel Orientation="Vertical">
-                                            <TextBlock Text="Convenient Links" Foreground="{StaticResource FontColor}" Margin="8" FontWeight="Bold"/>
+                                            <TextBlock Text="{DynamicResource fe_HP_ConvenientLinks}" Foreground="{StaticResource FontColor}" Margin="8" FontWeight="Bold"/>
                                             <StackPanel Orientation="Horizontal" Margin="8,8,0,0">
                                                 <TextBlock Text="Frosty Website (non-functional):" Foreground="{StaticResource FontColor}" Margin="0,0,20,0"/>
                                                 <TextBlock>
@@ -444,7 +455,7 @@
                                         <ListView.View>
                                             <ctrl2:FrostyAutoSizedGridView>
                                                 <GridView.Columns>
-                                                    <GridViewColumn Header="Name">
+                                                    <GridViewColumn Header="{DynamicResource fe_Col_Name}">
                                                         <GridViewColumn.CellTemplate>
                                                             <DataTemplate>
                                                                 <StackPanel Orientation="Horizontal" Height="24">
@@ -453,7 +464,7 @@
                                                             </DataTemplate>
                                                         </GridViewColumn.CellTemplate>
                                                     </GridViewColumn>
-                                                    <GridViewColumn Header="Author">
+                                                    <GridViewColumn Header="{DynamicResource fe_Col_Author}">
                                                         <GridViewColumn.CellTemplate>
                                                             <DataTemplate>
                                                                 <StackPanel Orientation="Horizontal" Height="24">
@@ -462,7 +473,7 @@
                                                             </DataTemplate>
                                                         </GridViewColumn.CellTemplate>
                                                     </GridViewColumn>
-                                                    <GridViewColumn Header="Version">
+                                                    <GridViewColumn Header="{DynamicResource fe_Col_Version}">
                                                         <GridViewColumn.CellTemplate>
                                                             <DataTemplate>
                                                                 <StackPanel Orientation="Horizontal" Height="24">
@@ -484,7 +495,7 @@
                             <Grid Grid.Column="1" Margin="2" Background="{StaticResource ListBackground}">
                                 <ScrollViewer  HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto" Padding="4">
                                     <StackPanel Orientation="Vertical">
-                                        <TextBlock Text="Change Log" Foreground="{StaticResource FontColor}" Margin="8" FontWeight="Bold"/>
+                                        <TextBlock Text="{DynamicResource fe_HP_ChangeLog}" Foreground="{StaticResource FontColor}" Margin="8" FontWeight="Bold"/>
                                         <StackPanel Orientation="Vertical" Margin="8,8,0,0">
                                             <TextBlock x:Name="changeLogTextBlock" Foreground="{StaticResource FontColor}" Text="{ext:Text 'ChangeLog.txt'}" FontFamily="Consolas" TextWrapping="Wrap" Margin="0,0,8,0"/>
                                         </StackPanel>
@@ -646,33 +657,33 @@
                             </Style>
                         </ctrl2:FrostyTabControl.Style>
 
-                        <ctrl2:FrostyTabItem x:Name="dataExplorerTabItem" Icon="/FrostyEditor;component/Images/Database.png" Header="Data Explorer" CloseButtonVisible="False">
+                        <ctrl2:FrostyTabItem x:Name="dataExplorerTabItem" Icon="/FrostyEditor;component/Images/Database.png" Header="{DynamicResource fe_Tab_DataExplorer}" CloseButtonVisible="False">
                             <Border BorderBrush="{StaticResource ControlBackground}" BorderThickness="0,2,0,0">
                                 <core:FrostyDataExplorer x:Name="dataExplorer" SelectedAssetDoubleClick="dataExplorer_SelectedAssetDoubleClick" SelectionChanged="dataExplorer_SelectionChanged" BookmarkContext="Asset Bookmarks">
                                     <core:FrostyDataExplorer.AssetContextMenu>
                                         <ContextMenu>
-                                            <MenuItem Header="Open" Click="contextMenuOpen_Click">
+                                            <MenuItem Header="{DynamicResource fe_CtxMenu_Open}" Click="contextMenuOpen_Click">
                                                 <MenuItem.Icon>
                                                     <Image Source="/FrostyEditor;component/Images/OpenAsset.png" RenderOptions.BitmapScalingMode="Fant"/>
                                                 </MenuItem.Icon>
                                             </MenuItem>
-                                            <MenuItem Header="Open Unmodified" Click="contextMenuOpenUnmodified_Click">
+                                            <MenuItem Header="{DynamicResource fe_CtxMenu_OpenUnmodified}" Click="contextMenuOpenUnmodified_Click">
                                                 <MenuItem.Icon>
                                                     <Image Source="/FrostyEditor;component/Images/OpenAsset.png" RenderOptions.BitmapScalingMode="Fant" Opacity="0.5"/>
                                                 </MenuItem.Icon>
                                             </MenuItem>
-                                            <MenuItem Header="Revert" Click="contextMenuRevert_Click">
+                                            <MenuItem Header="{DynamicResource fe_CtxMenu_Revert}" Click="contextMenuRevert_Click">
                                                 <MenuItem.Icon>
                                                     <Image Source="/FrostyEditor;component/Images/Revert.png" RenderOptions.BitmapScalingMode="Fant"/>
                                                 </MenuItem.Icon>
                                             </MenuItem>
                                             <Separator/>
-                                            <MenuItem Header="Export" Click="contextMenuExportEbx_Click">
+                                            <MenuItem Header="{DynamicResource fe_CtxMenu_Export}" Click="contextMenuExportEbx_Click">
                                                 <MenuItem.Icon>
                                                     <Image Source="/FrostyEditor;component/Images/Export.png" RenderOptions.BitmapScalingMode="Fant"/>
                                                 </MenuItem.Icon>
                                             </MenuItem>
-                                            <MenuItem Header="Import" Click="contextMenuImportEbx_Click">
+                                            <MenuItem Header="{DynamicResource fe_CtxMenu_Import}" Click="contextMenuImportEbx_Click">
                                                 <MenuItem.Icon>
                                                     <Image Source="/FrostyEditor;component/Images/Import.png" RenderOptions.BitmapScalingMode="Fant"/>
                                                 </MenuItem.Icon>
@@ -682,27 +693,27 @@
                                 </core:FrostyDataExplorer>
                             </Border>
                         </ctrl2:FrostyTabItem>
-                        <ctrl2:FrostyTabItem x:Name="legacyExplorerTabItem" Icon="/FrostyEditor;component/Images/Database.png" Header="Legacy Explorer" CloseButtonVisible="False" Visibility="Collapsed">
+                        <ctrl2:FrostyTabItem x:Name="legacyExplorerTabItem" Icon="/FrostyEditor;component/Images/Database.png" Header="{DynamicResource fe_Tab_LegacyExplorer}" CloseButtonVisible="False" Visibility="Collapsed">
                             <Border BorderBrush="{StaticResource ControlBackground}" BorderThickness="0,2,0,0">
                                 <core:FrostyDataExplorer x:Name="legacyExplorer" SelectedAssetDoubleClick="dataExplorer_SelectedAssetDoubleClick" MultiSelect="True" BookmarkContext="Legacy Bookmarks">
                                     <core:FrostyDataExplorer.AssetContextMenu>
                                         <ContextMenu>
-                                            <MenuItem Header="Open" Click="contextMenuOpen_Click">
+                                            <MenuItem Header="{DynamicResource fe_CtxMenu_Open}" Click="contextMenuOpen_Click">
                                                 <MenuItem.Icon>
                                                     <Image Source="/FrostyEditor;component/Images/OpenAsset.png" Opacity="0.5" RenderOptions.BitmapScalingMode="Fant"/>
                                                 </MenuItem.Icon>
                                             </MenuItem>
-                                            <MenuItem Header="Revert" Click="contextMenuRevert_Click">
+                                            <MenuItem Header="{DynamicResource fe_CtxMenu_Revert}" Click="contextMenuRevert_Click">
                                                 <MenuItem.Icon>
                                                     <Image Source="/FrostyEditor;component/Images/Revert.png" Opacity="0.5" RenderOptions.BitmapScalingMode="Fant"/>
                                                 </MenuItem.Icon>
                                             </MenuItem>
-                                            <MenuItem Header="Export" Click="contextMenuExportAsset_Click">
+                                            <MenuItem Header="{DynamicResource fe_CtxMenu_Export}" Click="contextMenuExportAsset_Click">
                                                 <MenuItem.Icon>
                                                     <Image Source="/FrostyEditor;component/Images/Export.png" Opacity="0.5" RenderOptions.BitmapScalingMode="Fant"/>
                                                 </MenuItem.Icon>
                                             </MenuItem>
-                                            <MenuItem Header="Import" Click="contextMenuImportAsset_Click">
+                                            <MenuItem Header="{DynamicResource fe_CtxMenu_Import}" Click="contextMenuImportAsset_Click">
                                                 <MenuItem.Icon>
                                                     <Image Source="/FrostyEditor;component/Images/Import.png" Opacity="0.5" RenderOptions.BitmapScalingMode="Fant"/>
                                                 </MenuItem.Icon>
@@ -868,14 +879,14 @@
                                     </Setter>
                                 </Style>
                             </ctrl2:FrostyTabControl.Style>
-                            <ctrl2:FrostyTabItem Header="Log" CloseButtonVisible="False">
+                            <ctrl2:FrostyTabItem Header="{DynamicResource fe_Tab_Log}" CloseButtonVisible="False">
                                 <Grid>
                                     <Border BorderBrush="{StaticResource ControlBackground}" RenderOptions.EdgeMode="Aliased" BorderThickness="0,2,0,0">
                                         <TextBox x:Name="tb" FontFamily="Consolas" IsReadOnly="True" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Background="{StaticResource ListBackground}" TextChanged="logTextBox_TextChanged"/>
                                     </Border>
                                 </Grid>
                             </ctrl2:FrostyTabItem>
-                            <ctrl2:FrostyTabItem x:Name="BookmarkTabItem" Header="Bookmarks" CloseButtonVisible="False" Background="Transparent" Loaded="BookmarkTabItem_Loaded">
+                            <ctrl2:FrostyTabItem x:Name="BookmarkTabItem" Header="{DynamicResource fe_Tab_Bookmarks}" CloseButtonVisible="False" Background="Transparent" Loaded="BookmarkTabItem_Loaded">
                                 <ctrl2:FrostyTabItem.Style>
                                     <Style TargetType="{x:Type ctrl2:FrostyTabItem}">
                                         <Setter Property="Foreground" Value="{StaticResource FontColor}"/>
@@ -952,22 +963,22 @@
                                                 </DataTemplate>
                                             </ComboBox.ItemTemplate>
                                         </ComboBox>
-                                        <Button x:Name="BookmarkAddButton" IsEnabled="False" Margin="0,1,6,1" Padding="0,0,0,0" Width="22" Height="22" ToolTip="Add Bookmark (Ctrl+B)" Click="BookmarkAddButton_Click">
+                                        <Button x:Name="BookmarkAddButton" IsEnabled="False" Margin="0,1,6,1" Padding="0,0,0,0" Width="22" Height="22" ToolTip="{DynamicResource fe_Tip_AddBookmark}" Click="BookmarkAddButton_Click">
                                             <Image Source="/FrostyEditor;component/Images/AddBookmark.png" Width="16" Height="16"/>
                                         </Button>
-                                        <Button x:Name="BookmarkRemoveButton" IsEnabled="False" Margin="0,1,6,1" Padding="0,0,0,0" Width="22" Height="22" ToolTip="Remove Bookmark (Ctrl+Shift+B)" Click="BookmarkRemoveButton_Click">
+                                        <Button x:Name="BookmarkRemoveButton" IsEnabled="False" Margin="0,1,6,1" Padding="0,0,0,0" Width="22" Height="22" ToolTip="{DynamicResource fe_Tip_RemoveBookmark}" Click="BookmarkRemoveButton_Click">
                                             <Image Source="/FrostyEditor;component/Images/RemoveBookmark.png" Width="16" Height="16"/>
                                         </Button>
-                                        <Button x:Name="BookmarkAddFolderButton" IsEnabled="True" Margin="0,1,6,1" Padding="0,0,0,0" Width="22" Height="22" ToolTip="Add Folder" Click="BookmarkAddFolderButton_Click">
+                                        <Button x:Name="BookmarkAddFolderButton" IsEnabled="True" Margin="0,1,6,1" Padding="0,0,0,0" Width="22" Height="22" ToolTip="{DynamicResource fe_Tip_AddFolder}" Click="BookmarkAddFolderButton_Click">
                                             <Image Source="/FrostyEditor;component/Images/AddFolder.png" Width="16" Height="16"/>
                                         </Button>
-                                        <Button x:Name="BookmarkEditLabelButton" IsEnabled="False" Margin="0,1,6,1" Padding="0,0,0,0" Width="22" Height="22" ToolTip="Edit Name" Click="BookmarkEditLabelButton_Click">
+                                        <Button x:Name="BookmarkEditLabelButton" IsEnabled="False" Margin="0,1,6,1" Padding="0,0,0,0" Width="22" Height="22" ToolTip="{DynamicResource fe_Tip_EditName}" Click="BookmarkEditLabelButton_Click">
                                             <Image Source="/FrostyEditor;component/Images/EditLabel.png" Width="16" Height="16"/>
                                         </Button>
                                         <Grid MinWidth="170">
 
                                             <Border Grid.Column="0" Grid.ColumnSpan="2" Margin="0,2,2,2" BorderBrush="#868686" BorderThickness="1">
-                                                <ctrl2:FrostyWatermarkTextBox x:Name="BookmarkFilterTextBox" WatermarkText="Filter" Padding="4,2,4,2" TextChanged="BookmarkFilterTextBox_TextChanged"/>
+                                                <ctrl2:FrostyWatermarkTextBox x:Name="BookmarkFilterTextBox" WatermarkText="{DynamicResource fe_Filter_Watermark}" Padding="4,2,4,2" TextChanged="BookmarkFilterTextBox_TextChanged"/>
                                             </Border>
 
                                         </Grid>

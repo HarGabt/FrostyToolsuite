@@ -74,7 +74,7 @@
 
                         <GridSplitter Grid.Row="0" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Height="3" Background="Transparent"/>
 
-                        <ctrl:FrostyDockablePanel Grid.Row="2" Title="Affected Files" CloseButtonVisible="False">
+                        <ctrl:FrostyDockablePanel Grid.Row="2" Title="{DynamicResource mm_AffectedFiles}" CloseButtonVisible="False">
                             <Grid>
                                 <ListBox x:Name="PART_ModFilesListBox" VirtualizingStackPanel.IsVirtualizing="True">
                                     <ListBox.ItemTemplate>
@@ -104,7 +104,7 @@
                                     </ListBox.ItemTemplate>
                                 </ListBox>
 
-                                <TextBlock x:Name="PART_LoadingText" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{StaticResource FontColor}" Text="Loading..."/>
+                                <TextBlock x:Name="PART_LoadingText" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{StaticResource FontColor}" Text="{DynamicResource mm_Loading}"/>
                             </Grid>
                         </ctrl:FrostyDockablePanel>
 

@@ -7,7 +7,7 @@
                            xmlns:ctrl="clr-namespace:Frosty.Controls;assembly=FrostyControls"
                            Icon="/FrostyCore;component/AppIcon.ico"
                            mc:Ignorable="d"
-                           Title="Load Profile" Height="250" Width="400" Loaded="Window_Loaded"
+                           Title="{DynamicResource fe_Prelaunch_Title}" Height="250" Width="400" Loaded="Window_Loaded"
                            ResizeMode="NoResize" WindowStartupLocation="CenterScreen" SnapsToDevicePixels="True">
 
     <Grid>
@@ -23,7 +23,7 @@
                 <TextBlock x:Name="ProfileNameTextBlock" Foreground="{StaticResource FontColor}" FontSize="14" FontWeight="Medium"/>
                 <TextBlock x:Name="ProfilePathTextBlock" Foreground="{StaticResource FontColor}" FontSize="10"/>
             </StackPanel>
-            <TextBlock x:Name="SelectGameTextBlock" Text="Select Game" Foreground="{StaticResource FontColor}" FontSize="14" FontWeight="Medium" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <TextBlock x:Name="SelectGameTextBlock" Text="{DynamicResource fe_Prelaunch_SelectGame}" Foreground="{StaticResource FontColor}" FontSize="14" FontWeight="Medium" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         </Grid>
 
         <Border Grid.Row="1" Background="{StaticResource ControlBackground}"/>
@@ -57,14 +57,14 @@
 
         <Grid Grid.Row="3" Background="{StaticResource ListBackground}" >
             <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
-                <Button x:Name="AddConfigurationButton" Content="Add" Padding="12,0" Margin="6,6,0,6" Click="AddConfigurationButton_OnClick"/>
-                <Button x:Name="RemoveConfigurationButton" Content="Remove" Padding="12,0" Margin="6,6,0,6" Click="RemoveConfigurationButton_OnClick"/>
-                <Button x:Name="LaunchConfigurationButton" Content="Select" Padding="12,0" Margin="6,6,6,6" Click="LaunchConfigurationButton_OnClick"/>
+                <Button x:Name="AddConfigurationButton" Content="{DynamicResource fe_Btn_Add}" Padding="12,0" Margin="6,6,0,6" Click="AddConfigurationButton_OnClick"/>
+                <Button x:Name="RemoveConfigurationButton" Content="{DynamicResource fe_Btn_Remove}" Padding="12,0" Margin="6,6,0,6" Click="RemoveConfigurationButton_OnClick"/>
+                <Button x:Name="LaunchConfigurationButton" Content="{DynamicResource fe_Btn_Select}" Padding="12,0" Margin="6,6,6,6" Click="LaunchConfigurationButton_OnClick"/>
             </StackPanel>
 
             <StackPanel HorizontalAlignment="Left" Orientation="Horizontal">
-                <Button x:Name="CancelButton" Content="Cancel" Padding="12,0" Margin="6,6,0,6" Click="CancelButton_OnClick"/>
-                <Button x:Name="ScanButton" Content="Scan" Padding="12,0" Margin="6,6,0,6" Click="ScanButton_OnClick"/>
+                <Button x:Name="CancelButton" Content="{DynamicResource fe_Btn_Cancel}" Padding="12,0" Margin="6,6,0,6" Click="CancelButton_OnClick"/>
+                <Button x:Name="ScanButton" Content="{DynamicResource fe_Btn_Scan}" Padding="12,0" Margin="6,6,0,6" Click="ScanButton_OnClick"/>
             </StackPanel>
         </Grid>
     </Grid>

@@ -36,6 +36,16 @@ namespace Frosty.Core.Viewport
             {
                 TextureParameters = ebxEntry.TextureParameters;
             }
+            else if (ProfilesLibrary.IsLoaded(ProfileVersion.DeadSpace))
+            {
+                // Dead Space stores textures in the inline MaterialVariation's shader, not directly on the db entry
+                try
+                {
+                    if (MaterialVariation.Type == PointerRefType.Internal && MaterialVariation.Internal != null)
+                        TextureParameters = ((dynamic)MaterialVariation.Internal).Shader.TextureParameters;
+                }
+                catch { }
+            }
         }
         public MeshVariationMaterial(Guid input1, Guid input2, Guid input3, List<dynamic> input4)
         {
@@ -131,7 +141,7 @@ namespace Frosty.Core.Viewport
 
         public static void LoadVariations(FrostyTaskWindow task)
         {
-            int mvdbVersion = 1;
+            int mvdbVersion = 2;
 
 
             if (ProfilesLibrary.IsLoaded(ProfileVersion.Fifa19 , ProfileVersion.Madden20,
@@ -139,7 +149,7 @@ namespace Frosty.Core.Viewport
                 ProfileVersion.NeedForSpeedHeat,
                 ProfileVersion.Fifa21, ProfileVersion.Madden22,
                 ProfileVersion.Fifa22, ProfileVersion.Battlefield2042,
-                ProfileVersion.Madden23, ProfileVersion.NeedForSpeedUnbound, ProfileVersion.DeadSpace,
+                ProfileVersion.Madden23, ProfileVersion.NeedForSpeedUnbound,
                 ProfileVersion.DragonAgeVeilguard))
             {
                 IsLoaded = true;
@@ -302,7 +312,7 @@ namespace Frosty.Core.Viewport
                 ProfileVersion.NeedForSpeedHeat,
                 ProfileVersion.Fifa21, ProfileVersion.Madden22,
                 ProfileVersion.Fifa22, ProfileVersion.Battlefield2042,
-                ProfileVersion.Madden23, ProfileVersion.NeedForSpeedUnbound, ProfileVersion.DeadSpace,
+                ProfileVersion.Madden23, ProfileVersion.NeedForSpeedUnbound,
                 ProfileVersion.DragonAgeVeilguard))
             {
                 IsLoaded = true;

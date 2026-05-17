@@ -1474,6 +1474,8 @@ namespace FrostySdk.Managers
                     return m_resourceManager.GetRawResourceData(entry.ExtraData.DataOffset, entry.Size);
 
                 case AssetDataLocation.CasNonIndexed:
+                    if (string.IsNullOrEmpty(entry.ExtraData?.CasPath))
+                        return null;
                     return m_resourceManager.GetRawResourceData(entry.ExtraData.CasPath, entry.ExtraData.DataOffset, entry.Size);
             }
 
@@ -1501,6 +1503,8 @@ namespace FrostySdk.Managers
                     return m_resourceManager.GetResourceData(entry.ExtraData.DataOffset, entry.Size);
 
                 case AssetDataLocation.CasNonIndexed:
+                    if (string.IsNullOrEmpty(entry.ExtraData?.CasPath))
+                        return null;
                     return m_resourceManager.GetResourceData(entry.ExtraData.CasPath, entry.ExtraData.DataOffset, entry.Size);
             }
 

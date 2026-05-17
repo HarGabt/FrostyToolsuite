@@ -516,10 +516,32 @@ namespace SoundEditorPlugin
 
         protected override Task ReloadTrack(NewWaveResource newWave, SoundDataTrack track)
         {
-            Dictionary<Guid, Stream> chunkStreams = new Dictionary<Guid, Stream>();
+            if (track.VariationIndex < 0 || track.VariationIndex >= newWave.Variations.Count)
+            {
+                logger.LogWarning($"[ReloadTrack] VariationIndex {track.VariationIndex} out of range (count={newWave.Variations.Count}). Skipping UI refresh.");
+                return null;
+            }
 
             dynamic runtimeVariation = newWave.Variations[track.VariationIndex];
-            int chunkIndex = newWave.Segments[(int)runtimeVariation.FirstSegmentIndex].SamplesOffsetFlag == 1 ? (int)runtimeVariation.MemoryChunkIndex : (int)runtimeVariation.StreamChunkIndex;
+            int firstSegment = (int)runtimeVariation.FirstSegmentIndex;
+
+            if (firstSegment < 0 || firstSegment >= newWave.Segments.Count)
+            {
+                logger.LogWarning($"[ReloadTrack] FirstSegmentIndex {firstSegment} out of range (count={newWave.Segments.Count}). Skipping UI refresh.");
+                return null;
+            }
+
+            int chunkIndex = newWave.Segments[firstSegment].SamplesOffsetFlag == 1
+                ? (int)runtimeVariation.MemoryChunkIndex
+                : (int)runtimeVariation.StreamChunkIndex;
+
+            if (chunkIndex < 0 || chunkIndex >= newWave.Chunks.Count)
+            {
+                logger.LogWarning($"[ReloadTrack] ChunkIndex {chunkIndex} out of range (count={newWave.Chunks.Count}). Skipping UI refresh.");
+                return null;
+            }
+
+            Dictionary<Guid, Stream> chunkStreams = new Dictionary<Guid, Stream>();
             dynamic soundDataChunk = newWave.Chunks[chunkIndex];
 
             ChunkAssetEntry chunkEntry = App.AssetManager.GetChunkEntry(soundDataChunk.ChunkId);
@@ -533,19 +555,35 @@ namespace SoundEditorPlugin
 
         public Task LoadTrackFromNewWave(int index, NewWaveResource newWave, SoundDataTrack track, Variation runtimeVariation, Dictionary<Guid, Stream> chunkStreams)
         {
-            int chunkIndex = newWave.Segments[(int)runtimeVariation.FirstSegmentIndex].SamplesOffsetFlag == 1 ? (int)runtimeVariation.MemoryChunkIndex : (int)runtimeVariation.StreamChunkIndex;
+            int firstSegment = (int)runtimeVariation.FirstSegmentIndex;
+            if (firstSegment < 0 || firstSegment >= newWave.Segments.Count)
+            {
+                logger.LogWarning($"[LoadTrackFromNewWave] FirstSegmentIndex {firstSegment} out of range (count={newWave.Segments.Count}). Aborting reload.");
+                return null;
+            }
+
+            int chunkIndex = newWave.Segments[firstSegment].SamplesOffsetFlag == 1
+                ? (int)runtimeVariation.MemoryChunkIndex
+                : (int)runtimeVariation.StreamChunkIndex;
+
+            if (chunkIndex < 0 || chunkIndex >= newWave.Chunks.Count)
+            {
+                logger.LogWarning($"[LoadTrackFromNewWave] ChunkIndex {chunkIndex} out of range (count={newWave.Chunks.Count}). Aborting reload.");
+                return null;
+            }
+
             dynamic soundDataChunk = newWave.Chunks[chunkIndex];
 
             track.ChunkIndex = chunkIndex;
             track.ChunkId = soundDataChunk.ChunkId;
-            track.SegmentIndex = (int)runtimeVariation.FirstSegmentIndex;
+            track.SegmentIndex = firstSegment;
             track.VariationIndex = index - 1;
             track.SegmentCount = (int)runtimeVariation.SegmentCount;
 
             using (NativeReader2 reader = new NativeReader2(chunkStreams[track.ChunkId]))
             {
                 reader.KeepUnderlyingStreamOpen = true;
-                reader.Position = newWave.Segments[(int)runtimeVariation.FirstSegmentIndex].SamplesOffset & 0xFFFFFFFC;
+                reader.Position = newWave.Segments[firstSegment].SamplesOffset & 0xFFFFFFFC;
 
                 if (reader.ReadUShort() != 0x48)
                 {

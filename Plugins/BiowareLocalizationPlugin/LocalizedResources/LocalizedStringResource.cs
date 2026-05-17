@@ -737,7 +737,8 @@ namespace BiowareLocalizationPlugin.LocalizedResources
             if (newModifiedResource != m_modifiedResource)
             {
                 m_modifiedResource = newModifiedResource;
-                m_modifiedResource.SaveListener += (s, e) => OnSaveModifiedResource();
+                if (m_modifiedResource != null)
+                    m_modifiedResource.SaveListener += (s, e) => OnSaveModifiedResource();
                 ResourceEventHandlers?.Invoke(this, new EventArgs());
             }
 
