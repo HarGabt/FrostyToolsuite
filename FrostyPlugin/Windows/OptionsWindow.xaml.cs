@@ -16,7 +16,6 @@ using System.Windows.Data;
 using FrostySdk;
 using Microsoft.Win32;
 using System.Runtime.InteropServices;
-using FrostySdk.Managers.Entries;
 
 namespace Frosty.Core.Windows
 {
@@ -131,12 +130,6 @@ namespace Frosty.Core.Windows
     [DisplayName("Editor Options")]
     public class EditorOptionsData : BaseOptionsData
     {
-        [Category("General")]
-        [Description("Selects which localized language files to read from the game files.")]
-        [EbxFieldMeta(EbxFieldType.Struct)]
-        [Editor(typeof(FrostyLocalizationLanguageDataEditor))]
-        public CustomComboData<string, string> Language { get; set; }
-
         [Category("Autosave")]
         [DisplayName("Enabled")]
         [Description("Enables autosaving for projects.")]
@@ -222,26 +215,9 @@ namespace Frosty.Core.Windows
         [EbxFieldMeta(EbxFieldType.String)]
         public string DeadSpaceBackupPath { get; set; } = "";
 
-        [Category("Dead Space")]
-        [DisplayName("Data Backup Path (Mod Manager)")]
-        [Description("Folder where the Dead Space Remake Data backup is stored for the Frosty Mod Manager. Before each mod compilation the backup is used to restore modified files and remove mod-generated CAS files. Example: C:\\DSBackup\\ModManager")]
-        [EbxFieldMeta(EbxFieldType.String)]
-        public string DeadSpaceMMBackupPath { get; set; } = "";
-
         public override void Load()
         {
             base.Load();
-            
-            if (ProfilesLibrary.HasLoadedProfile)
-            {
-                List<string> langs = GetLocalizedLanguages();
-                Language = new CustomComboData<string, string>(langs, langs) { SelectedIndex = langs.IndexOf(Config.Get<string>("Language", "English", ConfigScope.Game)) };
-            }
-            else
-            {
-                List<string> emptyLangs = new List<string>();
-                Language = new CustomComboData<string, string>(emptyLangs, emptyLangs);
-            }
 
             AutosaveEnabled = Config.Get<bool>("AutosaveEnabled", true);
             AutosavePeriod = Config.Get<int>("AutosavePeriod", 5);
@@ -260,8 +236,7 @@ namespace Frosty.Core.Windows
             AssetDisplayModuleInId = Config.Get<bool>("DisplayModuleInId", false);
             RememberChoice = Config.Get<bool>("UseDefaultProfile", false);
             ShowAllFiles = Config.Get<bool>("ShowAllFiles", false);
-            DeadSpaceBackupPath   = Config.Get<string>("DS_BackupPath",    "", ConfigScope.Game);
-            DeadSpaceMMBackupPath = Config.Get<string>("DS_MM_BackupPath", "", ConfigScope.Game);
+            DeadSpaceBackupPath = Config.Get<string>("DS_BackupPath", "", ConfigScope.Game);
 
             //Checks the registry for the current association instead of loading from config
             string KeyName = "frostyproject";
@@ -293,19 +268,14 @@ namespace Frosty.Core.Windows
             Config.Add("DisplayModuleInId", AssetDisplayModuleInId);
             Config.Add("UseDefaultProfile", RememberChoice);
             Config.Add("ShowAllFiles", ShowAllFiles);
-            Config.Add("DS_BackupPath",    DeadSpaceBackupPath,   ConfigScope.Game);
-            Config.Add("DS_MM_BackupPath", DeadSpaceMMBackupPath, ConfigScope.Game);
+            Config.Add("DS_BackupPath", DeadSpaceBackupPath, ConfigScope.Game);
 
             if (RememberChoice)
                 Config.Add("DefaultProfile", ProfilesLibrary.ProfileName);
             else
                 Config.Remove("DefaultProfile");
 
-            Config.Add("Language", Language.SelectedName, ConfigScope.Game);
-
             Config.Save();
-
-            LocalizedStringDatabase.Current.Initialize();
 
             //Create file association if enabled
             if (DefaultInstallation) {
@@ -348,37 +318,6 @@ namespace Frosty.Core.Windows
         
         [DllImport("shell32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         private static extern void SHChangeNotify(uint wEventId, uint uFlags, IntPtr dwItem1, IntPtr dwItem2);
-
-        private List<string> GetLocalizedLanguages()
-        {
-            List<string> languages = new List<string>();
-            foreach (EbxAssetEntry entry in App.AssetManager.EnumerateEbx("LocalizationAsset"))
-            {
-                // read master localization asset
-                dynamic localizationAsset = App.AssetManager.GetEbx(entry).RootObject;
-
-                // iterate through localized texts
-                foreach (PointerRef pointer in localizationAsset.LocalizedTexts)
-                {
-                    EbxAssetEntry textEntry = App.AssetManager.GetEbxEntry(pointer.External.FileGuid);
-                    if (textEntry == null)
-                        continue;
-
-                    // read localized text asset
-                    dynamic localizedText = App.AssetManager.GetEbx(textEntry).RootObject;
-
-                    string lang = localizedText.Language.ToString();
-                    lang = lang.Replace("LanguageFormat_", "");
-
-                    languages.Add(lang);
-                }
-            }
-
-            if (languages.Count == 0)
-                languages.Add("English");
-
-            return languages;
-        }
     }
 
     [DisplayName("Mod Manager Options")]
