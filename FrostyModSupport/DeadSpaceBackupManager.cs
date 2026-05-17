@@ -27,17 +27,22 @@ namespace Frosty.ModSupport
         /// </summary>
         public static string CurrentConfigKey { get; set; } = "DS_BackupPath";
 
-        public static string GetBackupPath() =>
-            Config.Get<string>(CurrentConfigKey, "", ConfigScope.Game);
+        /// <summary>Returns the default backup folder next to the game's .exe: {gamePath}\DSBackup</summary>
+        public static string GetDefaultBackupPath(string gamePath) =>
+            Path.Combine(gamePath.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar), "DSBackup");
 
-        public static bool IsConfigured() =>
-            !string.IsNullOrWhiteSpace(GetBackupPath());
-
-        public static bool BackupExists()
+        /// <summary>
+        /// Returns the configured backup path, falling back to the default DSBackup folder
+        /// next to the game .exe when no path has been set by the user.
+        /// </summary>
+        public static string GetBackupPath(string gamePath)
         {
-            string bp = GetBackupPath();
-            return !string.IsNullOrWhiteSpace(bp) && Directory.Exists(Path.Combine(bp, "Data"));
+            string configured = Config.Get<string>(CurrentConfigKey, "", ConfigScope.Game);
+            return string.IsNullOrWhiteSpace(configured) ? GetDefaultBackupPath(gamePath) : configured;
         }
+
+        public static bool BackupExists(string gamePath) =>
+            Directory.Exists(Path.Combine(GetBackupPath(gamePath), "Data"));
 
         /// <summary>
         /// Returns true if any mod-generated CAS files (above vanilla limits) are present
@@ -107,9 +112,7 @@ namespace Frosty.ModSupport
         /// </summary>
         public static void CreateBackup(string gamePath)
         {
-            string backupRoot = GetBackupPath();
-            if (string.IsNullOrWhiteSpace(backupRoot))
-                throw new InvalidOperationException("Dead Space backup path is not configured.");
+            string backupRoot = GetBackupPath(gamePath);
 
             string srcData = Path.Combine(gamePath, "Data");
             string dstData = Path.Combine(backupRoot, "Data");
@@ -149,10 +152,10 @@ namespace Frosty.ModSupport
         /// </summary>
         public static void RestoreFromBackup(string gamePath)
         {
-            if (!BackupExists())
+            if (!BackupExists(gamePath))
                 throw new InvalidOperationException("Dead Space backup does not exist at configured path.");
 
-            string srcData = Path.Combine(GetBackupPath(), "Data");
+            string srcData = Path.Combine(GetBackupPath(gamePath), "Data");
             string dstData = Path.Combine(gamePath, "Data");
 
             App.Logger.Log("Dead Space: Restoring Data from backup...");
@@ -215,21 +218,11 @@ namespace Frosty.ModSupport
         /// </summary>
         public static void PrepareForModApplication(string gamePath)
         {
-            if (!IsConfigured())
+            if (!BackupExists(gamePath))
             {
-                FrostyMessageBox.Show(
-                    "No Dead Space backup path has been configured.\n\n" +
-                    "A vanilla backup of the game's Data folder is required before mods can be applied.\n\n" +
-                    "Please set a backup path under:\n" +
-                    "Editor Options → Dead Space → Data Backup Path\n\n" +
-                    "The backup will be created automatically on the next launch.",
-                    "Dead Space: Backup Path Not Configured");
-                throw new InvalidOperationException("Dead Space backup path is not configured. Mod application aborted.");
-            }
-
-            if (!BackupExists())
-            {
-                CreateBackup(gamePath); // includes dirty-data check and CAS wipe
+                // First run: create the backup automatically in the default or configured folder
+                App.Logger.Log($"Dead Space: No backup found, creating one at: {GetBackupPath(gamePath)}");
+                CreateBackup(gamePath);
             }
             else
             {

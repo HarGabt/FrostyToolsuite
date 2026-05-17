@@ -211,7 +211,7 @@ namespace Frosty.Core.Windows
 
         [Category("Dead Space")]
         [DisplayName("Data Backup Path (Editor)")]
-        [Description("Folder where the Dead Space Remake Data backup is stored for the Frosty Editor. Before each mod compilation the backup is used to restore modified files and remove mod-generated CAS files. Example: C:\\DSBackup\\Editor")]
+        [Description("Folder where the Dead Space Remake Data backup is stored for the Frosty Editor. Leave empty to use the default location: DSBackup folder next to the game .exe. The backup is created automatically on first use.")]
         [EbxFieldMeta(EbxFieldType.String)]
         public string DeadSpaceBackupPath { get; set; } = "";
 
@@ -337,7 +337,7 @@ namespace Frosty.Core.Windows
 
         [Category("Dead Space")]
         [DisplayName("Data Backup Path")]
-        [Description("Folder where the Dead Space Remake Data backup is stored for the Frosty Mod Manager. Before each mod compilation the backup is used to restore modified files and remove mod-generated CAS files. Example: C:\\DSBackup\\ModManager")]
+        [Description("Folder where the Dead Space Remake Data backup is stored for the Frosty Mod Manager. Leave empty to use the default location: DSBackup folder next to the game .exe. The backup is created automatically on first use.")]
         [EbxFieldMeta(EbxFieldType.String)]
         public string DeadSpaceBackupPath { get; set; } = "";
 

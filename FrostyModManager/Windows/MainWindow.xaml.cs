@@ -774,18 +774,18 @@ namespace FrostyModManager
         {
             DeadSpaceBackupManager.CurrentConfigKey = "DS_MM_BackupPath";
 
-            if (!DeadSpaceBackupManager.BackupExists())
+            string gamePath = Config.Get<string>("GamePath", "", ConfigScope.Game);
+
+            if (!DeadSpaceBackupManager.BackupExists(gamePath))
             {
                 FrostyMessageBox.Show(
-                    "No backup found at the configured path.\n\nPlease set a backup path under Options → Dead Space → Data Backup Path and apply mods at least once to create a backup.",
+                    $"No backup found.\n\nApply mods at least once to create a backup automatically.\n\nDefault backup location: {DeadSpaceBackupManager.GetDefaultBackupPath(gamePath)}",
                     "Dead Space: No Backup Found");
                 return;
             }
 
             restoreVanillaButton.IsEnabled = false;
             launchButton.IsEnabled = false;
-
-            string gamePath = Config.Get<string>("GamePath", "", ConfigScope.Game);
 
             FrostyTaskWindow.Show("Restoring Dead Space Data", "", task =>
             {

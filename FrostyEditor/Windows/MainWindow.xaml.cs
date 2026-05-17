@@ -513,10 +513,10 @@ namespace FrostyEditor.Windows
 
         private void restoreBackupButton_Click(object sender, RoutedEventArgs e)
         {
-            if (!DeadSpaceBackupManager.BackupExists())
+            if (!DeadSpaceBackupManager.BackupExists(App.FileSystem.BasePath))
             {
                 FrostyMessageBox.Show(
-                    "No backup found at the configured path.\n\nPlease launch the game at least once to create a backup.",
+                    $"No backup found.\n\nCompile mods at least once to create a backup automatically.\n\nDefault backup location: {DeadSpaceBackupManager.GetDefaultBackupPath(App.FileSystem.BasePath)}",
                     "Dead Space: No Backup Found");
                 return;
             }
