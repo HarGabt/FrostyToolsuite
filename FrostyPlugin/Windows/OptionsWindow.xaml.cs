@@ -216,6 +216,18 @@ namespace Frosty.Core.Windows
         [EbxFieldMeta(EbxFieldType.Boolean)]
         public bool DefaultInstallation { get; set; } = false;
 
+        [Category("Dead Space")]
+        [DisplayName("Data Backup Path (Editor)")]
+        [Description("Folder where the Dead Space Remake Data backup is stored for the Frosty Editor. Before each mod compilation the backup is used to restore modified files and remove mod-generated CAS files. Example: C:\\DSBackup\\Editor")]
+        [EbxFieldMeta(EbxFieldType.String)]
+        public string DeadSpaceBackupPath { get; set; } = "";
+
+        [Category("Dead Space")]
+        [DisplayName("Data Backup Path (Mod Manager)")]
+        [Description("Folder where the Dead Space Remake Data backup is stored for the Frosty Mod Manager. Before each mod compilation the backup is used to restore modified files and remove mod-generated CAS files. Example: C:\\DSBackup\\ModManager")]
+        [EbxFieldMeta(EbxFieldType.String)]
+        public string DeadSpaceMMBackupPath { get; set; } = "";
+
         public override void Load()
         {
             base.Load();
@@ -248,6 +260,8 @@ namespace Frosty.Core.Windows
             AssetDisplayModuleInId = Config.Get<bool>("DisplayModuleInId", false);
             RememberChoice = Config.Get<bool>("UseDefaultProfile", false);
             ShowAllFiles = Config.Get<bool>("ShowAllFiles", false);
+            DeadSpaceBackupPath   = Config.Get<string>("DS_BackupPath",    "", ConfigScope.Game);
+            DeadSpaceMMBackupPath = Config.Get<string>("DS_MM_BackupPath", "", ConfigScope.Game);
 
             //Checks the registry for the current association instead of loading from config
             string KeyName = "frostyproject";
@@ -279,6 +293,8 @@ namespace Frosty.Core.Windows
             Config.Add("DisplayModuleInId", AssetDisplayModuleInId);
             Config.Add("UseDefaultProfile", RememberChoice);
             Config.Add("ShowAllFiles", ShowAllFiles);
+            Config.Add("DS_BackupPath",    DeadSpaceBackupPath,   ConfigScope.Game);
+            Config.Add("DS_MM_BackupPath", DeadSpaceMMBackupPath, ConfigScope.Game);
 
             if (RememberChoice)
                 Config.Add("DefaultProfile", ProfilesLibrary.ProfileName);
@@ -380,20 +396,28 @@ namespace Frosty.Core.Windows
         [EbxFieldMeta(EbxFieldType.Boolean)]
         public string CommandLineArgs { get; set; } = "";
 
+        [Category("Dead Space")]
+        [DisplayName("Data Backup Path")]
+        [Description("Folder where the Dead Space Remake Data backup is stored for the Frosty Mod Manager. Before each mod compilation the backup is used to restore modified files and remove mod-generated CAS files. Example: C:\\DSBackup\\ModManager")]
+        [EbxFieldMeta(EbxFieldType.String)]
+        public string DeadSpaceBackupPath { get; set; } = "";
+
         public override void Load()
         {
             base.Load();
-            
+
             RememberChoice = Config.Get<bool>("UseDefaultProfile", false);
             CommandLineArgs = Config.Get<string>("CommandLineArgs", "", ConfigScope.Game);
+            DeadSpaceBackupPath = Config.Get<string>("DS_MM_BackupPath", "", ConfigScope.Game);
         }
 
         public override void Save()
         {
             base.Save();
-            
+
             Config.Add("UseDefaultProfile", RememberChoice);
             Config.Add("CommandLineArgs", CommandLineArgs, ConfigScope.Game);
+            Config.Add("DS_MM_BackupPath", DeadSpaceBackupPath, ConfigScope.Game);
 
             if (RememberChoice)
                 Config.Add("DefaultProfile", ProfilesLibrary.ProfileName);

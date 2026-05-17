@@ -1375,6 +1375,20 @@ namespace Frosty.ModSupport
             cancelToken.ThrowIfCancellationRequested();
             if (needsModding)
             {
+                // Dead Space: restore original Data files and clean mod-generated CAS files before re-applying
+                if (ProfilesLibrary.IsLoaded(ProfileVersion.DeadSpace))
+                {
+                    try
+                    {
+                        DeadSpaceBackupManager.PrepareForModApplication(m_fs.BasePath);
+                    }
+                    catch (Exception ex)
+                    {
+                        App.Logger.LogError($"Dead Space: {ex.Message}");
+                        throw new OperationCanceledException("Dead Space mod application aborted: " + ex.Message);
+                    }
+                }
+
                 cancelToken.ThrowIfCancellationRequested();
                 Logger.Log("Initializing Resources");
 
@@ -1541,7 +1555,13 @@ namespace Frosty.ModSupport
                                 cmdArgs.Add(new SymLinkStruct(modDataPath + "Data/Win32", m_fs.BasePath + "Data/Win32", true));
                             }
                         }
-                        else if (ProfilesLibrary.IsLoaded(ProfileVersion.Battlefield5, ProfileVersion.NeedForSpeedUnbound, ProfileVersion.DeadSpace))
+                        else if (ProfilesLibrary.IsLoaded(ProfileVersion.DeadSpace))
+                        {
+                            // Dead Space: no symlinks needed; mod files are copied directly into the game's Data folder at the end
+                            if (!Directory.Exists(modDataPath + "Data"))
+                                Directory.CreateDirectory(modDataPath + "Data");
+                        }
+                        else if (ProfilesLibrary.IsLoaded(ProfileVersion.Battlefield5, ProfileVersion.NeedForSpeedUnbound))
                         {
                             // bfv and unbound dont have a patch directory so we need to rebuild the data folder structure instead
                             if (!Directory.Exists(modDataPath + "Data"))
@@ -1625,8 +1645,7 @@ namespace Frosty.ModSupport
                             ProfileVersion.Madden20, ProfileVersion.Fifa20,
                             ProfileVersion.NeedForSpeedHeat, ProfileVersion.PlantsVsZombiesBattleforNeighborville,
                             ProfileVersion.Fifa21, ProfileVersion.Madden22,
-                            ProfileVersion.Fifa22, ProfileVersion.Madden23,
-                            ProfileVersion.DeadSpace))
+                            ProfileVersion.Fifa22, ProfileVersion.Madden23))
                         {
                             foreach (string casFilename in Directory.EnumerateFiles(m_fs.BasePath + m_patchPath, "*.cas", SearchOption.AllDirectories))
                             {
@@ -1650,10 +1669,10 @@ namespace Frosty.ModSupport
                     }
                 }
 
-                // if there is a gamedir/shader_cache folder, symlink it
+                // if there is a gamedir/shader_cache folder, symlink it (skipped for Dead Space)
                 string baseShaderCachePath = Path.Combine(m_fs.BasePath, "shadercache");
                 string shaderCacheLinkPath = Path.Combine(modDataPath, "shadercache");
-                if (Directory.Exists(baseShaderCachePath))
+                if (!ProfilesLibrary.IsLoaded(ProfileVersion.DeadSpace) && Directory.Exists(baseShaderCachePath))
                 {
                     DirectoryInfo shaderCacheLink = new DirectoryInfo(shaderCacheLinkPath);
                     if (Config.Get<bool>("DisableShaderCacheSymLink", false))
@@ -1683,7 +1702,8 @@ namespace Frosty.ModSupport
                     }
                 }
 
-                        // add cas files to link
+                        // add cas files to link (skipped for Dead Space: mod files are copied directly to game Data)
+                        if (!ProfilesLibrary.IsLoaded(ProfileVersion.DeadSpace))
                         foreach (string catalog in m_fs.Catalogs)
                 {
                     string path = m_fs.ResolvePath("native_patch/" + catalog + "/cas.cat");
@@ -1819,6 +1839,10 @@ namespace Frosty.ModSupport
                             // as the game data is now in an inconsistent state
                             throw completedAction.Exception;
                         }
+
+                        // Dead Space: no ModData symlinks needed; mod files are copied directly into game Data
+                        if (ProfilesLibrary.IsLoaded(ProfileVersion.DeadSpace))
+                            continue;
 
                         string srcPath = m_fs.ResolvePath($"native_patch/{completedAction.SuperBundleInfo.Name}.toc");
                         if (!m_hasPatchFolder)
@@ -2118,39 +2142,43 @@ namespace Frosty.ModSupport
                             throw completedAction.Exception;
                         }
 
-                        if (!completedAction.TocModified)
+                        // Dead Space: no ModData symlinks needed; mod files are copied directly into game Data
+                        if (!ProfilesLibrary.IsLoaded(ProfileVersion.DeadSpace))
                         {
-                            string srcPath = m_fs.ResolvePath(completedAction.SuperBundle + ".toc");
-                            FileInfo sbFi = new FileInfo(modDataPath + m_patchPath + "/" + completedAction.SuperBundle + ".toc");
-
-                            if (!Directory.Exists(sbFi.DirectoryName))
-                                Directory.CreateDirectory(sbFi.DirectoryName);
-
-                            if (m_useAltSymLink)
+                            if (!completedAction.TocModified)
                             {
-                                Utils.File.CreateSymbolicLink(sbFi.FullName, srcPath);
+                                string srcPath = m_fs.ResolvePath(completedAction.SuperBundle + ".toc");
+                                FileInfo sbFi = new FileInfo(modDataPath + m_patchPath + "/" + completedAction.SuperBundle + ".toc");
+
+                                if (!Directory.Exists(sbFi.DirectoryName))
+                                    Directory.CreateDirectory(sbFi.DirectoryName);
+
+                                if (m_useAltSymLink)
+                                {
+                                    Utils.File.CreateSymbolicLink(sbFi.FullName, srcPath);
+                                }
+                                else
+                                {
+                                    cmdArgs.Add(new SymLinkStruct(sbFi.FullName, srcPath, false));
+                                }
                             }
-                            else
-                            {
-                                cmdArgs.Add(new SymLinkStruct(sbFi.FullName, srcPath, false));
-                            }
-                        }
 
-                        if (!completedAction.SbModified)
-                        {
-                            string srcPath = m_fs.ResolvePath(completedAction.SuperBundle + ".sb");
-                            FileInfo sbFi = new FileInfo(modDataPath + m_patchPath + "/" + completedAction.SuperBundle + ".sb");
-
-                            if (!Directory.Exists(sbFi.DirectoryName))
-                                Directory.CreateDirectory(sbFi.DirectoryName);
-
-                            if (m_useAltSymLink)
+                            if (!completedAction.SbModified)
                             {
-                                Utils.File.CreateSymbolicLink(sbFi.FullName, srcPath);
-                            }
-                            else
-                            {
-                                cmdArgs.Add(new SymLinkStruct(sbFi.FullName, srcPath, false));
+                                string srcPath = m_fs.ResolvePath(completedAction.SuperBundle + ".sb");
+                                FileInfo sbFi = new FileInfo(modDataPath + m_patchPath + "/" + completedAction.SuperBundle + ".sb");
+
+                                if (!Directory.Exists(sbFi.DirectoryName))
+                                    Directory.CreateDirectory(sbFi.DirectoryName);
+
+                                if (m_useAltSymLink)
+                                {
+                                    Utils.File.CreateSymbolicLink(sbFi.FullName, srcPath);
+                                }
+                                else
+                                {
+                                    cmdArgs.Add(new SymLinkStruct(sbFi.FullName, srcPath, false));
+                                }
                             }
                         }
 
@@ -2396,12 +2424,6 @@ namespace Frosty.ModSupport
             }
             CopyFileIfRequired(m_fs.BasePath + "user.cfg", modDataPath + "user.cfg");
 
-            // Dead Space dataPath argument hijack
-            if (ProfilesLibrary.IsLoaded(ProfileVersion.DeadSpace))
-            {
-                CopyFileIfRequired("ThirdParty/dpapi.dll", m_fs.BasePath + "dpapi.dll");
-            }
-
             // FIFA games require a fifaconfig workaround
             if (ProfilesLibrary.IsLoaded(ProfileVersion.Fifa17,
                 ProfileVersion.Fifa18,
@@ -2418,35 +2440,47 @@ namespace Frosty.ModSupport
                 CopyFileIfRequired("thirdparty/fifaconfig.exe", m_fs.BasePath + "FIFASetup\\fifaconfig.exe");
             }
 
-            // launch the game (redirecting to the modPath directory)
-            Logger.Log("Launching Game");
-
-            string args = $"-dataPath \"{modDataPath.Trim('\\')}\" {additionalArgs}";
             if (ProfilesLibrary.IsLoaded(ProfileVersion.DeadSpace))
             {
-                // Dead Space doesn't give a single one about -dataPath argument. dpapi.dll takes care of it by making the game look at the datapath file.
-                File.WriteAllText(m_fs.BasePath + "datapath", modDataPath.Trim('\\'));
-                args = "";
-            }
+                // Release all open file handles to game Data files before overwriting them
+                m_rm?.ClearNativeReaderCache();
 
-            if (ProfilesLibrary.IsLoaded(ProfileVersion.DeadSpace))
-            {
-                ExecuteProcess($"{m_fs.BasePath + ProfilesLibrary.ProfileName}.exe", args);
-            }
-            else try
-            {
-                //KillEADesktop();
-                //ModifyInstallerData($"-dataPath \"{modDataPath.Trim('\\')}\" {additionalArgs}");
-                LaunchGame(m_fs.BasePath, m_modDirName, modDataPath, additionalArgs);
-                //WaitForGame();
-                //CleanUpInstalledData();
-            }
-            catch (Exception ex)
-            {
-                App.Logger.Log("Error Launching Game: " + ex);
-            }
+                // Copy compiled mod data directly into the game's Data folder
+                try
+                {
+                    DeadSpaceBackupManager.CopyModDataToGameData(modDataPath.TrimEnd('\\'), m_fs.BasePath);
+                }
+                catch (Exception ex)
+                {
+                    App.Logger.LogWarning($"Dead Space: Failed to copy mod data to game: {ex.Message}");
+                }
 
-            App.Logger.Log("Done");
+                App.Logger.Log("Done");
+                FrostyMessageBox.Show(
+                    "Mod compilation complete.\n\nThe mod files have been applied to the game's Data folder.\nYou can now launch Dead Space.",
+                    "Dead Space: Mods Applied");
+            }
+            else
+            {
+                // launch the game (redirecting to the modPath directory)
+                Logger.Log("Launching Game");
+
+                string args = $"-dataPath \"{modDataPath.Trim('\\')}\" {additionalArgs}";
+                try
+                {
+                    //KillEADesktop();
+                    //ModifyInstallerData($"-dataPath \"{modDataPath.Trim('\\')}\" {additionalArgs}");
+                    LaunchGame(m_fs.BasePath, m_modDirName, modDataPath, additionalArgs);
+                    //WaitForGame();
+                    //CleanUpInstalledData();
+                }
+                catch (Exception ex)
+                {
+                    App.Logger.Log("Error Launching Game: " + ex);
+                }
+
+                App.Logger.Log("Done");
+            }
 
             GC.Collect();
             return 0;
