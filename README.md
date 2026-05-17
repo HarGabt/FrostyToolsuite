@@ -10,9 +10,10 @@ From here on out I will refer to Dead Space Remake as "DSR".
 - MeshVariation Database recognition fixed for DSR so for quite a lot of meshes, texture previewing works again in Mesh Viewer. Still working on extending support for this.
 - Biggest one: Automatic mod installation. It goes like this: User must set a backup location or else mods wont compile at all. Once done, on first ever backup creation it creates an appropiate, efficient backup. Mod gets compiled as usual, .symlink steps and cmd admin entirely removed. It checks if a mod is already installed, if yes, replace files with backup and remove any additional .cas files. Files automatically gets imported properly from ModData, and that's it. Works beautifully. Also applies to the Mod Manager.
 - "Restore Vanilla" button added next to Compile button which will turn game back to vanilla using CAS-deletion and backup.
-- Color change of top title.
-- Fixed sound importing to a major extent,
+- Localization rework, across whole software: Add German (de-DE) and English (en-US) string resources for FrostyEditor, FrostyModManager, FrostyPlugin. All the individual plugins are not covered yet, more translations can be added as wanted
+- Fixed sound importing to a major extent, included support for .opus and .snr files (EALayer3)
 - Attempted fix for mod compilation inconsistencies when re-opening or re-compiling projects.
+FrostySdk: EbxWriter and AssetManager fixes. Any instabilities with certain file types in Frosty Editor such as Widgets on re-opening project files or re-compiling and more should be fixed. (Still testing this)
 
 ## What's coming next?
 
