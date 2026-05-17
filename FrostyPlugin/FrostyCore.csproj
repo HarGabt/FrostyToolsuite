@@ -111,6 +111,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.cs" />
+    <Compile Include="Localization\LocalizationManager.cs" />
     <Compile Include="AssetDefinition.cs" />
     <Compile Include="Attributes\PluginAuthorAttribute.cs" />
     <Compile Include="Attributes\PluginDisplayNameAttribute.cs" />

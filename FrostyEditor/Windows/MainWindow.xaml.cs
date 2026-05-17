@@ -109,7 +109,7 @@ namespace FrostyEditor.Windows
 
             MenuItem optionsMenuItem = new MenuItem()
             {
-                Header = "Options",
+                Header = Application.Current.TryFindResource("fe_MenuItem_Options") as string ?? "Options",
                 Icon = new Image() { Source = new ImageSourceConverter().ConvertFromString("pack://application:,,,/FrostyCore;component/Images/Settings.png") as ImageSource },
             };
             optionsMenuItem.Click += optionsMenuItem_Click;
@@ -125,6 +125,8 @@ namespace FrostyEditor.Windows
             }
             BookmarkContextPicker.SelectedItem = Bookmarks.BookmarkDb.CurrentContext;
             TaskbarItemInfo = new System.Windows.Shell.TaskbarItemInfo();
+
+            m_clearRecentsMenuItem.Header = Application.Current.TryFindResource("fe_MenuItem_ClearRecents") as string ?? "Clear Recents";
 
             m_clearRecentsMenuItem.Click += delegate (object sender, RoutedEventArgs e) {
                 m_recentProjects.Clear();
@@ -301,6 +303,11 @@ namespace FrostyEditor.Windows
             {
                 InitFifaMenu();
             }
+
+            if (ProfilesLibrary.IsLoaded(ProfileVersion.DeadSpace))
+            {
+                RestoreBackupButton.Visibility = Visibility.Visible;
+            }
         }
 
         private void InitFifaMenu()
@@ -322,12 +329,13 @@ namespace FrostyEditor.Windows
                 if (ProfilesLibrary.EnableExecution)
                     Title += "[" + m_project.DisplayName + "]";
                 else
-                    Title += "[Read Only]";
+                    Title += Application.Current.TryFindResource("fe_TitleBarReadOnly") as string ?? " [Read Only]";
             }
             else
             {
                 Title = "Frosty Editor - " + Frosty.Core.App.Version;
             }
+            UpdateLanguageMenuChecks();
         }
 
         private void FrostyWindow_Loaded(object sender, EventArgs e)
@@ -439,7 +447,7 @@ namespace FrostyEditor.Windows
             try
             {
                 // run mod applying process
-                FrostyTaskWindow.Show("Launching", "", (task) => 
+                FrostyTaskWindow.Show(Application.Current.TryFindResource("fe_Task_LaunchGame") as string ?? "Launching", "", (task) =>
                 {
                     try
                     {
@@ -503,6 +511,41 @@ namespace FrostyEditor.Windows
             GC.Collect();
         }
 
+        private void restoreBackupButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (!DeadSpaceBackupManager.BackupExists())
+            {
+                FrostyMessageBox.Show(
+                    "No backup found at the configured path.\n\nPlease launch the game at least once to create a backup.",
+                    "Dead Space: No Backup Found");
+                return;
+            }
+
+            RestoreBackupButton.IsEnabled = false;
+            LaunchButton.IsEnabled = false;
+
+            FrostyTaskWindow.Show(Application.Current.TryFindResource("fe_Task_RestoreDeadSpace") as string ?? "Restoring Dead Space Data", "", task =>
+            {
+                try
+                {
+                    task.Update("Restoring vanilla files from backup...");
+                    DeadSpaceBackupManager.RestoreFromBackup(App.FileSystem.BasePath);
+
+                    task.Update("Removing mod-generated CAS files...");
+                    DeadSpaceBackupManager.DeleteModCasFiles(App.FileSystem.BasePath);
+                }
+                catch (Exception ex)
+                {
+                    App.Logger.LogError($"Dead Space restore failed: {ex.Message}");
+                }
+            });
+
+            RestoreBackupButton.IsEnabled = true;
+            LaunchButton.IsEnabled = true;
+
+            FrostyMessageBox.Show("Vanilla restore complete. The game's Data folder has been restored to its unmodded state.", "Dead Space: Restore Complete");
+        }
+
         public void ExportMod(ModSettings modSettings, string filename, bool bSilent)
         {
             m_project.WriteToMod(filename, modSettings);
@@ -553,7 +596,7 @@ namespace FrostyEditor.Windows
 
             if (m_project.IsDirty)
             {
-                MessageBoxResult result = FrostyMessageBox.Show("Do you wish to save changes to " + m_project.DisplayName + "?", "Frosty Editor", MessageBoxButton.YesNoCancel);
+                MessageBoxResult result = FrostyMessageBox.Show(string.Format(Application.Current.TryFindResource("fe_Msg_SaveChanges") as string ?? "Do you wish to save changes to {0}?", m_project.DisplayName), "Frosty Editor", MessageBoxButton.YesNoCancel);
                 if (result == MessageBoxResult.Cancel)
                     return;
 
@@ -561,7 +604,7 @@ namespace FrostyEditor.Windows
                 {
                     if (SaveProject(false))
                     {
-                        FrostyTaskWindow.Show("Saving Project", m_project.Filename, (task) => m_project.Save());
+                        FrostyTaskWindow.Show(Application.Current.TryFindResource("fe_Task_SaveProject") as string ?? "Saving Project", m_project.Filename, (task) => m_project.Save());
                         App.Logger.Log("Project saved to {0}", m_project.Filename);
                     }
                 }
@@ -593,14 +636,14 @@ namespace FrostyEditor.Windows
         private void openModMenuItem_Click(object sender, RoutedEventArgs e)
         {
             bool savePrevProject = false;
-            FrostyOpenFileDialog ofd = new FrostyOpenFileDialog("Open Project", "*.fbproject (Frosty Project)|*.fbproject", "Project");
+            FrostyOpenFileDialog ofd = new FrostyOpenFileDialog(Application.Current.TryFindResource("fe_DlgTitle_OpenProject") as string ?? "Open Project", "*.fbproject (Frosty Project)|*.fbproject", "Project");
 
             if (!ofd.ShowDialog())
                 return; 
             
             if (m_project.IsDirty)
             {
-                MessageBoxResult result = FrostyMessageBox.Show("Do you wish to save changes to " + m_project.DisplayName + "?", "Frosty Editor", MessageBoxButton.YesNoCancel);
+                MessageBoxResult result = FrostyMessageBox.Show(string.Format(Application.Current.TryFindResource("fe_Msg_SaveChanges") as string ?? "Do you wish to save changes to {0}?", m_project.DisplayName), "Frosty Editor", MessageBoxButton.YesNoCancel);
                 switch (result)
                 {
                     case MessageBoxResult.Cancel:
@@ -627,7 +670,7 @@ namespace FrostyEditor.Windows
             m_autoSaveTimer?.Stop();
             if (SaveProject(false))
             {
-                FrostyTaskWindow.Show("Saving Project", m_project.Filename, (task) => m_project.Save());
+                FrostyTaskWindow.Show(Application.Current.TryFindResource("fe_Task_SaveProject") as string ?? "Saving Project", m_project.Filename, (task) => m_project.Save());
 
                 AddRecentProject(m_project.Filename);
 
@@ -648,7 +691,7 @@ namespace FrostyEditor.Windows
             m_autoSaveTimer?.Stop();
             if (SaveProject(true))
             {
-                FrostyTaskWindow.Show("Saving Project", m_project.Filename, (task) => m_project.Save());
+                FrostyTaskWindow.Show(Application.Current.TryFindResource("fe_Task_SaveProject") as string ?? "Saving Project", m_project.Filename, (task) => m_project.Save());
 
                 AddRecentProject(m_project.Filename);
 
@@ -738,7 +781,7 @@ namespace FrostyEditor.Windows
         {
             if (m_project.Filename == "" || forceSaveAs)
             {
-                FrostySaveFileDialog sfd = new FrostySaveFileDialog("Save Project As", "*.fbproject (Frosty Project)|*.fbproject", "Project");
+                FrostySaveFileDialog sfd = new FrostySaveFileDialog(Application.Current.TryFindResource("fe_DlgTitle_SaveProjectAs") as string ?? "Save Project As", "*.fbproject (Frosty Project)|*.fbproject", "Project");
                 if (!sfd.ShowDialog())
                     return false;
 
@@ -790,9 +833,10 @@ namespace FrostyEditor.Windows
                 return;
             }
 
+            string readOnlySuffix = Application.Current.TryFindResource("fe_ReadOnly") as string ?? " (Read-only)";
             foreach (FrostyTabItem currentTi in TabControl.Items)
             {
-                if (!openUnmodifiedData && (string)currentTi.Header == asset.DisplayName && currentTi.TabId == asset.Name || openUnmodifiedData && (string)currentTi.Header == $"{asset.DisplayName} (Read-only)" && currentTi.TabId == asset.Name)
+                if (!openUnmodifiedData && (string)currentTi.Header == asset.DisplayName && currentTi.TabId == asset.Name || openUnmodifiedData && (string)currentTi.Header == $"{asset.DisplayName}{readOnlySuffix}" && currentTi.TabId == asset.Name)
                 {
                     currentTi.IsSelected = true;
                     return;
@@ -824,7 +868,7 @@ namespace FrostyEditor.Windows
             }
             catch (Exception)
             {
-                FrostyMessageBox.Show("Unable to open asset", "Frosty Editor");
+                FrostyMessageBox.Show(Application.Current.TryFindResource("fe_Msg_UnableToOpenAsset") as string ?? "Unable to open asset", "Frosty Editor");
                 return;
             }
 
@@ -844,7 +888,7 @@ namespace FrostyEditor.Windows
 
             ti.Icon = (new AssetEntryToBitmapSourceConverter().Convert(asset, typeof(ImageSource), null, null) as ImageSource);
             ti.Content = editor;
-            ti.Header = openUnmodifiedData ? $"{asset.DisplayName} (Read-only)" : asset.DisplayName;
+            ti.Header = openUnmodifiedData ? $"{asset.DisplayName}{readOnlySuffix}" : asset.DisplayName;
             ti.TabId = asset.Name;
             ti.IsSelected = true;
             ti.CloseButtonVisible = true;
@@ -971,12 +1015,12 @@ namespace FrostyEditor.Windows
         {
             if (m_project.IsDirty)
             {
-                MessageBoxResult result = FrostyMessageBox.Show("Do you wish to save changes to " + m_project.DisplayName + "?", "Frosty Editor", MessageBoxButton.YesNo);
+                MessageBoxResult result = FrostyMessageBox.Show(string.Format(Application.Current.TryFindResource("fe_Msg_SaveChanges") as string ?? "Do you wish to save changes to {0}?", m_project.DisplayName), "Frosty Editor", MessageBoxButton.YesNo);
                 if (result == MessageBoxResult.Yes)
                 {
                     if (SaveProject(false))
                     {
-                        FrostyTaskWindow.Show("Saving Project", "", (task) => m_project.Save());
+                        FrostyTaskWindow.Show(Application.Current.TryFindResource("fe_Task_SaveProject") as string ?? "Saving Project", "", (task) => m_project.Save());
                         App.Logger.Log("Project saved to {0}", m_project.Filename);
                     }
                 }
@@ -1040,7 +1084,7 @@ namespace FrostyEditor.Windows
                 }
             }
 
-            FrostyTaskWindow.Show("Reverting Asset", "", (task) => { App.AssetManager.RevertAsset(entry, suppressOnModify: false); });
+            FrostyTaskWindow.Show(Application.Current.TryFindResource("fe_Task_RevertAsset") as string ?? "Reverting Asset", "", (task) => { App.AssetManager.RevertAsset(entry, suppressOnModify: false); });
             
             if (entry.IsAdded)
             {
@@ -1055,11 +1099,11 @@ namespace FrostyEditor.Windows
         private void contextMenuImportAsset_Click(object sender, RoutedEventArgs e)
         {
             LegacyFileEntry selectedAsset = legacyExplorer.SelectedAsset as LegacyFileEntry;
-            FrostyOpenFileDialog ofd = new FrostyOpenFileDialog("Open Legacy file", "*." + selectedAsset.Type + " (Legacy Files)|*." + selectedAsset.Type, "FifaLegacy");
+            FrostyOpenFileDialog ofd = new FrostyOpenFileDialog(Application.Current.TryFindResource("fe_DlgTitle_OpenLegacy") as string ?? "Open Legacy file", "*." + selectedAsset.Type + " (Legacy Files)|*." + selectedAsset.Type, "FifaLegacy");
 
             if (ofd.ShowDialog())
             {
-                FrostyTaskWindow.Show("Importing Legacy Asset", "", (task) =>
+                FrostyTaskWindow.Show(Application.Current.TryFindResource("fe_Task_ImportLegacy") as string ?? "Importing Legacy Asset", "", (task) =>
                 {
                     byte[] buffer;
                     using (NativeReader reader = new NativeReader(new FileStream(ofd.FileName, FileMode.Open, FileAccess.Read)))
@@ -1083,7 +1127,7 @@ namespace FrostyEditor.Windows
             {
                 SaveFileDialog sfd = new SaveFileDialog
                 {
-                    Title = "Save Legacy File",
+                    Title = Application.Current.TryFindResource("fe_DlgTitle_SaveLegacy") as string ?? "Save Legacy File",
                     Filter = "*." + selectedAsset.Type + " (Legacy Files)|*." + selectedAsset.Type,
                     FileName = selectedAsset.Filename
                 };
@@ -1091,7 +1135,7 @@ namespace FrostyEditor.Windows
                 if (sfd.ShowDialog() == true)
                 {
                     IList<AssetEntry> assets = legacyExplorer.SelectedAssets;
-                    FrostyTaskWindow.Show("Exporting Legacy Assets", "", (task) =>
+                    FrostyTaskWindow.Show(Application.Current.TryFindResource("fe_Task_ExportLegacy") as string ?? "Exporting Legacy Assets", "", (task) =>
                     {
                         App.AssetManager.SendManagerCommand("legacy", "SetCacheModeEnabled", true);
                         FileInfo fi = new FileInfo(sfd.FileName);
@@ -1133,7 +1177,7 @@ namespace FrostyEditor.Windows
                 filterString += "|" + filter.FilterString;
             filterString = filterString.Trim('|');
 
-            FrostyOpenFileDialog ofd = new FrostyOpenFileDialog("Import Asset", filterString, assetDefinition.GetType().Name);
+            FrostyOpenFileDialog ofd = new FrostyOpenFileDialog(Application.Current.TryFindResource("fe_DlgTitle_ImportAsset") as string ?? "Import Asset", filterString, assetDefinition.GetType().Name);
             if (ofd.ShowDialog())
             {
                 if (assetDefinition.Import(entry, ofd.FileName, filters[ofd.FilterIndex - 1]))
@@ -1159,7 +1203,7 @@ namespace FrostyEditor.Windows
                     filterString += "|" + filter.FilterString;
                 filterString = filterString.Trim('|');
 
-                FrostySaveFileDialog sfd = new FrostySaveFileDialog("Export Asset", filterString, assetDefinition.GetType().Name, entry.Filename);
+                FrostySaveFileDialog sfd = new FrostySaveFileDialog(Application.Current.TryFindResource("fe_DlgTitle_ExportAsset") as string ?? "Export Asset", filterString, assetDefinition.GetType().Name, entry.Filename);
                 if (sfd.ShowDialog())
                 {
                     if (assetDefinition.Export(entry, sfd.FileName, filters[sfd.FilterIndex - 1].Extension))
@@ -1443,7 +1487,7 @@ namespace FrostyEditor.Windows
 
             if (string.IsNullOrEmpty(BookmarkFilterTextBox.Text))
             {
-                BookmarkFilterInfo.Content = "(no filter)";
+                BookmarkFilterInfo.Content = Application.Current.TryFindResource("fe_NoFilter") as string ?? "(no filter)";
             }
             else
             {
@@ -1545,7 +1589,7 @@ namespace FrostyEditor.Windows
                 return MessageBoxResult.None;
             }
 
-            MessageBoxResult saveQuestionResult = FrostyMessageBox.Show("Do you wish to save changes to " + m_project.DisplayName + "?", "Frosty Editor", MessageBoxButton.YesNoCancel);
+            MessageBoxResult saveQuestionResult = FrostyMessageBox.Show(string.Format(Application.Current.TryFindResource("fe_Msg_SaveChanges") as string ?? "Do you wish to save changes to {0}?", m_project.DisplayName), "Frosty Editor", MessageBoxButton.YesNoCancel);
 
             // check if the user wishes to save the project
             if (saveQuestionResult == MessageBoxResult.Yes)
@@ -1561,7 +1605,7 @@ namespace FrostyEditor.Windows
                     }
 
                     // begin a FrostyTask to indicate the project is being saved
-                    FrostyTaskWindow.Show("Saving Project", m_project.Filename, delegate {
+                    FrostyTaskWindow.Show(Application.Current.TryFindResource("fe_Task_SaveProject") as string ?? "Saving Project", m_project.Filename, delegate {
                         m_project.Save();
                         AddRecentProject(m_project.Filename);
                     });
@@ -1620,7 +1664,7 @@ namespace FrostyEditor.Windows
                     // check if the recent project no longer exists
                     if (!File.Exists(recentProject))
                     {
-                        FrostyMessageBox.Show("The selected project does not exist.", "Frosty Editor");
+                        FrostyMessageBox.Show(Application.Current.TryFindResource("fe_Msg_ProjectNotExist") as string ?? "The selected project does not exist.", "Frosty Editor");
 
                         // refresh the displayed recent projects to accommodate for the missing project
                         RefreshRecentProjects();
@@ -1652,6 +1696,26 @@ namespace FrostyEditor.Windows
             recentProjectsMenuItem.Items.Add(new Separator());
             recentProjectsMenuItem.Items.Add(m_clearRecentsMenuItem);
             recentProjectsMenuItem.IsEnabled = true;
+        }
+
+        private void langMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is MenuItem item && item.Tag is string locale)
+            {
+                LocalizationManager.SetLanguage("FrostyEditor", locale);
+                Config.Add("Language", locale);
+                Config.Save();
+                UpdateLanguageMenuChecks();
+            }
+        }
+
+        private void UpdateLanguageMenuChecks()
+        {
+            if (langEnglish == null || langGerman == null)
+                return;
+            string current = LocalizationManager.CurrentLanguage;
+            langEnglish.IsChecked = string.Equals(current, "en-US", StringComparison.OrdinalIgnoreCase);
+            langGerman.IsChecked  = string.Equals(current, "de-DE", StringComparison.OrdinalIgnoreCase);
         }
     }
 }

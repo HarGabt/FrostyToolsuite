@@ -120,6 +120,10 @@ namespace FrostyModManager
 
             Config.Load();
 
+            // Load language before any windows are shown so DynamicResource bindings resolve correctly.
+            string language = Config.Get<string>("Language", "en-US");
+            LocalizationManager.SetLanguage("FrostyModManager", language);
+
             if (Config.Get<bool>("UpdateCheck", true) || Config.Get<bool>("UpdateCheckPrerelease", false))
             {
                 CheckVersion();

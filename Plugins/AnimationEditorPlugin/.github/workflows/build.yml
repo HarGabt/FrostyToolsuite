@@ -1,0 +1,116 @@
+name: build
+
+on:
+  push:
+    branches: [main, master]
+    tags: ['v*']
+  pull_request:
+    branches: [main, master]
+
+env:
+  CONFIGURATION: 'Release - Final'
+  PLATFORM: x64
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: checkout plugin
+        uses: actions/checkout@v4
+        with:
+          path: Plugins/AssetBankPluginVBR
+
+      - name: checkout frostytoolsuite
+        uses: actions/checkout@v4
+        with:
+          repository: CadeEvs/FrostyToolsuite
+          ref: 1.0.6.2
+          path: FrostyToolsuite
+
+      - name: setup dotnet
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: setup msbuild
+        uses: microsoft/setup-msbuild@v2
+
+      - name: prepare dirs
+        shell: pwsh
+        run: |
+          $root = "${{ github.workspace }}"
+          $pluginDir = Join-Path $root "Plugins/AssetBankPluginVBR"
+          $targetBase = (Resolve-Path (Join-Path $pluginDir "../..")).Path
+
+          $mappings = @{
+            "FrostyToolsuite/FrostyControls"  = "FrostyControls"
+            "FrostyToolsuite/FrostyHash"      = "FrostyHash"
+            "FrostyToolsuite/FrostyPlugin"    = "FrostyPlugin"
+            "FrostyToolsuite/FrostySdk"       = "FrostySdk"
+            "FrostyToolsuite/FrostyModSupport" = "FrostyModSupport"
+            "FrostyToolsuite/FrostyEditor"    = "FrostyEditor"
+          }
+
+          foreach ($entry in $mappings.GetEnumerator()) {
+            $src  = Join-Path $root $entry.Key
+            $dest = Join-Path $targetBase $entry.Value
+            if (Test-Path $src) {
+              New-Item -ItemType Junction -Path $dest -Target $src -Force | Out-Null
+            }
+          }
+
+          $meshSrc  = Join-Path $root "FrostyToolsuite/Plugins/MeshSetPlugin"
+          $meshDest = Join-Path $root "Plugins/MeshSetPlugin"
+          if (Test-Path $meshSrc) {
+            New-Item -ItemType Junction -Path $meshDest -Target $meshSrc -Force | Out-Null
+          }
+
+          New-Item -ItemType Directory -Path (Join-Path $root "bin/Release/Final/Plugins") -Force | Out-Null
+
+      - name: restore
+        shell: pwsh
+        run: |
+          $csproj = "${{ github.workspace }}/Plugins/AssetBankPluginVBR/AssetBankPlugin.csproj"
+          dotnet restore $csproj -p:Platform=${{ env.PLATFORM }}
+
+      - name: build
+        shell: pwsh
+        run: |
+          $csproj = "${{ github.workspace }}/Plugins/AssetBankPluginVBR/AssetBankPlugin.csproj"
+          msbuild $csproj `
+            /p:Configuration="${{ env.CONFIGURATION }}" `
+            /p:Platform=${{ env.PLATFORM }} `
+            /p:SolutionDir="${{ github.workspace }}\" `
+            /p:WindowsTargetPlatformVersion=10.0 `
+            /p:TreatWarningsAsErrors=false `
+            /p:RunPostBuildEvent=Never `
+            /t:Build `
+            /restore
+
+      - name: upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: AssetBankPluginVBR
+          path: Plugins/AssetBankPluginVBR/bin/Release/Final/*.dll
+          if-no-files-found: error
+
+  release:
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: AssetBankPluginVBR
+          path: dist
+
+      - name: create release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*
+          generate_release_notes: true

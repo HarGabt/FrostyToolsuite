@@ -8,7 +8,7 @@
     <SolidColorBrush x:Key="WindowBackground"
                      Color="#141414" />
 	<SolidColorBrush x:Key="TitlebarBackground"
-                     Color="#040404" />
+                     Color="#402A14" />
     <SolidColorBrush x:Key="FontColor"
                      Color="#F8F8F8" />
     <SolidColorBrush x:Key="ControlBackground"

@@ -808,11 +808,55 @@ namespace Frosty.Core.Viewport
                     }
                 }
 
+                // Dead Space
+                else if (ProfilesLibrary.IsLoaded(ProfileVersion.DeadSpace))
+                {
+                    paramName = paramName.ToLower();
+
+                    // TSD_TextureSet_XX: index % 3 == 0 → albedo/metalness, 1 → normal/roughness, 2 → mask/AO
+                    if (paramName.StartsWith("tsd_textureset"))
+                    {
+                        string suffix = paramName.Substring(paramName.LastIndexOf('_') + 1);
+                        if (int.TryParse(suffix, out int texIndex))
+                        {
+                            if (texIndex % 3 == 0 && DiffuseTexture == null)
+                                DiffuseTexture = state.TextureLibrary.LoadTextureAsset(value.External.FileGuid);
+                            else if (texIndex % 3 == 1 && NormTexture == null)
+                                NormTexture = state.TextureLibrary.LoadTextureAsset(value.External.FileGuid);
+                            else if (texIndex % 3 == 2 && MaskTexture == null)
+                                MaskTexture = state.TextureLibrary.LoadTextureAsset(value.External.FileGuid);
+                        }
+                    }
+                    // Generic keyword matching for any other parameter naming convention
+                    else if (paramName.Contains("color") || paramName.Contains("albedo") || paramName.Contains("diffuse") || paramName.Contains("basecolor"))
+                    {
+                        if (DiffuseTexture == null)
+                            DiffuseTexture = state.TextureLibrary.LoadTextureAsset(value.External.FileGuid);
+                    }
+                    else if (paramName.Contains("normal") || paramName.Contains("norm"))
+                    {
+                        if (NormTexture == null)
+                            NormTexture = state.TextureLibrary.LoadTextureAsset(value.External.FileGuid);
+                    }
+                    else if (paramName.Contains("mask") || paramName.Contains("spec") || paramName.Contains("rough") || paramName.Contains("ao") || paramName.Contains("emissive") || paramName.Contains("emission"))
+                    {
+                        if (MaskTexture == null)
+                            MaskTexture = state.TextureLibrary.LoadTextureAsset(value.External.FileGuid);
+                    }
+                    // Positional fallback: assign to the first empty slot so something is always visible
+                    else if (DiffuseTexture == null)
+                        DiffuseTexture = state.TextureLibrary.LoadTextureAsset(value.External.FileGuid);
+                    else if (NormTexture == null)
+                        NormTexture = state.TextureLibrary.LoadTextureAsset(value.External.FileGuid);
+                    else if (MaskTexture == null)
+                        MaskTexture = state.TextureLibrary.LoadTextureAsset(value.External.FileGuid);
+                }
+
                 // Fifa
                 else if (ProfilesLibrary.IsLoaded(ProfileVersion.Fifa17, ProfileVersion.Fifa18,
                     ProfileVersion.Fifa19, ProfileVersion.Fifa20,
                     ProfileVersion.NeedForSpeedHeat, ProfileVersion.Fifa21,
-                    ProfileVersion.Fifa22, ProfileVersion.NeedForSpeedUnbound, ProfileVersion.DeadSpace, ProfileVersion.DragonAgeVeilguard))
+                    ProfileVersion.Fifa22, ProfileVersion.NeedForSpeedUnbound, ProfileVersion.DragonAgeVeilguard))
                 {
                     paramName = paramName.ToLower();
                     if (paramName.StartsWith("colortexture") || paramName.StartsWith("diffuse") || paramName.Contains("basecolor"))
@@ -2079,7 +2123,7 @@ namespace Frosty.Core.Viewport
                         )
                     {
                         dynamic texParams = mv.Materials[idx].TextureParameters;
-                        if (texParams.Count > 0)
+                        if (texParams != null && texParams.Count > 0)
                         {
                             foreach (dynamic param in texParams)
                             {

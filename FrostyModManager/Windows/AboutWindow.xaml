@@ -6,7 +6,7 @@
         xmlns:ctrl="clr-namespace:Frosty.Controls;assembly=FrostyControls"
         xmlns:local="clr-namespace:FrostyModManager"
         mc:Ignorable="d"
-        Title="About Frosty Mod Manager" Height="450" Width="350"
+        Title="{DynamicResource mm_About_Title}" Height="450" Width="350"
         ResizeMode="NoResize" Icon="/FrostyModManager;component/AppIcon.ico"
         WindowStartupLocation="CenterScreen">
     <ctrl:FrostyWindow.Resources>
@@ -47,13 +47,13 @@
 
                 <StackPanel Grid.Row="1" Orientation="Vertical" Margin="10,0,10,10">
                     <TextBlock x:Name="versionTextBox" Text="Version" Foreground="{StaticResource FontColor}" HorizontalAlignment="Center" Margin="2,2,2,8" FontFamily="Global User Interface" FontSize="12"/>
-                    <TextBlock Text="Copyright© 2017-2020" Foreground="{StaticResource FontColor}" HorizontalAlignment="Center" Margin="2" FontFamily="Global User Interface" FontSize="12"/>
-                    <TextBlock Text="derwangler, Cade and benji" Foreground="{StaticResource FontColor}" HorizontalAlignment="Center" Margin="2" FontFamily="Global User Interface" FontSize="12"/>
-                    <TextBlock Text="Originally created by GalaxyMan2015" Foreground="{StaticResource FontColor}" HorizontalAlignment="Center" Margin="2" FontFamily="Global User Interface" FontSize="12"/>
+                    <TextBlock Text="{DynamicResource mm_About_Copyright}" Foreground="{StaticResource FontColor}" HorizontalAlignment="Center" Margin="2" FontFamily="Global User Interface" FontSize="12"/>
+                    <TextBlock Text="{DynamicResource mm_About_Authors}" Foreground="{StaticResource FontColor}" HorizontalAlignment="Center" Margin="2" FontFamily="Global User Interface" FontSize="12"/>
+                    <TextBlock Text="{DynamicResource mm_About_OriginalCreator}" Foreground="{StaticResource FontColor}" HorizontalAlignment="Center" Margin="2" FontFamily="Global User Interface" FontSize="12"/>
                     <TextBox Height="158" IsReadOnly="True" Padding="4" Margin="2,6,2,8" TextWrapping="Wrap" AcceptsReturn="True" VerticalScrollBarVisibility="Auto" FontFamily="Consolas" Text="{local:Text 'Credits.txt'}"/>
 
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                        <TextBlock Text="Website: " Foreground="{StaticResource FontColor}"/>
+                        <TextBlock Text="{DynamicResource mm_About_Website}" Foreground="{StaticResource FontColor}"/>
                         <TextBlock FontFamily="Global User Interface" FontSize="12" Margin="2" HorizontalAlignment="Center">
                             <Hyperlink NavigateUri="https://frostytoolsuite.com" Foreground="{StaticResource FontColor}" RequestNavigate="hyperlink_RequestNavigate">
                                 https://frostytoolsuite.com
@@ -61,7 +61,7 @@
                         </TextBlock>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                        <TextBlock Text="Support: " Foreground="{StaticResource FontColor}"/>
+                        <TextBlock Text="{DynamicResource mm_About_Support}" Foreground="{StaticResource FontColor}"/>
                         <TextBlock FontFamily="Global User Interface" FontSize="12" Margin="2" HorizontalAlignment="Center">
                             <Hyperlink NavigateUri="https://discord.gg/sB8ZUAT" Foreground="{StaticResource FontColor}" RequestNavigate="hyperlink_RequestNavigate">
                                 https://discord.gg/sB8ZUAT
@@ -73,7 +73,7 @@
         </Border>
 
         <Border Grid.Row="1" Background="#606060">
-            <Button x:Name="messageBoxOk" Content="OK" HorizontalAlignment="Right" Margin="0,12,12,10" Grid.Row="1" Width="75" Command="{StaticResource CloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"/>
+            <Button x:Name="messageBoxOk" Content="{DynamicResource mm_Btn_OK}" HorizontalAlignment="Right" Margin="0,12,12,10" Grid.Row="1" Width="75" Command="{StaticResource CloseCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type Window}}}"/>
         </Border>
     </Grid>
 </ctrl:FrostyWindow>

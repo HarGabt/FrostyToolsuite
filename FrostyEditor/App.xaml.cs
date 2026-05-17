@@ -197,6 +197,7 @@ namespace FrostyEditor
             }
 
             Config.Load();
+            LocalizationManager.SetLanguage("FrostyEditor", Config.Get<string>("Language", "en-US"));
 
             if (Config.Get<bool>("UpdateCheck", true) || Config.Get<bool>("UpdateCheckPrerelease", false))
             {

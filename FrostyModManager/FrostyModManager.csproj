@@ -239,6 +239,10 @@
     <Resource Include="AppIcon.ico" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Localization\Strings.en-US.xaml" />
+    <Resource Include="Localization\Strings.de-DE.xaml" />
+  </ItemGroup>
+  <ItemGroup>
     <Resource Include="Images\AddMod.png" />
   </ItemGroup>
   <ItemGroup>
@@ -247,6 +251,7 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Play.png" />
+    <Resource Include="Images\RestoreVanilla.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Remove.png" />

@@ -1,10 +1,7 @@
 ﻿using Frosty.Core.Attributes;
-using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Windows;
-using AnimationEditorPlugin.Extensions;
-using AnimationEditorPlugin.Managers;
+using AssetBankPlugin;
 
 // Setting ComVisible to false makes the types in this assembly not visible
 // to COM components.  If you need to access a type in this assembly from
@@ -24,8 +21,9 @@ using AnimationEditorPlugin.Managers;
 [assembly: Guid("4b612468-9b6a-4304-88a5-055c3575eb3d")]
 
 [assembly: PluginDisplayName("Animation Editor")]
-[assembly: PluginAuthor("Cade")]
+[assembly: PluginAuthor("marv7000")]
 [assembly: PluginVersion("1.0.0.0")]
 
-[assembly: RegisterMenuExtension(typeof(AnimationEditorMenuExtension))]
-[assembly: RegisterCustomAssetManager("assetbank", typeof(AssetBankFileManager))]
+[assembly: RegisterOptionsExtension(typeof(AnimationOptions))]
+[assembly: RegisterAssetDefinition("AntStateAsset", typeof(AntStateAssetDefinition))]
+[assembly: RegisterAssetDefinition("AntAnimationSetAsset", typeof(AntAnimationSetAssetDefinition))]

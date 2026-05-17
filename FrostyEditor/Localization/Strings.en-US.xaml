@@ -1,0 +1,158 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <!-- ═══════════════════════════════════════════
+         Frosty Editor — English (en-US)
+         ═══════════════════════════════════════════ -->
+
+    <!-- App / Window titles -->
+    <sys:String x:Key="fe_AppTitle">Frosty Editor</sys:String>
+    <sys:String x:Key="fe_About_Title">About Frosty Editor</sys:String>
+    <sys:String x:Key="fe_ModSettings_Title">Export Mod</sys:String>
+    <sys:String x:Key="fe_PatchSummary_Title">Patch Summary</sys:String>
+    <sys:String x:Key="fe_Prelaunch_Title">Load Profile</sys:String>
+
+    <!-- Main menu -->
+    <sys:String x:Key="fe_Menu_File">File</sys:String>
+    <sys:String x:Key="fe_Menu_Tools">Tools</sys:String>
+    <sys:String x:Key="fe_Menu_Window">Window</sys:String>
+    <sys:String x:Key="fe_Menu_Help">Help</sys:String>
+    <sys:String x:Key="fe_Menu_Language">Language</sys:String>
+
+    <!-- File menu items -->
+    <sys:String x:Key="fe_MenuItem_New">New</sys:String>
+    <sys:String x:Key="fe_MenuItem_Open">Open</sys:String>
+    <sys:String x:Key="fe_MenuItem_RecentProjects">Recent Projects</sys:String>
+    <sys:String x:Key="fe_MenuItem_Save">Save</sys:String>
+    <sys:String x:Key="fe_MenuItem_SaveAs">Save As</sys:String>
+    <sys:String x:Key="fe_MenuItem_ExportMod">Export to Mod</sys:String>
+    <sys:String x:Key="fe_MenuItem_Exit">Exit</sys:String>
+    <sys:String x:Key="fe_MenuItem_CloseAllDocs">Close All Documents</sys:String>
+    <sys:String x:Key="fe_MenuItem_About">About Frosty Editor</sys:String>
+    <sys:String x:Key="fe_MenuItem_ClearRecents">Clear Recents</sys:String>
+    <sys:String x:Key="fe_MenuItem_Options">Options</sys:String>
+
+    <!-- Toolbar tooltips -->
+    <sys:String x:Key="fe_Tip_NewProject">New Project</sys:String>
+    <sys:String x:Key="fe_Tip_OpenProject">Open Project</sys:String>
+    <sys:String x:Key="fe_Tip_SaveProject">Save Project</sys:String>
+    <sys:String x:Key="fe_Tip_SaveProjectAs">Save Project As</sys:String>
+    <sys:String x:Key="fe_Tip_LaunchGame">Launch game with current project</sys:String>
+    <sys:String x:Key="fe_Tip_RestoreVanilla">Restore vanilla Data from backup and remove mod CAS files</sys:String>
+
+    <!-- Launch / Compile buttons -->
+    <sys:String x:Key="fe_Btn_Compile">Compile</sys:String>
+    <sys:String x:Key="fe_Btn_RestoreVanilla">Restore Vanilla</sys:String>
+
+    <!-- Home Page tab -->
+    <sys:String x:Key="fe_Tab_Home">Home Page</sys:String>
+    <sys:String x:Key="fe_HP_ConvenientLinks">Convenient Links</sys:String>
+    <sys:String x:Key="fe_HP_ChangeLog">Change Log</sys:String>
+
+    <!-- Loaded plugins column headers -->
+    <sys:String x:Key="fe_Col_Name">Name</sys:String>
+    <sys:String x:Key="fe_Col_Author">Author</sys:String>
+    <sys:String x:Key="fe_Col_Version">Version</sys:String>
+
+    <!-- Data / Legacy Explorer tabs -->
+    <sys:String x:Key="fe_Tab_DataExplorer">Data Explorer</sys:String>
+    <sys:String x:Key="fe_Tab_LegacyExplorer">Legacy Explorer</sys:String>
+
+    <!-- Explorer context menus -->
+    <sys:String x:Key="fe_CtxMenu_Open">Open</sys:String>
+    <sys:String x:Key="fe_CtxMenu_OpenUnmodified">Open Unmodified</sys:String>
+    <sys:String x:Key="fe_CtxMenu_Revert">Revert</sys:String>
+    <sys:String x:Key="fe_CtxMenu_Export">Export</sys:String>
+    <sys:String x:Key="fe_CtxMenu_Import">Import</sys:String>
+
+    <!-- Log / Bookmarks panels -->
+    <sys:String x:Key="fe_Tab_Log">Log</sys:String>
+    <sys:String x:Key="fe_Tab_Bookmarks">Bookmarks</sys:String>
+
+    <!-- Bookmark toolbar -->
+    <sys:String x:Key="fe_Tip_AddBookmark">Add Bookmark (Ctrl+B)</sys:String>
+    <sys:String x:Key="fe_Tip_RemoveBookmark">Remove Bookmark (Ctrl+Shift+B)</sys:String>
+    <sys:String x:Key="fe_Tip_AddFolder">Add Folder</sys:String>
+    <sys:String x:Key="fe_Tip_EditName">Edit Name</sys:String>
+    <sys:String x:Key="fe_Filter_Watermark">Filter</sys:String>
+
+    <!-- Bookmark context menu -->
+    <sys:String x:Key="fe_CtxMenu_OpenAsset">Open asset</sys:String>
+    <sys:String x:Key="fe_CtxMenu_FindInExplorer">Find in explorer</sys:String>
+
+    <!-- About window -->
+    <sys:String x:Key="fe_About_Copyright">Copyright&#169; 2017-2020</sys:String>
+    <sys:String x:Key="fe_About_Authors">derwangler, Cade and benji</sys:String>
+    <sys:String x:Key="fe_About_OriginalCreator">Originally created by GalaxyMan2015</sys:String>
+    <sys:String x:Key="fe_About_Website">Website: </sys:String>
+    <sys:String x:Key="fe_About_Support">Support: </sys:String>
+
+    <!-- Mod Settings window labels -->
+    <sys:String x:Key="fe_ModSettings_LabelTitle">Title </sys:String>
+    <sys:String x:Key="fe_ModSettings_LabelAuthor">Author </sys:String>
+    <sys:String x:Key="fe_ModSettings_LabelVersion">Version </sys:String>
+    <sys:String x:Key="fe_ModSettings_LabelCategory">Category </sys:String>
+    <sys:String x:Key="fe_ModSettings_LabelLink">Link </sys:String>
+
+    <!-- Patch Summary window -->
+    <sys:String x:Key="fe_PatchSummary_Notice">Game was recently updated. Here is a summary of the changes.</sys:String>
+    <sys:String x:Key="fe_PatchSummary_AssetsAdded">Assets Added</sys:String>
+    <sys:String x:Key="fe_PatchSummary_AssetsModified">Assets Modified</sys:String>
+    <sys:String x:Key="fe_PatchSummary_AssetsRemoved">Assets Removed</sys:String>
+
+    <!-- Prelaunch window -->
+    <sys:String x:Key="fe_Prelaunch_SelectGame">Select Game</sys:String>
+
+    <!-- Common buttons -->
+    <sys:String x:Key="fe_Btn_OK">OK</sys:String>
+    <sys:String x:Key="fe_Btn_Cancel">Cancel</sys:String>
+    <sys:String x:Key="fe_Btn_Save">Save</sys:String>
+    <sys:String x:Key="fe_Btn_Add">Add</sys:String>
+    <sys:String x:Key="fe_Btn_Remove">Remove</sys:String>
+    <sys:String x:Key="fe_Btn_Select">Select</sys:String>
+    <sys:String x:Key="fe_Btn_Export">Export</sys:String>
+    <sys:String x:Key="fe_Btn_Scan">Scan</sys:String>
+
+    <!-- Message box text -->
+    <sys:String x:Key="fe_Msg_SaveChanges">Do you wish to save changes to {0}?</sys:String>
+    <sys:String x:Key="fe_Msg_UnableToOpenAsset">Unable to open asset</sys:String>
+    <sys:String x:Key="fe_Msg_ProjectNotExist">The selected project does not exist.</sys:String>
+    <sys:String x:Key="fe_Msg_ProfileError">There was an error when trying to load game using specified profile.</sys:String>
+    <sys:String x:Key="fe_Msg_NoGameChosen">No game executable chosen.</sys:String>
+    <sys:String x:Key="fe_Msg_ProfileExists">{0} already has a profile.</sys:String>
+    <sys:String x:Key="fe_Msg_EasyAntiCheat">This game contains EasyAntiCheat and cannot automatically generate an sdk. We will not support nor assist anyone who attempts to bypass it.</sys:String>
+    <sys:String x:Key="fe_Msg_ConfirmRemoveProfile">Are you sure you want to remove this profile?</sys:String>
+    <sys:String x:Key="fe_Msg_ModSettingsRequired">Title, Author, Category and Version are mandatory fields</sys:String>
+    <sys:String x:Key="fe_Msg_InvalidChars">Invalid Characters: {, }</sys:String>
+    <sys:String x:Key="fe_Msg_IconTooLarge">Icon cannot be larger than 128x128</sys:String>
+    <sys:String x:Key="fe_Msg_ScreenshotTooLarge">Screenshots cannot be larger than 5mb each</sys:String>
+    <sys:String x:Key="fe_Msg_PatchSummaryExported">Successfully exported Patch Summary</sys:String>
+    <sys:String x:Key="fe_Msg_EncryptionKeyEmpty">Encryption key not entered. Unable to load profile.</sys:String>
+    <sys:String x:Key="fe_Msg_EncryptionKeyInvalid">Encryption key is invalid. Unable to load profile.</sys:String>
+
+    <!-- Task window titles -->
+    <sys:String x:Key="fe_Task_LaunchGame">Launching</sys:String>
+    <sys:String x:Key="fe_Task_SaveProject">Saving Project</sys:String>
+    <sys:String x:Key="fe_Task_RevertAsset">Reverting Asset</sys:String>
+    <sys:String x:Key="fe_Task_ImportLegacy">Importing Legacy Asset</sys:String>
+    <sys:String x:Key="fe_Task_ExportLegacy">Exporting Legacy Assets</sys:String>
+    <sys:String x:Key="fe_Task_RestoreDeadSpace">Restoring Dead Space Data</sys:String>
+
+    <!-- File dialog titles -->
+    <sys:String x:Key="fe_DlgTitle_OpenProject">Open Project</sys:String>
+    <sys:String x:Key="fe_DlgTitle_SaveProjectAs">Save Project As</sys:String>
+    <sys:String x:Key="fe_DlgTitle_OpenLegacy">Open Legacy file</sys:String>
+    <sys:String x:Key="fe_DlgTitle_SaveLegacy">Save Legacy File</sys:String>
+    <sys:String x:Key="fe_DlgTitle_ImportAsset">Import Asset</sys:String>
+    <sys:String x:Key="fe_DlgTitle_ExportAsset">Export Asset</sys:String>
+    <sys:String x:Key="fe_DlgTitle_SavePatchSummary">Save Patch Summary</sys:String>
+    <sys:String x:Key="fe_DlgTitle_ChooseExe">Choose Game Executable</sys:String>
+
+    <!-- Other UI strings -->
+    <sys:String x:Key="fe_ReadOnly"> (Read-only)</sys:String>
+    <sys:String x:Key="fe_TitleBarReadOnly"> [Read Only]</sys:String>
+    <sys:String x:Key="fe_NoFilter">(no filter)</sys:String>
+    <sys:String x:Key="fe_Total_Fmt">Total: {0}</sys:String>
+
+</ResourceDictionary>

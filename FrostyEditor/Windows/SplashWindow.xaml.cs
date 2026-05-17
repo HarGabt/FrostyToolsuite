@@ -143,7 +143,7 @@ namespace FrostyEditor.Windows
                     KeyPromptWindow keyPromptWin = new KeyPromptWindow();
                     if (keyPromptWin.ShowDialog() == false)
                     {
-                        FrostyMessageBox.Show("Encryption key not entered. Unable to load profile.", "Frosty Editor");
+                        FrostyMessageBox.Show(Application.Current.TryFindResource("fe_Msg_EncryptionKeyEmpty") as string ?? "Encryption key not entered. Unable to load profile.", "Frosty Editor");
                         Close();
                         return;
                     }
@@ -169,7 +169,7 @@ namespace FrostyEditor.Windows
                 catch
                 {
                     File.Delete(ProfilesLibrary.CacheName + ".key");
-                    FrostyMessageBox.Show("Encryption key is invalid. Unable to load profile.", "Frosty Editor");
+                    FrostyMessageBox.Show(Application.Current.TryFindResource("fe_Msg_EncryptionKeyInvalid") as string ?? "Encryption key is invalid. Unable to load profile.", "Frosty Editor");
                     Close();
                     return;
                 }
@@ -190,7 +190,7 @@ namespace FrostyEditor.Windows
                     catch
                     {
                         File.Delete(ProfilesLibrary.CacheName + ".key");
-                        FrostyMessageBox.Show("Encryption key is invalid. Unable to load profile.", "Frosty Editor");
+                        FrostyMessageBox.Show(Application.Current.TryFindResource("fe_Msg_EncryptionKeyInvalid") as string ?? "Encryption key is invalid. Unable to load profile.", "Frosty Editor");
                         Close();
                         return;
                     }

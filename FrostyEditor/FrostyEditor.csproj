@@ -235,6 +235,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Localization\Strings.en-US.xaml" />
+    <Resource Include="Localization\Strings.de-DE.xaml" />
+  </ItemGroup>
+  <ItemGroup>
     <Resource Include="AppIcon.ico" />
     <Resource Include="Images\CloseFolder.png" />
     <Resource Include="Images\OpenFolder.png" />
@@ -251,6 +255,7 @@
     <Resource Include="Images\Export.png" />
     <Resource Include="Images\Grid.png" />
     <Resource Include="Images\Play.png" />
+    <Resource Include="Images\RestoreVanilla.png" />
     <Resource Include="Images\Save.png" />
     <Resource Include="Images\New.png" />
     <Resource Include="Images\Open.png" />

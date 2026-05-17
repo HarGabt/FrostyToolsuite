@@ -111,7 +111,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LaunchPlatformPlugin", "..\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FrostyCmd", "..\FrostyCmd\FrostyCmd.csproj", "{500ACAB7-D948-4BCA-8208-20812D712DDB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AnimationEditorPlugin", "..\Plugins\AnimationEditorPlugin\AnimationEditorPlugin.csproj", "{CE312C84-2677-433C-B4B1-352BD16E7590}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AnimationEditorPlugin", "..\Plugins\AnimationEditorPlugin\AssetBankPlugin.csproj", "{CE312C84-2677-433C-B4B1-352BD16E7590}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShaderDataPlugin", "..\Plugins\FrostyShaderDataPlugin\ShaderDataPlugin.csproj", "{153A9661-41EF-93BE-AF5D-916505004822}"
 EndProject
