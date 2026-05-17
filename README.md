@@ -8,7 +8,7 @@ This is a Fork of Hargabt's Fork of Frosty Toolsuite and that one is based on [s
 
 From here on out I will refer to Dead Space Remake as "DSR".
 - MeshVariation Database recognition fixed for DSR so for quite a lot of meshes, texture previewing works again in Mesh Viewer. Still working on extending support for this.
-- Biggest one: Automatic mod installation. It goes like this: User must set a backup location or else mods wont compile at all. Once done, on first ever backup creation it creates an appropiate, efficient backup. Mod gets compiled as usual, .symlink shit entirely removed. It checks if a mod is already installed, if yes, replace files with backup and remove any additional .cas files. Files automatically gets imported properly from ModData, and that's it. Works beautifully. Also applies to the Mod Manager.
+- Biggest one: Automatic mod installation. It goes like this: User must set a backup location or else mods wont compile at all. Once done, on first ever backup creation it creates an appropiate, efficient backup. Mod gets compiled as usual, .symlink steps and cmd admin entirely removed. It checks if a mod is already installed, if yes, replace files with backup and remove any additional .cas files. Files automatically gets imported properly from ModData, and that's it. Works beautifully. Also applies to the Mod Manager.
 - "Restore Vanilla" button added next to Compile button which will turn game back to vanilla using CAS-deletion and backup.
 - Color change of top title.
 - Fixed sound importing to a major extent,
