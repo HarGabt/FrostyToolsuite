@@ -200,12 +200,6 @@ namespace Frosty.Core.Windows
 
             Close();
 
-            if (App.IsEditor && result.InvalidatedDueToPatch)
-            {
-                // show the results of the most recent patch
-                PatchSummaryWindow summaryWin = new PatchSummaryWindow(result);
-                summaryWin.ShowDialog();
-            }
         }
 
         private bool UpdateSdk()

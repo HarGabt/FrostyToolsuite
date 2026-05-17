@@ -275,12 +275,6 @@ namespace FrostyEditor.Windows
 
             Close();
 
-            if (result.InvalidatedDueToPatch)
-            {
-                // show the results of the most recent patch
-                PatchSummaryWindow summaryWin = new PatchSummaryWindow(result);
-                summaryWin.ShowDialog();
-            }
         }
 
         private static BitmapImage LoadBanner(byte[] banner)

@@ -399,6 +399,14 @@
                                                 </TextBlock>
                                             </StackPanel>
                                             <StackPanel Orientation="Horizontal" Margin="8,8,0,0">
+                                                <TextBlock Text="Dead Space Modding Community:" Foreground="{StaticResource FontColor}" Margin="0,0,20,0"/>
+                                                <TextBlock>
+                                                    <Hyperlink NavigateUri="https://discord.gg/deadspacemodding" Foreground="{StaticResource FontColor}" RequestNavigate="hyperlink_RequestNavigate">
+                                                        https://discord.gg/deadspacemodding
+                                                    </Hyperlink>
+                                                </TextBlock>
+                                            </StackPanel>
+                                            <StackPanel Orientation="Horizontal" Margin="8,8,0,0">
                                                 <TextBlock Text="Frosty Source Code:" Foreground="{StaticResource FontColor}" Margin="0,0,20,0"/>
                                                 <TextBlock>
                                                     <Hyperlink NavigateUri="https://github.com/CadeEvs/FrostyToolsuite" Foreground="{StaticResource FontColor}" RequestNavigate="hyperlink_RequestNavigate">
