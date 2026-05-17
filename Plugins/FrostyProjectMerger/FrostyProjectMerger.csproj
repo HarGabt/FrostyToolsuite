@@ -1,0 +1,72 @@
+<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+  <PropertyGroup>
+    <Configurations>Developer - Debug;Release - Alpha;Release - Beta;Release - Final</Configurations>
+    <Platforms>x64</Platforms>
+    <TargetFrameworks>net48</TargetFrameworks>
+    <AssemblyTitle>FrostyProjectMerger</AssemblyTitle>
+    <Product>FrostyProjectMerger</Product>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <UseWPF>true</UseWPF>
+    <OutputType>Library</OutputType>
+    <LangVersion>12</LangVersion>
+    <PathMap>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)'))=$(MSBuildProjectName)</PathMap>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Developer - Debug|x64' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Developer\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;FROSTY_DEVELOPER</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release - Alpha|x64' ">
+    <OutputPath>bin\Release\Alpha\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release - Beta|x64'">
+    <OutputPath>bin\Release\Beta\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release - Final|x64'">
+    <OutputPath>bin\Release\Final\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\FrostyControls\FrostyControls.csproj">
+      <Private>false</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\FrostyEditor\FrostyEditor.csproj">
+      <Private>false</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\FrostyHash\FrostyHash.vcxproj">
+      <Private>false</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\FrostyPlugin\FrostyCore.csproj">
+      <Private>false</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\FrostySdk\FrostySdk.csproj">
+      <Private>false</Private>
+    </ProjectReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Themes\Generic.xaml" />
+  </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command='xcopy /Y "$(TargetPath)" "$(SolutionDir)$(OutDir)Plugins\"' />
+  </Target>
+
+</Project>
