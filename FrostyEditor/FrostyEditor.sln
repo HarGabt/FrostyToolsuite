@@ -100,6 +100,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BundleEditorPlugin", "..\Plugins\BundleEditorPlugin\BundleEditorPlugin.csproj", "{712463CE-5B7D-4F61-B760-00012BC9174A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FrostyProjectMerger", "..\Plugins\FrostyProjectMerger\FrostyProjectMerger.csproj", "{02AD9642-A49B-4A00-B2B0-5D71AC952C46}"
+	ProjectSection(ProjectDependencies) = postProject
+		{355B078B-45A5-472D-9CCD-688D8E30BAED} = {355B078B-45A5-472D-9CCD-688D8E30BAED}
+		{E703B059-36F3-4EBF-8F86-32561BC47DCB} = {E703B059-36F3-4EBF-8F86-32561BC47DCB}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DuplicationPlugin", "..\Plugins\DuplicationPlugin\DuplicationPlugin.csproj", "{21444577-C2B3-46BE-B914-EAEF25C6331F}"
 	ProjectSection(ProjectDependencies) = postProject
