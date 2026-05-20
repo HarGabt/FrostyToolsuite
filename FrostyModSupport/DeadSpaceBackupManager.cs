@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Security.Cryptography;
+using System.Text;
+using System.Windows;
 using Frosty.Controls;
 using Frosty.Core;
 using FrostySdk;
@@ -44,6 +47,107 @@ namespace Frosty.ModSupport
         public static bool BackupExists(string gamePath) =>
             Directory.Exists(Path.Combine(GetBackupPath(gamePath), "Data"));
 
+        // -------------------------------------------------------------------------
+        // Hash manifest helpers
+        // -------------------------------------------------------------------------
+
+        private static string GetManifestPath(string backupRoot) =>
+            Path.Combine(backupRoot, "frosty_hashes.txt");
+
+        /// <summary>
+        /// Returns true if a manifest exists for the current backup path.
+        /// </summary>
+        public static bool ManifestExists(string gamePath) =>
+            File.Exists(GetManifestPath(GetBackupPath(gamePath)));
+
+        /// <summary>
+        /// Computes the SHA256 hash of a file and returns it as a lowercase hex string.
+        /// </summary>
+        private static string ComputeSha256(string filePath)
+        {
+            using (SHA256 sha256 = SHA256.Create())
+            using (FileStream fs = File.OpenRead(filePath))
+            {
+                byte[] hash = sha256.ComputeHash(fs);
+                return BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
+            }
+        }
+
+        /// <summary>
+        /// Writes a SHA256 hash manifest of every file in the backup's Data folder.
+        /// The manifest is stored at {backupRoot}/frosty_hashes.txt and is used on
+        /// subsequent runs to detect whether tracked files have been modified outside
+        /// of normal Frosty mod application.
+        /// </summary>
+        private static void WriteManifest(string backupRoot)
+        {
+            string dstData = Path.Combine(backupRoot, "Data");
+            var sb = new StringBuilder();
+
+            foreach (string file in Directory.EnumerateFiles(dstData, "*", SearchOption.AllDirectories))
+            {
+                string relative = file.Substring(dstData.Length).TrimStart(Path.DirectorySeparatorChar);
+                sb.AppendLine($"{relative}|{ComputeSha256(file)}");
+            }
+
+            File.WriteAllText(GetManifestPath(backupRoot), sb.ToString(), Encoding.UTF8);
+        }
+
+        /// <summary>
+        /// Reads the manifest and returns a dictionary of relative path -> expected SHA256 hash.
+        /// Returns null if no manifest exists.
+        /// </summary>
+        private static Dictionary<string, string> ReadManifest(string backupRoot)
+        {
+            string path = GetManifestPath(backupRoot);
+            if (!File.Exists(path))
+                return null;
+
+            var dict = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            foreach (string line in File.ReadAllLines(path, Encoding.UTF8))
+            {
+                int sep = line.IndexOf('|');
+                if (sep < 0) continue;
+                dict[line.Substring(0, sep)] = line.Substring(sep + 1).Trim();
+            }
+            return dict;
+        }
+
+        /// <summary>
+        /// Returns true if any file tracked by the manifest differs from its recorded hash.
+        /// This detects modifications made outside of normal Frosty mod application
+        /// (e.g. .toc or catalog files changed by another tool, or mods applied manually).
+        /// Returns false if no manifest exists.
+        /// </summary>
+        public static bool HasModifiedTrackedFiles(string gamePath)
+        {
+            string backupRoot = GetBackupPath(gamePath);
+            Dictionary<string, string> manifest = ReadManifest(backupRoot);
+            if (manifest == null)
+                return false;
+
+            string dataRoot = Path.Combine(gamePath, "Data");
+            foreach (var kvp in manifest)
+            {
+                string currentFile = Path.Combine(dataRoot, kvp.Key);
+                if (!File.Exists(currentFile))
+                {
+                    App.Logger.Log($"Dead Space: Manifest tracked file missing: {kvp.Key}");
+                    return true;
+                }
+                if (ComputeSha256(currentFile) != kvp.Value)
+                {
+                    App.Logger.Log($"Dead Space: Manifest mismatch detected: {kvp.Key}");
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        // -------------------------------------------------------------------------
+        // CAS file detection
+        // -------------------------------------------------------------------------
+
         /// <summary>
         /// Returns true if any mod-generated CAS files (above vanilla limits) are present
         /// in the streaming install subfolders.
@@ -74,6 +178,10 @@ namespace Frosty.ModSupport
             }
             return false;
         }
+
+        // -------------------------------------------------------------------------
+        // Backup / restore
+        // -------------------------------------------------------------------------
 
         /// <summary>
         /// Returns true if this file should be included in the backup.
@@ -106,7 +214,8 @@ namespace Frosty.ModSupport
         }
 
         /// <summary>
-        /// Creates a backup of the game's Data folder.
+        /// Creates a backup of the game's Data folder and writes a SHA256 manifest so that
+        /// future runs can detect whether any tracked files have been modified.
         /// The streaminginstall CAS/CAT files are excluded, but the language subfolders
         /// within the three streaming packages are included.
         /// </summary>
@@ -116,20 +225,6 @@ namespace Frosty.ModSupport
 
             string srcData = Path.Combine(gamePath, "Data");
             string dstData = Path.Combine(backupRoot, "Data");
-
-            // Warn the user if extra CAS files are already present
-            if (HasExtraModCasFiles(gamePath))
-            {
-                FrostyMessageBox.Show(
-                    "Extra mod-generated CAS files were detected in your Dead Space Data folder.\n\n" +
-                    "This usually means mods were previously applied directly to the game files.\n\n" +
-                    "For the cleanest backup it is strongly recommended to first verify game integrity " +
-                    "via Steam (Right-click game → Properties → Installed Files → Verify).\n\n" +
-                    "The extra CAS files will be removed automatically before the backup is created.",
-                    "Dead Space: Modified Data Detected");
-
-                DeleteModCasFiles(gamePath);
-            }
 
             App.Logger.Log("Dead Space: Creating Data backup...");
 
@@ -143,6 +238,9 @@ namespace Frosty.ModSupport
                 Directory.CreateDirectory(Path.GetDirectoryName(dstFile));
                 File.Copy(srcFile, dstFile, overwrite: true);
             }
+
+            App.Logger.Log("Dead Space: Writing file hash manifest...");
+            WriteManifest(backupRoot);
 
             App.Logger.Log("Dead Space: Backup complete.");
         }
@@ -212,20 +310,62 @@ namespace Frosty.ModSupport
             }
         }
 
+        // -------------------------------------------------------------------------
+        // Main entry point
+        // -------------------------------------------------------------------------
+
         /// <summary>
         /// Full pre-launch cleanup: restore original files and remove mod CAS files.
-        /// If no backup exists yet, creates one first (with a pre-check for dirty Data).
+        /// If no backup exists yet, performs dirty-data checks and creates one.
         /// </summary>
         public static void PrepareForModApplication(string gamePath)
         {
             if (!BackupExists(gamePath))
             {
-                // First run: create the backup automatically in the default or configured folder
+                // --- Abort if extra mod-generated CAS files are present ---
+                // The Data folder is definitely dirty; catalog files may also be modified.
+                if (HasExtraModCasFiles(gamePath))
+                {
+                    FrostyMessageBox.Show(
+                        "Mod-generated CAS files were detected in your Dead Space Data folder, " +
+                        "but no vanilla backup exists yet.\n\n" +
+                        "The Data folder may no longer be in a clean state, so a reliable backup cannot be created.\n\n" +
+                        "Please verify game integrity via Steam first:\n" +
+                        "Right-click Dead Space → Properties → Installed Files → Verify integrity of game files\n\n" +
+                        "Then apply mods again to create a clean backup automatically.",
+                        "Dead Space: Cannot Create Backup");
+                    throw new InvalidOperationException("Dead Space: Dirty Data detected with no existing backup. Mod application aborted.");
+                }
+
+                // --- First-time backup: ask the user to confirm clean state ---
+                // We have no manifest reference yet, so we cannot automatically verify
+                // whether catalog or .toc files have been modified by another tool.
+                // Show a Yes/No dialog so the user can abort and verify via Steam if unsure.
+                MessageBoxResult confirm = FrostyMessageBox.Show(
+                    "No vanilla backup of Dead Space's Data folder exists yet.\r\n\r\n" +
+                    "Frosty is about to create one now. The backup must contain clean, " +
+                    "unmodified game files to work correctly.\r\n\r\n" +
+                    "If you have previously applied mods to your game files using another " +
+                    "tool or manually, please verify game integrity via Steam first:\r\n" +
+                    "Right-click Dead Space → Properties → Installed Files → Verify integrity of game files\r\n\r\n" +
+                    "Are your game files currently unmodified?",
+                    "Dead Space: Create Vanilla Backup",
+                    MessageBoxButton.YesNo);
+
+                if (confirm != MessageBoxResult.Yes)
+                    throw new InvalidOperationException("Dead Space: User cancelled first-time backup creation.");
+
                 App.Logger.Log($"Dead Space: No backup found, creating one at: {GetBackupPath(gamePath)}");
                 CreateBackup(gamePath);
             }
             else
             {
+                // --- Backup exists: check manifest for unexpected external modifications ---
+                if (HasModifiedTrackedFiles(gamePath))
+                {
+                    App.Logger.Log("Dead Space: Manifest mismatch — tracked files were modified outside of Frosty. Restoring from backup...");
+                }
+
                 RestoreFromBackup(gamePath);
                 DeleteModCasFiles(gamePath);
             }
