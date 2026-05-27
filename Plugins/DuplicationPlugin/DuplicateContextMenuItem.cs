@@ -112,37 +112,82 @@ namespace DuplicationPlugin
             EbxAsset origAsset = App.AssetManager.GetEbx(entry);
             dynamic refRoot = refAsset.RootObject;
 
-            NewWaveResource newWave = App.AssetManager.GetResAs<NewWaveResource>(newRes);
-            foreach (dynamic chk in refRoot.Chunks)
+            NewWaveResource oldWave = App.AssetManager.GetResAs<NewWaveResource>(res);
+            uint oldBankKey = oldWave.BankKey;
+
+
+
+
+            byte[] resBytes;
+            using (FrostySdk.IO.NativeReader reader = new FrostySdk.IO.NativeReader(App.AssetManager.GetRes(res)))
             {
-                ChunkAssetEntry soundChunk = App.AssetManager.GetChunkEntry(chk.ChunkId);
-                ChunkAssetEntry newSoundChunk = DuplicateChunk(soundChunk, CompressionType.None);
+                resBytes = reader.ReadToEnd();
+
+
+
+            }
+
+            // Get the new instance GUID from the duplicated EBX root object
+            Guid newInstanceGuid = ((AssetClassGuid)refRoot.GetInstanceGuid()).ExportedGuid;
+            byte[] newInstanceGuidBytes = newInstanceGuid.ToByteArray();
+
+            // LOG: verify this matches the Guid in the duplicated assets
+            App.Logger.Log($"[NWE] new instance GUID: {newInstanceGuid}");
+            App.Logger.Log($"[NWE] new meta bytes:    {BitConverter.ToString(newInstanceGuidBytes)}");
+
+            uint newBankKey = (uint)Frosty.Hash.Fnv1.HashString(newInstanceGuid.ToString());
+            byte[] oldKeyBytes = BitConverter.GetBytes(oldBankKey);
+            byte[] newKeyBytes = BitConverter.GetBytes(newBankKey);
+            ReplaceAllBytes(resBytes, oldKeyBytes, newKeyBytes);
+
+            for (int i = 0; i < refRoot.Chunks.Count; i++)
+            {
+                dynamic chk = refRoot.Chunks[i];
+                Guid oldChunkId = oldWave.Chunks[i].ChunkId;
+
+                ChunkAssetEntry soundChunk = App.AssetManager.GetChunkEntry(oldChunkId);
+                ChunkAssetEntry newSoundChunk = DuplicateChunk(soundChunk);
 
                 newRes.LinkAsset(newSoundChunk);
-                int trackChunk = newWave.Chunks.FindIndex(chunk => chunk.ChunkId == chk.ChunkId);
-                if (trackChunk != -1)
-                {
-                    newWave.Chunks[trackChunk].ChunkId = newSoundChunk.Id;
-                }
                 chk.ChunkId = newSoundChunk.Id;
+
+                byte[] oldGuidBytes = oldChunkId.ToByteArray();
+                byte[] newGuidBytes = newSoundChunk.Id.ToByteArray();
+                ReplaceAllBytes(resBytes, oldGuidBytes, newGuidBytes);
             }
 
-            newWave.BankKey = (uint)Fnv1.HashString(refAsset.RootInstanceGuid.ToString().Replace("{", "").Replace("}", "").Replace("\"", ""));
-
-            foreach (NewWaveResource.Dset dataSet in newWave.Dsets)
-            {
-                dataSet.DsetKey = newWave.BankKey;
-            }
-
-            App.AssetManager.ModifyRes(newRes.Name, newWave);
-
+            // the engine uses this to register the sound bank in sampleBankManager.
+            // passing res.ResMeta here (old GUID) causes the bank to register under the wrong key then you get a null then you crash, so dont
+            // touching this code area will have very bad consequences, i cannot stress enough how much you shouldnt touch this code.
+            App.AssetManager.ModifyRes(newRes.Name, resBytes, newInstanceGuidBytes);
 
             refEntry.LinkAsset(newRes);
-
             App.AssetManager.ModifyEbx(refEntry.Name, refAsset);
 
-
             return refEntry;
+        }
+
+        // this part is self explaintory
+        private void ReplaceAllBytes(byte[] source, byte[] search, byte[] replace)
+        {
+            if (search.Length != replace.Length) return;
+
+            for (int i = 0; i <= source.Length - search.Length; i++)
+            {
+                bool match = true;
+                for (int j = 0; j < search.Length; j++)
+                {
+                    if (source[i + j] != search[j])
+                    {
+                        match = false;
+                        break;
+                    }
+                }
+                if (match)
+                {
+                    Buffer.BlockCopy(replace, 0, source, i, replace.Length);
+                }
+            }
         }
     }
 
@@ -219,6 +264,14 @@ namespace DuplicationPlugin
             newRoot.MeshSetResource = newResEntry.ResRid;
             newRoot.NameHash = (uint)Utils.HashString(newName);
             newEntry.LinkAsset(newResEntry);
+
+            // Force SaveBytes to recalculate the string offsets, then extract the updated ResMeta
+            newMeshSet.SaveBytes();
+            var fi = typeof(Resource).GetField("resMeta", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+            if (fi != null)
+            {
+                newResEntry.ResMeta = (byte[])fi.GetValue(newMeshSet);
+            }
 
             if (ProfilesLibrary.IsLoaded(ProfileVersion.StarWarsBattlefrontII))
             {

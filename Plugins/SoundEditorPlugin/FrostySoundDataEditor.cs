@@ -772,16 +772,19 @@ namespace SoundEditorPlugin
 
             if (chunkIsAlreadyModified)
             {
+                // Save bundle info before reverting
+                // and AddedBundles on IsAdded entries , so reading them after revert gives empy lists
+                var savedSuperBundles = existingChunkEntry.AddedSuperBundles.ToList();
+                var savedBundles = existingChunkEntry.AddedBundles.ToList();
+
                 App.AssetManager.RevertAsset(existingChunkEntry);
 
-                // add the new chunk to the existing superbundle
-                foreach (var sb in existingChunkEntry.AddedSuperBundles)
+                foreach (var sb in savedSuperBundles)
                 {
                     newAssetEntry.AddToSuperBundle(sb);
                 }
 
-                // add the new chunk to the existing bundles
-                newAssetEntry.AddToBundles(existingChunkEntry.AddedBundles);
+                newAssetEntry.AddToBundles(savedBundles);
             }
             else if (!hasExistingNewChunk)
             {
