@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:FrostyModManager"
         xmlns:ctrl="clr-namespace:Frosty.Controls;assembly=FrostyControls"
         mc:Ignorable="d"
-        Title="Installation Report" Height="300" Width="600"
+        Title="{DynamicResource mm_Errors_Title}" Height="300" Width="600"
         ResizeMode="NoResize" WindowStartupLocation="CenterOwner"
         Icon="/FrostyModManager;component/AppIcon.ico">
     <ctrl:FrostyDockableWindow.Resources>
@@ -22,7 +22,7 @@
             <ListView.View>
                 <GridView>
                     <GridView.Columns>
-                        <GridViewColumn Header="Filename">
+                        <GridViewColumn Header="{DynamicResource mm_Col_Filename}">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <Grid Height="22">
@@ -31,7 +31,7 @@
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn Header="Status">
+                        <GridViewColumn Header="{DynamicResource mm_Col_Status}">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <Grid Height="22">
@@ -49,7 +49,7 @@
         </ListView>
 
         <Grid Grid.Row="1">
-            <Button Content="Ok" HorizontalAlignment="Right" Width="75" Margin="8" Click="Button_Click"/>
+            <Button Content="{DynamicResource mm_Btn_OK}" HorizontalAlignment="Right" Width="75" Margin="8" Click="Button_Click"/>
         </Grid>
     </Grid>
 </ctrl:FrostyDockableWindow>

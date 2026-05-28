@@ -1,0 +1,153 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <!-- Frosty Mod Manager — English (en-US) -->
+
+    <!-- App / Window titles -->
+    <sys:String x:Key="mm_AppTitle">Frosty Mod Manager</sys:String>
+    <sys:String x:Key="mm_About_Title">About Frosty Mod Manager</sys:String>
+    <sys:String x:Key="mm_AddProfile_Title">Add Profile</sys:String>
+    <sys:String x:Key="mm_Config_Title">Mod Configuration</sys:String>
+    <sys:String x:Key="mm_Collection_Title">Export Collection</sys:String>
+    <sys:String x:Key="mm_Errors_Title">Installation Report</sys:String>
+    <sys:String x:Key="mm_LaunchOpts_Title">Launch Options</sys:String>
+    <sys:String x:Key="mm_ModData_Title">Manage ModData</sys:String>
+
+    <!-- Main menu -->
+    <sys:String x:Key="mm_Menu_File">File</sys:String>
+    <sys:String x:Key="mm_Menu_Pack">Pack</sys:String>
+    <sys:String x:Key="mm_Menu_Tools">Tools</sys:String>
+    <sys:String x:Key="mm_Menu_Help">Help</sys:String>
+    <sys:String x:Key="mm_Menu_Language">Language</sys:String>
+
+    <!-- Menu items -->
+    <sys:String x:Key="mm_MenuItem_Rename">Rename</sys:String>
+    <sys:String x:Key="mm_MenuItem_Duplicate">Duplicate</sys:String>
+    <sys:String x:Key="mm_MenuItem_Export">Export</sys:String>
+    <sys:String x:Key="mm_MenuItem_Import">Import</sys:String>
+    <sys:String x:Key="mm_MenuItem_CreateCollection">Create Collection</sys:String>
+    <sys:String x:Key="mm_MenuItem_SelectGame">Select Game</sys:String>
+    <sys:String x:Key="mm_MenuItem_Exit">Exit</sys:String>
+    <sys:String x:Key="mm_MenuItem_ManageModData">Manage ModData</sys:String>
+    <sys:String x:Key="mm_MenuItem_About">About Frosty Mod Manager</sys:String>
+
+    <!-- Toolbar / Pack strip -->
+    <sys:String x:Key="mm_Pack_Label">Pack: </sys:String>
+    <sys:String x:Key="mm_Tip_AddPack">Add Pack</sys:String>
+    <sys:String x:Key="mm_Tip_RemovePack">Remove Pack</sys:String>
+    <sys:String x:Key="mm_Tip_ImportPack">Import Pack</sys:String>
+
+    <!-- Launch buttons -->
+    <sys:String x:Key="mm_Btn_Compile">Compile</sys:String>
+    <sys:String x:Key="mm_Tip_LaunchGame">Launch game with selected mods applied</sys:String>
+    <sys:String x:Key="mm_Btn_RestoreVanilla">Restore Vanilla</sys:String>
+    <sys:String x:Key="mm_Tip_RestoreVanilla">Restore vanilla Data from backup and remove mod-generated CAS files</sys:String>
+
+    <!-- Tab headers -->
+    <sys:String x:Key="mm_Tab_AvailableMods">Available Mods</sys:String>
+    <sys:String x:Key="mm_Tab_AvailableModsFmt">Available Mods ({0})</sys:String>
+    <sys:String x:Key="mm_Tab_InstalledPlugins">Installed Plugins</sys:String>
+    <sys:String x:Key="mm_Tab_Log">Log</sys:String>
+    <sys:String x:Key="mm_Tab_AppliedMods">Applied Mods</sys:String>
+    <sys:String x:Key="mm_Tab_AppliedModsFmt">Applied Mods ({0})</sys:String>
+    <sys:String x:Key="mm_Tab_Description">Description</sys:String>
+    <sys:String x:Key="mm_Tab_Resources">Resources</sys:String>
+
+    <!-- Mod description panel -->
+    <sys:String x:Key="mm_AffectedFiles">Affected Files</sys:String>
+    <sys:String x:Key="mm_Loading">Loading...</sys:String>
+
+    <!-- Available mods toolbar -->
+    <sys:String x:Key="mm_Btn_AddMods">Add Mod(s)</sys:String>
+    <sys:String x:Key="mm_Tip_ImportMods">Import mod(s) from file</sys:String>
+    <sys:String x:Key="mm_Btn_RemoveMods">Remove Mod(s)</sys:String>
+    <sys:String x:Key="mm_Tip_RemoveMods">Remove selected mod(s)</sys:String>
+    <sys:String x:Key="mm_Btn_ApplyMods">Apply Mod(s)</sys:String>
+    <sys:String x:Key="mm_Tip_ApplyMods">Add mod(s) to applied list</sys:String>
+    <sys:String x:Key="mm_Tip_ShowApplied">Show Applied Mod(s)</sys:String>
+    <sys:String x:Key="mm_Tip_HideApplied">Hide Applied Mod(s)</sys:String>
+    <sys:String x:Key="mm_Filter_Watermark">Filter</sys:String>
+
+    <!-- ListView / GridView column headers -->
+    <sys:String x:Key="mm_Col_Title">Title</sys:String>
+    <sys:String x:Key="mm_Col_Version">Version</sys:String>
+    <sys:String x:Key="mm_Col_Applied">Applied</sys:String>
+    <sys:String x:Key="mm_Col_Name">Name</sys:String>
+    <sys:String x:Key="mm_Col_Author">Author</sys:String>
+    <sys:String x:Key="mm_Col_Path">Path</sys:String>
+    <sys:String x:Key="mm_Col_Filename">Filename</sys:String>
+    <sys:String x:Key="mm_Col_Status">Status</sys:String>
+
+    <!-- Applied mods toolbar tooltips -->
+    <sys:String x:Key="mm_Tip_DeselectAll">Deselect all mods</sys:String>
+    <sys:String x:Key="mm_Tip_MoveDown">Move mod down in list&#x0A;Shift click to move down 5 spaces&#x0A;Ctrl Shift click to move to bottom</sys:String>
+    <sys:String x:Key="mm_Tip_MoveUp">Move mod up in list&#x0A;Shift click to move up 5 spaces&#x0A;Ctrl Shift click to move to top</sys:String>
+    <sys:String x:Key="mm_Tip_RemoveMod">Remove mod from list</sys:String>
+
+    <!-- Resources (conflicts) tab -->
+    <sys:String x:Key="mm_Chk_ShowConflicts">Show conflicts only</sys:String>
+
+    <!-- About window -->
+    <sys:String x:Key="mm_About_Copyright">Copyright© 2017-2020</sys:String>
+    <sys:String x:Key="mm_About_Authors">derwangler, Cade and benji</sys:String>
+    <sys:String x:Key="mm_About_OriginalCreator">Originally created by GalaxyMan2015</sys:String>
+    <sys:String x:Key="mm_About_Website">Website: </sys:String>
+    <sys:String x:Key="mm_About_Support">Support: </sys:String>
+
+    <!-- Add Profile window -->
+    <sys:String x:Key="mm_AddProfile_NameLabel">Profile Name:</sys:String>
+
+    <!-- Collection Settings window labels -->
+    <sys:String x:Key="mm_Label_Title">Title </sys:String>
+    <sys:String x:Key="mm_Label_Author">Author </sys:String>
+    <sys:String x:Key="mm_Label_Version">Version </sys:String>
+    <sys:String x:Key="mm_Label_Category">Category </sys:String>
+    <sys:String x:Key="mm_Label_Link">Link </sys:String>
+
+    <!-- Launch Options window -->
+    <sys:String x:Key="mm_LaunchOpts_CmdArgs">Command Line Arguments:</sys:String>
+
+    <!-- Manage ModData window -->
+    <sys:String x:Key="mm_ModData_PacksLabel">Packs in ModData:</sys:String>
+    <sys:String x:Key="mm_ModData_PathLabel">ModData Path:</sys:String>
+    <sys:String x:Key="mm_Tip_LaunchExisting">Attempts to launch game with existing ModData</sys:String>
+    <sys:String x:Key="mm_Tip_OpenFolder">Opens Folder</sys:String>
+    <sys:String x:Key="mm_Tip_DeleteFolder">Deletes Folder</sys:String>
+
+    <!-- Prelaunch window -->
+    <sys:String x:Key="mm_Btn_ScanGames">Scan for games</sys:String>
+
+    <!-- Status bar -->
+    <sys:String x:Key="mm_Status_AvailableMods">{0} Available Mod(s)</sys:String>
+    <sys:String x:Key="mm_Status_FilteredMods">{0} Filtered Mod(s)</sys:String>
+    <sys:String x:Key="mm_Status_AppliedMods">{0} Applied Mod(s)</sys:String>
+    <sys:String x:Key="mm_Status_NotAppliedMods">{0} Mod(s) Not Applied</sys:String>
+
+    <!-- Dynamic filter-button tooltips -->
+    <sys:String x:Key="mm_Tip_ShowAvailable">Show Available Mod(s)</sys:String>
+
+    <!-- Message box text -->
+    <sys:String x:Key="mm_Msg_AtLeastOnePack">There must be at least one active pack</sys:String>
+    <sys:String x:Key="mm_Msg_ConfirmDeletePack">Are you sure you want to delete this pack?</sys:String>
+    <sys:String x:Key="mm_Msg_PackExists">A pack with the same name already exists</sys:String>
+    <sys:String x:Key="mm_Msg_ModsUninstalled">Mod(s) has been successfully uninstalled</sys:String>
+    <sys:String x:Key="mm_Msg_PackImported">Pack has been successfully imported</sys:String>
+    <sys:String x:Key="mm_Msg_PackFileExists">A file with the same name already exists</sys:String>
+    <sys:String x:Key="mm_Msg_ShowAllResources">Are you sure you want to show all resources?&#x0A;&#x0A;This may take a while if you have a lot of mods applied.</sys:String>
+
+    <!-- File dialog titles -->
+    <sys:String x:Key="mm_DlgTitle_InstallMod">Install Mod</sys:String>
+    <sys:String x:Key="mm_DlgTitle_ImportPack">Import Pack</sys:String>
+
+    <!-- Common buttons -->
+    <sys:String x:Key="mm_Btn_OK">OK</sys:String>
+    <sys:String x:Key="mm_Btn_Cancel">Cancel</sys:String>
+    <sys:String x:Key="mm_Btn_Save">Save</sys:String>
+    <sys:String x:Key="mm_Btn_Close">Close</sys:String>
+    <sys:String x:Key="mm_Btn_Add">Add</sys:String>
+    <sys:String x:Key="mm_Btn_New">New</sys:String>
+    <sys:String x:Key="mm_Btn_Remove">Remove</sys:String>
+    <sys:String x:Key="mm_Btn_Select">Select</sys:String>
+
+</ResourceDictionary>
