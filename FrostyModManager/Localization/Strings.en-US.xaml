@@ -39,10 +39,8 @@
     <sys:String x:Key="mm_Tip_ImportPack">Import Pack</sys:String>
 
     <!-- Launch buttons -->
-    <sys:String x:Key="mm_Btn_Compile">Compile</sys:String>
+    <sys:String x:Key="mm_Btn_Compile">Launch</sys:String>
     <sys:String x:Key="mm_Tip_LaunchGame">Launch game with selected mods applied</sys:String>
-    <sys:String x:Key="mm_Btn_RestoreVanilla">Restore Vanilla</sys:String>
-    <sys:String x:Key="mm_Tip_RestoreVanilla">Restore vanilla Data from backup and remove mod-generated CAS files</sys:String>
 
     <!-- Tab headers -->
     <sys:String x:Key="mm_Tab_AvailableMods">Available Mods</sys:String>

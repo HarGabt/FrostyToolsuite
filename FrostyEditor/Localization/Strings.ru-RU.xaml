@@ -7,151 +7,148 @@
 
     <!-- App / Window titles -->
     <sys:String x:Key="fe_AppTitle">Frosty Editor</sys:String>
-    <sys:String x:Key="fe_About_Title">&#220;ber Frosty Editor</sys:String>
-    <sys:String x:Key="fe_ModSettings_Title">Mod exportieren</sys:String>
-    <sys:String x:Key="fe_PatchSummary_Title">Patch-Zusammenfassung</sys:String>
-    <sys:String x:Key="fe_Prelaunch_Title">Profil laden</sys:String>
+    <sys:String x:Key="fe_About_Title">О программе</sys:String>
+    <sys:String x:Key="fe_ModSettings_Title">Экспорт модификации</sys:String>
+    <sys:String x:Key="fe_PatchSummary_Title">Изменения в патче</sys:String>
+    <sys:String x:Key="fe_Prelaunch_Title">Загрузка профиля</sys:String>
 
     <!-- Main menu -->
-    <sys:String x:Key="fe_Menu_File">Datei</sys:String>
-    <sys:String x:Key="fe_Menu_Tools">Extras</sys:String>
-    <sys:String x:Key="fe_Menu_Window">Fenster</sys:String>
-    <sys:String x:Key="fe_Menu_Help">Hilfe</sys:String>
-    <sys:String x:Key="fe_Menu_Language">Sprache</sys:String>
+    <sys:String x:Key="fe_Menu_File">Файл</sys:String>
+    <sys:String x:Key="fe_Menu_Tools">Инструменты</sys:String>
+    <sys:String x:Key="fe_Menu_Window">Окно</sys:String>
+    <sys:String x:Key="fe_Menu_Help">Справка</sys:String>
+    <sys:String x:Key="fe_Menu_Language">Язык (Language)</sys:String>
 
     <!-- File menu items -->
-    <sys:String x:Key="fe_MenuItem_New">Neu</sys:String>
-    <sys:String x:Key="fe_MenuItem_Open">&#214;ffnen</sys:String>
-    <sys:String x:Key="fe_MenuItem_RecentProjects">Zuletzt verwendet</sys:String>
-    <sys:String x:Key="fe_MenuItem_Save">Speichern</sys:String>
-    <sys:String x:Key="fe_MenuItem_SaveAs">Speichern unter</sys:String>
-    <sys:String x:Key="fe_MenuItem_ExportMod">Als Mod exportieren</sys:String>
-    <sys:String x:Key="fe_MenuItem_Exit">Beenden</sys:String>
-    <sys:String x:Key="fe_MenuItem_CloseAllDocs">Alle Dokumente schlie&#223;en</sys:String>
-    <sys:String x:Key="fe_MenuItem_About">&#220;ber Frosty Editor</sys:String>
-    <sys:String x:Key="fe_MenuItem_ClearRecents">Verlauf l&#246;schen</sys:String>
-    <sys:String x:Key="fe_MenuItem_Options">Optionen</sys:String>
+    <sys:String x:Key="fe_MenuItem_New">Новый</sys:String>
+    <sys:String x:Key="fe_MenuItem_Open">Открыть</sys:String>
+    <sys:String x:Key="fe_MenuItem_RecentProjects">Недавние проекты</sys:String>
+    <sys:String x:Key="fe_MenuItem_Save">Сохранить</sys:String>
+    <sys:String x:Key="fe_MenuItem_SaveAs">Сохранить как...</sys:String>
+    <sys:String x:Key="fe_MenuItem_ExportMod">Экспортировать модификацию</sys:String>
+    <sys:String x:Key="fe_MenuItem_Exit">Выход</sys:String>
+    <sys:String x:Key="fe_MenuItem_CloseAllDocs">Закрыть все документы</sys:String>
+    <sys:String x:Key="fe_MenuItem_About">О программе (Frosty Editor)</sys:String>
+    <sys:String x:Key="fe_MenuItem_ClearRecents">Очистить список</sys:String>
+    <sys:String x:Key="fe_MenuItem_Options">Настройки</sys:String>
 
     <!-- Toolbar tooltips -->
-    <sys:String x:Key="fe_Tip_NewProject">Neues Projekt</sys:String>
-    <sys:String x:Key="fe_Tip_OpenProject">Projekt &#246;ffnen</sys:String>
-    <sys:String x:Key="fe_Tip_SaveProject">Projekt speichern</sys:String>
-    <sys:String x:Key="fe_Tip_SaveProjectAs">Projekt speichern unter</sys:String>
-    <sys:String x:Key="fe_Tip_LaunchGame">Spiel mit aktuellem Projekt starten</sys:String>
-    <sys:String x:Key="fe_Tip_RestoreVanilla">Originaldaten aus Backup wiederherstellen und mod-generierte CAS-Dateien entfernen</sys:String>
+    <sys:String x:Key="fe_Tip_NewProject">Новый проект</sys:String>
+    <sys:String x:Key="fe_Tip_OpenProject">Открыть проект</sys:String>
+    <sys:String x:Key="fe_Tip_SaveProject">Сохранить проект</sys:String>
+    <sys:String x:Key="fe_Tip_SaveProjectAs">Сохранить проект как...</sys:String>
+    <sys:String x:Key="fe_Tip_LaunchGame">Запустить игру с данным проектом</sys:String>
 
     <!-- Launch / Compile buttons -->
-    <sys:String x:Key="fe_Btn_Compile">Kompilieren</sys:String>
-    <sys:String x:Key="fe_Btn_RestoreVanilla">Vanilla wiederherstellen</sys:String>
+    <sys:String x:Key="fe_Btn_Compile">Запустить игру</sys:String>
 
     <!-- Home Page tab -->
-    <sys:String x:Key="fe_Tab_Home">Startseite</sys:String>
-    <sys:String x:Key="fe_HP_ConvenientLinks">N&#252;tzliche Links</sys:String>
-    <sys:String x:Key="fe_HP_ChangeLog">&#196;nderungsprotokoll</sys:String>
+    <sys:String x:Key="fe_Tab_Home">Домашняя страница</sys:String>
+    <sys:String x:Key="fe_HP_ConvenientLinks">Ссылки</sys:String>
+    <sys:String x:Key="fe_HP_ChangeLog">Список изменений (на английском)</sys:String>
 
     <!-- Loaded plugins column headers -->
-    <sys:String x:Key="fe_Col_Name">Name</sys:String>
-    <sys:String x:Key="fe_Col_Author">Autor</sys:String>
-    <sys:String x:Key="fe_Col_Version">Version</sys:String>
+    <sys:String x:Key="fe_Col_Name">Имя</sys:String>
+    <sys:String x:Key="fe_Col_Author">Автор</sys:String>
+    <sys:String x:Key="fe_Col_Version">Версия</sys:String>
 
     <!-- Data / Legacy Explorer tabs -->
-    <sys:String x:Key="fe_Tab_DataExplorer">Daten-Explorer</sys:String>
-    <sys:String x:Key="fe_Tab_LegacyExplorer">Legacy-Explorer</sys:String>
+    <sys:String x:Key="fe_Tab_DataExplorer">Проводник</sys:String>
+    <sys:String x:Key="fe_Tab_LegacyExplorer">Проводник (пред. версия)</sys:String>
 
     <!-- Explorer context menus -->
-    <sys:String x:Key="fe_CtxMenu_Open">&#214;ffnen</sys:String>
-    <sys:String x:Key="fe_CtxMenu_OpenUnmodified">Unver&#228;ndert &#246;ffnen</sys:String>
-    <sys:String x:Key="fe_CtxMenu_Revert">Zur&#252;cksetzen</sys:String>
-    <sys:String x:Key="fe_CtxMenu_Export">Exportieren</sys:String>
-    <sys:String x:Key="fe_CtxMenu_Import">Importieren</sys:String>
+    <sys:String x:Key="fe_CtxMenu_Open">Открыть</sys:String>
+    <sys:String x:Key="fe_CtxMenu_OpenUnmodified">Открыть оригинальный ресурс</sys:String>
+    <sys:String x:Key="fe_CtxMenu_Revert">Отменить изменения</sys:String>
+    <sys:String x:Key="fe_CtxMenu_Export">Экспорт...</sys:String>
+    <sys:String x:Key="fe_CtxMenu_Import">Импорт...</sys:String>
 
     <!-- Log / Bookmarks panels -->
-    <sys:String x:Key="fe_Tab_Log">Protokoll</sys:String>
-    <sys:String x:Key="fe_Tab_Bookmarks">Lesezeichen</sys:String>
+    <sys:String x:Key="fe_Tab_Log">Журнал</sys:String>
+    <sys:String x:Key="fe_Tab_Bookmarks">Закладки</sys:String>
 
     <!-- Bookmark toolbar -->
-    <sys:String x:Key="fe_Tip_AddBookmark">Lesezeichen hinzuf&#252;gen (Strg+B)</sys:String>
-    <sys:String x:Key="fe_Tip_RemoveBookmark">Lesezeichen entfernen (Strg+Umschalt+B)</sys:String>
-    <sys:String x:Key="fe_Tip_AddFolder">Ordner hinzuf&#252;gen</sys:String>
-    <sys:String x:Key="fe_Tip_EditName">Namen bearbeiten</sys:String>
-    <sys:String x:Key="fe_Filter_Watermark">Filtern</sys:String>
+    <sys:String x:Key="fe_Tip_AddBookmark">Добавить закладку (Ctrl+B)</sys:String>
+    <sys:String x:Key="fe_Tip_RemoveBookmark">Удалить закладку (Ctrl+Shift+B)</sys:String>
+    <sys:String x:Key="fe_Tip_AddFolder">Добавить папку</sys:String>
+    <sys:String x:Key="fe_Tip_EditName">Изменить имя</sys:String>
+    <sys:String x:Key="fe_Filter_Watermark">Фильтр</sys:String>
 
     <!-- Bookmark context menu -->
-    <sys:String x:Key="fe_CtxMenu_OpenAsset">Asset &#246;ffnen</sys:String>
-    <sys:String x:Key="fe_CtxMenu_FindInExplorer">Im Explorer suchen</sys:String>
+    <sys:String x:Key="fe_CtxMenu_OpenAsset">Открыть ресурс</sys:String>
+    <sys:String x:Key="fe_CtxMenu_FindInExplorer">Найти в проводнике</sys:String>
 
     <!-- About window -->
     <sys:String x:Key="fe_About_Copyright">Copyright&#169; 2017-2020</sys:String>
-    <sys:String x:Key="fe_About_Authors">derwangler, Cade und benji</sys:String>
-    <sys:String x:Key="fe_About_OriginalCreator">Urspr&#252;nglich erstellt von GalaxyMan2015</sys:String>
-    <sys:String x:Key="fe_About_Website">Webseite: </sys:String>
-    <sys:String x:Key="fe_About_Support">Support: </sys:String>
+    <sys:String x:Key="fe_About_Authors">derwangler, Cade и benji</sys:String>
+    <sys:String x:Key="fe_About_OriginalCreator">Оригинальная задумка: GalaxyMan2015</sys:String>
+    <sys:String x:Key="fe_About_Website">Веб-сайт: </sys:String>
+    <sys:String x:Key="fe_About_Support">Поддержка: </sys:String>
 
     <!-- Mod Settings window labels -->
-    <sys:String x:Key="fe_ModSettings_LabelTitle">Titel </sys:String>
-    <sys:String x:Key="fe_ModSettings_LabelAuthor">Autor </sys:String>
-    <sys:String x:Key="fe_ModSettings_LabelVersion">Version </sys:String>
-    <sys:String x:Key="fe_ModSettings_LabelCategory">Kategorie </sys:String>
-    <sys:String x:Key="fe_ModSettings_LabelLink">Link </sys:String>
+    <sys:String x:Key="fe_ModSettings_LabelTitle">Название </sys:String>
+    <sys:String x:Key="fe_ModSettings_LabelAuthor">Автор </sys:String>
+    <sys:String x:Key="fe_ModSettings_LabelVersion">Версия </sys:String>
+    <sys:String x:Key="fe_ModSettings_LabelCategory">Категория </sys:String>
+    <sys:String x:Key="fe_ModSettings_LabelLink">Ссылка </sys:String>
 
     <!-- Patch Summary window -->
-    <sys:String x:Key="fe_PatchSummary_Notice">Das Spiel wurde k&#252;rzlich aktualisiert. Hier ist eine Zusammenfassung der &#196;nderungen.</sys:String>
-    <sys:String x:Key="fe_PatchSummary_AssetsAdded">Hinzugef&#252;gte Assets</sys:String>
-    <sys:String x:Key="fe_PatchSummary_AssetsModified">Ge&#228;nderte Assets</sys:String>
-    <sys:String x:Key="fe_PatchSummary_AssetsRemoved">Entfernte Assets</sys:String>
+    <sys:String x:Key="fe_PatchSummary_Notice">Игра была обновлена. Вот список изменений.</sys:String>
+    <sys:String x:Key="fe_PatchSummary_AssetsAdded">Добавленные ресурсы</sys:String>
+    <sys:String x:Key="fe_PatchSummary_AssetsModified">Изменённые ресурсы</sys:String>
+    <sys:String x:Key="fe_PatchSummary_AssetsRemoved">Удалённые ресурсы</sys:String>
 
     <!-- Prelaunch window -->
-    <sys:String x:Key="fe_Prelaunch_SelectGame">Spiel ausw&#228;hlen</sys:String>
+    <sys:String x:Key="fe_Prelaunch_SelectGame">Выберите игру</sys:String>
 
     <!-- Common buttons -->
     <sys:String x:Key="fe_Btn_OK">OK</sys:String>
-    <sys:String x:Key="fe_Btn_Cancel">Abbrechen</sys:String>
-    <sys:String x:Key="fe_Btn_Save">Speichern</sys:String>
-    <sys:String x:Key="fe_Btn_Add">Hinzuf&#252;gen</sys:String>
-    <sys:String x:Key="fe_Btn_Remove">Entfernen</sys:String>
-    <sys:String x:Key="fe_Btn_Select">Ausw&#228;hlen</sys:String>
-    <sys:String x:Key="fe_Btn_Export">Exportieren</sys:String>
-    <sys:String x:Key="fe_Btn_Scan">Suchen</sys:String>
+    <sys:String x:Key="fe_Btn_Cancel">Отмена</sys:String>
+    <sys:String x:Key="fe_Btn_Save">Сохранить</sys:String>
+    <sys:String x:Key="fe_Btn_Add">Добавить</sys:String>
+    <sys:String x:Key="fe_Btn_Remove">Удалить</sys:String>
+    <sys:String x:Key="fe_Btn_Select">Выбрать</sys:String>
+    <sys:String x:Key="fe_Btn_Export">Экспорт</sys:String>
+    <sys:String x:Key="fe_Btn_Scan">Автопоиск</sys:String>
 
     <!-- Message box text -->
-    <sys:String x:Key="fe_Msg_SaveChanges">M&#246;chten Sie die &#196;nderungen an {0} speichern?</sys:String>
-    <sys:String x:Key="fe_Msg_UnableToOpenAsset">Asset konnte nicht ge&#246;ffnet werden</sys:String>
-    <sys:String x:Key="fe_Msg_ProjectNotExist">Das ausgew&#228;hlte Projekt existiert nicht.</sys:String>
-    <sys:String x:Key="fe_Msg_ProfileError">Beim Laden des Spiels mit dem angegebenen Profil ist ein Fehler aufgetreten.</sys:String>
-    <sys:String x:Key="fe_Msg_NoGameChosen">Keine Spielausf&#252;hrungsdatei ausgew&#228;hlt.</sys:String>
-    <sys:String x:Key="fe_Msg_ProfileExists">{0} hat bereits ein Profil.</sys:String>
-    <sys:String x:Key="fe_Msg_EasyAntiCheat">Dieses Spiel enth&#228;lt EasyAntiCheat und kann kein SDK automatisch generieren. Wir werden niemanden unterst&#252;tzen oder assistieren, der versucht, es zu umgehen.</sys:String>
-    <sys:String x:Key="fe_Msg_ConfirmRemoveProfile">M&#246;chten Sie dieses Profil wirklich entfernen?</sys:String>
-    <sys:String x:Key="fe_Msg_ModSettingsRequired">Titel, Autor, Kategorie und Version sind Pflichtfelder</sys:String>
-    <sys:String x:Key="fe_Msg_InvalidChars">Ung&#252;ltige Zeichen: {, }</sys:String>
-    <sys:String x:Key="fe_Msg_IconTooLarge">Das Symbol darf nicht gr&#246;&#223;er als 128x128 sein</sys:String>
-    <sys:String x:Key="fe_Msg_ScreenshotTooLarge">Screenshots d&#252;rfen jeweils nicht gr&#246;&#223;er als 5 MB sein</sys:String>
-    <sys:String x:Key="fe_Msg_PatchSummaryExported">Patch-Zusammenfassung erfolgreich exportiert</sys:String>
-    <sys:String x:Key="fe_Msg_EncryptionKeyEmpty">Verschl&#252;sselungsschl&#252;ssel nicht eingegeben. Profil konnte nicht geladen werden.</sys:String>
-    <sys:String x:Key="fe_Msg_EncryptionKeyInvalid">Verschl&#252;sselungsschl&#252;ssel ist ung&#252;ltig. Profil konnte nicht geladen werden.</sys:String>
+    <sys:String x:Key="fe_Msg_SaveChanges">Вы хотите сохранить изменения в файле {0} ?</sys:String>
+    <sys:String x:Key="fe_Msg_UnableToOpenAsset">Невозможно открыть ресурс</sys:String>
+    <sys:String x:Key="fe_Msg_ProjectNotExist">Выбранный проект не существует.</sys:String>
+    <sys:String x:Key="fe_Msg_ProfileError">Произошла ошибка при попытке загрузить игру с использованием выбранного профиля.</sys:String>
+    <sys:String x:Key="fe_Msg_NoGameChosen">Не был выбран исполнительный файл игры.</sys:String>
+    <sys:String x:Key="fe_Msg_ProfileExists">Для {0} уже существует профиль.</sys:String>
+    <sys:String x:Key="fe_Msg_EasyAntiCheat">Данная игра содержит систему EasyAntiCheat, не позволяющая сгенерировать SDK игры. Мы не поддерживаем и не помогаем тем, кто попытается её обойти.</sys:String>
+    <sys:String x:Key="fe_Msg_ConfirmRemoveProfile">Вы действительно хотите удалить данный профиль?</sys:String>
+    <sys:String x:Key="fe_Msg_ModSettingsRequired">Поля "Название", "Автор", "Категория" и "Версия" являются обязательными для заполнения.</sys:String>
+    <sys:String x:Key="fe_Msg_InvalidChars">Неподходящие символы: {, }</sys:String>
+    <sys:String x:Key="fe_Msg_IconTooLarge">Максимальное разрешение для иконки может быть только 128x128.</sys:String>
+    <sys:String x:Key="fe_Msg_ScreenshotTooLarge">Максимальный размер скриншотов: 5 МБ.</sys:String>
+    <sys:String x:Key="fe_Msg_PatchSummaryExported">Успешный экспорт списка изменений</sys:String>
+    <sys:String x:Key="fe_Msg_EncryptionKeyEmpty">Ключ шифрования не введён. Невозможно загрузить профиль.</sys:String>
+    <sys:String x:Key="fe_Msg_EncryptionKeyInvalid">Ключ шифрования не подходит. Невозможно загрузить профиль.</sys:String>
 
     <!-- Task window titles -->
-    <sys:String x:Key="fe_Task_LaunchGame">Starte Spiel</sys:String>
-    <sys:String x:Key="fe_Task_SaveProject">Projekt wird gespeichert</sys:String>
-    <sys:String x:Key="fe_Task_RevertAsset">Asset wird zur&#252;ckgesetzt</sys:String>
-    <sys:String x:Key="fe_Task_ImportLegacy">Legacy-Asset wird importiert</sys:String>
-    <sys:String x:Key="fe_Task_ExportLegacy">Legacy-Assets werden exportiert</sys:String>
-    <sys:String x:Key="fe_Task_RestoreDeadSpace">Dead Space-Daten werden wiederhergestellt</sys:String>
+    <sys:String x:Key="fe_Task_LaunchGame">Идёт запуск</sys:String>
+    <sys:String x:Key="fe_Task_SaveProject">Сохранение проекта</sys:String>
+    <sys:String x:Key="fe_Task_RevertAsset">Отмена изменений</sys:String>
+    <sys:String x:Key="fe_Task_ImportLegacy">Импорт ресурса (Legacy)</sys:String>
+    <sys:String x:Key="fe_Task_ExportLegacy">Экспорт ресурса (Legacy)</sys:String>
 
     <!-- File dialog titles -->
-    <sys:String x:Key="fe_DlgTitle_OpenProject">Projekt &#246;ffnen</sys:String>
-    <sys:String x:Key="fe_DlgTitle_SaveProjectAs">Projekt speichern unter</sys:String>
-    <sys:String x:Key="fe_DlgTitle_OpenLegacy">Legacy-Datei &#246;ffnen</sys:String>
-    <sys:String x:Key="fe_DlgTitle_SaveLegacy">Legacy-Datei speichern</sys:String>
-    <sys:String x:Key="fe_DlgTitle_ImportAsset">Asset importieren</sys:String>
-    <sys:String x:Key="fe_DlgTitle_ExportAsset">Asset exportieren</sys:String>
-    <sys:String x:Key="fe_DlgTitle_SavePatchSummary">Patch-Zusammenfassung speichern</sys:String>
-    <sys:String x:Key="fe_DlgTitle_ChooseExe">Spielprogramm ausw&#228;hlen</sys:String>
+    <sys:String x:Key="fe_DlgTitle_OpenProject">Открыть проект</sys:String>
+    <sys:String x:Key="fe_DlgTitle_SaveProjectAs">Сохранить проект как...</sys:String>
+    <sys:String x:Key="fe_DlgTitle_OpenLegacy">Открыть файл (Legacy)</sys:String>
+    <sys:String x:Key="fe_DlgTitle_SaveLegacy">Сохранить файл (Legacy)</sys:String>
+    <sys:String x:Key="fe_DlgTitle_ImportAsset">Импорт ресурса</sys:String>
+    <sys:String x:Key="fe_DlgTitle_ExportAsset">Экспорт ресурса</sys:String>
+    <sys:String x:Key="fe_DlgTitle_SavePatchSummary">Сохранить список изменений</sys:String>
+    <sys:String x:Key="fe_DlgTitle_ChooseExe">Выберите исполнительный файл игры</sys:String>
 
     <!-- Other UI strings -->
-    <sys:String x:Key="fe_ReadOnly"> (Schreibgesch&#252;tzt)</sys:String>
-    <sys:String x:Key="fe_TitleBarReadOnly"> [Schreibgesch&#252;tzt]</sys:String>
-    <sys:String x:Key="fe_NoFilter">(kein Filter)</sys:String>
-    <sys:String x:Key="fe_Total_Fmt">Gesamt: {0}</sys:String>
+    <sys:String x:Key="fe_ReadOnly"> (Только чтение)</sys:String>
+    <sys:String x:Key="fe_TitleBarReadOnly"> [Только чтение]</sys:String>
+    <sys:String x:Key="fe_NoFilter">(нет фильтра)</sys:String>
+    <sys:String x:Key="fe_Total_Fmt">Итого: {0}</sys:String>
 
 </ResourceDictionary>

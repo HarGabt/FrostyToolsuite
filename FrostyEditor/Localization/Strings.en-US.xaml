@@ -37,11 +37,9 @@
     <sys:String x:Key="fe_Tip_SaveProject">Save Project</sys:String>
     <sys:String x:Key="fe_Tip_SaveProjectAs">Save Project As</sys:String>
     <sys:String x:Key="fe_Tip_LaunchGame">Launch game with current project</sys:String>
-    <sys:String x:Key="fe_Tip_RestoreVanilla">Restore vanilla Data from backup and remove mod CAS files</sys:String>
 
     <!-- Launch / Compile buttons -->
-    <sys:String x:Key="fe_Btn_Compile">Compile</sys:String>
-    <sys:String x:Key="fe_Btn_RestoreVanilla">Restore Vanilla</sys:String>
+    <sys:String x:Key="fe_Btn_Compile">Launch</sys:String>
 
     <!-- Home Page tab -->
     <sys:String x:Key="fe_Tab_Home">Home Page</sys:String>
@@ -61,8 +59,8 @@
     <sys:String x:Key="fe_CtxMenu_Open">Open</sys:String>
     <sys:String x:Key="fe_CtxMenu_OpenUnmodified">Open Unmodified</sys:String>
     <sys:String x:Key="fe_CtxMenu_Revert">Revert</sys:String>
-    <sys:String x:Key="fe_CtxMenu_Export">Export</sys:String>
-    <sys:String x:Key="fe_CtxMenu_Import">Import</sys:String>
+    <sys:String x:Key="fe_CtxMenu_Export">Export...</sys:String>
+    <sys:String x:Key="fe_CtxMenu_Import">Import...</sys:String>
 
     <!-- Log / Bookmarks panels -->
     <sys:String x:Key="fe_Tab_Log">Log</sys:String>
@@ -135,7 +133,6 @@
     <sys:String x:Key="fe_Task_RevertAsset">Reverting Asset</sys:String>
     <sys:String x:Key="fe_Task_ImportLegacy">Importing Legacy Asset</sys:String>
     <sys:String x:Key="fe_Task_ExportLegacy">Exporting Legacy Assets</sys:String>
-    <sys:String x:Key="fe_Task_RestoreDeadSpace">Restoring Dead Space Data</sys:String>
 
     <!-- File dialog titles -->
     <sys:String x:Key="fe_DlgTitle_OpenProject">Open Project</sys:String>
