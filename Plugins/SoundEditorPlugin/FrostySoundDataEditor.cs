@@ -616,7 +616,7 @@ namespace SoundEditorPlugin
             if (tracksListBox.SelectedItem == null)
                 return;
 
-            FrostyOpenFileDialog ofd = new FrostyOpenFileDialog("Import Sound", "Audio Files (*.mp3; *.wav)|*.mp3; *.wav", "Sound");
+            FrostyOpenFileDialog ofd = new FrostyOpenFileDialog("Import Sound", "Audio Files (*.mp3; *.wav; *.opus; *.snr)|*.mp3; *.wav; *.opus; *.snr", "Sound");
             if (ofd.ShowDialog())
             {
                 try
@@ -685,6 +685,23 @@ namespace SoundEditorPlugin
 
         private async void ImportSound(string importFileName, SoundDataTrack track, FrostyTaskWindow task)
         {
+            // the EA Tool only understands .wav and .mp3 natively
+            // any other format like .opus, .snr, etc.. is pre-converted to a temporary WAV via vgmstream
+            string tempWavFromVgmstream = null;
+            string ext = Path.GetExtension(importFileName);
+            bool needsVgmstream = !string.Equals(ext, ".wav", StringComparison.OrdinalIgnoreCase)
+                               && !string.Equals(ext, ".mp3", StringComparison.OrdinalIgnoreCase);
+            if (needsVgmstream)
+            {
+                tempWavFromVgmstream = await VgmStreamHelper.Instance.ConvertToWav(importFileName);
+                if (tempWavFromVgmstream == null)
+                    throw new Exception($"Failed to convert {ext} file to WAV via vgmstream. Make sure the file is a valid audio file supported by vgmstream.");
+                importFileName = tempWavFromVgmstream;
+            }
+
+            try
+            {
+
             string codec = GetFormat(track.CodecUnformatted);
             bool isSeekable = ((dynamic)Asset.RootObject).IsSeekable;
             bool shouldRemix = Config.Get<bool>("AutoRemixOnImport", true);
@@ -718,24 +735,24 @@ namespace SoundEditorPlugin
                 hasExistingNewChunk = true;
             }
 
+            // for streampool assets new audio is always appended after the existing chunk data
+            // so that other tracks' offsets remain valid
+            // For non-streampool a new standalone chunk is created (offsetStart = 0)
+            uint appendStart = (hasStreamPool || hasExistingNewChunk) ? (uint)existingChunkData.Length : 0u;
+
             if (seekTableData != null)
             {
-                // Adjust offsets depending on whether we are using an existing chunk or a new one
-                uint seekTableStart = hasExistingNewChunk ? (uint)existingChunkData.Length : 0u;
-
-                seekTableOffset = seekTableStart | GetSegmentOffsetFlags(isValid: true, hasStreamPool);
-                int alignedSampleOffset = AlignTo((int)seekTableOffset + seekTableData.Length, 4);
-                chunkData = new byte[(alignedSampleOffset - seekTableStart) + spsData.Length];
+                seekTableOffset = appendStart | GetSegmentOffsetFlags(isValid: true, hasStreamPool);
+                int alignedSampleOffset = AlignTo((int)appendStart + seekTableData.Length, 4);
+                chunkData = new byte[alignedSampleOffset - (int)appendStart + spsData.Length];
                 Array.Copy(seekTableData, chunkData, seekTableData.Length);
-                Array.Copy(spsData, 0, chunkData, alignedSampleOffset - seekTableStart, spsData.Length);
+                Array.Copy(spsData, 0, chunkData, alignedSampleOffset - (int)appendStart, spsData.Length);
                 samplesOffset = (uint)alignedSampleOffset | GetSegmentOffsetFlags(isValid: true, hasStreamPool);
             }
             else
             {
-                // Adjust offsets depending on whether we are using an existing chunk or a new one
                 chunkData = spsData;
-                uint offsetStart = hasExistingNewChunk ? (uint)existingChunkData.Length : 0u;
-                samplesOffset = offsetStart | GetSegmentOffsetFlags(isValid: true, hasStreamPool);
+                samplesOffset = appendStart | GetSegmentOffsetFlags(isValid: true, hasStreamPool);
                 seekTableOffset = 0 | GetSegmentOffsetFlags(isValid: false, hasStreamPool);
             }
 
@@ -749,45 +766,49 @@ namespace SoundEditorPlugin
             Dispatcher?.Invoke(() => { index = tracksListBox.SelectedIndex; });
 
             bool chunkIsAlreadyModified = existingChunkEntry != null && existingChunkEntry.IsAdded && track.ChunkId != null && !hasStreamPool;
-            dynamic chunkToModify = chunkIsAlreadyModified || (hasStreamPool && hasExistingNewChunk) ? soundDataChunk : Activator.CreateInstance(originalSoundWave.Chunks[0].GetType());
+            // for streampool one would reuse the existing soundDataChunk object so we can update its size in-place
+            // for non-streampool one would create a new chunk object unless the chunk was already added by a previous import
+            dynamic chunkToModify = (chunkIsAlreadyModified || hasStreamPool) ? soundDataChunk : Activator.CreateInstance(originalSoundWave.Chunks[0].GetType());
 
-            if (!hasStreamPool || !hasExistingNewChunk)
+            if (hasStreamPool)
             {
-                chunkToModify.ChunkId = newGuid;
-                chunkToModify.ChunkSize = (uint)chunkData.Length;
-            }
-            else
-            {
+                // always append new audio after the existing chunk bytes so that every other track's
+                // SamplesOffset still points to valid data. this covers both first and subsequent imports
                 using (MemoryStream ms = new MemoryStream())
                 {
+                    existingChunkData.Position = 0;
                     byte[] existingChunkBytes = existingChunkData.ReadToEnd();
                     ms.Write(existingChunkBytes, 0, existingChunkBytes.Length);
                     ms.Write(chunkData, 0, chunkData.Length);
                     App.AssetManager.ModifyChunk(newGuid, ms.ToArray(), CompressionType.None);
                     chunkToModify.ChunkSize = (uint)ms.Length;
                 }
+                // the existing chunk is already registered in the correct bundles, no changes needed
+            }
+            else
+            {
+                chunkToModify.ChunkId = newGuid;
+                chunkToModify.ChunkSize = (uint)chunkData.Length;
             }
 
             ChunkAssetEntry newAssetEntry = App.AssetManager.GetChunkEntry(newGuid);
 
             if (chunkIsAlreadyModified)
             {
-                // Save bundle info before reverting
-                // and AddedBundles on IsAdded entries , so reading them after revert gives empy lists
-                var savedSuperBundles = existingChunkEntry.AddedSuperBundles.ToList();
-                var savedBundles = existingChunkEntry.AddedBundles.ToList();
-
                 App.AssetManager.RevertAsset(existingChunkEntry);
 
-                foreach (var sb in savedSuperBundles)
+                // add the new chunk to the existing superbundle
+                foreach (var sb in existingChunkEntry.AddedSuperBundles)
                 {
                     newAssetEntry.AddToSuperBundle(sb);
                 }
 
-                newAssetEntry.AddToBundles(savedBundles);
+                // add the new chunk to the existing bundles
+                newAssetEntry.AddToBundles(existingChunkEntry.AddedBundles);
             }
-            else if (!hasExistingNewChunk)
+            else if (!hasStreamPool && !hasExistingNewChunk)
             {
+                // First non-streampool import: register the new chunk reference in the EBX.
                 originalSoundWave.Chunks.Add(chunkToModify);
                 chunkIndex = originalSoundWave.Chunks.Count - 1;
 
@@ -814,32 +835,12 @@ namespace SoundEditorPlugin
                 newWave.Segments[track.SegmentIndex].SegmentLength = durationInSeconds;
             }
 
-            if (track.VariationIndex > -1)
-            {
-                if (hasStreamPool)
-                {
-                    //    // ensure all variations point to the same chunk if using a stream
-                    //    foreach(var variation in newWave.Variations)
-                    //    {
-                    //      variation.StreamChunkIndex = (uint)chunkIndex;
-                    //    }
-
-                    newWave.Variations[track.VariationIndex].StreamChunkIndex = (uint)chunkIndex;
-                }
-                else
-                {
-                    newWave.Variations[track.VariationIndex].MemoryChunkIndex = (uint)chunkIndex;
-                }
-            }
-
             Dictionary<Guid, uint> uniqueChunks = new Dictionary<Guid, uint>();
             for (int i = 0; i < originalSoundWave.Chunks.Count; i++)
             {
                 Guid guid = originalSoundWave.Chunks[i].ChunkId;
                 if (!uniqueChunks.ContainsKey(guid))
-                {
                     uniqueChunks[guid] = originalSoundWave.Chunks[i].ChunkSize;
-                }
             }
 
             object chunks = newWave.Chunks;
@@ -852,6 +853,28 @@ namespace SoundEditorPlugin
                 chunk.ChunkId = item.Key;
                 chunk.ChunkSize = Convert.ChangeType(item.Value, chunk.ChunkSize.GetType());
                 chunksList.Add(chunk);
+            }
+
+            // resolve the chunk index AFTER deduplication by finding soundDataChunk's GUID
+            // in the rebuilt list. This is correct even when originalSoundWave.Chunks contains
+            // duplicate GUIDs which is common in LocalizedWaveAssets, which collapse to fewer entries
+            if (track.VariationIndex > -1)
+            {
+                Guid targetGuid = (Guid)soundDataChunk.ChunkId;
+                int rebuiltChunkIndex = 0;
+                for (int i = 0; i < chunksList.Count; i++)
+                {
+                    if ((Guid)((dynamic)chunksList[i]).ChunkId == targetGuid)
+                    {
+                        rebuiltChunkIndex = i;
+                        break;
+                    }
+                }
+
+                if (hasStreamPool)
+                    newWave.Variations[track.VariationIndex].StreamChunkIndex = (uint)rebuiltChunkIndex;
+                else
+                    newWave.Variations[track.VariationIndex].MemoryChunkIndex = (uint)rebuiltChunkIndex;
             }
 
             audioPlayer.Dispose();
@@ -884,6 +907,13 @@ namespace SoundEditorPlugin
                 //foreach (var theTrack in tracks)
                 //    TracksList.Add(theTrack);
             });
+
+            } // end try (opus pre-conversion guard)
+            finally
+            {
+                if (tempWavFromVgmstream != null && File.Exists(tempWavFromVgmstream))
+                    File.Delete(tempWavFromVgmstream);
+            }
         }
     }
 }
