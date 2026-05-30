@@ -36,7 +36,7 @@
     <sys:String x:Key="mm_Pack_Label">Набор: </sys:String>
     <sys:String x:Key="mm_Tip_AddPack">Добавить набор</sys:String>
     <sys:String x:Key="mm_Tip_RemovePack">Удалить набор</sys:String>
-    <sys:String x:Key="mm_Tip_ImportPack">Импортировать набор</sys:String>
+    <sys:String x:Key="mm_Tip_ImportPack">Импорт набора</sys:String>
 
     <!-- Launch  buttons -->
     <sys:String x:Key="mm_Btn_Compile">Запустить игру</sys:String>
@@ -44,7 +44,7 @@
 
     <!-- Tab headers -->
     <sys:String x:Key="mm_Tab_AvailableMods">Доступные модификации</sys:String>
-    <sys:String x:Key="mm_Tab_AvailableModsFmt">Доступные модификации: ({0})</sys:String>
+    <sys:String x:Key="mm_Tab_AvailableModsFmt">Доступные модификации ({0})</sys:String>
     <sys:String x:Key="mm_Tab_InstalledPlugins">Установленные плагины</sys:String>
     <sys:String x:Key="mm_Tab_Log">Журнал</sys:String>
     <sys:String x:Key="mm_Tab_AppliedMods">Установленные модификации</sys:String>
@@ -117,9 +117,9 @@
     <sys:String x:Key="mm_Btn_ScanGames">Автопоиск игр</sys:String>
 
     <!-- Status bar -->
-    <sys:String x:Key="mm_Status_AvailableMods">Доступно модификаций: {0}</sys:String>
-    <sys:String x:Key="mm_Status_FilteredMods">Отсеяно модификаций: {0}</sys:String>
-    <sys:String x:Key="mm_Status_AppliedMods">Установлено модификаций: {0}</sys:String>
+    <sys:String x:Key="mm_Status_AvailableMods">Доступных модификаций: {0}</sys:String>
+    <sys:String x:Key="mm_Status_FilteredMods">Отсеянных модификаций: {0}</sys:String>
+    <sys:String x:Key="mm_Status_AppliedMods">Установленных модификаций: {0}</sys:String>
     <sys:String x:Key="mm_Status_NotAppliedMods">Неустановленных модификаций: {0}</sys:String>
 
     <!-- Dynamic filter-button tooltips -->
@@ -129,7 +129,7 @@
     <sys:String x:Key="mm_Msg_AtLeastOnePack">Должен быть как минимум один активный набор</sys:String>
     <sys:String x:Key="mm_Msg_ConfirmDeletePack">Вы действительно хотите удалить этот набор?</sys:String>
     <sys:String x:Key="mm_Msg_PackExists">Уже существует набор с этим названием</sys:String>
-    <sys:String x:Key="mm_Msg_ModsUninstalled">Модификации были успешно удалены</sys:String>
+    <sys:String x:Key="mm_Msg_ModsUninstalled">Выбранные модификации были успешно удалены</sys:String>
     <sys:String x:Key="mm_Msg_PackImported">Успешный импорт набора</sys:String>
     <sys:String x:Key="mm_Msg_PackFileExists">Уже существует файл с этим названием</sys:String>
     <sys:String x:Key="mm_Msg_ShowAllResources">Вы действительно хотите показать все изменяемые файлы?&#x0A;&#x0A;Это может занять продолжительное время, особенно при большом количестве установленных модификаций.</sys:String>
