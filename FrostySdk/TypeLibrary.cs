@@ -1254,7 +1254,14 @@ namespace FrostySdk
                         //}
                         foreach (TypeInfoGuidAttribute guidAttr in subType.GetCustomAttributes<TypeInfoGuidAttribute>())
                         {
-                            m_guidTypeMapping.Add(guidAttr.Guid, subType);
+                            {
+                                if (!m_guidTypeMapping.ContainsKey(guidAttr.Guid))
+                                    m_guidTypeMapping.Add(guidAttr.Guid, subType);
+                            }
+
+                            GuidAttribute classGuid = subType.GetCustomAttribute<GuidAttribute>();
+                            if (classGuid != null && !m_guidTypeMapping.ContainsKey(classGuid.Guid))
+                                m_guidTypeMapping.Add(classGuid.Guid, subType);
                         }
                     }
                 }

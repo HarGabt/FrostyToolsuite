@@ -76,7 +76,10 @@ namespace FrostySdk.IO
                             if (subValue == null)
                                 break;
 
-                            values.Add(tmpName, subValue);
+                            // newer Frostbite layout metadata can contain repeated field names
+                            // DbObject is dictionary-backed, so retain the final value instead of
+                            // rejecting an otherwise valid object
+                            values[tmpName] = subValue;
                         }
                         return new DbObject(values);
                     }

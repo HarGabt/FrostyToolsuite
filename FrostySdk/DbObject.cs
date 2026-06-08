@@ -48,6 +48,16 @@ namespace FrostySdk
                 return (T)hash[name];
             }
 
+            if (typeof(T) == typeof(uint) && hash[name] is int intValue)
+            { 
+                return (T)(object)unchecked((uint)intValue);
+            }
+
+            if (typeof(T) == typeof(ulong) && hash[name] is long longValue)
+            { 
+                return (T)(object)unchecked((ulong)longValue);
+            }
+
             return (T)Convert.ChangeType(hash[name], typeof(T));
         }
 

@@ -14,7 +14,14 @@ namespace FrostySdk.IO
         {
             get
             {
-                Type type = TypeLibrary.GetType(classGuids[instances[0].ClassRef]);
+                if (!isValid || instances.Count == 0)
+                    return "";
+
+                int classRef = instances[0].ClassRef;
+                if (classRef < 0 || classRef >= classGuids.Count)
+                    return "";
+
+                Type type = TypeLibrary.GetType(classGuids[classRef]);
                 return type != null ? type.Name : "";
             }
         }
