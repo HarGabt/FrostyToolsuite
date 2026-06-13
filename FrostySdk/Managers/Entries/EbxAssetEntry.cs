@@ -11,7 +11,7 @@ namespace FrostySdk.Managers.Entries
             {
                 // TODO: @techdebt find better method to move blueprint bundles to sub-folder, this will most likely break writing.
                 if (ProfilesLibrary.IsLoaded(ProfileVersion.Battlefield2042, ProfileVersion.Battlefield6) &&
-                    (base.Name.StartsWith("cd_") || base.Name.StartsWith("md_") || base.Name.StartsWith("gad_") &! base.Name.Contains("win32/")))
+                    (base.Name.StartsWith("cd_") || base.Name.StartsWith("md_") || base.Name.StartsWith("gad_") || base.Name.StartsWith("dpf_") || base.Name.StartsWith("dsp_") || base.Name.StartsWith("ob_") || base.Name.StartsWith("ov_") || base.Name.StartsWith("pf_") & !base.Name.Contains("win32/")))
                 {
                     return $"win32/{base.Name}";
                 }
