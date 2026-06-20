@@ -1,0 +1,3 @@
+Type = "SendEventEntityData"
+Header = "SendEvent"
+InputEvent = "Trigger"

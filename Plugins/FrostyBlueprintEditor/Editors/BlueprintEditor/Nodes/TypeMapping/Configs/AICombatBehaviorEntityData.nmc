@@ -1,0 +1,4 @@
+﻿Type = "AICombatBehaviorEntityData"
+Header = "Combat Behavior"
+OutputLink = "Spawners"
+OutputLink = "Vehicles"

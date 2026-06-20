@@ -1,0 +1,69 @@
+﻿<controls:FrostyDockableWindow x:Class="BlueprintEditorPlugin.Windows.HashingUtilsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:BlueprintEditorPlugin.Windows"
+        xmlns:controls="clr-namespace:Frosty.Controls;assembly=FrostyControls"
+        mc:Ignorable="d"
+        Title="Hashing Utilities" Height="270" Width="450"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/BlueprintEditorPlugin;component/Themes/Generic.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    
+    <Grid Background="{StaticResource WindowBackground}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="200" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        
+        <Grid Background="{StaticResource ListBackground}">
+            <StackPanel Orientation="Vertical" Width="300"
+                        Margin="20">
+                <Border BorderBrush="{StaticResource ControlBackground}" BorderThickness="2"
+                        Margin="0,2,0,16">
+                    <controls:FrostyWatermarkTextBox WatermarkText="String to Hash"
+                                                     KeyUp="StringText_OnKeyUp"
+                                                     x:Name="StringText" 
+                                                     Height="24"
+                                                     VerticalContentAlignment="Center" />
+                </Border>
+                
+                <Border BorderBrush="{StaticResource ControlBackground}" BorderThickness="2"
+                        Margin="0,2,0,8">
+                    <controls:FrostyWatermarkTextBox WatermarkText="Hex Hash"
+                                                     KeyUp="HexText_OnKeyUp"
+                                                     x:Name="HexText" 
+                                                     Height="24"
+                                                     VerticalContentAlignment="Center" />
+                </Border>
+
+                <Border BorderBrush="{StaticResource ControlBackground}" BorderThickness="2"
+                        Margin="0,2,0,8">
+                    <controls:FrostyWatermarkTextBox WatermarkText="Integer Hash"
+                                                     KeyUp="IntText_OnKeyUp"
+                                                     x:Name="IntText" 
+                                                     Height="25"
+                                                     VerticalContentAlignment="Center" />
+                </Border>
+            </StackPanel>
+        </Grid>
+        
+        <StackPanel Grid.Row="1">
+            <Button x:Name="OkButton"
+                    Margin="8,8,16,8"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top"
+                    Width="100"
+                    Height="35"
+                    Content="OK"
+                    Click="OkButton_OnClick"/>
+        </StackPanel>
+    </Grid>
+</controls:FrostyDockableWindow>

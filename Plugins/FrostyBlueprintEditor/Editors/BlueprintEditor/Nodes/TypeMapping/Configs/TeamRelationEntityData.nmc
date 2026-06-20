@@ -1,0 +1,8 @@
+Type = "TeamRelationEntityData"
+Header = "TeamRelation"
+InputProperty = "A"
+InputProperty = "B"
+InputEvent = "In"
+OutputEvent = "OnFriendly"
+OutputEvent = "OnHostile"
+OutputEvent = "0xae468f51"

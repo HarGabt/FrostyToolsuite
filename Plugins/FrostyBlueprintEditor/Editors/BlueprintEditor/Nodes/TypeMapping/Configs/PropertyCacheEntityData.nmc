@@ -1,0 +1,5 @@
+Type = "PropertyCacheEntityData"
+Header = "Property Cache"
+InputProperty = "InValue"
+InputEvent = "Load"
+OutputProperty = "Value"

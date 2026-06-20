@@ -1,0 +1,7 @@
+﻿Type = "AIVehicleBehaviorEntityData"
+Header = "Character Vehicle Behavior"
+OutputLink = "Spawners"
+OutputLink = "Vehicle"
+InputProperty = "AllowFire"
+InputProperty = "AllowDetectHuman"
+InputProperty = "AllowFireDuringScriptedAnimations"

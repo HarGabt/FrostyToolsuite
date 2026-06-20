@@ -1,0 +1,6 @@
+Type = "ConditionalTransformEntityData"
+Header = "ConditionalTransform"
+InputProperty = "ValueIfTrue"
+InputProperty = "ValueIfFalse"
+InputProperty = "Condition"
+OutputProperty = "Output"

@@ -129,6 +129,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FrostyStringGeneration", ".
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FontPlugin", "..\Plugins\FontPlugin\FontPlugin.csproj", "{11188037-DD32-DBE8-C0D5-215A5AF84B4F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlueprintEditorPlugin", "..\Plugins\FrostyBlueprintEditor\BlueprintEditorPlugin.csproj", "{8B8E8ABD-F146-F2A0-D40E-377DF907E46D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Developer - Debug|x64 = Developer - Debug|x64
@@ -638,6 +640,16 @@ Global
 		{11188037-DD32-DBE8-C0D5-215A5AF84B4F}.Release - Final|x64.Build.0 = Release - Final|x64
 		{11188037-DD32-DBE8-C0D5-215A5AF84B4F}.Release|x64.ActiveCfg = Release - Alpha|x64
 		{11188037-DD32-DBE8-C0D5-215A5AF84B4F}.Release|x64.Build.0 = Release - Alpha|x64
+		{8B8E8ABD-F146-F2A0-D40E-377DF907E46D}.Developer - Debug|x64.ActiveCfg = Developer - Debug|x64
+		{8B8E8ABD-F146-F2A0-D40E-377DF907E46D}.Developer - Debug|x64.Build.0 = Developer - Debug|x64
+		{8B8E8ABD-F146-F2A0-D40E-377DF907E46D}.Release - Alpha|x64.ActiveCfg = Release - Alpha|x64
+		{8B8E8ABD-F146-F2A0-D40E-377DF907E46D}.Release - Alpha|x64.Build.0 = Release - Alpha|x64
+		{8B8E8ABD-F146-F2A0-D40E-377DF907E46D}.Release - Beta|x64.ActiveCfg = Release - Beta|x64
+		{8B8E8ABD-F146-F2A0-D40E-377DF907E46D}.Release - Beta|x64.Build.0 = Release - Beta|x64
+		{8B8E8ABD-F146-F2A0-D40E-377DF907E46D}.Release - Final|x64.ActiveCfg = Release - Final|x64
+		{8B8E8ABD-F146-F2A0-D40E-377DF907E46D}.Release - Final|x64.Build.0 = Release - Final|x64
+		{8B8E8ABD-F146-F2A0-D40E-377DF907E46D}.Release|x64.ActiveCfg = Release - Alpha|x64
+		{8B8E8ABD-F146-F2A0-D40E-377DF907E46D}.Release|x64.Build.0 = Release - Alpha|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -684,6 +696,7 @@ Global
 		{940F28C6-3F67-54FB-E4EE-06287F7B7C61} = {492048B6-848D-4675-A9BF-34A4751303F2}
 		{A25C4A40-40F8-CECF-5228-0EECD08112CF} = {492048B6-848D-4675-A9BF-34A4751303F2}
 		{11188037-DD32-DBE8-C0D5-215A5AF84B4F} = {492048B6-848D-4675-A9BF-34A4751303F2}
+		{8B8E8ABD-F146-F2A0-D40E-377DF907E46D} = {492048B6-848D-4675-A9BF-34A4751303F2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C0B22EF1-4C3F-45B9-9F08-9793ED912199}

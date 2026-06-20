@@ -1,0 +1,7 @@
+Type = "AIKillCounterEntityData"
+Header = "AIKillCounter"
+InputEvent = "Enable"
+InputEvent = "Disable"
+OutputProperty = "Alive"
+OutputEvent = "AliveThresholdTrigger"
+OutputLink = "Spawners"

@@ -1,0 +1,4 @@
+Type = "PbrSphereLightEntityData"
+Header = "PbrSphereLight"
+InputEvent = "Enable"
+InputEvent = "Disable"

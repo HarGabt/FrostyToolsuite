@@ -1,0 +1,4 @@
+Type = "AICombatGroupEntityData"
+Header = "AICombatGroup"
+InputEvent = "Alert"
+OutputLink = "Spawners"

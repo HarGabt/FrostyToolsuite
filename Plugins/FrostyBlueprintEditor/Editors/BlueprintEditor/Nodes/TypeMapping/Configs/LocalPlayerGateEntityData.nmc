@@ -1,0 +1,5 @@
+Type = "LocalPlayerGateEntityData"
+Header = "LocalPlayerGate"
+InputEvent = "In"
+OutputEvent = "LocalPlayerId_0"
+OutputEvent = "LocalPlayerId_1"

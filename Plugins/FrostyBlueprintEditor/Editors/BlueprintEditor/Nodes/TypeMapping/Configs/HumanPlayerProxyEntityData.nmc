@@ -1,0 +1,4 @@
+Type = "HumanPlayerProxyEntityData"
+Header = "HumanPlayerProxy"
+OutputEvent = "OnPlayerSpawnEnabled"
+OutputEvent = "OnPlayerSpawnDisabled"

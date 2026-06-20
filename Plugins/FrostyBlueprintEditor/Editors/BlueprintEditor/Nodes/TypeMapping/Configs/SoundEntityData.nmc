@@ -1,0 +1,6 @@
+Type = "SoundEntityData"
+Header = "Sound"
+InputEvent = "Start"
+InputEvent = "Stop"
+InputEvent = "Triggered"
+InputProperty = "Transform"

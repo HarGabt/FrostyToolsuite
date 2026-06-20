@@ -1,0 +1,4 @@
+Type = "TeamIdToIntEntityData"
+Header = "TeamIdToInt"
+InputProperty = "TeamId"
+OutputProperty = "IntOut"

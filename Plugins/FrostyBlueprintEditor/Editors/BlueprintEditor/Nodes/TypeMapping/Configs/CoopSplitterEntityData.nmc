@@ -1,0 +1,5 @@
+Type = "CoopSplitterEntityData"
+Header = "CoopSplitter"
+InputEvent = "Impulse"
+OutputEvent = "0x6310f992"
+OutputEvent = "TwoPlayers"

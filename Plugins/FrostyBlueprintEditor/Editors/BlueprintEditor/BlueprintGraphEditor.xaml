@@ -1,0 +1,1560 @@
+﻿<UserControl x:Class="BlueprintEditorPlugin.Editors.BlueprintEditor.BlueprintGraphEditor"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:BlueprintEditorPlugin.Editors.BlueprintEditor"
+             xmlns:options="clr-namespace:BlueprintEditorPlugin.Options"
+             xmlns:connections="clr-namespace:BlueprintEditorPlugin.Editors.BlueprintEditor.Connections"
+             xmlns:nodes="clr-namespace:BlueprintEditorPlugin.Editors.BlueprintEditor.Nodes"
+             xmlns:ports="clr-namespace:BlueprintEditorPlugin.Editors.BlueprintEditor.Nodes.Ports"
+             xmlns:pending="clr-namespace:BlueprintEditorPlugin.Editors.BlueprintEditor.NodeWrangler"
+             xmlns:controls="clr-namespace:Frosty.Controls;assembly=FrostyControls"
+             xmlns:controls1="clr-namespace:Frosty.Core.Controls;assembly=FrostyCore"
+             xmlns:status="clr-namespace:BlueprintEditorPlugin.Models.Status"
+             xmlns:utilities="clr-namespace:BlueprintEditorPlugin.Editors.BlueprintEditor.Nodes.Utilities"
+             xmlns:presentationOptions="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
+             xmlns:wireview="clr-namespace:BlueprintEditorPlugin.Views.Wires"
+             xmlns:propertyGrid="clr-namespace:BlueprintEditorPlugin.Editors.PropertyGrid"
+             xmlns:networking="clr-namespace:BlueprintEditorPlugin.Models.Entities.Networking"
+             xmlns:connections1="clr-namespace:BlueprintEditorPlugin.Views.Connections"
+             xmlns:nodes1="clr-namespace:BlueprintEditorPlugin.Views.Nodes"
+             xmlns:editor="clr-namespace:BlueprintEditorPlugin.Views.Editor"
+             xmlns:nodes2="clr-namespace:BlueprintEditorPlugin.Models.Nodes"
+             xmlns:buttons="clr-namespace:BlueprintEditorPlugin.Views.Buttons"
+             xmlns:treeViews="clr-namespace:BlueprintEditorPlugin.Views.TreeViews"
+             mc:Ignorable="d"
+             d:DesignHeight="702" d:DesignWidth="1520">
+    
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/BlueprintEditorPlugin;component/Themes/Generic.xaml"/>
+                <ResourceDictionary Source="/BlueprintEditorPlugin;component/Editors/PropertyGrid/BlueprintPropertyGrid.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            
+            <DataTemplate DataType="{x:Type connections:EntityConnection}"
+                          x:Key="ConnectionTemplate">
+                <Canvas>
+                    <wireview:Wire Source="{Binding Source.Anchor}" Target="{Binding Target.Anchor}"
+                                   StrokeThickness="{x:Static options:EditorOptions.WireThickness}"
+                                   RenderOptions.CachingHint="Cache"
+                                   RenderOptions.CacheInvalidationThresholdMaximum="4"
+                                   RenderOptions.CacheInvalidationThresholdMinimum="0.85"
+                                   RenderOptions.BitmapScalingMode="Linear">
+                        <wireview:Wire.Style>
+                            <Style TargetType="{x:Type wireview:Wire}">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Type, Mode=OneTime}"
+                                                 Value="{x:Static connections:ConnectionType.Event}">
+                                        <Setter Property="Stroke" Value="White" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Type, Mode=OneTime}"
+                                                 Value="{x:Static connections:ConnectionType.Link}">
+                                        <Setter Property="Stroke" Value="{StaticResource LinkConnectionColor}" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Type, Mode=OneTime}"
+                                                 Value="{x:Static connections:ConnectionType.Property}">
+                                        <Setter Property="Stroke"
+                                                Value="{StaticResource PropertyConnectionColor}" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding IsSelected}"
+                                                 Value="true">
+                                        <Setter Property="Stroke"
+                                                Value="{StaticResource NodeSelectedColor}" />
+                                    </DataTrigger>
+                                    
+                                    <DataTrigger Binding="{Binding CurrentStatus.Status}"
+                                                 Value="{x:Static status:EditorStatus.Flawed}">
+                                        <Setter Property="Effect">
+                                            <Setter.Value>
+                                                <DropShadowEffect RenderingBias="Performance"
+                                                                  Color="Goldenrod"
+                                                                  Direction="315" />
+                                            </Setter.Value>
+                                        </Setter>
+                                        <Setter Property="ToolTip"
+                                                Value="{Binding CurrentStatus.ToolTip}" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding CurrentStatus.Status}"
+                                                 Value="{x:Static status:EditorStatus.Broken}">
+                                        <Setter Property="Effect">
+                                            <Setter.Value>
+                                                <DropShadowEffect RenderingBias="Performance"
+                                                                  Color="Red"
+                                                                  Direction="315" />
+                                            </Setter.Value>
+                                        </Setter>
+                                        <Setter Property="ToolTip"
+                                                Value="{Binding CurrentStatus.ToolTip}" />
+                                    </DataTrigger>
+                                    
+                                    <DataTrigger Binding="{Binding HasPlayer}" Value="true">
+                                        <Setter Property="Effect">
+                                            <Setter.Value>
+                                                <DropShadowEffect RenderingBias="Performance"
+                                                                  Color="#5FD95F"
+                                                                  Direction="315" />
+                                            </Setter.Value>
+                                        </Setter>
+                                        <Setter Property="ToolTip"
+                                                Value="This connection has a Player Event attatched to it" />
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding PropType}"
+                                                 Value="{x:Static networking:PropertyType.Interface}">
+                                        <Setter Property="Effect">
+                                            <Setter.Value>
+                                                <DropShadowEffect RenderingBias="Performance"
+                                                                  Color="#2D9B2D"
+                                                                  Direction="315" />
+                                            </Setter.Value>
+                                        </Setter>
+                                        <Setter Property="ToolTip"
+                                                Value="This connection goes into an interface" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </wireview:Wire.Style>
+                    </wireview:Wire>
+                                
+                    <Canvas.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Edit" Command="{Binding EditCommand}">
+                                <MenuItem.Icon>
+                                    <Image Source="pack://application:,,,/FrostyEditor;component/images/openasset.png"/>
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Header="Fix Problems" Command="{Binding FixCommand}" 
+                                      ToolTip="{Binding CurrentStatus.ToolTip}">
+                                <MenuItem.Style>
+                                    <Style TargetType="{x:Type MenuItem}">
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding CurrentStatus.Status}"
+                                                         Value="{x:Static status:EditorStatus.Flawed}">
+                                                <Setter Property="Visibility" Value="Visible" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding CurrentStatus.Status}"
+                                                         Value="{x:Static status:EditorStatus.Broken}">
+                                                <Setter Property="Visibility" Value="Visible" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </MenuItem.Style>
+                                <MenuItem.Icon>
+                                    <Image Source="pack://application:,,,/FrostyCore;component/images/cross.png"/>
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Header="Go to Source" Click="ConnectionGoToSource_OnClick">
+                                <MenuItem.Icon>
+                                    <Image
+                                        Source="pack://application:,,,/FrostyEditor;component/images/assign.png" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Header="Go to Target" Click="ConnectionGoToTarget_OnClick">
+                                <MenuItem.Icon>
+                                    <Image
+                                        Source="pack://application:,,,/FrostyEditor;component/images/assign.png" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Header="Remove" Command="{Binding RemoveCommand}">
+                                <MenuItem.Icon>
+                                    <Image Source="pack://application:,,,/FrostyEditor;component/images/clear.png"/>
+                                </MenuItem.Icon>
+                            </MenuItem>
+                        </ContextMenu>
+                    </Canvas.ContextMenu>
+                </Canvas>
+            </DataTemplate>
+            
+            <DataTemplate DataType="{x:Type pending:EntityPendingConnection}"
+                          x:Key="PendingConnectionTemplate">
+                <connections1:PendingConnection StartedCommand="{Binding Start}"
+                                          CompletedCommand="{Binding Finish}"
+                                          AllowOnlyConnectors="True"
+                                          EnableSnapping="True"
+                                          SourceAnchor="{Binding SourceAnchor, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"
+                                          TargetAnchor="{Binding TargetAnchor, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}"
+                                          IsVisible="False">
+                    <connections1:PendingConnection.Template>
+                        <ControlTemplate TargetType="{x:Type connections1:PendingConnection}">
+                            <Canvas>
+                                <wireview:CurvedWire Source="{Binding SourceAnchor}" Target="{Binding TargetAnchor}"
+                                                     CurvePoint1="{Binding CurvePoint1}"
+                                                     CurvePoint2="{Binding CurvePoint2}"
+                                                     StrokeThickness="{x:Static options:EditorOptions.WireThickness}">
+                                    <wireview:CurvedWire.Style>
+                                        <Style TargetType="{x:Type wireview:CurvedWire}">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Type}"
+                                                             Value="{x:Static connections:ConnectionType.Event}">
+                                                    <Setter Property="Stroke" Value="White" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Type}"
+                                                             Value="{x:Static connections:ConnectionType.Link}">
+                                                    <Setter Property="Stroke" Value="{StaticResource LinkConnectionColor}" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Type}"
+                                                             Value="{x:Static connections:ConnectionType.Property}">
+                                                    <Setter Property="Stroke"
+                                                            Value="{StaticResource PropertyConnectionColor}" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </wireview:CurvedWire.Style>
+                                </wireview:CurvedWire>
+                            </Canvas>
+                        </ControlTemplate>
+                    </connections1:PendingConnection.Template>
+                </connections1:PendingConnection>
+            </DataTemplate>
+            
+            <ControlTemplate x:Key="InputConnectorTemplate">
+                <Ellipse Width="{x:Static options:EditorOptions.PortSize}"
+                         Height="{x:Static options:EditorOptions.PortSize}"
+                         VerticalAlignment="Center"
+                         HorizontalAlignment="Left">
+                    <Ellipse.RenderTransform>
+                        <TranslateTransform
+                            X="{x:Static options:EditorOptions.InputPos}" />
+                    </Ellipse.RenderTransform>
+
+                    <Ellipse.Style>
+                        <Style TargetType="{x:Type Ellipse}">
+                            <Setter Property="Fill" Value="Red" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Type, Mode=OneTime}"
+                                             Value="{x:Static connections:ConnectionType.Event}">
+                                    <Setter Property="Fill" Value="White" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Type, Mode=OneTime}"
+                                             Value="{x:Static connections:ConnectionType.Property}">
+                                    <Setter Property="Fill"
+                                            Value="{StaticResource PropertyConnectionColor}" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Type, Mode=OneTime}"
+                                             Value="{x:Static connections:ConnectionType.Link}">
+                                    <Setter Property="Fill"
+                                            Value="{StaticResource LinkConnectionColor}" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsPendingConnection, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=nodes1:NodeInput}}"
+                                             Value="True">
+                                    <Setter Property="Fill" Value="{StaticResource NodeSelectedColor}" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=nodes1:NodeInput}}"
+                                             Value="True">
+                                    <Setter Property="Fill" Value="{StaticResource NodeSelectedColor}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Ellipse.Style>
+                </Ellipse>
+            </ControlTemplate>
+            
+            <ControlTemplate x:Key="OutputConnectorTemplate">
+                <Ellipse
+                    Width="{x:Static options:EditorOptions.PortSize}"
+                    Height="{x:Static options:EditorOptions.PortSize}"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Left">
+                    <Ellipse.RenderTransform>
+                        <TranslateTransform
+                            X="{x:Static options:EditorOptions.OutputPos}" />
+                    </Ellipse.RenderTransform>
+
+                    <Ellipse.Style>
+                        <Style TargetType="{x:Type Ellipse}">
+                            <Setter Property="Fill" Value="Red" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Type, Mode=OneTime}"
+                                             Value="{x:Static connections:ConnectionType.Event}">
+                                    <Setter Property="Fill" Value="White" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Type, Mode=OneTime}"
+                                             Value="{x:Static connections:ConnectionType.Property}">
+                                    <Setter Property="Fill"
+                                            Value="{StaticResource PropertyConnectionColor}" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Type, Mode=OneTime}"
+                                             Value="{x:Static connections:ConnectionType.Link}">
+                                    <Setter Property="Fill"
+                                            Value="{StaticResource LinkConnectionColor}" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsPendingConnection, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=nodes1:NodeOutput}}"
+                                             Value="True">
+                                    <Setter Property="Fill" Value="{StaticResource NodeSelectedColor}" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=nodes1:NodeOutput}}"
+                                             Value="True">
+                                    <Setter Property="Fill" Value="{StaticResource NodeSelectedColor}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Ellipse.Style>
+                </Ellipse>
+            </ControlTemplate>
+            
+            <DataTemplate DataType="{x:Type ports:EntityInput}"
+                          x:Key="GenericInputTemplate">
+                <nodes1:NodeInput IsConnected="{Binding IsConnected}"
+                                  Anchor="{Binding Anchor, Mode=OneWayToSource}"
+                                  BorderBrush="{StaticResource NodeSelectedColor}"
+                                  ConnectorTemplate="{StaticResource InputConnectorTemplate}"
+                                  ToolTip="{Binding ToolTip}">
+                    <nodes1:NodeInput.Style>
+                        <Style TargetType="{x:Type nodes1:NodeInput}">
+                            <Setter Property="Visibility" Value="Visible" />
+                            <Style.Triggers>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding IsConnected}"
+                                                   Value="false" />
+                                        <Condition Binding="{Binding Node.IsFlatted}"
+                                                   Value="true" />
+                                    </MultiDataTrigger.Conditions>
+                                    <MultiDataTrigger.Setters>
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </MultiDataTrigger.Setters>
+                                </MultiDataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </nodes1:NodeInput.Style>
+
+                    <nodes1:NodeInput.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock FontFamily="Consolas"
+                                       Text="{Binding Name}"
+                                       FontSize="10"
+                                       Foreground="Black"
+                                       HorizontalAlignment="Left"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,3,0" 
+                                       DataContext="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=1,AncestorType=nodes1:NodeInput}}" />
+                        </DataTemplate>
+                    </nodes1:NodeInput.HeaderTemplate>
+                    <nodes1:NodeInput.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Edit" Command="{Binding EditCommand}">
+                                <MenuItem.Icon>
+                                    <Image Source="pack://application:,,,/FrostyCore;component/images/rename.png"/>
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Header="Redirect Port" Command="{Binding RedirectCommand}"
+                                      ToolTip="Add a redirect node to this port and its connections">
+                                <MenuItem.Icon>
+                                    <Image Source="pack://application:,,,/BlueprintEditorPlugin;component/images/AddRedirectIcon.png"/>
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Header="Delete" Command="{Binding DeleteCommand}">
+                                <MenuItem.Icon>
+                                    <Image Source="pack://application:,,,/FrostyCore;component/images/clear.png"/>
+                                </MenuItem.Icon>
+                            </MenuItem>
+                        </ContextMenu>
+                    </nodes1:NodeInput.ContextMenu>
+                </nodes1:NodeInput>
+            </DataTemplate>
+            
+            <DataTemplate DataType="{x:Type ports:EntityOutput}"
+                          x:Key="GenericOutputTemplate">
+                <nodes1:NodeOutput IsConnected="{Binding IsConnected}"
+                                   Anchor="{Binding Anchor, Mode=OneWayToSource}"
+                                   BorderBrush="{StaticResource NodeSelectedColor}"
+                                   ConnectorTemplate="{StaticResource OutputConnectorTemplate}"
+                                   ToolTip="{Binding ToolTip}">
+                    <nodes1:NodeOutput.Style>
+                        <Style TargetType="{x:Type nodes1:NodeOutput}">
+                            <Setter Property="Visibility" Value="Visible" />
+                            <Style.Triggers>
+                                <MultiDataTrigger>
+                                    <MultiDataTrigger.Conditions>
+                                        <Condition Binding="{Binding IsConnected}"
+                                                   Value="false" />
+                                        <Condition Binding="{Binding Node.IsFlatted}"
+                                                   Value="true" />
+                                    </MultiDataTrigger.Conditions>
+                                    <MultiDataTrigger.Setters>
+                                        <Setter Property="Visibility" Value="Collapsed" />
+                                    </MultiDataTrigger.Setters>
+                                </MultiDataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </nodes1:NodeOutput.Style>
+
+                    <nodes1:NodeOutput.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock FontFamily="Consolas"
+                                       Text="{Binding Name}"
+                                       FontSize="10"
+                                       Foreground="Black"
+                                       HorizontalAlignment="Left"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,3,0" 
+                                       DataContext="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=1,AncestorType=nodes1:NodeOutput}}" />
+                        </DataTemplate>
+                    </nodes1:NodeOutput.HeaderTemplate>
+                                            
+                    <nodes1:NodeOutput.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Edit" Command="{Binding EditCommand}">
+                                <MenuItem.Icon>
+                                    <Image Source="pack://application:,,,/FrostyCore;component/images/rename.png"/>
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Header="Redirect Port" Command="{Binding RedirectCommand}"
+                                      ToolTip="Add a redirect node to this port and its connections">
+                                <MenuItem.Icon>
+                                    <Image Source="pack://application:,,,/BlueprintEditorPlugin;component/images/AddRedirectIcon.png"/>
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Header="Delete" Command="{Binding DeleteCommand}">
+                                <MenuItem.Icon>
+                                    <Image Source="pack://application:,,,/FrostyCore;component/images/clear.png"/>
+                                </MenuItem.Icon>
+                            </MenuItem>
+                        </ContextMenu>
+                    </nodes1:NodeOutput.ContextMenu>
+                </nodes1:NodeOutput>
+            </DataTemplate>
+            
+            <DataTemplate DataType="{x:Type nodes:EntityNode}">
+                <nodes1:Node Header="{Binding Header}"
+                             Input="{Binding Inputs}"
+                             Output="{Binding Outputs}"
+                             ToolTip="{Binding ToolTip}"
+                             InputConnectorTemplate="{StaticResource GenericInputTemplate}"
+                             OutputConnectorTemplate="{StaticResource GenericOutputTemplate}">
+                    <nodes1:Node.HeaderTemplate>
+                        <DataTemplate>
+                            <Grid
+                                DataContext="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=1,AncestorType=nodes1:Node}}">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock FontFamily="Consolas"
+                                               Text="{Binding Header}"
+                                               Foreground="White"
+                                               HorizontalAlignment="Left"
+                                               VerticalAlignment="Top"
+                                               RenderOptions.BitmapScalingMode="Linear"
+                                               RenderOptions.EdgeMode="Aliased">
+                                        <TextBlock.Style>
+                                            <Style TargetType="{x:Type TextBlock}">
+                                                <Setter Property="FontSize" Value="10" />
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Footer}"
+                                                                 Value="{x:Null}">
+                                                        <Setter Property="FontSize" Value="12" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+
+                                    <!--NCS Grid-->
+                                    <Grid Grid.Column="1"
+                                          HorizontalAlignment="Right"
+                                          Margin="4,0,0,0">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        
+                                        <Grid.Style>
+                                            <Style TargetType="{x:Type Grid}">
+                                                <Setter Property="Visibility" Value="Visible" />
+                                                <Style.Triggers>
+                                                    <!--Don't render above this zoom level-->
+                                                    <DataTrigger Binding="{Binding ViewportZoom, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=1,AncestorType=editor:NodifyEditor}}"
+                                                                 Value="0.5">
+                                                        <Setter Property="Visibility" Value="Collapsed" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Grid.Style>
+                                        
+                                        <ToggleButton Grid.Column="1" Width="13"
+                                                      Height="13"
+                                                      HorizontalAlignment="Right"
+                                                      VerticalAlignment="Top"
+                                                      Background="Transparent"
+                                                      BorderBrush="Transparent"
+                                                      Margin="4,0,0,0"
+                                                      IsChecked="{Binding IsFlatted, Mode=TwoWay}">
+                                            <ToggleButton.Template>
+                                                <ControlTemplate TargetType="{x:Type ToggleButton}">
+                                                    <Canvas>
+                                                        <Rectangle Fill="White" 
+                                                                   Opacity="0.15" 
+                                                                   Width="17"
+                                                                   Height="17"
+                                                                   RadiusX="3"
+                                                                   RadiusY="3"
+                                                                   x:Name="NodeCollapseFrost" />
+                                                        <Path Width="17" Height="17" Fill="White" Data="M5 6 L5 6 13 6 9 11 Z"
+                                                              RenderTransformOrigin="0.5,0.5">
+                                                            <Path.Style>
+                                                                <Style TargetType="{x:Type Path}">
+                                                                    <Setter Property="RenderTransform">
+                                                                        <Setter.Value>
+                                                                            <ScaleTransform ScaleY="1" />
+                                                                        </Setter.Value>
+                                                                    </Setter>
+                                                                                    
+                                                                    <Style.Triggers>
+                                                                        <DataTrigger Binding="{Binding IsFlatted}"
+                                                                            Value="True">
+                                                                            <DataTrigger.Setters>
+                                                                                <Setter Property="RenderTransform">
+                                                                                    <Setter.Value>
+                                                                                        <ScaleTransform ScaleY="-1" />
+                                                                                    </Setter.Value>
+                                                                                </Setter>
+                                                                            </DataTrigger.Setters>
+                                                                        </DataTrigger>
+                                                                    </Style.Triggers>
+                                                                </Style>
+                                                            </Path.Style>
+                                                        </Path>
+                                                    </Canvas>
+                                                                    
+                                                    <ControlTemplate.Triggers>
+                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                            <Trigger.Setters>
+                                                                <Setter Property="Opacity" TargetName="NodeCollapseFrost" Value="0.25"/>
+                                                            </Trigger.Setters>
+                                                        </Trigger>
+                                                        <Trigger Property="IsPressed" Value="True">
+                                                            <Trigger.Setters>
+                                                                <Setter Property="Fill" TargetName="NodeCollapseFrost" Value="{StaticResource NodeSelectedColor}"/>
+                                                                <Setter Property="Opacity" TargetName="NodeCollapseFrost" Value="0.75"/>
+                                                            </Trigger.Setters>
+                                                        </Trigger>
+                                                    </ControlTemplate.Triggers>
+                                                </ControlTemplate>
+                                            </ToggleButton.Template>
+                                        </ToggleButton>
+                                        <StackPanel Grid.Column="0" Orientation="Horizontal">
+                                            <Rectangle Width="6" Height="6"
+                                                       HorizontalAlignment="Left"
+                                                       VerticalAlignment="Top"
+                                                       Margin="0,0,2,0">
+                                                <Rectangle.Style>
+                                                    <Style TargetType="{x:Type Rectangle}">
+                                                        <Setter Property="Fill" Value="DimGray" />
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Realm}"
+                                                                         Value="{x:Static networking:Realm.NetworkedClient}">
+                                                                <Setter Property="Fill"
+                                                                        Value="{StaticResource NodeSelectedColor}" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding Realm}"
+                                                                         Value="{x:Static networking:Realm.NetworkedClientAndServer}">
+                                                                <Setter Property="Fill"
+                                                                        Value="{StaticResource NodeSelectedColor}" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding Realm}"
+                                                                         Value="{x:Static networking:Realm.Invalid}">
+                                                                <Setter Property="Fill" Value="DarkRed" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Rectangle.Style>
+                                                <Rectangle.OpacityMask>
+                                                    <ImageBrush
+                                                        ImageSource="pack://application:,,,/BlueprintEditorPlugin;component/Images/Networked.png" 
+                                                        RenderOptions.CachingHint="Cache"
+                                                        RenderOptions.CacheInvalidationThresholdMaximum="6"
+                                                        RenderOptions.CacheInvalidationThresholdMinimum="0.85"
+                                                        RenderOptions.BitmapScalingMode="Linear"
+                                                        RenderOptions.EdgeMode="Aliased"/>
+                                                </Rectangle.OpacityMask>
+                                            </Rectangle>
+                                            <Rectangle Width="6" Height="6"
+                                                       VerticalAlignment="Top"
+                                                       HorizontalAlignment="Left">
+                                                <Rectangle.Style>
+                                                    <Style TargetType="{x:Type Rectangle}">
+                                                        <Setter Property="Fill" Value="DimGray" />
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Realm}"
+                                                                         Value="{x:Static networking:Realm.NetworkedClient}">
+                                                                <Setter Property="Fill"
+                                                                        Value="{StaticResource NodeSelectedColor}" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding Realm}"
+                                                                         Value="{x:Static networking:Realm.NetworkedClientAndServer}">
+                                                                <Setter Property="Fill"
+                                                                        Value="{StaticResource NodeSelectedColor}" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding Realm}"
+                                                                         Value="{x:Static networking:Realm.Client}">
+                                                                <Setter Property="Fill"
+                                                                        Value="{StaticResource NodeSelectedColor}" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding Realm}"
+                                                                         Value="{x:Static networking:Realm.ClientAndServer}">
+                                                                <Setter Property="Fill"
+                                                                        Value="{StaticResource NodeSelectedColor}" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding Realm}"
+                                                                         Value="{x:Static networking:Realm.Invalid}">
+                                                                <Setter Property="Fill" Value="DarkRed" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Rectangle.Style>
+                                                <Rectangle.OpacityMask>
+                                                    <ImageBrush
+                                                        ImageSource="pack://application:,,,/BlueprintEditorPlugin;component/Images/Client.png" 
+                                                        RenderOptions.CachingHint="Cache"
+                                                        RenderOptions.CacheInvalidationThresholdMaximum="6"
+                                                        RenderOptions.CacheInvalidationThresholdMinimum="0.85"
+                                                        RenderOptions.BitmapScalingMode="Linear"
+                                                        RenderOptions.EdgeMode="Aliased"/>
+                                                </Rectangle.OpacityMask>
+                                            </Rectangle>
+                                            <Rectangle Width="6" Height="6"
+                                                       VerticalAlignment="Top"
+                                                       HorizontalAlignment="Left">
+                                                <Rectangle.Style>
+                                                    <Style TargetType="{x:Type Rectangle}">
+                                                        <Setter Property="Fill" Value="DimGray" />
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Realm}"
+                                                                         Value="{x:Static networking:Realm.Server}">
+                                                                <Setter Property="Fill"
+                                                                        Value="{StaticResource NodeSelectedColor}" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding Realm}"
+                                                                         Value="{x:Static networking:Realm.NetworkedClientAndServer}">
+                                                                <Setter Property="Fill"
+                                                                        Value="{StaticResource NodeSelectedColor}" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding Realm}"
+                                                                         Value="{x:Static networking:Realm.ClientAndServer}">
+                                                                <Setter Property="Fill"
+                                                                        Value="{StaticResource NodeSelectedColor}" />
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding Realm}"
+                                                                         Value="{x:Static networking:Realm.Invalid}">
+                                                                <Setter Property="Fill" Value="DarkRed" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Rectangle.Style>
+                                                <Rectangle.OpacityMask>
+                                                    <ImageBrush
+                                                        ImageSource="pack://application:,,,/BlueprintEditorPlugin;component/Images/Server.png" 
+                                                        RenderOptions.CachingHint="Cache"
+                                                        RenderOptions.CacheInvalidationThresholdMaximum="6"
+                                                        RenderOptions.CacheInvalidationThresholdMinimum="0.85"
+                                                        RenderOptions.BitmapScalingMode="Linear"
+                                                        RenderOptions.EdgeMode="Aliased"/>
+                                                </Rectangle.OpacityMask>
+                                            </Rectangle>
+                                        </StackPanel>
+                                    </Grid>
+                                </Grid>
+
+                                <TextBlock Grid.Row="1" FontFamily="Consolas"
+                                           Text="{Binding Footer}"
+                                           FontSize="6"
+                                           Foreground="DarkGray"
+                                           HorizontalAlignment="Left"
+                                           VerticalAlignment="Top"
+                                           Margin="0,0,14,0"
+                                           RenderOptions.BitmapScalingMode="Linear"
+                                           RenderOptions.EdgeMode="Aliased">
+                                    <TextBlock.Style>
+                                        <Style TargetType="{x:Type TextBlock}">
+                                            <Setter Property="Visibility" Value="Visible" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Footer}" Value="{x:Null}">
+                                                    <Setter Property="Visibility" Value="Collapsed" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                            </Grid>
+                        </DataTemplate>
+                    </nodes1:Node.HeaderTemplate>
+                                
+                    <nodes1:Node.ContextMenu>
+                        <ContextMenu x:Name="EntityContextMenu">
+                            <MenuItem Header="Add Port" Command="{Binding AddPortCommand}">
+                                <MenuItem.Icon>
+                                    <Image Source="pack://application:,,,/FrostyEditor;component/images/more.png"/>
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Header="Redirect Inputs" Command="{Binding RedirectInCommand}">
+                                <MenuItem.Icon>
+                                    <Image Source="pack://application:,,,/BlueprintEditorPlugin;component/images/AddRedirectIcon.png"/>
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Header="Redirect Outputs" Command="{Binding RedirectOutCommand}">
+                                <MenuItem.Icon>
+                                    <Image Source="pack://application:,,,/BlueprintEditorPlugin;component/images/AddRedirectIcon.png"/>
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Header="Copy" Command="{Binding CopyCommand}">
+                                <MenuItem.Icon>
+                                    <Image Source="pack://application:,,,/FrostyCore;component/images/copy.png"/>
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Header="Duplicate" Click="DuplicateNode_OnClick">
+                                <MenuItem.Icon>
+                                    <Image Source="pack://application:,,,/FrostyCore;component/images/add.png"/>
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Header="Delete" Click="DeleteNode_OnClick">
+                                <MenuItem.Icon>
+                                    <Image Source="pack://application:,,,/FrostyCore;component/images/clear.png"/>
+                                </MenuItem.Icon>
+                            </MenuItem>
+                        </ContextMenu>
+                    </nodes1:Node.ContextMenu>
+                </nodes1:Node>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type nodes:InterfaceNode}">
+                <nodes1:Node Input="{Binding Inputs}"
+                             Output="{Binding Outputs}">
+                    <nodes1:Node.Style>
+                        <Style TargetType="{x:Type nodes1:Node}">
+                            <Setter Property="ContentBrush" Value="{StaticResource PropertyConnectionColor}" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ConnectionType, Mode=OneTime}"
+                                             Value="{x:Static connections:ConnectionType.Event}">
+                                    <Setter Property="ContentBrush" Value="White" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding ConnectionType, Mode=OneTime}"
+                                             Value="{x:Static connections:ConnectionType.Property}">
+                                    <Setter Property="ContentBrush"
+                                            Value="{StaticResource PropertyConnectionColor}" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding ConnectionType, Mode=OneTime}"
+                                             Value="{x:Static connections:ConnectionType.Link}">
+                                    <Setter Property="ContentBrush"
+                                            Value="{StaticResource LinkConnectionColor}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </nodes1:Node.Style>
+
+                    <nodes1:Node.InputConnectorTemplate>
+                        <DataTemplate DataType="{x:Type ports:EntityInput}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+
+                                <nodes1:NodeInput IsConnected="{Binding IsConnected}"
+                                                  Anchor="{Binding Anchor, Mode=OneWayToSource}"
+                                                  BorderBrush="{StaticResource NodeSelectedColor}"
+                                                  ConnectorTemplate="{StaticResource InputConnectorTemplate}">
+                                    <nodes1:NodeInput.HeaderTemplate>
+                                        <DataTemplate>
+                                            <TextBlock FontFamily="Consolas"
+                                                       Text="{Binding Name}"
+                                                       FontSize="10"
+                                                       Foreground="Black"
+                                                       HorizontalAlignment="Left"
+                                                       VerticalAlignment="Center"
+                                                       Margin="0,0,3,0" 
+                                                       DataContext="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=1,AncestorType=nodes1:NodeInput}}" />
+                                        </DataTemplate>
+                                    </nodes1:NodeInput.HeaderTemplate>
+                                                    
+                                    <nodes1:NodeInput.ContextMenu>
+                                        <ContextMenu>
+                                            <MenuItem Header="Redirect Port" Command="{Binding RedirectCommand}"
+                                                      ToolTip="Add a redirect node to this port and its connections">
+                                                <MenuItem.Icon>
+                                                    <Image Source="pack://application:,,,/BlueprintEditorPlugin;component/images/AddRedirectIcon.png"/>
+                                                </MenuItem.Icon>
+                                            </MenuItem>
+                                        </ContextMenu>
+                                    </nodes1:NodeInput.ContextMenu>
+                                </nodes1:NodeInput>
+
+                                <Grid Grid.Column="1" VerticalAlignment="Center"
+                                      HorizontalAlignment="Left"
+                                      Width="23"
+                                      Height="23">
+                                    <Grid.Style>
+                                        <Style TargetType="{x:Type Grid}">
+                                            <Setter Property="Background"
+                                                    Value="{StaticResource PropertyConnectionColor}" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Type, Mode=OneTime}"
+                                                             Value="{x:Static connections:ConnectionType.Event}">
+                                                    <Setter Property="Background" Value="White" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Type, Mode=OneTime}"
+                                                             Value="{x:Static connections:ConnectionType.Property}">
+                                                    <Setter Property="Background"
+                                                            Value="{StaticResource PropertyConnectionColor}" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Type, Mode=OneTime}"
+                                                             Value="{x:Static connections:ConnectionType.Link}">
+                                                    <Setter Property="Background"
+                                                            Value="{StaticResource LinkConnectionColor}" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Grid.Style>
+                                    <Image
+                                        Source="pack://application:,,,/BlueprintEditorPlugin;component/Images/InterfaceIcon.png"
+                                        Width="18"
+                                        HorizontalAlignment="Center" />
+                                </Grid>
+                            </Grid>
+                        </DataTemplate>
+                    </nodes1:Node.InputConnectorTemplate>
+
+                    <nodes1:Node.OutputConnectorTemplate>
+                        <DataTemplate DataType="{x:Type ports:EntityOutput}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+
+                                <nodes1:NodeOutput Grid.Column="1" IsConnected="{Binding IsConnected}"
+                                                   Anchor="{Binding Anchor, Mode=OneWayToSource}"
+                                                   BorderBrush="{StaticResource NodeSelectedColor}"
+                                                   ConnectorTemplate="{StaticResource OutputConnectorTemplate}">
+                                    <nodes1:NodeOutput.HeaderTemplate>
+                                        <DataTemplate>
+                                            <TextBlock FontFamily="Consolas"
+                                                       Text="{Binding Name}"
+                                                       FontSize="10"
+                                                       Foreground="Black"
+                                                       HorizontalAlignment="Left"
+                                                       VerticalAlignment="Center"
+                                                       Margin="0,0,3,0" 
+                                                       DataContext="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=1,AncestorType=nodes1:NodeOutput}}" />
+                                        </DataTemplate>
+                                    </nodes1:NodeOutput.HeaderTemplate>
+                                                    
+                                    <nodes1:NodeOutput.ContextMenu>
+                                        <ContextMenu>
+                                            <MenuItem Header="Redirect Port" Command="{Binding RedirectCommand}"
+                                                      ToolTip="Add a redirect node to this port and its connections">
+                                                <MenuItem.Icon>
+                                                    <Image Source="pack://application:,,,/BlueprintEditorPlugin;component/images/AddRedirectIcon.png"/>
+                                                </MenuItem.Icon>
+                                            </MenuItem>
+                                        </ContextMenu>
+                                    </nodes1:NodeOutput.ContextMenu>
+                                </nodes1:NodeOutput>
+
+                                <Grid Grid.Column="0" VerticalAlignment="Center"
+                                      HorizontalAlignment="Right"
+                                      Width="23"
+                                      Height="23">
+                                    <Grid.Style>
+                                        <Style TargetType="{x:Type Grid}">
+                                            <Setter Property="Background"
+                                                    Value="{StaticResource PropertyConnectionColor}" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Type, Mode=OneTime}"
+                                                             Value="{x:Static connections:ConnectionType.Event}">
+                                                    <Setter Property="Background" Value="White" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Type, Mode=OneTime}"
+                                                             Value="{x:Static connections:ConnectionType.Property}">
+                                                    <Setter Property="Background"
+                                                            Value="{StaticResource PropertyConnectionColor}" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Type, Mode=OneTime}"
+                                                             Value="{x:Static connections:ConnectionType.Link}">
+                                                    <Setter Property="Background"
+                                                            Value="{StaticResource LinkConnectionColor}" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Grid.Style>
+                                    <Image
+                                        Source="pack://application:,,,/BlueprintEditorPlugin;component/Images/InterfaceIcon.png"
+                                        Width="18"
+                                        HorizontalAlignment="Center" />
+                                </Grid>
+                            </Grid>
+                        </DataTemplate>
+                    </nodes1:Node.OutputConnectorTemplate>
+                    
+                    <nodes1:Node.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Delete" Click="DeleteNode_OnClick">
+                                <MenuItem.Icon>
+                                    <Image Source="pack://application:,,,/FrostyCore;component/images/clear.png"/>
+                                </MenuItem.Icon>
+                            </MenuItem>
+                        </ContextMenu>
+                    </nodes1:Node.ContextMenu>
+                </nodes1:Node>
+            </DataTemplate>
+                        
+            <DataTemplate DataType="{x:Type utilities:EntityComment}">
+                <nodes1:GroupingNode HeaderBrush="{Binding HeaderColor}"
+                                     Header="{Binding Header}"
+                                     Background="{Binding HeaderColor}"
+                                     MovementMode="Self"
+                                     ActualSize="{Binding CommentSize, Mode=TwoWay}">
+                    <nodes1:GroupingNode.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Delete" Click="DeleteNode_OnClick">
+                                <MenuItem.Icon>
+                                    <Image Source="pack://application:,,,/FrostyCore;component/images/clear.png"/>
+                                </MenuItem.Icon>
+                            </MenuItem>
+                        </ContextMenu>
+                    </nodes1:GroupingNode.ContextMenu>
+                </nodes1:GroupingNode>
+            </DataTemplate>
+                        
+            <DataTemplate DataType="{x:Type utilities:EntityInputRedirect}">
+                <nodes1:Node Input="{Binding Inputs}"
+                             Output="{Binding Outputs}"
+                             Header="{Binding Header}"
+                             HeaderBrush="#3F3F3F">
+                    <nodes1:Node.Style>
+                        <Style TargetType="{x:Type nodes1:Node}">
+                            <Setter Property="ContentBrush" Value="{StaticResource PropertyConnectionColor}" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ConnectionType, Mode=OneTime}"
+                                             Value="{x:Static connections:ConnectionType.Event}">
+                                    <Setter Property="ContentBrush" Value="White" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding ConnectionType, Mode=OneTime}"
+                                             Value="{x:Static connections:ConnectionType.Property}">
+                                    <Setter Property="ContentBrush"
+                                            Value="{StaticResource PropertyConnectionColor}" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding ConnectionType, Mode=OneTime}"
+                                             Value="{x:Static connections:ConnectionType.Link}">
+                                    <Setter Property="ContentBrush"
+                                            Value="{StaticResource LinkConnectionColor}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </nodes1:Node.Style>
+
+                    <nodes1:Node.InputConnectorTemplate>
+                        <DataTemplate DataType="{x:Type ports:EntityInput}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+
+                                <nodes1:NodeInput IsConnected="{Binding IsConnected}"
+                                                  Anchor="{Binding Anchor, Mode=OneWayToSource}"
+                                                  BorderBrush="{StaticResource NodeSelectedColor}"
+                                                  ConnectorTemplate="{StaticResource InputConnectorTemplate}">
+                                    <nodes1:NodeInput.HeaderTemplate>
+                                        <DataTemplate>
+                                            <TextBlock FontFamily="Consolas"
+                                                       Text="{Binding Name}"
+                                                       FontSize="10"
+                                                       Foreground="Black"
+                                                       HorizontalAlignment="Left"
+                                                       VerticalAlignment="Center"
+                                                       Margin="0,0,3,0" 
+                                                       DataContext="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=1,AncestorType=nodes1:NodeInput}}" />
+                                        </DataTemplate>
+                                    </nodes1:NodeInput.HeaderTemplate>
+                                </nodes1:NodeInput>
+
+                                <Grid Grid.Column="1" VerticalAlignment="Center"
+                                      HorizontalAlignment="Left"
+                                      Width="23"
+                                      Height="23">
+                                    <Grid.Style>
+                                        <Style TargetType="{x:Type Grid}">
+                                            <Setter Property="Background"
+                                                    Value="{StaticResource PropertyConnectionColor}" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Type, Mode=OneTime}"
+                                                             Value="{x:Static connections:ConnectionType.Event}">
+                                                    <Setter Property="Background" Value="White" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Type, Mode=OneTime}"
+                                                             Value="{x:Static connections:ConnectionType.Property}">
+                                                    <Setter Property="Background"
+                                                            Value="{StaticResource PropertyConnectionColor}" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Type, Mode=OneTime}"
+                                                             Value="{x:Static connections:ConnectionType.Link}">
+                                                    <Setter Property="Background"
+                                                            Value="{StaticResource LinkConnectionColor}" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Grid.Style>
+                                    <Image
+                                        Source="pack://application:,,,/BlueprintEditorPlugin;component/Images/InputRedirectIcon.png"
+                                        Width="18"
+                                        HorizontalAlignment="Center" 
+                                        ToolTip="This node is redirecting an Input"/>
+                                </Grid>
+                            </Grid>
+                        </DataTemplate>
+                    </nodes1:Node.InputConnectorTemplate>
+
+                    <nodes1:Node.OutputConnectorTemplate>
+                        <DataTemplate DataType="{x:Type ports:EntityOutput}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+
+                                <nodes1:NodeOutput Grid.Column="1" IsConnected="{Binding IsConnected}"
+                                                   Anchor="{Binding Anchor, Mode=OneWayToSource}"
+                                                   BorderBrush="{StaticResource NodeSelectedColor}"
+                                                   ConnectorTemplate="{StaticResource OutputConnectorTemplate}">
+                                    <nodes1:NodeOutput.HeaderTemplate>
+                                        <DataTemplate>
+                                            <TextBlock FontFamily="Consolas"
+                                                       Text="{Binding Name}"
+                                                       FontSize="10"
+                                                       Foreground="Black"
+                                                       HorizontalAlignment="Left"
+                                                       VerticalAlignment="Center"
+                                                       Margin="0,0,3,0" 
+                                                       DataContext="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=1,AncestorType=nodes1:NodeOutput}}" />
+                                        </DataTemplate>
+                                    </nodes1:NodeOutput.HeaderTemplate>
+                                </nodes1:NodeOutput>
+
+                                <Grid Grid.Column="0" VerticalAlignment="Center"
+                                      HorizontalAlignment="Right"
+                                      Width="23"
+                                      Height="23">
+                                    <Grid.Style>
+                                        <Style TargetType="{x:Type Grid}">
+                                            <Setter Property="Background"
+                                                    Value="{StaticResource PropertyConnectionColor}" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Type, Mode=OneTime}"
+                                                             Value="{x:Static connections:ConnectionType.Event}">
+                                                    <Setter Property="Background" Value="White" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Type, Mode=OneTime}"
+                                                             Value="{x:Static connections:ConnectionType.Property}">
+                                                    <Setter Property="Background"
+                                                            Value="{StaticResource PropertyConnectionColor}" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Type, Mode=OneTime}"
+                                                             Value="{x:Static connections:ConnectionType.Link}">
+                                                    <Setter Property="Background"
+                                                            Value="{StaticResource LinkConnectionColor}" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Grid.Style>
+                                    <Image
+                                        Source="pack://application:,,,/BlueprintEditorPlugin;component/Images/InputRedirectIcon.png"
+                                        Width="18"
+                                        HorizontalAlignment="Center" 
+                                        ToolTip="This node is redirecting an Input" />
+                                </Grid>
+                            </Grid>
+                        </DataTemplate>
+                    </nodes1:Node.OutputConnectorTemplate>
+                                
+                    <nodes1:Node.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Go to Source" Click="RedirectGoToSource_OnClick">
+                                <MenuItem.Icon>
+                                    <Image
+                                        Source="pack://application:,,,/FrostyEditor;component/images/assign.png" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Header="Delete" Click="DeleteNode_OnClick">
+                                <MenuItem.Icon>
+                                    <Image
+                                        Source="pack://application:,,,/FrostyCore;component/images/clear.png" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                        </ContextMenu>
+                    </nodes1:Node.ContextMenu>
+                </nodes1:Node>
+            </DataTemplate>
+                        
+            <DataTemplate DataType="{x:Type utilities:EntityOutputRedirect}">
+                <nodes1:Node Input="{Binding Inputs}"
+                             Output="{Binding Outputs}"
+                             Header="{Binding Header}"
+                             HeaderBrush="#3F3F3F">
+                    <nodes1:Node.Style>
+                        <Style TargetType="{x:Type nodes1:Node}">
+                            <Setter Property="ContentBrush" Value="{StaticResource PropertyConnectionColor}" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ConnectionType}"
+                                             Value="{x:Static connections:ConnectionType.Event}">
+                                    <Setter Property="ContentBrush" Value="White" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding ConnectionType}"
+                                             Value="{x:Static connections:ConnectionType.Property}">
+                                    <Setter Property="ContentBrush"
+                                            Value="{StaticResource PropertyConnectionColor}" />
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding ConnectionType}"
+                                             Value="{x:Static connections:ConnectionType.Link}">
+                                    <Setter Property="ContentBrush"
+                                            Value="{StaticResource LinkConnectionColor}" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </nodes1:Node.Style>
+
+                    <nodes1:Node.InputConnectorTemplate>
+                        <DataTemplate DataType="{x:Type ports:EntityInput}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+
+                                <nodes1:NodeInput IsConnected="{Binding IsConnected}"
+                                                  Anchor="{Binding Anchor, Mode=OneWayToSource}"
+                                                  BorderBrush="{StaticResource NodeSelectedColor}"
+                                                  ConnectorTemplate="{StaticResource InputConnectorTemplate}">
+                                    <nodes1:NodeInput.HeaderTemplate>
+                                        <DataTemplate>
+                                            <TextBlock FontFamily="Consolas"
+                                                       Text="{Binding Name}"
+                                                       FontSize="10"
+                                                       Foreground="Black"
+                                                       HorizontalAlignment="Left"
+                                                       VerticalAlignment="Center"
+                                                       Margin="0,0,3,0" 
+                                                       DataContext="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=1,AncestorType=nodes1:NodeInput}}" />
+                                        </DataTemplate>
+                                    </nodes1:NodeInput.HeaderTemplate>
+                                </nodes1:NodeInput>
+
+                                <Grid Grid.Column="1" VerticalAlignment="Center"
+                                      HorizontalAlignment="Left"
+                                      Width="23"
+                                      Height="23">
+                                    <Grid.Style>
+                                        <Style TargetType="{x:Type Grid}">
+                                            <Setter Property="Background"
+                                                    Value="{StaticResource PropertyConnectionColor}" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Type, Mode=OneTime}"
+                                                             Value="{x:Static connections:ConnectionType.Event}">
+                                                    <Setter Property="Background" Value="White" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Type, Mode=OneTime}"
+                                                             Value="{x:Static connections:ConnectionType.Property}">
+                                                    <Setter Property="Background"
+                                                            Value="{StaticResource PropertyConnectionColor}" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Type, Mode=OneTime}"
+                                                             Value="{x:Static connections:ConnectionType.Link}">
+                                                    <Setter Property="Background"
+                                                            Value="{StaticResource LinkConnectionColor}" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Grid.Style>
+                                    <Image
+                                        Source="pack://application:,,,/BlueprintEditorPlugin;component/Images/OutputRedirectIcon.png"
+                                        Width="18"
+                                        HorizontalAlignment="Center" 
+                                        ToolTip="This node is redirecting an Output"/>
+                                </Grid>
+                            </Grid>
+                        </DataTemplate>
+                    </nodes1:Node.InputConnectorTemplate>
+
+                    <nodes1:Node.OutputConnectorTemplate>
+                        <DataTemplate DataType="{x:Type ports:EntityOutput}">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+
+                                <nodes1:NodeOutput Grid.Column="1" IsConnected="{Binding IsConnected}"
+                                                   Anchor="{Binding Anchor, Mode=OneWayToSource}"
+                                                   BorderBrush="{StaticResource NodeSelectedColor}"
+                                                   ConnectorTemplate="{StaticResource OutputConnectorTemplate}">
+                                    <nodes1:NodeOutput.HeaderTemplate>
+                                        <DataTemplate>
+                                            <TextBlock FontFamily="Consolas"
+                                                       Text="{Binding Name}"
+                                                       FontSize="10"
+                                                       Foreground="Black"
+                                                       HorizontalAlignment="Left"
+                                                       VerticalAlignment="Center"
+                                                       Margin="0,0,3,0" 
+                                                       DataContext="{Binding DataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=1,AncestorType=nodes1:NodeOutput}}" />
+                                        </DataTemplate>
+                                    </nodes1:NodeOutput.HeaderTemplate>
+                                </nodes1:NodeOutput>
+
+                                <Grid Grid.Column="0" VerticalAlignment="Center"
+                                      HorizontalAlignment="Right"
+                                      Width="23"
+                                      Height="23">
+                                    <Grid.Style>
+                                        <Style TargetType="{x:Type Grid}">
+                                            <Setter Property="Background"
+                                                    Value="{StaticResource PropertyConnectionColor}" />
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Type, Mode=OneTime}"
+                                                             Value="{x:Static connections:ConnectionType.Event}">
+                                                    <Setter Property="Background" Value="White" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Type, Mode=OneTime}"
+                                                             Value="{x:Static connections:ConnectionType.Property}">
+                                                    <Setter Property="Background"
+                                                            Value="{StaticResource PropertyConnectionColor}" />
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding Type, Mode=OneTime}"
+                                                             Value="{x:Static connections:ConnectionType.Link}">
+                                                    <Setter Property="Background"
+                                                            Value="{StaticResource LinkConnectionColor}" />
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Grid.Style>
+                                    <Image
+                                        Source="pack://application:,,,/BlueprintEditorPlugin;component/Images/OutputRedirectIcon.png"
+                                        Width="18"
+                                        HorizontalAlignment="Center" 
+                                        ToolTip="This node is redirecting an Output"/>
+                                </Grid>
+                            </Grid>
+                        </DataTemplate>
+                    </nodes1:Node.OutputConnectorTemplate>
+                                
+                    <nodes1:Node.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Go to Source" Click="RedirectGoToSource_OnClick">
+                                <MenuItem.Icon>
+                                    <Image
+                                        Source="pack://application:,,,/FrostyEditor;component/images/assign.png" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Header="Delete" Click="DeleteNode_OnClick">
+                                <MenuItem.Icon>
+                                    <Image
+                                        Source="pack://application:,,,/FrostyCore;component/images/clear.png" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                        </ContextMenu>
+                    </nodes1:Node.ContextMenu>
+                </nodes1:Node>
+            </DataTemplate>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Border BorderBrush="{StaticResource SubItemPressed}"
+            BorderThickness="2">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="225" x:Name="ToolboxCollum"/>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="425" x:Name="PropertyCollum"/>
+                </Grid.ColumnDefinitions>
+                
+                <!--Node Editor-->
+                <Grid Grid.Column="1" Background="{StaticResource CanvasBackground}">
+                    <editor:NodifyEditor x:Name="Editor"
+                                         ItemsSource="{Binding NodeWrangler.Vertices}"
+                                         SelectedItems="{Binding NodeWrangler.SelectedVertices}"
+                                         SelectionChanged="Selector_OnSelectionChanged"
+                                         Connections="{Binding NodeWrangler.Connections}"
+                                         PendingConnection="{Binding NodeWrangler.PendingConnection}"
+                                         DisconnectConnectorCommand="{Binding NodeWrangler.RemoveConnectionsCommand}"
+                                         DataContext="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=1,AncestorType=UserControl}}"
+                                         ConnectionTemplate="{StaticResource ConnectionTemplate}"
+                                         PendingConnectionTemplate="{StaticResource PendingConnectionTemplate}"
+                                         KeyUp="Editor_OnKeyUp"
+                                         MouseUp="Editor_OnMouseUp">
+                        
+                        <editor:NodifyEditor.ContextMenu>
+                            <ContextMenu x:Name="GraphContextMenu">
+                                <MenuItem Header="Add Node"
+                                          Click="SearchForClass_Click">
+                                    <MenuItem.Icon>
+                                        <Image Source="pack://application:,,,/FrostyEditor;component/images/add.png"/>
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <MenuItem Header="Add Interface"
+                                          ToolTip="Adds an Interface node, or a representation of an input/output for this file when referenced, to the file"
+                                          Click="AddInterface_OnClick">
+                                    <MenuItem.Icon>
+                                        <Image Source="pack://application:,,,/FrostyEditor;component/images/interface.png"/>
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <MenuItem Header="Paste"
+                                          Click="PasteObject">
+                                    <MenuItem.Icon>
+                                        <Image Source="pack://application:,,,/FrostyCore;component/images/paste.png" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                            </ContextMenu>
+                        </editor:NodifyEditor.ContextMenu>
+                    </editor:NodifyEditor>
+                </Grid>
+            
+                <!--Toolbox(for adding and removing nodes)-->
+                <Grid Grid.Column="0" x:Name="ToolboxPanel"
+                      Background="{StaticResource MenuItemBackground}">
+                    <!--This contains a list of all of the types we can use and a filter box-->
+                    <Border BorderBrush="{StaticResource ScrollbarBackground}"
+                            BorderThickness="0">
+                        <controls:FrostyTabControl x:Name="ToolboxTabControl">
+                            <controls:FrostyTabControl.Items>
+                                <controls:FrostyTabItem Header="Toolbox"
+                                                        Icon="pack://application:,,,/FrostyEditor;component/Images/Database.png">
+                                    <controls:FrostyTabItem.Content>
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition />
+                                                <RowDefinition Height="Auto"/>
+                                            </Grid.RowDefinitions>
+                                        
+                                            <!--<controls1:FrostyClassSelector x:Name="ClassList"
+                                                                           Grid.Row="1"
+                                                                           ItemDoubleClicked="ClassSelector_OnItemDoubleClicked"
+                                                                           SelectedItemChanged="ClassList_OnSelectedItemChanged"
+                                                                           Types="{x:Static local:BlueprintGraphEditor.Types}"
+                                                                           ItemBeginDrag="ClassList_OnItemBeginDrag"/>-->
+                                            
+                                            <treeViews:TypeSelectorTreeView x:Name="ClassList"
+                                                                           Grid.Row="1"
+                                                                           ItemDoubleClicked="ClassSelector_OnItemDoubleClicked"
+                                                                           SelectedItemChanged="ClassList_OnSelectedItemChanged"
+                                                                           Types="{x:Static local:BlueprintGraphEditor.Types}"/>
+                                        
+                                            <!--Documentation on the type-->
+                                            <Grid Grid.Row="2">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="19" />
+                                                    <RowDefinition />
+                                                </Grid.RowDefinitions>
+
+                                                <Border Background="#454545">
+                                                    <Grid>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="*" />
+                                                            <ColumnDefinition Width="18" />
+                                                        </Grid.ColumnDefinitions>
+
+                                                        <TextBlock FontWeight="Bold" Margin="7 0 0 0" VerticalAlignment="Top"
+                                                                   x:Name="EntDocBoxHeader" />
+                                                        <Path Grid.Column="1" Fill="White" Width="11" Height="11"
+                                                              Data="m 4 9 h 2 v 2 H 4 Z M 1 4 V 1 H 2 V 0 H 8 V 1 H 9 V 6 H 8 V 7 H 6 V 8 H 4 V 6 H 5 V 5 H 7 V 2 H 3 v 2 z" />
+                                                    </Grid>
+                                                </Border>
+
+                                                <Grid Grid.Row="1">
+                                                    <TextBox Padding="4" IsReadOnly="True" VerticalScrollBarVisibility="Auto"
+                                                             TextWrapping="Wrap" x:Name="EntDocBoxText"
+                                                             Foreground="{StaticResource FontColor}" />
+                                                </Grid>
+                                            </Grid>
+                                        </Grid>
+                                    </controls:FrostyTabItem.Content>
+                                </controls:FrostyTabItem>
+                                <controls:FrostyTabItem Header="Utilities"
+                                                        Icon="pack://application:,,,/FrostyEditor;component/Images/ThreeD.png">
+                                    <controls:FrostyTabItem.Content>
+                                        <Border BorderBrush="{StaticResource SubItemPressed}"
+                                                BorderThickness="2">
+                                            <ListBox x:Name="TransTypeList" 
+                                                     ItemsSource="{x:Static local:BlueprintGraphEditor.NodeUtils}"
+                                                     MouseDoubleClick="TransClassSelector_OnItemDoubleClicked"/>
+                                        </Border>
+                                    </controls:FrostyTabItem.Content>
+                                </controls:FrostyTabItem>
+                            </controls:FrostyTabControl.Items>
+                        </controls:FrostyTabControl>
+                    </Border>
+                </Grid>
+            
+                <!--Property grid & search-->
+                <Grid Grid.Column="2" x:Name="PropertyPanel"
+                      Background="{StaticResource MenuItemBackground}">
+                    <controls:FrostyTabControl x:Name="PropertiesTabControl" SelectedIndex="0">
+                        <controls:FrostyTabItem Header="Node Properties"
+                                                Icon="pack://application:,,,/FrostyEditor;component/Images/classref.png">
+                            <controls:FrostyTabItem.Content>
+                                <Border BorderBrush="{StaticResource SubItemPressed}"
+                                        BorderThickness="0,2,0,0">
+                                    <propertyGrid:BlueprintPropertyGrid x:Name="NodePropertyGrid"
+                                                                        OnModified="NodePropertyGrid_OnOnModified" />
+                                </Border>
+                            </controls:FrostyTabItem.Content>
+                        </controls:FrostyTabItem>
+                        <controls:FrostyTabItem Header="Search"
+                                                Icon="pack://application:,,,/FrostyEditor;component/Images/filter.png">
+                            <controls:FrostyTabItem.Content>
+                                <Border BorderBrush="{StaticResource SubItemPressed}"
+                                        BorderThickness="0,2,0,0">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition />
+                                        </Grid.RowDefinitions>
+                                        <controls:FrostyWatermarkTextBox Height="24" Margin="-1,1,1,1" WatermarkText="Filter" VerticalContentAlignment="Center" BorderThickness="1"
+                                                                         LostFocus="FilterBox_LostFocus"
+                                                                         KeyUp="FilterBox_KeyUp"
+                                                                         x:Name="FilterBox"/>
+                                        
+                                        <ListBox Grid.Row="1" x:Name="NodesList"
+                                                 ItemsSource="{Binding NodeWrangler.Vertices, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=1,AncestorType=UserControl}}"
+                                                 MouseDoubleClick="NodesList_OnMouseDoubleClick">
+                                            <ListBox.ItemTemplate>
+                                                <DataTemplate DataType="{x:Type nodes2:IVertex}">
+                                                    <TextBlock Text="{Binding }"/>
+                                                </DataTemplate>
+                                            </ListBox.ItemTemplate>
+                                            
+                                            <ListBox.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <StackPanel IsItemsHost="True"/>                            
+                                                </ItemsPanelTemplate>
+                                            </ListBox.ItemsPanel>
+                                        </ListBox>
+                                    </Grid>
+                                </Border>
+                            </controls:FrostyTabItem.Content>
+                        </controls:FrostyTabItem>
+                    </controls:FrostyTabControl>
+                </Grid>
+
+                <!--This through what I presume to be black magic
+            Allows the user to change the size of the Nodes window-->
+                <GridSplitter Grid.Column="0"
+                              Background="{StaticResource SubItemPressed}"
+                              Width="3"
+                              ResizeDirection="Columns" />
+                <GridSplitter Grid.Column="1"
+                              Background="{StaticResource SubItemPressed}"
+                              Width="3"
+                              ResizeDirection="Columns" />
+            </Grid>
+            
+            <!--Header with buttons and status-->
+            <Border Grid.Row="0" BorderBrush="{StaticResource SubItemPressed}" BorderThickness="1">
+                <Border BorderBrush="{StaticResource SubMenuItemHighlight}" 
+                        BorderThickness="0, 1, 0, 1"
+                        Background="{StaticResource ControlBackground}">
+                    <!--Buttons-->
+                    <StackPanel Orientation="Horizontal" RenderOptions.EdgeMode="Aliased"
+                                x:Name="HeaderButtons">
+                        <Button x:Name="OrganizeButton"
+                                Width="20"
+                                Height="20"
+                                Margin="4,0,2,0"
+                                HorizontalAlignment="Left"
+                                ToolTip="Automatically organize the Blueprint's nodes"
+                                Click="OrganizeButton_OnClick">
+                            <Image
+                                Source="pack://application:,,,/BlueprintEditorPlugin;component/Images/AutoSortButton.png"
+                                Width="20" />
+                        </Button>
+
+                        <Button x:Name="SaveOrganizationButton"
+                                Width="20"
+                                Height="20"
+                                Margin="2,0,2,0"
+                                HorizontalAlignment="Left"
+                                ToolTip="Save the current layout"
+                                Click="SaveOrganizationButton_OnClick">
+                            <Image Source="pack://application:,,,/FrostyEditor;component/Images/Save.png"
+                                   Width="20" />
+                        </Button>
+
+                        <Button x:Name="ImportOrganizationButton"
+                                Width="20"
+                                Height="20"
+                                Margin="2,0,4,0"
+                                HorizontalAlignment="Left"
+                                ToolTip="Import a different layout"
+                                Click="ImportOrganizationButton_OnClick">
+                            <Image Source="pack://application:,,,/FrostyEditor;component/Images/Import.png"
+                                   Width="20" />
+                        </Button>
+
+                        <Grid Background="{StaticResource SubMenuItemHighlight}" Width="1" />
+                        
+                        <Button x:Name="ToolboxVisible"
+                                Width="20"
+                                Height="20"
+                                Margin="4,0,2,0"
+                                HorizontalAlignment="Left"
+                                ToolTip="Open/Close the toolbox window"
+                                Click="ToolboxVisible_OnClick">
+                            <Image Source="/FrostyEditor;component/Images/Database.png"
+                                   Width="20" />
+                        </Button>
+                        <Button x:Name="PropertyGridVisible"
+                                Width="20"
+                                Height="20"
+                                Margin="2,0,2,0"
+                                HorizontalAlignment="Left"
+                                ToolTip="Open/Close the property grid"
+                                Click="PropertyGridVisible_OnClick">
+                            <Image Source="/FrostyEditor;component/Images/Properties.png"
+                                   Width="20" />
+                        </Button>
+                        <Button x:Name="ControlsMenuVisible"
+                                Width="20"
+                                Height="20"
+                                Margin="2,0,2,0"
+                                HorizontalAlignment="Left"
+                                ToolTip="View the list of controls for the editor"
+                                Click="ControlsMenuVisible_OnClick">
+                            <Image Source="/FrostyEditor;component/Images/reference.png"
+                                   Width="20" />
+                        </Button>
+                        
+                        <Grid Background="{StaticResource SubMenuItemHighlight}" Width="1" />
+                        
+                        <buttons:DropDownButton Width="25"
+                                                Height="20"
+                                                Margin="2,0,2,0"
+                                                HorizontalAlignment="Left">
+                            <Image Source="/FrostyEditor;component/Images/more.png"
+                                   Width="25" />
+                            
+                            <buttons:DropDownButton.Menu>
+                                <ContextMenu x:Name="MenuItems">
+                                    
+                                </ContextMenu>
+                            </buttons:DropDownButton.Menu>
+                        </buttons:DropDownButton>
+                    </StackPanel>
+                </Border>
+            </Border>
+        </Grid>
+    </Border>
+</UserControl>

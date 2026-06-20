@@ -1,0 +1,209 @@
+<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+  <PropertyGroup>
+    <Configurations>Developer - Debug;Release - Alpha;Release - Beta;Release - Final</Configurations>
+    <Platforms>x64</Platforms>
+    <TargetFramework>net48</TargetFramework>
+    <AssemblyTitle>BlueprintEditorPlugin</AssemblyTitle>
+    <Product>BlueprintEditorPlugin</Product>
+    <Copyright>Copyright ©  2020</Copyright>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <UseWPF>true</UseWPF>
+    <OutputType>Library</OutputType>
+    <LangVersion>11</LangVersion>
+    <PathMap>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)'))=$(MSBuildProjectName)\</PathMap>
+    <DebugType>embedded</DebugType>
+
+    <WeaverConfiguration>
+      <Weavers>
+        <Costura>
+          <IncludeAssemblies>
+            Prism
+          </IncludeAssemblies>
+        </Costura>
+      </Weavers>
+    </WeaverConfiguration>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Developer - Debug|x64' ">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\Developer\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release - Alpha|x64' ">
+    <OutputPath>bin\Release\Alpha\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release - Beta|x64'">
+    <OutputPath>bin\Release\Beta\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release - Final|x64'">
+    <OutputPath>bin\Release\Final\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\FrostyControls\FrostyControls.csproj">
+      <Private>false</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\FrostyEditor\FrostyEditor.csproj">
+      <Private>false</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\FrostyHash\FrostyHash.vcxproj">
+      <Private>false</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\FrostyPlugin\FrostyCore.csproj">
+      <Private>false</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\FrostySdk\FrostySdk.csproj">
+      <Private>false</Private>
+    </ProjectReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Costura.Fody" Version="5.7.0">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Prism.Core" Version="8.1.97" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Editors\BlueprintEditor\Nodes\TypeMapping\Configs\AICombatBehaviorEntityData.nmc" />
+    <None Remove="Editors\BlueprintEditor\Nodes\TypeMapping\Configs\AICombatGroupEntityData.nmc" />
+    <None Remove="Editors\BlueprintEditor\Nodes\TypeMapping\Configs\AIDefendAreaEntityData.nmc" />
+    <None Remove="Editors\BlueprintEditor\Nodes\TypeMapping\Configs\AIKillCounterEntityData.nmc" />
+    <None Remove="Editors\BlueprintEditor\Nodes\TypeMapping\Configs\AISensingParameterEntityData.nmc" />
+    <None Remove="Editors\BlueprintEditor\Nodes\TypeMapping\Configs\AIUseCoverEntityData.nmc" />
+    <None Remove="Editors\BlueprintEditor\Nodes\TypeMapping\Configs\AIVehicleBehaviorEntityData.nmc" />
+    <None Remove="Editors\BlueprintEditor\Nodes\TypeMapping\Configs\CheckGameModeEntityData.nmc" />
+    <None Remove="Editors\BlueprintEditor\Nodes\TypeMapping\Configs\ConditionalFloatEntityData.nmc" />
+    <None Remove="Editors\BlueprintEditor\Nodes\TypeMapping\Configs\ConditionalIntEntityData.nmc" />
+    <None Remove="Editors\BlueprintEditor\Nodes\TypeMapping\Configs\ConditionalTransformEntityData.nmc" />
+    <None Remove="Editors\BlueprintEditor\Nodes\TypeMapping\Configs\ConsoleCommandTriggerEntityData.nmc" />
+    <None Remove="Editors\BlueprintEditor\Nodes\TypeMapping\Configs\CoopSpawnHelperEntityData.nmc" />
+    <None Remove="Editors\BlueprintEditor\Nodes\TypeMapping\Configs\CoopSplitterEntityData.nmc" />
+    <None Remove="Editors\BlueprintEditor\Nodes\TypeMapping\Configs\CustomizeSoldierEntityData.nmc" />
+    <None Remove="Editors\BlueprintEditor\Nodes\TypeMapping\Configs\FadeEntityData.nmc" />
+    <None Remove="Editors\BlueprintEditor\Nodes\TypeMapping\Configs\FloatEntityData.nmc" />
+    <None Remove="Editors\BlueprintEditor\Nodes\TypeMapping\Configs\HumanPlayerProxyEntityData.nmc" />
+    <None Remove="Editors\BlueprintEditor\Nodes\TypeMapping\Configs\LocalPlayerGateEntityData.nmc" />
+    <None Remove="Editors\BlueprintEditor\Nodes\TypeMapping\Configs\LocatorEntityData.nmc" />
+    <None Remove="Editors\BlueprintEditor\Nodes\TypeMapping\Configs\PbrSphereLightEntityData.nmc" />
+    <None Remove="Editors\BlueprintEditor\Nodes\TypeMapping\Configs\ProjectileStateEntityData.nmc" />
+    <None Remove="Editors\BlueprintEditor\Nodes\TypeMapping\Configs\PropertyCacheEntityData.nmc" />
+    <None Remove="Editors\BlueprintEditor\Nodes\TypeMapping\Configs\PropertyCastEntityData.nmc" />
+    <None Remove="Editors\BlueprintEditor\Nodes\TypeMapping\Configs\SendEventEntityData.nmc" />
+    <None Remove="Editors\BlueprintEditor\Nodes\TypeMapping\Configs\SoundEntityData.nmc" />
+    <None Remove="Editors\BlueprintEditor\Nodes\TypeMapping\Configs\StringConstantEntityData.nmc" />
+    <None Remove="Editors\BlueprintEditor\Nodes\TypeMapping\Configs\SubLevelStatusEntityData.nmc" />
+    <None Remove="Editors\BlueprintEditor\Nodes\TypeMapping\Configs\TeamFilterEntityData.nmc" />
+    <None Remove="Editors\BlueprintEditor\Nodes\TypeMapping\Configs\TeamIdToIntEntityData.nmc" />
+    <None Remove="Editors\BlueprintEditor\Nodes\TypeMapping\Configs\TeamRelationEntityData.nmc" />
+    <None Remove="Images\BlueprintEdit.png" />
+    <Resource Include="Images\BlueprintEdit.png" />
+    <None Remove="Images\AddObjectButton.png" />
+    <Resource Include="Images\AddObjectButton.png" />
+    <None Remove="Images\AutoSortButton.png" />
+    <Resource Include="Images\AutoSortButton.png" />
+    <None Remove="Images\RemoveObjectButton.png" />
+    <Resource Include="Images\Refresh.png" />
+    <Resource Include="Images\RemoveObjectButton.png" />
+    <None Remove="Images\github-mark-white.png" />
+    <Resource Include="Images\github-mark-white.png" />
+    <None Remove="Windows\BlueprintEditorPortMenu.xaml.cs~" />
+    <None Remove="Images\NCS.png" />
+    <Resource Include="Images\NCS.png" />
+    <None Remove="Images\Networked.png" />
+    <Resource Include="Images\Networked.png" />
+    <None Remove="Images\Server.png" />
+    <Resource Include="Images\Server.png" />
+    <None Remove="Images\CollapseWindow.png" />
+    <Resource Include="Images\CollapseWindow.png" />
+    <None Remove="Images\CollapsedWindow.png" />
+    <Resource Include="Images\CollapsedWindow.png" />
+    <None Remove="Images\InterfaceIcon.png" />
+    <Resource Include="Images\InterfaceIcon.png" />
+    <None Remove="Images\RedirectIcon.png" />
+    <Resource Include="Images\InputRedirectIcon.png" />
+    <None Remove="Images\AddRedirectIcon.png" />
+    <Resource Include="Images\AddRedirectIcon.png" />
+    <None Remove="Images\OutputRedirectIcon.png" />
+    <Resource Include="Images\OutputRedirectIcon.png" />
+    <None Remove="Images\HashingUtilsIcon.png" />
+    <Resource Include="Images\HashingUtilsIcon.png" />
+    <None Remove="Images\Client.png" />
+    <Resource Include="Images\Client.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Editors\BlueprintEditor\Nodes\TypeMapping\Configs\AICombatBehaviorEntityData.nmc" />
+    <EmbeddedResource Include="Editors\BlueprintEditor\Nodes\TypeMapping\Configs\AICombatGroupEntityData.nmc" />
+    <EmbeddedResource Include="Editors\BlueprintEditor\Nodes\TypeMapping\Configs\AIDefendAreaEntityData.nmc" />
+    <EmbeddedResource Include="Editors\BlueprintEditor\Nodes\TypeMapping\Configs\AIKillCounterEntityData.nmc" />
+    <EmbeddedResource Include="Editors\BlueprintEditor\Nodes\TypeMapping\Configs\AISensingParameterEntityData.nmc" />
+    <EmbeddedResource Include="Editors\BlueprintEditor\Nodes\TypeMapping\Configs\AIUseCoverEntityData.nmc" />
+    <EmbeddedResource Include="Editors\BlueprintEditor\Nodes\TypeMapping\Configs\AIVehicleBehaviorEntityData.nmc" />
+    <EmbeddedResource Include="Editors\BlueprintEditor\Nodes\TypeMapping\Configs\CheckGameModeEntityData.nmc" />
+    <EmbeddedResource Include="Editors\BlueprintEditor\Nodes\TypeMapping\Configs\ConditionalFloatEntityData.nmc" />
+    <EmbeddedResource Include="Editors\BlueprintEditor\Nodes\TypeMapping\Configs\ConditionalIntEntityData.nmc" />
+    <EmbeddedResource Include="Editors\BlueprintEditor\Nodes\TypeMapping\Configs\ConditionalTransformEntityData.nmc" />
+    <EmbeddedResource Include="Editors\BlueprintEditor\Nodes\TypeMapping\Configs\ConsoleCommandTriggerEntityData.nmc" />
+    <EmbeddedResource Include="Editors\BlueprintEditor\Nodes\TypeMapping\Configs\CoopSpawnHelperEntityData.nmc" />
+    <EmbeddedResource Include="Editors\BlueprintEditor\Nodes\TypeMapping\Configs\CoopSplitterEntityData.nmc" />
+    <EmbeddedResource Include="Editors\BlueprintEditor\Nodes\TypeMapping\Configs\CustomizeSoldierEntityData.nmc" />
+    <EmbeddedResource Include="Editors\BlueprintEditor\Nodes\TypeMapping\Configs\FadeEntityData.nmc" />
+    <EmbeddedResource Include="Editors\BlueprintEditor\Nodes\TypeMapping\Configs\FloatEntityData.nmc" />
+    <EmbeddedResource Include="Editors\BlueprintEditor\Nodes\TypeMapping\Configs\HumanPlayerProxyEntityData.nmc" />
+    <EmbeddedResource Include="Editors\BlueprintEditor\Nodes\TypeMapping\Configs\LocalPlayerGateEntityData.nmc" />
+    <EmbeddedResource Include="Editors\BlueprintEditor\Nodes\TypeMapping\Configs\LocatorEntityData.nmc" />
+    <EmbeddedResource Include="Editors\BlueprintEditor\Nodes\TypeMapping\Configs\PbrSphereLightEntityData.nmc" />
+    <EmbeddedResource Include="Editors\BlueprintEditor\Nodes\TypeMapping\Configs\ProjectileStateEntityData.nmc" />
+    <EmbeddedResource Include="Editors\BlueprintEditor\Nodes\TypeMapping\Configs\PropertyCacheEntityData.nmc" />
+    <EmbeddedResource Include="Editors\BlueprintEditor\Nodes\TypeMapping\Configs\PropertyCastEntityData.nmc" />
+    <EmbeddedResource Include="Editors\BlueprintEditor\Nodes\TypeMapping\Configs\SendEventEntityData.nmc" />
+    <EmbeddedResource Include="Editors\BlueprintEditor\Nodes\TypeMapping\Configs\SoundEntityData.nmc" />
+    <EmbeddedResource Include="Editors\BlueprintEditor\Nodes\TypeMapping\Configs\StringConstantEntityData.nmc" />
+    <EmbeddedResource Include="Editors\BlueprintEditor\Nodes\TypeMapping\Configs\SubLevelStatusEntityData.nmc" />
+    <EmbeddedResource Include="Editors\BlueprintEditor\Nodes\TypeMapping\Configs\TeamFilterEntityData.nmc" />
+    <EmbeddedResource Include="Editors\BlueprintEditor\Nodes\TypeMapping\Configs\TeamIdToIntEntityData.nmc" />
+    <EmbeddedResource Include="Editors\BlueprintEditor\Nodes\TypeMapping\Configs\TeamRelationEntityData.nmc" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Editors\BlueprintEditor\BlueprintGraphEditor.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <XamlRuntime>Wpf</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Editors\PropertyGrid\BlueprintPropertyGrid.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Views\Themes" />
+  </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command='xcopy /Y "$(TargetPath)" "$(SolutionDir)$(OutDir)Plugins\"' />
+  </Target>
+
+  <PropertyGroup>
+    <EmitLegacyAssetsFileItems>True</EmitLegacyAssetsFileItems>
+  </PropertyGroup>
+
+</Project>

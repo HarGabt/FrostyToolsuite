@@ -1,0 +1,5 @@
+Type = "CheckGameModeEntityData"
+Header = "CheckGameMode"
+InputEvent = "Impulse"
+OutputEvent = "OnTrue"
+OutputEvent = "OnFalse"

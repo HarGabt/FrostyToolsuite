@@ -1,0 +1,3 @@
+Type = "ConsoleCommandTriggerEntityData"
+Header = "ConsoleCommandTrigger"
+OutputEvent = "OnCommand"

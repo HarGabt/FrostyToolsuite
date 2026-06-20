@@ -1,0 +1,4 @@
+Type = "SubLevelStatusEntityData"
+Header = "SubLevelStatus"
+OutputProperty = "IsLoaded"
+Documentation = "This node returns a boolean on whether or not the specified sublevel is currently loaded"

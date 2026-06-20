@@ -1,0 +1,5 @@
+Type = "CustomizeSoldierEntityData"
+Header = "Character Customization"
+InputEvent = "Apply"
+OutputLink = "Characters"
+Documentation = "This controls various things relating to character customization such as weapons or visual unlocks"

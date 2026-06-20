@@ -1,0 +1,5 @@
+Type = "AIDefendAreaEntityData"
+Header = "Defend Area"
+OutputLink = "Spawners"
+OutputLink = "Geometry"
+InputProperty = "FollowObjectAttractRadius"

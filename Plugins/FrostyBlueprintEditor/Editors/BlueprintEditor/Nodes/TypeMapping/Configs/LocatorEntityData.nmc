@@ -1,0 +1,4 @@
+Type = "LocatorEntityData"
+Header = "Locator"
+InputEvent = "SetTransform"
+OutputProperty = "DynamicTransform"

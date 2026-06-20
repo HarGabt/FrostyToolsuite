@@ -1,0 +1,5 @@
+Type = "TeamFilterEntityData"
+Header = "Team Filter"
+InputEvent = "In"
+OutputEvent = "OnTriggeredByMatchingTeam"
+Documentation = "This will send an event if the inputted Player Event is a part of the specified team"

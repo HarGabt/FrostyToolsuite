@@ -1,0 +1,6 @@
+Type = "ProjectileStateEntityData"
+Header = "ProjectileState"
+InputEvent = "ContinuousQueryStart"
+OutputProperty = "TeamId"
+OutputProperty = "0x7a786eb0"
+OutputLink = "0xf8f2a18d"

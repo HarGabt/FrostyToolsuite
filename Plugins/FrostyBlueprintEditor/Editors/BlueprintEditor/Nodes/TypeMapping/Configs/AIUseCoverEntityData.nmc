@@ -1,0 +1,6 @@
+Type = "AIUseCoverEntityData"
+Header = "Use Cover"
+InputEvent = "Activate"
+InputEvent = "Deactivate"
+OutputLink = "Cover"
+OutputLink = "Spawners"

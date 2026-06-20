@@ -1,0 +1,6 @@
+﻿Type = "FloatEntityData"
+Header = "Float"
+InputProperty = "Value"
+InputEvent = "Increment"
+InputEvent = "Decrement"
+OutputProperty = "Value"
