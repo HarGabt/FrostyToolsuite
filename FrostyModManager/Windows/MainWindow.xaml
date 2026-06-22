@@ -163,9 +163,14 @@
                 </MenuItem>
                 <MenuItem x:Name="toolsMenuItem" Header="{DynamicResource mm_Menu_Tools}" Height="22">
                     <MenuItem x:Name="manageModData" Header="{DynamicResource mm_MenuItem_ManageModData}" Click="modDataMenuItem_Click"/>
-                    <MenuItem Header="{DynamicResource mm_Menu_Language}">
-                        <MenuItem x:Name="langEnglish" Header="English" IsCheckable="True" Click="langMenuItem_Click" Tag="en-US"/>
-                        <MenuItem x:Name="langRussian" Header="Русский" IsCheckable="True" Click="langMenuItem_Click" Tag="ru-RU"/>
+                    <MenuItem x:Name="langMenuItem" Header="{DynamicResource mm_Menu_Language}">
+                        <MenuItem Header="English (United States)" IsCheckable="True" Click="langMenuItem_Click" Tag="en-US"/>
+                        <MenuItem Header="Русский (Россия)" IsCheckable="True" Click="langMenuItem_Click" Tag="ru-RU"/>
+                    </MenuItem>
+                    <MenuItem x:Name="optionsMenuItem" Header="{DynamicResource mm_MenuItem_Options}" Click="optionsMenuItem_Click">
+                        <MenuItem.Icon>
+                            <Image Source="/FrostyCore;component/Images/Settings.png" RenderOptions.BitmapScalingMode="Fant"/>
+                        </MenuItem.Icon>
                     </MenuItem>
                 </MenuItem>
                 <MenuItem Header="{DynamicResource mm_Menu_Help}" Height="22">
@@ -634,7 +639,7 @@
                             <ctrl:FrostyTabItem Header="{DynamicResource mm_Tab_Log}">
                                 <Grid>
                                     <Border BorderBrush="{StaticResource ControlBackground}" RenderOptions.EdgeMode="Aliased" BorderThickness="0,2,0,0">
-                                        <TextBox x:Name="tb" FontFamily="Consolas" IsReadOnly="True" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Background="{StaticResource ListBackground}" TextChanged="logTextBox_TextChanged"/>
+                                        <TextBox x:Name="tb" FontFamily="{DynamicResource MonoFontFamily}" IsReadOnly="True" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Background="{StaticResource ListBackground}" TextChanged="logTextBox_TextChanged"/>
                                     </Border>
                                 </Grid>
                             </ctrl:FrostyTabItem>
@@ -892,9 +897,9 @@
                                                     <StackPanel Height="22" Orientation="Horizontal">
                                                         <Grid Height="18" Margin="0,0,4,2">
                                                             <Rectangle Width="35" Height="15" RadiusY="3" RadiusX="3" Fill="#FFFFFFFF" />
-                                                            <TextBlock x:Name="typeName" Text="{Binding Path=Type}" Foreground="Black" FontFamily="Segoe UI" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="9"/>
+                                                            <TextBlock x:Name="typeName" Text="{Binding Path=Type}" Foreground="Black" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="9"/>
                                                         </Grid>
-                                                        <TextBlock Text="{Binding Path=Name}" FontFamily="Consolas" VerticalAlignment="Center"/>
+                                                        <TextBlock Text="{Binding Path=Name}" FontFamily="{DynamicResource MonoFontFamily}" VerticalAlignment="Center"/>
                                                     </StackPanel>
 
                                                     <!-- Custom Names for Types with long Names -->

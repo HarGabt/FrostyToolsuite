@@ -26,7 +26,7 @@
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <Grid Height="22">
-                                        <TextBlock Text="{Binding Path=Filename}" FontFamily="Global User Interface" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                        <TextBlock Text="{Binding Path=Filename}" VerticalAlignment="Center" Margin="0,0,10,0"/>
                                     </Grid>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
@@ -37,7 +37,7 @@
                                     <Grid Height="22">
                                         <StackPanel Orientation="Horizontal">
                                             <Image Height="20" Margin="4,0,8,0" Source="{Binding Path=IsWarning, Converter={StaticResource modStatusToBitmapSourceConverter}}" Opacity="0.5"/>
-                                            <TextBlock Text="{Binding Path=Error}" FontFamily="Global User Interface" VerticalAlignment="Center"/>
+                                            <TextBlock Text="{Binding Path=Error}" VerticalAlignment="Center"/>
                                         </StackPanel>
                                     </Grid>
                                 </DataTemplate>

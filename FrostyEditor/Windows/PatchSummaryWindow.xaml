@@ -22,7 +22,7 @@
         </Grid.RowDefinitions>
 
         <Grid Background="{StaticResource ListBackground}">
-            <TextBlock Text="{DynamicResource fe_PatchSummary_Notice}" DockPanel.Dock="Bottom" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3" Foreground="{StaticResource FontColor}" FontSize="16" FontFamily="Global User Interface"/>
+            <TextBlock Text="{DynamicResource fe_PatchSummary_Notice}" DockPanel.Dock="Bottom" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3" Foreground="{StaticResource FontColor}" FontSize="16"/>
         </Grid>
 
         <Grid Grid.Row="1" Margin="2">
@@ -35,8 +35,8 @@
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal" Height="22">
                                             <Image x:Name="imageRect" Width="16" Height="16" Source="{Binding Path=Type, Converter={StaticResource StringToBitmapSourceConverter}}"/>
-                                            <TextBlock Margin="6,0,0,0" Text="{Binding Path=DisplayName}" VerticalAlignment="Center" FontFamily="MS Reference Sans Serif" FontWeight="Normal"/>
-                                            <TextBlock Margin="6,0,0,0" VerticalAlignment="Center" FontFamily="MS Reference Sans Serif" FontWeight="Normal" Opacity="0.5">
+                                            <TextBlock Margin="6,0,0,0" Text="{Binding Path=DisplayName}" VerticalAlignment="Center" FontFamily="{DynamicResource ReferenceFontFamily}" FontWeight="Normal"/>
+                                            <TextBlock Margin="6,0,0,0" VerticalAlignment="Center" FontFamily="{DynamicResource ReferenceFontFamily}" FontWeight="Normal" Opacity="0.5">
                                                 <TextBlock.Text>
                                                     <Binding Path="Name" StringFormat="({0})"/>
                                                 </TextBlock.Text>
@@ -56,8 +56,8 @@
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal" Height="22">
                                             <Image x:Name="imageRect"  Width="16" Height="16" Source="{Binding Path=Type, Converter={StaticResource StringToBitmapSourceConverter}}"/>
-                                            <TextBlock Margin="6,0,0,0" Text="{Binding Path=DisplayName}" VerticalAlignment="Center" FontFamily="MS Reference Sans Serif" FontWeight="Normal"/>
-                                            <TextBlock Margin="6,0,0,0" VerticalAlignment="Center" FontFamily="MS Reference Sans Serif" FontWeight="Normal" Opacity="0.5">
+                                            <TextBlock Margin="6,0,0,0" Text="{Binding Path=DisplayName}" VerticalAlignment="Center" FontFamily="{DynamicResource ReferenceFontFamily}" FontWeight="Normal"/>
+                                            <TextBlock Margin="6,0,0,0" VerticalAlignment="Center" FontFamily="{DynamicResource ReferenceFontFamily}" FontWeight="Normal" Opacity="0.5">
                                                 <TextBlock.Text>
                                                     <Binding Path="Name" StringFormat="({0})"/>
                                                 </TextBlock.Text>
@@ -77,8 +77,8 @@
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal" Height="22">
                                             <Image x:Name="imageRect"  Width="16" Height="16" Source="{Binding Path=Type, Converter={StaticResource StringToBitmapSourceConverter}}"/>
-                                            <TextBlock Margin="6,0,0,0" Text="{Binding Path=DisplayName}" VerticalAlignment="Center" FontFamily="MS Reference Sans Serif" FontWeight="Normal"/>
-                                            <TextBlock Margin="6,0,0,0" VerticalAlignment="Center" FontFamily="MS Reference Sans Serif" FontWeight="Normal" Opacity="0.5">
+                                            <TextBlock Margin="6,0,0,0" Text="{Binding Path=DisplayName}" VerticalAlignment="Center" FontFamily="{DynamicResource ReferenceFontFamily}" FontWeight="Normal"/>
+                                            <TextBlock Margin="6,0,0,0" VerticalAlignment="Center" FontFamily="{DynamicResource ReferenceFontFamily}" FontWeight="Normal" Opacity="0.5">
                                                 <TextBlock.Text>
                                                     <Binding Path="Name" StringFormat="({0})"/>
                                                 </TextBlock.Text>
