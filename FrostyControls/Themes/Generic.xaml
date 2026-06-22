@@ -35,7 +35,7 @@
                      Color="#292929" />
 
     <!-- Dynamic font placeholder -->
-    <FontFamily x:Key="DefaultFontFamily">Global User Interface</FontFamily>
+    <FontFamily x:Key="DefaultFontFamily">Segoe UI Variable Text, Global User Interface</FontFamily>
     <FontFamily x:Key="ReferenceFontFamily">MS Reference Sans Serif, Global User Interface</FontFamily>
     <FontFamily x:Key="MonoFontFamily">Consolas, Global User Interface</FontFamily>
     <FontFamily x:Key="IconFontFamily">Segoe Fluent Icons, Segoe MDL2 Assets</FontFamily>
@@ -1890,7 +1890,6 @@
 
     <!-- FrostyWindow -->
     <Style TargetType="{x:Type ctrl:FrostyWindow}">
-        <!-- Global dynamic font + flow direction; both inherit to all descendants -->
         <Setter Property="FontFamily" Value="{DynamicResource DefaultFontFamily}" />
         <Setter Property="FlowDirection" Value="{DynamicResource FlowDirection}" />
         <Setter Property="Template">
