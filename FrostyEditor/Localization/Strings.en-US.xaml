@@ -10,7 +10,7 @@
     <FontFamily x:Key="MonoFontFamily">Consolas, Global User Interface</FontFamily>
     <FontFamily x:Key="BrandFontFamily">OCR A Extended, Global User Interface</FontFamily>
 
-    <!-- Right-to-left layout (Example: Arabic, Hebrew, ...) -->
+    <!-- Right-to-left layout -->
     <sys:Boolean x:Key="IsRightToLeft">false</sys:Boolean>
 
     <!-- App / Window titles -->
