@@ -118,9 +118,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CopyFilePathPlugin", "..\Pl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FrostyStringGeneration", "..\FrostyStringGeneration\FrostyStringGeneration.csproj", "{56980B5A-1E2E-43F9-86BA-D670CF413F9E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BetterLocalizedStringPlugin", "..\Plugins\FrostyBetterLocalizedStringPlugin\BetterLocalizedStringPlugin.csproj", "{ED441C05-E6D3-A5F6-B701-83A37877BF1B}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FsLocalizationPlugin", "..\Plugins\FrostyFlammenwerferPlugin\FsLocalizationPlugin.csproj", "{1CF1E11F-9AF5-30A0-FA8D-37AE0C5CC87F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BetterLocalizedStringPlugin", "..\Plugins\FrostyBetterLocalizedStringPlugin\BetterLocalizedStringPlugin.csproj", "{ED441C05-E6D3-A5F6-B701-83A37877BF1B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LocalizedStringPlugin", "..\Plugins\LocalizedStringPlugin\LocalizedStringPlugin.csproj", "{D14826EB-B2E2-C0D8-23BC-F9620872C921}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -601,16 +603,6 @@ Global
 		{56980B5A-1E2E-43F9-86BA-D670CF413F9E}.Release - Final|x64.Build.0 = Release - Final|x64
 		{56980B5A-1E2E-43F9-86BA-D670CF413F9E}.Release|x64.ActiveCfg = Release - Final|x64
 		{56980B5A-1E2E-43F9-86BA-D670CF413F9E}.Release|x64.Build.0 = Release - Final|x64
-		{1CF1E11F-9AF5-30A0-FA8D-37AE0C5CC87F}.Developer - Debug|x64.ActiveCfg = Developer - Debug|x64
-		{1CF1E11F-9AF5-30A0-FA8D-37AE0C5CC87F}.Developer - Debug|x64.Build.0 = Developer - Debug|x64
-		{1CF1E11F-9AF5-30A0-FA8D-37AE0C5CC87F}.Release - Alpha|x64.ActiveCfg = Release - Alpha|x64
-		{1CF1E11F-9AF5-30A0-FA8D-37AE0C5CC87F}.Release - Alpha|x64.Build.0 = Release - Alpha|x64
-		{1CF1E11F-9AF5-30A0-FA8D-37AE0C5CC87F}.Release - Beta|x64.ActiveCfg = Release - Beta|x64
-		{1CF1E11F-9AF5-30A0-FA8D-37AE0C5CC87F}.Release - Beta|x64.Build.0 = Release - Beta|x64
-		{1CF1E11F-9AF5-30A0-FA8D-37AE0C5CC87F}.Release - Final|x64.ActiveCfg = Release - Final|x64
-		{1CF1E11F-9AF5-30A0-FA8D-37AE0C5CC87F}.Release - Final|x64.Build.0 = Release - Final|x64
-		{1CF1E11F-9AF5-30A0-FA8D-37AE0C5CC87F}.Release|x64.ActiveCfg = Release - Alpha|x64
-		{1CF1E11F-9AF5-30A0-FA8D-37AE0C5CC87F}.Release|x64.Build.0 = Release - Alpha|x64
 		{ED441C05-E6D3-A5F6-B701-83A37877BF1B}.Developer - Debug|x64.ActiveCfg = Developer - Debug|x64
 		{ED441C05-E6D3-A5F6-B701-83A37877BF1B}.Developer - Debug|x64.Build.0 = Developer - Debug|x64
 		{ED441C05-E6D3-A5F6-B701-83A37877BF1B}.Release - Alpha|x64.ActiveCfg = Release - Alpha|x64
@@ -621,6 +613,26 @@ Global
 		{ED441C05-E6D3-A5F6-B701-83A37877BF1B}.Release - Final|x64.Build.0 = Release - Final|x64
 		{ED441C05-E6D3-A5F6-B701-83A37877BF1B}.Release|x64.ActiveCfg = Release - Alpha|x64
 		{ED441C05-E6D3-A5F6-B701-83A37877BF1B}.Release|x64.Build.0 = Release - Alpha|x64
+		{1CF1E11F-9AF5-30A0-FA8D-37AE0C5CC87F}.Developer - Debug|x64.ActiveCfg = Release - 1.0.6.2 or Earlier|x64
+		{1CF1E11F-9AF5-30A0-FA8D-37AE0C5CC87F}.Developer - Debug|x64.Build.0 = Release - 1.0.6.2 or Earlier|x64
+		{1CF1E11F-9AF5-30A0-FA8D-37AE0C5CC87F}.Release - Alpha|x64.ActiveCfg = Debug - 1.0.6.2 or Earlier|x64
+		{1CF1E11F-9AF5-30A0-FA8D-37AE0C5CC87F}.Release - Alpha|x64.Build.0 = Debug - 1.0.6.2 or Earlier|x64
+		{1CF1E11F-9AF5-30A0-FA8D-37AE0C5CC87F}.Release - Beta|x64.ActiveCfg = Debug - 1.0.6.2 or Earlier|x64
+		{1CF1E11F-9AF5-30A0-FA8D-37AE0C5CC87F}.Release - Beta|x64.Build.0 = Debug - 1.0.6.2 or Earlier|x64
+		{1CF1E11F-9AF5-30A0-FA8D-37AE0C5CC87F}.Release - Final|x64.ActiveCfg = Debug - 1.0.6.2 or Earlier|x64
+		{1CF1E11F-9AF5-30A0-FA8D-37AE0C5CC87F}.Release - Final|x64.Build.0 = Debug - 1.0.6.2 or Earlier|x64
+		{1CF1E11F-9AF5-30A0-FA8D-37AE0C5CC87F}.Release|x64.ActiveCfg = Release - 1.0.6.2 or Earlier|x64
+		{1CF1E11F-9AF5-30A0-FA8D-37AE0C5CC87F}.Release|x64.Build.0 = Release - 1.0.6.2 or Earlier|x64
+		{D14826EB-B2E2-C0D8-23BC-F9620872C921}.Developer - Debug|x64.ActiveCfg = Developer - Debug|x64
+		{D14826EB-B2E2-C0D8-23BC-F9620872C921}.Developer - Debug|x64.Build.0 = Developer - Debug|x64
+		{D14826EB-B2E2-C0D8-23BC-F9620872C921}.Release - Alpha|x64.ActiveCfg = Release - Alpha|x64
+		{D14826EB-B2E2-C0D8-23BC-F9620872C921}.Release - Alpha|x64.Build.0 = Release - Alpha|x64
+		{D14826EB-B2E2-C0D8-23BC-F9620872C921}.Release - Beta|x64.ActiveCfg = Release - Beta|x64
+		{D14826EB-B2E2-C0D8-23BC-F9620872C921}.Release - Beta|x64.Build.0 = Release - Beta|x64
+		{D14826EB-B2E2-C0D8-23BC-F9620872C921}.Release - Final|x64.ActiveCfg = Release - Final|x64
+		{D14826EB-B2E2-C0D8-23BC-F9620872C921}.Release - Final|x64.Build.0 = Release - Final|x64
+		{D14826EB-B2E2-C0D8-23BC-F9620872C921}.Release|x64.ActiveCfg = Release - Alpha|x64
+		{D14826EB-B2E2-C0D8-23BC-F9620872C921}.Release|x64.Build.0 = Release - Alpha|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -664,8 +676,9 @@ Global
 		{7C22D1BF-0282-8BD4-4B8F-5600B3520CC4} = {492048B6-848D-4675-A9BF-34A4751303F2}
 		{940F28C6-3F67-54FB-E4EE-06287F7B7C61} = {492048B6-848D-4675-A9BF-34A4751303F2}
 		{A25C4A40-40F8-CECF-5228-0EECD08112CF} = {492048B6-848D-4675-A9BF-34A4751303F2}
-		{1CF1E11F-9AF5-30A0-FA8D-37AE0C5CC87F} = {492048B6-848D-4675-A9BF-34A4751303F2}
 		{ED441C05-E6D3-A5F6-B701-83A37877BF1B} = {492048B6-848D-4675-A9BF-34A4751303F2}
+		{1CF1E11F-9AF5-30A0-FA8D-37AE0C5CC87F} = {492048B6-848D-4675-A9BF-34A4751303F2}
+		{D14826EB-B2E2-C0D8-23BC-F9620872C921} = {492048B6-848D-4675-A9BF-34A4751303F2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C0B22EF1-4C3F-45B9-9F08-9793ED912199}
