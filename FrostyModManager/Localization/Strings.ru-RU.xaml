@@ -4,6 +4,15 @@
 
     <!-- Frosty Mod Manager — Русский (ru-RU)-->
 
+    <!-- Dynamic fonts (override per language) -->
+    <FontFamily x:Key="DefaultFontFamily">Segoe UI Variable Text, Global User Interface</FontFamily>
+    <FontFamily x:Key="ReferenceFontFamily">MS Reference Sans Serif, Global User Interface</FontFamily>
+    <FontFamily x:Key="MonoFontFamily">Consolas, Global User Interface</FontFamily>
+    <FontFamily x:Key="BrandFontFamily">OCR A Extended, Global User Interface</FontFamily>
+
+    <!-- Right-to-left layout -->
+    <sys:Boolean x:Key="IsRightToLeft">false</sys:Boolean>
+
     <!-- App / Window titles -->
     <sys:String x:Key="mm_AppTitle">Frosty Mod Manager</sys:String>
     <sys:String x:Key="mm_About_Title">О программе (Frosty Mod Manager)</sys:String>
@@ -31,6 +40,7 @@
     <sys:String x:Key="mm_MenuItem_Exit">Выход</sys:String>
     <sys:String x:Key="mm_MenuItem_ManageModData">Настройка папки ModData</sys:String>
     <sys:String x:Key="mm_MenuItem_About">О программе (Frosty Mod Manager)</sys:String>
+    <sys:String x:Key="mm_MenuItem_Options">Настройки</sys:String>
 
     <!-- Toolbar / Pack strip -->
     <sys:String x:Key="mm_Pack_Label">Набор: </sys:String>

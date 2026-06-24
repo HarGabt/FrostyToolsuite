@@ -461,14 +461,6 @@ namespace FrostyModManager
             if (toolsMenuItem.Items.Count != 0)
                 toolsMenuItem.Items.Add(new Separator());
 
-            MenuItem optionsMenuItem = new MenuItem()
-            {
-                Header = "Options",
-                Icon = new Image() { Source = new ImageSourceConverter().ConvertFromString("pack://application:,,,/FrostyCore;component/Images/Settings.png") as ImageSource },
-            };
-            optionsMenuItem.Click += optionsMenuItem_Click;
-            toolsMenuItem.Items.Add(optionsMenuItem);
-
             string selectedPackName = Config.Get<string>("SelectedPack", "", ConfigScope.Game);
             int selectedIndex = 0;
             if (selectedPackName != null)
@@ -1068,9 +1060,14 @@ namespace FrostyModManager
 
         private void UpdateLanguageMenuChecks()
         {
+            if (!langMenuItem.HasItems)
+                return;
+
             string current = LocalizationManager.CurrentLanguage;
-            langEnglish.IsChecked = string.Equals(current, "en-US", StringComparison.OrdinalIgnoreCase);
-            langRussian.IsChecked = string.Equals(current, "ru-RU", StringComparison.OrdinalIgnoreCase);
+            foreach (MenuItem item in langMenuItem.Items)
+            {
+                item.IsChecked = string.Equals(current, item.Tag as string, StringComparison.OrdinalIgnoreCase);
+            }
         }
 
         private void availableModsList_SelectionChanged(object sender, SelectionChangedEventArgs e)

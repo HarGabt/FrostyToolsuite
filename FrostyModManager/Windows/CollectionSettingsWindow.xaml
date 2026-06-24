@@ -30,19 +30,19 @@
                 <Grid DockPanel.Dock="Top" Margin="5">
                     <StackPanel>
                         <DockPanel LastChildFill="True">
-                            <Label Content="{DynamicResource mm_Label_Title}" FontFamily="Global User Interface" Width="75"/>
+                            <Label Content="{DynamicResource mm_Label_Title}" Width="75"/>
                             <TextBox x:Name="modTitleTextBox" VerticalContentAlignment="Center" Text="" Margin="1" BorderThickness="1" Style="{StaticResource TextBoxValidate}"/>
                         </DockPanel>
                         <DockPanel LastChildFill="True">
-                            <Label Content="{DynamicResource mm_Label_Author}" FontFamily="Global User Interface" Width="75"/>
+                            <Label Content="{DynamicResource mm_Label_Author}" Width="75"/>
                             <TextBox x:Name="modAuthorTextBox" VerticalContentAlignment="Center" Text="" Margin="1" BorderThickness="1" Style="{StaticResource TextBoxValidate}"/>
                         </DockPanel>
                         <DockPanel LastChildFill="True">
-                            <Label Content="{DynamicResource mm_Label_Version}" FontFamily="Global User Interface" Width="75"/>
+                            <Label Content="{DynamicResource mm_Label_Version}" Width="75"/>
                             <TextBox Grid.Column="1" x:Name="modVersionTextBox" VerticalContentAlignment="Center" Text="" Margin="1" BorderThickness="1" Style="{StaticResource TextBoxValidate}"/>
                         </DockPanel>
                         <DockPanel LastChildFill="True">
-                            <Label Content="{DynamicResource mm_Label_Category}" FontFamily="Global User Interface" Width="75"/>
+                            <Label Content="{DynamicResource mm_Label_Category}" Width="75"/>
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="0.5*"/>
@@ -54,7 +54,7 @@
                             </Grid>
                         </DockPanel>
                         <DockPanel LastChildFill="True">
-                            <Label Content="{DynamicResource mm_Label_Link}" FontFamily="Global User Interface" Width="75"/>
+                            <Label Content="{DynamicResource mm_Label_Link}" Width="75"/>
                             <TextBox x:Name="modLinkTextBox" VerticalContentAlignment="Center" Text="" Margin="1" BorderThickness="1"/>
                         </DockPanel>
                     </StackPanel>

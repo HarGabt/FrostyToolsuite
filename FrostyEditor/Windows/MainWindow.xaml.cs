@@ -107,15 +107,6 @@ namespace FrostyEditor.Windows
 
             CommandBindings.Add(new CommandBinding(launchGameCmd, launchButton_Click));
 
-            MenuItem optionsMenuItem = new MenuItem()
-            {
-                Header = Application.Current.TryFindResource("fe_MenuItem_Options") as string ?? "Options",
-                Icon = new Image() { Source = new ImageSourceConverter().ConvertFromString("pack://application:,,,/FrostyCore;component/Images/Settings.png") as ImageSource },
-            };
-            optionsMenuItem.Click += optionsMenuItem_Click;
-            ToolsMenuItem.Items.Add(optionsMenuItem);
-            ToolsMenuItem.Items.Add(new Separator());
-
             Bookmarks.BookmarkDb.ContextChanged += BookmarkDb_ContextChanged;
             BookmarkContextPicker.ItemsSource = Bookmarks.BookmarkDb.Contexts.Values;
             if (Bookmarks.BookmarkDb.CurrentContext != null)
@@ -1671,11 +1662,14 @@ namespace FrostyEditor.Windows
 
         private void UpdateLanguageMenuChecks()
         {
-            if (langEnglish == null || langRussian == null)
+            if (!langMenuItem.HasItems)
                 return;
+
             string current = LocalizationManager.CurrentLanguage;
-            langEnglish.IsChecked = string.Equals(current, "en-US", StringComparison.OrdinalIgnoreCase);
-            langRussian.IsChecked  = string.Equals(current, "ru-RU", StringComparison.OrdinalIgnoreCase);
+            foreach (MenuItem item in langMenuItem.Items)
+            {
+                item.IsChecked = string.Equals(current, item.Tag as string, StringComparison.OrdinalIgnoreCase);
+            }
         }
     }
 }

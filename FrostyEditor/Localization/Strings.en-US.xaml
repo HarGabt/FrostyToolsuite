@@ -4,6 +4,15 @@
 
     <!-- Frosty Editor — English (en-US) -->
 
+    <!-- Dynamic fonts (override per language) -->
+    <FontFamily x:Key="DefaultFontFamily">Segoe UI Variable Text, Global User Interface</FontFamily>
+    <FontFamily x:Key="ReferenceFontFamily">MS Reference Sans Serif, Global User Interface</FontFamily>
+    <FontFamily x:Key="MonoFontFamily">Consolas, Global User Interface</FontFamily>
+    <FontFamily x:Key="BrandFontFamily">OCR A Extended, Global User Interface</FontFamily>
+
+    <!-- Right-to-left layout -->
+    <sys:Boolean x:Key="IsRightToLeft">false</sys:Boolean>
+
     <!-- App / Window titles -->
     <sys:String x:Key="fe_AppTitle">Frosty Editor</sys:String>
     <sys:String x:Key="fe_About_Title">About Frosty Editor</sys:String>

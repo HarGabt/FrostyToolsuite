@@ -10,6 +10,10 @@
                 <ResourceDictionary Source="/FrostyCore;component/Themes/Generic.xaml"/>
                 <ResourceDictionary Source="/FrostyControls;component/Themes/Generic.xaml"/>
                 <ResourceDictionary Source="/FrostyEditor;component/Themes/Generic.xaml"/>
+                <!-- Merge en-US as a static base, so Visual Studio XAML Designer can resolve strings.
+                     If any locale is missing a key, it will fallback to en-US automatically too.
+                     LocalizationManager will append the chosen locale on top of this. -->
+                <ResourceDictionary Source="/FrostyEditor;component/Localization/Strings.en-US.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
