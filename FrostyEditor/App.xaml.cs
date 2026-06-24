@@ -198,8 +198,13 @@ namespace FrostyEditor
 
             Config.Load();
             string locale = Config.Get<string>("Language", "");
-            if (string.IsNullOrEmpty(locale)) // First run: Set language based on user's Windows language
+            if (string.IsNullOrEmpty(locale))
+            {
+                // First run: Set language based on user's Windows language
                 locale = LocalizationManager.GetBestLocale();
+                Config.Add("Language", locale);
+                Config.Save();
+            }
             LocalizationManager.SetLanguage("FrostyEditor", locale);
 
             if (Config.Get<bool>("UpdateCheck", true) || Config.Get<bool>("UpdateCheckPrerelease", false))
