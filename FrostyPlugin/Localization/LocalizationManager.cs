@@ -1,11 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
-using System.Reflection;
-using System.Resources;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows;
 
@@ -19,7 +14,6 @@ namespace Frosty.Core
     public static class LocalizationManager
     {
         private static ResourceDictionary s_currentDictionary;
-        private static readonly Dictionary<string, string[]> s_availableLocales = new Dictionary<string, string[]>();
 
         /// <summary>Gets the currently active BCP-47 locale tag, e.g. "en-US" or "ru-RU".</summary>
         public static string CurrentLanguage { get; private set; } = "en-US";
@@ -105,15 +99,22 @@ namespace Frosty.Core
             foreach (string locale in available)
             {
                 if (string.Equals(locale, culture.Name, StringComparison.OrdinalIgnoreCase))
+                {
+                    App.Logger.Log($"[LocalizationManager] First run detected, current UI culture: {culture.Name}, exact available locale found: {locale}.");
                     return locale;
+                }
             }
             foreach (string locale in available)
             {
                 int dash = locale.IndexOf('-');
                 string firstPart = dash > 0 ? locale.Substring(0, dash) : locale;
                 if (string.Equals(firstPart, culture.TwoLetterISOLanguageName, StringComparison.OrdinalIgnoreCase))
+                { 
+                    App.Logger.Log($"[LocalizationManager] First run detected, current UI culture: {culture.Name}, exact locale not found, best available locale: {locale}.");
                     return locale;
+                }
             }
+            App.Logger.Log($"[LocalizationManager] First run detected, current UI culture: {culture.Name}, available locale not found, fallback to en-US.");
             return "en-US";
         }
     }
