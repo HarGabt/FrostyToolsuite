@@ -37,8 +37,7 @@
                         <StackPanel.Effect>
                             <DropShadowEffect Opacity="0.8" Direction="0" ShadowDepth="2" />
                         </StackPanel.Effect>
-                        <TextBlock Text="Frosty " Foreground="{StaticResource FontColor}" FontSize="22" FontFamily="{DynamicResource BrandFontFamily}" />
-                        <TextBlock Text="{DynamicResource fe_AppKind}" Foreground="{StaticResource FontColor}" FontSize="22" FontFamily="{DynamicResource BrandFontFamily}" />
+                        <TextBlock Text="{DynamicResource fe_AppTitle}" Foreground="{StaticResource FontColor}" FontSize="22" FontFamily="{DynamicResource BrandFontFamily}" />
                     </StackPanel>
                 </StackPanel>
 
