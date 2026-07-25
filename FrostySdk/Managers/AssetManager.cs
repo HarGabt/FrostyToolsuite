@@ -1585,16 +1585,22 @@ namespace FrostySdk.Managers
                 if (chunk.GetValue<bool>("cache") && entry.Location != AssetDataLocation.Cache)
                     helper.RemoveChunkData(entry.Id.ToString());
 
-                if (entry.Size == 0)
+                if (entry.LogicalSize == 0 && chunk.HasValue("logicalSize"))
                 {
-                    entry.Size = chunk.GetValue<long>("size");
                     entry.LogicalOffset = chunk.GetValue<uint>("logicalOffset");
                     entry.LogicalSize = chunk.GetValue<uint>("logicalSize");
                     entry.RangeStart = chunk.GetValue<uint>("rangeStart");
                     entry.RangeEnd = chunk.GetValue<uint>("rangeEnd");
                     entry.BundledSize = chunk.GetValue<uint>("bundledSize");
-                    entry.IsInline = chunk.HasValue("idata");
                 }
+
+                if (entry.Size == 0)
+                {
+                    entry.Size = chunk.GetValue<long>("size");
+                    entry.IsInline = chunk.HasValue("idata");
+               
+                }
+
                 else if (entry.LogicalSize == 0)
                 {
                     entry.LogicalOffset = chunk.GetValue<uint>("logicalOffset");
