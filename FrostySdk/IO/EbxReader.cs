@@ -192,7 +192,11 @@ namespace FrostySdk.IO
             {
                 for (int i = 0; i < objects.Count; i++)
                 {
-                    if (refCounts[i] == 0 || i == 0)
+                    dynamic obj = objects[i];
+                    AssetClassGuid guid = obj.GetInstanceGuid();
+
+                    // Prevent referenced and circular linked exported instance roots from being dropped
+                    if (guid.IsExported || refCounts[i] == 0 || i == 0)
                         yield return objects[i];
                 }
             }
@@ -600,9 +604,86 @@ namespace FrostySdk.IO
 
     public class EbxReader : NativeReader
     {
-        public static EbxReader CreateProjectReader(Stream inStream, FileSystemManager fs)
+        private const uint RiffProjectFormatVersion = 17;
+
+        public static EbxReader CreateProjectReader(Stream inStream, FileSystemManager fs, uint projectVersion = 0)
         {
-            return ProfilesLibrary.EbxVersion == 6 ? new EbxReaderRiff(inStream, fs, true) : ProfilesLibrary.EbxVersion == 4 ? new EbxReaderV2(inStream, fs, true) : new EbxReader(inStream, true);
+            if (ProfilesLibrary.EbxVersion == 6)
+            {
+                if (projectVersion >= RiffProjectFormatVersion)
+                {
+                    return new EbxReaderRiff(inStream, fs, true);
+                }
+
+                // Projects with versions <=16 can contain differing payloads. Their format needs to be
+                // checked to select the right reader
+                EbxVersion projectEbxVersion = PeekVersion(inStream);
+                if (projectEbxVersion == EbxVersion.Version2 || projectEbxVersion == EbxVersion.Version4)
+                {
+                    // Before projects switched to the shared type descriptors used by
+                    // EbxReaderV2, their EBX payloads carried field and type-name tables
+                    return HasEmbeddedTypeDescriptors(inStream)
+                        ? new EbxReader(inStream)
+                        : new EbxReaderV2(inStream, fs, true);
+                }
+
+                return new EbxReaderRiff(inStream, fs, true);
+            }
+
+            return ProfilesLibrary.EbxVersion == 4
+                ? new EbxReaderV2(inStream, fs, true)
+                : new EbxReader(inStream, true);
+        }
+
+        private static EbxVersion PeekVersion(Stream stream)
+        {
+            long position = stream.Position;
+            try
+            {
+                int b0 = stream.ReadByte();
+                int b1 = stream.ReadByte();
+                int b2 = stream.ReadByte();
+                int b3 = stream.ReadByte();
+                if ((b0 | b1 | b2 | b3) < 0)
+                {
+                    throw new EndOfStreamException();
+                }
+
+                return (EbxVersion)((uint)b0
+                    | ((uint)b1 << 8)
+                    | ((uint)b2 << 16)
+                    | ((uint)b3 << 24));
+            }
+            finally
+            {
+                stream.Position = position;
+            }
+        }
+
+        private static bool HasEmbeddedTypeDescriptors(Stream stream)
+        {
+            long position = stream.Position;
+            try
+            {
+                // EbxWriterV2 zeros these fields because its class metadata comes from SharedTypeDescriptors instead
+                stream.Position = position + 0x18;
+                int fieldCountLow = stream.ReadByte();
+                int fieldCountHigh = stream.ReadByte();
+                int typeNamesLengthLow = stream.ReadByte();
+                int typeNamesLengthHigh = stream.ReadByte();
+                if ((fieldCountLow | fieldCountHigh | typeNamesLengthLow | typeNamesLengthHigh) < 0)
+                {
+                    throw new EndOfStreamException();
+                }
+
+                ushort fieldTypeCount = (ushort)(fieldCountLow | (fieldCountHigh << 8));
+                ushort typeNamesLength = (ushort)(typeNamesLengthLow | (typeNamesLengthHigh << 8));
+                return fieldTypeCount != 0 || typeNamesLength != 0;
+            }
+            finally
+            {
+                stream.Position = position;
+            }
         }
 
         public static EbxReader CreateReader(Stream inStream, FileSystemManager fs = null, bool patched = false)

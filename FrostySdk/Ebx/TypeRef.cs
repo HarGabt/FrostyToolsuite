@@ -78,7 +78,7 @@ namespace FrostySdk.Ebx
 
         public static implicit operator TypeRef(Guid guid) => new TypeRef(guid);
 
-        public bool IsNull() => string.IsNullOrEmpty(typeName);
+        public bool IsNull() => typeGuid == Guid.Empty && string.IsNullOrEmpty(typeName);
 
         public override string ToString() => "TypeRef '" + (IsNull() ? "(null)" : typeName) + "'";
     }

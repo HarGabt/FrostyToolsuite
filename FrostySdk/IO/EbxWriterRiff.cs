@@ -50,6 +50,7 @@ namespace FrostySdk.IO
         private uint m_arraysOffset = 0;
         private uint m_boxedValuesOffset = 0;
         private uint m_stringsOffset = 0;
+        private RiffEbxSection m_ebxSection = RiffEbxSection.EBX;
 
         internal EbxWriterRiff(Stream inStream, EbxWriteFlags inFlags = EbxWriteFlags.None, bool leaveOpen = false)
             : base(inStream, inFlags, leaveOpen)
@@ -61,6 +62,22 @@ namespace FrostySdk.IO
         {
             if (stream != null)
             {
+                if (stream.CanSeek && stream.Length >= 12)
+                {
+                    long oldPosition = stream.Position;
+                    stream.Position = 8;
+                    byte[] section = new byte[4];
+                    if (stream.Read(section, 0, section.Length) == section.Length
+                        && section[0] == (byte)'E'
+                        && section[1] == (byte)'B'
+                        && section[2] == (byte)'X'
+                        && section[3] == (byte)'S')
+                    {
+                        m_ebxSection = RiffEbxSection.EBXS;
+                    }
+                    stream.Position = oldPosition;
+                }
+
                 using (var reader = EbxReader.CreateReader(stream))
                 {
                     m_arrayHashes = reader.GetArrayHashes(reader);
@@ -129,8 +146,7 @@ namespace FrostySdk.IO
             Write((int)EbxVersion.Version6);
             Write(0x00); // total size - 8
 
-            // @todo: sometimes this should be EBXS, don't know when though
-            Write((int)RiffEbxSection.EBX, Endian.Big);
+            Write((int)m_ebxSection, Endian.Big);
 
             // write EBXD section
             {
@@ -1123,6 +1139,22 @@ namespace FrostySdk.IO
                 WriteField(pi.GetValue(obj), fta.Type, fta, writer, isReference);
             }
 
+            if (writeClassBytes && EbxUnknownFieldStore.TryGetFields(obj, out List<EbxUnknownFieldValue> unknownFields))
+            {
+                foreach (EbxUnknownFieldValue unknownField in unknownFields)
+                {
+                    EbxField field = unknownField.Field;
+                    writer.Position = startOffset + field.DataOffset;
+                    EbxFieldMetaAttribute fieldMeta = new EbxFieldMetaAttribute(
+                        field.Type,
+                        field.DataOffset,
+                        typeof(object),
+                        false,
+                        0);
+                    WriteField(unknownField.Value, field.DebugType, fieldMeta, writer, false);
+                }
+            }
+
             writer.Position = startOffset + classType.Size;
             writer.WritePadding(classType.Alignment);
         }
@@ -1234,18 +1266,43 @@ namespace FrostySdk.IO
                 return (0, 0);
             }
 
-            if (TryGetPrimitiveTypeRef(typeRef.Name, out EbxFieldType primitiveType, out EbxFieldCategory primitiveCategory))
+            // Primitive TypeRefs are encoded in flags rather than SDK class-table entries
+            if (typeRef.Guid == Guid.Empty
+                && Enum.TryParse(typeRef.Name, out EbxFieldType primitiveType)
+                && IsPrimitiveTypeRef(primitiveType))
             {
-                uint primitiveTypeFlags = (uint)primitiveType << 5;
-                primitiveTypeFlags |= (uint)primitiveCategory << 1;
-                primitiveTypeFlags |= 1;
+                uint primitiveFlags = (uint)primitiveType << 5;
+                primitiveFlags |= (uint)EbxFieldCategory.PrimitiveType << 1;
+                primitiveFlags |= 1;
 
-                writer.Write(primitiveTypeFlags | 0x80000000);
+                writer.Write(primitiveFlags | 0x80000000);
                 writer.Write(-1);
-                return ((ushort)primitiveTypeFlags, ushort.MaxValue);
+                return ((ushort)primitiveFlags, ushort.MaxValue);
             }
 
-            Type typeRefType = typeRef.GetReferencedType();
+            Type typeRefType = null;
+            try
+            {
+                typeRefType = typeRef.GetReferencedType();
+            }
+            catch (Exception) when (typeRef.Guid != Guid.Empty)
+            {
+                // The guid is enough to preserve a TypeRef missing from the SDK
+            }
+
+            if (typeRefType == null)
+            {
+                int unresolvedTypeIdx = m_classGuids.IndexOf(typeRef.Guid);
+                if (unresolvedTypeIdx == -1)
+                {
+                    unresolvedTypeIdx = AddUnresolvedTypeRefClass(typeRef.Guid);
+                }
+
+                writer.Write((uint)(unresolvedTypeIdx << 2) | 2);
+                writer.Write(0);
+                return (0, (ushort)unresolvedTypeIdx);
+            }
+
             int typeIdx = FindExistingClass(typeRefType);
             EbxClassMetaAttribute cta = typeRefType.GetCustomAttribute<EbxClassMetaAttribute>();
 
@@ -1391,6 +1448,36 @@ namespace FrostySdk.IO
                 default:
                     type = EbxFieldType.Inherited;
                     category = EbxFieldCategory.None;
+                    return false;
+            }
+        }
+
+        private static bool IsPrimitiveTypeRef(EbxFieldType type)
+        {
+            switch (type)
+            {
+                case EbxFieldType.String:
+                case EbxFieldType.CString:
+                case EbxFieldType.FileRef:
+                case EbxFieldType.Boolean:
+                case EbxFieldType.Int8:
+                case EbxFieldType.UInt8:
+                case EbxFieldType.Int16:
+                case EbxFieldType.UInt16:
+                case EbxFieldType.Int32:
+                case EbxFieldType.UInt32:
+                case EbxFieldType.Int64:
+                case EbxFieldType.UInt64:
+                case EbxFieldType.Float32:
+                case EbxFieldType.Float64:
+                case EbxFieldType.Guid:
+                case EbxFieldType.Sha1:
+                case EbxFieldType.ResourceRef:
+                case EbxFieldType.TypeRef:
+                case EbxFieldType.BoxedValueRef:
+                    return true;
+
+                default:
                     return false;
             }
         }
@@ -1657,6 +1744,16 @@ namespace FrostySdk.IO
                 FixupField(pi.GetValue(obj), fta.Type, writer);
             }
 
+            if (objType == obj.GetType()
+                && EbxUnknownFieldStore.TryGetFields(obj, out List<EbxUnknownFieldValue> unknownFields))
+            {
+                foreach (EbxUnknownFieldValue unknownField in unknownFields)
+                {
+                    writer.Position = startOffset + unknownField.Field.DataOffset;
+                    FixupField(unknownField.Value, unknownField.Field.DebugType, writer);
+                }
+            }
+
             writer.Position = startOffset + classType.Size;
             while (writer.Position % classType.Alignment != 0)
             {
@@ -1902,6 +1999,15 @@ namespace FrostySdk.IO
         }
 
         private int FindExistingClass(Type inType) => m_typesToProcess.FindIndex((Type value) => value == inType);
+
+        private int AddUnresolvedTypeRefClass(Guid guid)
+        {
+            // Append unresolved TypeRef guids after signed classes and keep the class lists aligned
+            m_classGuids.Add(guid);
+            m_classTypes.Add(default(EbxClass));
+            m_typesToProcess.Add(null);
+            return m_classGuids.Count - 1;
+        }
 
         private void AddTypeName(string inName)
         {

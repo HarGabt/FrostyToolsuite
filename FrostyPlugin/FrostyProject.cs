@@ -37,9 +37,10 @@ namespace Frosty.Core
             14 - Can duplicate blueprint bundles
             15 - Adds superbundle ids for toc chunks
             16 - H32 and FirstMip are now stored even if chunk was only added to bundles
+            17 - Modified EBX now stored using the RIFF format
         */
 
-        private const uint FormatVersion = 16;
+        private const uint FormatVersion = 17;
 
         private const ulong Magic = 0x00005954534F5246;
 
@@ -293,7 +294,14 @@ namespace Frosty.Core
                             
                             // asset is using just regular data
                             EbxAsset asset = entry.ModifiedEntry.DataObject as EbxAsset;
-                            using (EbxBaseWriter ebxWriter = EbxBaseWriter.CreateProjectWriter(new MemoryStream(), EbxWriteFlags.IncludeTransient))
+                            EbxWriteFlags writeFlags = EbxWriteFlags.IncludeTransient;
+                            if (ProfilesLibrary.EbxVersion == 6)
+                            {
+                                // Preserve the original RIFF instance order in project saves
+                                writeFlags |= EbxWriteFlags.DoNotSort;
+                            }
+
+                            using (EbxBaseWriter ebxWriter = EbxBaseWriter.CreateProjectWriter(new MemoryStream(), writeFlags))
                             {
                                 ebxWriter.WriteAsset(asset, App.AssetManager.GetAsset(entry));
                                 buf = ebxWriter.ToByteArray();
@@ -778,7 +786,7 @@ namespace Frosty.Core
                                 }
 
                                 // store as a regular ebx
-                                using (EbxReader ebxReader = EbxReader.CreateProjectReader(new MemoryStream(data), App.FileSystemManager))
+                                using (EbxReader ebxReader = EbxReader.CreateProjectReader(new MemoryStream(data), App.FileSystemManager, version))
                                 {
                                     EbxAsset asset = ebxReader.ReadAsset<EbxAsset>();
                                     entry.ModifiedEntry.DataObject = asset;

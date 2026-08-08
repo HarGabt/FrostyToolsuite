@@ -5,9 +5,84 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace FrostySdk.IO
 {
+    internal sealed class EbxUnknownFieldValue
+    {
+        public EbxField Field { get; }
+        public object Value { get; }
+
+        public EbxUnknownFieldValue(EbxField field, object value)
+        {
+            Field = field;
+            Value = value;
+        }
+    }
+
+    internal static class EbxUnknownFieldStore
+    {
+        private static readonly ConditionalWeakTable<object, List<EbxUnknownFieldValue>> s_fields
+            = new ConditionalWeakTable<object, List<EbxUnknownFieldValue>>();
+
+        public static void Add(object obj, EbxField field, object value)
+        {
+            if (!CanPreserve(field.DebugType))
+            {
+                return;
+            }
+
+            List<EbxUnknownFieldValue> fields = s_fields.GetOrCreateValue(obj);
+            int index = fields.FindIndex(existing => existing.Field.DataOffset == field.DataOffset);
+            EbxUnknownFieldValue unknownField = new EbxUnknownFieldValue(field, value);
+            if (index == -1)
+            {
+                fields.Add(unknownField);
+            }
+            else
+            {
+                fields[index] = unknownField;
+            }
+        }
+
+        public static bool TryGetFields(object obj, out List<EbxUnknownFieldValue> fields)
+        {
+            return s_fields.TryGetValue(obj, out fields);
+        }
+
+        private static bool CanPreserve(EbxFieldType type)
+        {
+            switch (type)
+            {
+                case EbxFieldType.TypeRef:
+                case EbxFieldType.FileRef:
+                case EbxFieldType.CString:
+                case EbxFieldType.Pointer:
+                case EbxFieldType.Enum:
+                case EbxFieldType.Float32:
+                case EbxFieldType.Float64:
+                case EbxFieldType.Boolean:
+                case EbxFieldType.Int8:
+                case EbxFieldType.UInt8:
+                case EbxFieldType.Int16:
+                case EbxFieldType.UInt16:
+                case EbxFieldType.Int32:
+                case EbxFieldType.UInt32:
+                case EbxFieldType.Int64:
+                case EbxFieldType.UInt64:
+                case EbxFieldType.Guid:
+                case EbxFieldType.Sha1:
+                case EbxFieldType.String:
+                case EbxFieldType.ResourceRef:
+                case EbxFieldType.BoxedValueRef:
+                    return true;
+
+                default:
+                    return false;
+            }
+        }
+    }
 
     public class EbxReaderRiff : EbxReaderV2
     {
@@ -529,6 +604,12 @@ namespace FrostySdk.IO
                         {
                             try { fieldProp.SetValue(obj, value); }
                             catch (Exception) { }
+                        }
+                        else
+                        {
+                            // Shared type descriptors can contain fields which are missing from the SDK
+                            // Keep the instance's decoded value attached so a RIFF save doesn't zero that field
+                            EbxUnknownFieldStore.Add(obj, fieldType, value);
                         }
                     }
                 }
