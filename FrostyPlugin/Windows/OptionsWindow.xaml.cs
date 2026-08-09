@@ -6,7 +6,6 @@ using Frosty.Core.Misc;
 using FrostySdk.Attributes;
 using FrostySdk.Ebx;
 using FrostySdk.IO;
-using FrostySdk.Managers;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -81,12 +80,6 @@ namespace Frosty.Core.Windows
         public bool UseAltSymLink { get; set; } = false;
 
         [Category("General")]
-        [DisplayName("Launch Game Using Steam Protocol")]
-        [Description("An alternate launch method that uses the Steam Protocol for launching the game with mods")]
-        [EbxFieldMeta(EbxFieldType.Boolean)]
-        public bool UseSteamProtocol { get; set; } = true;
-
-        [Category("General")]
         [DisplayName("Disable Shader Compilation At Launch")]
         [Description("Disables the shader compilation or verification done by the game at launch")]
         [EbxFieldMeta(EbxFieldType.Boolean)]
@@ -107,7 +100,6 @@ namespace Frosty.Core.Windows
 
             DisableLaunchProcessCheck = Config.Get<bool>("DisableLaunchProcessCheck", false);
             DisableShaderCacheSymLink = Config.Get<bool>("DisableShaderCacheSymLink", false);
-            UseSteamProtocol = Config.Get<bool>("UseSteamProtocol", true);
             UseAltSymLink = Config.Get<bool>("UseAltSymLink", false);
         }
 
@@ -123,7 +115,6 @@ namespace Frosty.Core.Windows
 
             Config.Add("DisableLaunchProcessCheck", DisableLaunchProcessCheck);
             Config.Add("DisableShaderCacheSymLink", DisableShaderCacheSymLink);
-            Config.Add("UseSteamProtocol", UseSteamProtocol);
             Config.Add("UseAltSymLink", UseAltSymLink);
         }
     }
