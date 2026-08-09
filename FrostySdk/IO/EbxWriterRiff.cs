@@ -35,8 +35,8 @@ namespace FrostySdk.IO
         private byte[] m_data = null;
         private List<EbxInstance> m_instances = new List<EbxInstance>();
         private List<EbxArray> m_arrays = new List<EbxArray>();
-        private List<uint> m_arrayHashes = new List<uint>();
-        private List<uint> m_boxedValuesHashes = new List<uint>();
+        private List<uint> m_originalArrayHashes = new List<uint>();
+        private List<uint> m_originalBoxedValueHashes = new List<uint>();
         private List<byte[]> m_arrayData = new List<byte[]>();
         private List<uint> m_typeInfoOffsets = new List<uint>();
         private List<uint> m_arrayFieldOffsets = new List<uint>();
@@ -51,6 +51,52 @@ namespace FrostySdk.IO
         private uint m_boxedValuesOffset = 0;
         private uint m_stringsOffset = 0;
         private RiffEbxSection m_ebxSection = RiffEbxSection.EBX;
+
+        private sealed class ReflectionContext
+        {
+            private readonly EbxSharedTypeDescriptors descriptors;
+            private readonly ulong[] fieldPath;
+
+            public ReflectionContext(EbxSharedTypeDescriptors inDescriptors)
+            {
+                descriptors = inDescriptors;
+                fieldPath = inDescriptors != null ? new ulong[0] : null;
+            }
+
+            private ReflectionContext(EbxSharedTypeDescriptors inDescriptors, ulong[] inFieldPath)
+            {
+                descriptors = inDescriptors;
+                fieldPath = inFieldPath;
+            }
+
+            public ReflectionContext Append(EbxClass classType, uint fieldNameHash)
+            {
+                if (descriptors == null
+                    || fieldPath == null
+                    || !descriptors.TryGetReflectionFieldKey(classType, fieldNameHash, out ulong fieldKey))
+                {
+                    return new ReflectionContext(descriptors, null);
+                }
+
+                ulong[] newFieldPath = new ulong[fieldPath.Length + 1];
+                Array.Copy(fieldPath, newFieldPath, fieldPath.Length);
+                newFieldPath[fieldPath.Length] = fieldKey;
+                return new ReflectionContext(descriptors, newFieldPath);
+            }
+
+            public ReflectionContext Invalidate()
+            {
+                return new ReflectionContext(descriptors, null);
+            }
+
+            public uint GetReflectionId()
+            {
+                return fieldPath != null
+                    && descriptors.TryGetReflectionId(fieldPath, out uint reflectionId)
+                    ? reflectionId
+                    : 0;
+            }
+        }
 
         internal EbxWriterRiff(Stream inStream, EbxWriteFlags inFlags = EbxWriteFlags.None, bool leaveOpen = false)
             : base(inStream, inFlags, leaveOpen)
@@ -78,10 +124,14 @@ namespace FrostySdk.IO
                     stream.Position = oldPosition;
                 }
 
-                using (var reader = EbxReader.CreateReader(stream))
+                // Fallback to positional ids for games whose shared descriptors don't include Reflection ID tables
+                if (!HasSharedReflectionIds())
                 {
-                    m_arrayHashes = reader.GetArrayHashes(reader);
-                    m_boxedValuesHashes = reader.GetBoxedValuesHashes(reader);
+                    using (EbxReader reader = EbxReader.CreateReader(stream))
+                    {
+                        m_originalArrayHashes = reader.arrays.Select(array => array.Hash).ToList();
+                        m_originalBoxedValueHashes = reader.boxedValues.Select(value => value.Hash).ToList();
+                    }
                 }
             }
             if (m_flags.HasFlag(EbxWriteFlags.DoNotSort))
@@ -268,16 +318,9 @@ namespace FrostySdk.IO
                     {
                         writer.Write(m_arrays[i].Offset);
                         writer.Write(m_arrays[i].Count);
-
-                        if (m_arrayHashes.Count == m_arrays.Count)
-                        {
-                            writer.Write(m_arrayHashes[i]);
-                        }
-                        else
-                        {
-                            writer.Write(0x00);
-                        }
-
+                        writer.Write(m_arrays[i].Hash != 0
+                           ? m_arrays[i].Hash
+                           : GetOriginalHash(m_originalArrayHashes, i, m_arrays.Count));
                         writer.Write(m_arrays[i].Type);
                         writer.Write((short)m_arrays[i].ClassRef);
                     }
@@ -287,15 +330,9 @@ namespace FrostySdk.IO
                     {
                         writer.Write(m_boxedValues[i].Offset);
                         writer.Write(1);
-						
-                        if (m_boxedValuesHashes.Count == m_boxedValues.Count)
-                        {
-                            writer.Write(m_boxedValuesHashes[i]);
-                        }
-                        else
-                        {
-                            writer.Write(0x00);
-                        }
+                        writer.Write(m_boxedValues[i].Hash != 0
+                            ? m_boxedValues[i].Hash
+                            : GetOriginalHash(m_originalBoxedValueHashes, i, m_boxedValues.Count));
 
                         writer.Write(m_boxedValues[i].Type);
                         writer.Write((short)m_boxedValues[i].ClassRef);
@@ -1052,9 +1089,24 @@ namespace FrostySdk.IO
             m_uniqueClassCount = (ushort)uniqueTypes.Count;
         }
 
-        private void WriteClass(object obj, Type objType, long startOffset, NativeWriter writer, bool writeClassBytes = true)
+        private void WriteClass(
+            object obj,
+            Type objType,
+            long startOffset,
+            NativeWriter writer,
+            bool writeClassBytes = true,
+            EbxClass? reflectionClass = null,
+            ReflectionContext reflectionContext = null)
         {
             EbxClass classType = GetClass(objType);
+            if (!reflectionClass.HasValue)
+            {
+                reflectionClass = classType;
+            }
+            if (reflectionContext == null)
+            {
+                reflectionContext = new ReflectionContext(GetSharedTypeDescriptors(classType));
+            }
             //EbxClassMetaAttribute cta = objType.GetCustomAttribute<EbxClassMetaAttribute>();
 
             if (writeClassBytes)
@@ -1065,7 +1117,7 @@ namespace FrostySdk.IO
 
             if (objType.BaseType.Namespace == "FrostySdk.Ebx")
             {
-                WriteClass(obj, objType.BaseType, startOffset, writer, false);
+                WriteClass(obj, objType.BaseType, startOffset, writer, false, reflectionClass, reflectionContext);
             }
 
             PropertyInfo[] pis = objType.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
@@ -1136,7 +1188,19 @@ namespace FrostySdk.IO
                 }
 
                 writer.Position = startOffset + fta.Offset;
-                WriteField(pi.GetValue(obj), fta.Type, fta, writer, isReference);
+                HashAttribute hashAttribute = pi.GetCustomAttribute<HashAttribute>();
+                ReflectionContext fieldReflectionContext = hashAttribute != null
+                    ? reflectionContext.Append(reflectionClass.Value, (uint)hashAttribute.Hash)
+                    : reflectionContext.Invalidate();
+                uint reflectionId = fieldReflectionContext.GetReflectionId();
+                WriteField(
+                    pi.GetValue(obj),
+                    fta.Type,
+                    fta,
+                    writer,
+                    isReference,
+                    reflectionId,
+                    fieldReflectionContext);
             }
 
             if (writeClassBytes && EbxUnknownFieldStore.TryGetFields(obj, out List<EbxUnknownFieldValue> unknownFields))
@@ -1151,7 +1215,17 @@ namespace FrostySdk.IO
                         typeof(object),
                         false,
                         0);
-                    WriteField(unknownField.Value, field.DebugType, fieldMeta, writer, false);
+                    ReflectionContext fieldReflectionContext = reflectionContext.Append(
+                        reflectionClass.Value,
+                        field.NameHash);
+                    WriteField(
+                        unknownField.Value,
+                        field.DebugType,
+                        fieldMeta,
+                        writer,
+                        false,
+                        fieldReflectionContext.GetReflectionId(),
+                        fieldReflectionContext);
                 }
             }
 
@@ -1159,7 +1233,14 @@ namespace FrostySdk.IO
             writer.WritePadding(classType.Alignment);
         }
 
-        private void WriteField(object obj, EbxFieldType ebxType, EbxFieldMetaAttribute fieldMeta, NativeWriter writer, bool isReference)
+        private void WriteField(
+            object obj,
+            EbxFieldType ebxType,
+            EbxFieldMetaAttribute fieldMeta,
+            NativeWriter writer,
+            bool isReference,
+            uint reflectionId = 0,
+            ReflectionContext reflectionContext = null)
         {
             switch (ebxType)
             {
@@ -1198,13 +1279,18 @@ namespace FrostySdk.IO
                         EbxClassMetaAttribute cta = structType.GetCustomAttribute<EbxClassMetaAttribute>();
 
                         writer.WritePadding(cta.Alignment);
-                        WriteClass(structValue, structType, writer.Position, writer);
+                        WriteClass(
+                            structValue,
+                            structType,
+                            writer.Position,
+                            writer,
+                            reflectionContext: reflectionContext);
                     }
                     break;
 
                 case EbxFieldType.Array:
                     {
-                        WriteArray(obj, fieldMeta, isReference, writer);
+                        WriteArray(obj, fieldMeta, isReference, writer, reflectionId, reflectionContext);
                     }
                     break;
 
@@ -1235,6 +1321,7 @@ namespace FrostySdk.IO
                         EbxBoxedValue boxedValue = new EbxBoxedValue()
                         {
                             Offset = 0,
+                            Hash = reflectionId,
                             Type = tiPair.Item1,
                             ClassRef = tiPair.Item2
                         };
@@ -1242,7 +1329,7 @@ namespace FrostySdk.IO
                         m_boxedValues.Add(boxedValue);
                         if (value.Value != null)
                         {
-                            m_boxedValueData.Add(WriteBoxedValueRef(value));
+                            m_boxedValueData.Add(WriteBoxedValueRef(value, reflectionContext));
                         }
                         else
                         {
@@ -1507,7 +1594,13 @@ namespace FrostySdk.IO
             }
         }
 
-        private void WriteArray(object obj, EbxFieldMetaAttribute fieldMeta, bool isReference, NativeWriter writer)
+        private void WriteArray(
+            object obj,
+            EbxFieldMetaAttribute fieldMeta,
+            bool isReference,
+            NativeWriter writer,
+            uint reflectionId,
+            ReflectionContext reflectionContext)
         {
             int arrayClassIdx = FindExistingClass(obj.GetType().GenericTypeArguments[0]);
             int arrayIdx = 0;
@@ -1524,7 +1617,13 @@ namespace FrostySdk.IO
                     for (int i = 0; i < count; i++)
                     {
                         object subValue = arrayObj[i];
-                        WriteField(subValue, fieldMeta.ArrayType, fieldMeta, arrayWriter, isReference);
+                        WriteField(
+                            subValue,
+                            fieldMeta.ArrayType,
+                            fieldMeta,
+                            arrayWriter,
+                            isReference,
+                            reflectionContext: reflectionContext);
                     }
                 }
 
@@ -1543,12 +1642,18 @@ namespace FrostySdk.IO
                 {
                     Count = (uint)count,
                     ClassRef = arrayClassIdx,
+                    Hash = reflectionId,
                     Type = arrayTypeFlags
                 });
             writer.Write((ulong)arrayIdx);
         }
 
         protected override byte[] WriteBoxedValueRef(BoxedValueRef value)
+        {
+            return WriteBoxedValueRef(value, null);
+        }
+
+        private byte[] WriteBoxedValueRef(BoxedValueRef value, ReflectionContext reflectionContext)
         {
             // @todo: Does not at all handle boxed value arrays
             using (NativeWriter writer = new NativeWriter(new MemoryStream()))
@@ -1591,7 +1696,12 @@ namespace FrostySdk.IO
                             EbxClassMetaAttribute cta = structType.GetCustomAttribute<EbxClassMetaAttribute>();
 
                             writer.WritePadding(cta.Alignment);
-                            WriteClass(structValue, structType, writer.Position, writer);
+                            WriteClass(
+                                structValue,
+                                structType,
+                                writer.Position,
+                                writer,
+                                reflectionContext: reflectionContext);
                         }
                         break;
 
@@ -1999,6 +2109,24 @@ namespace FrostySdk.IO
         }
 
         private int FindExistingClass(Type inType) => m_typesToProcess.FindIndex((Type value) => value == inType);
+
+        private static bool HasSharedReflectionIds()
+        {
+            return (EbxReaderV2.std != null && EbxReaderV2.std.HasReflectionIds)
+                || (EbxReaderV2.patchStd != null && EbxReaderV2.patchStd.HasReflectionIds);
+        }
+
+        private static uint GetOriginalHash(List<uint> hashes, int index, int expectedCount)
+        {
+            return hashes.Count == expectedCount ? hashes[index] : 0;
+        }
+
+        private static EbxSharedTypeDescriptors GetSharedTypeDescriptors(EbxClass classType)
+        {
+            return classType.SecondSize == 1
+                ? EbxReaderV2.patchStd
+                : EbxReaderV2.std;
+        }
 
         private int AddUnresolvedTypeRefClass(Guid guid)
         {
