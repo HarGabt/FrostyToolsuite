@@ -217,7 +217,7 @@ namespace FrostySdk.IO
             uint importReferenceCount = ReadUInt();
             for (int i = 0; i < importReferenceCount; i++)
             {
-                var import = new EbxImportReference
+                EbxImportReference import = new EbxImportReference
                 {
                     FileGuid = ReadGuid(),
                     ClassGuid = ReadGuid()

@@ -1379,15 +1379,25 @@ namespace FrostySdk.IO
 
             if (typeRefType == null)
             {
-                int unresolvedTypeIdx = m_classGuids.IndexOf(typeRef.Guid);
-                if (unresolvedTypeIdx == -1)
-                {
-                    unresolvedTypeIdx = AddUnresolvedTypeRefClass(typeRef.Guid);
-                }
+                int unresolvedTypeIdx = GetOrAddTypeRefClass(typeRef.Guid);
 
                 writer.Write((uint)(unresolvedTypeIdx << 2) | 2);
                 writer.Write(0);
                 return (0, (ushort)unresolvedTypeIdx);
+            }
+
+            ArrayGuidAttribute arrayGuidAttribute = typeRefType.GetCustomAttribute<ArrayGuidAttribute>();
+            if (arrayGuidAttribute != null && typeRef.Guid == arrayGuidAttribute.Guid)
+            {
+                // Preserve the array GUID instead of replacing it with the element type GUID
+                int arrayTypeIdx = GetOrAddTypeRefClass(typeRef.Guid);
+                uint arrayTypeFlags = (uint)EbxFieldType.Array << 5;
+                arrayTypeFlags |= (uint)EbxFieldCategory.ArrayType << 1;
+                arrayTypeFlags |= 1;
+
+                writer.Write((uint)(arrayTypeIdx << 2) | 2);
+                writer.Write(0);
+                return ((ushort)arrayTypeFlags, (ushort)arrayTypeIdx);
             }
 
             int typeIdx = FindExistingClass(typeRefType);
@@ -2128,9 +2138,15 @@ namespace FrostySdk.IO
                 : EbxReaderV2.std;
         }
 
-        private int AddUnresolvedTypeRefClass(Guid guid)
+        private int GetOrAddTypeRefClass(Guid guid)
         {
-            // Append unresolved TypeRef guids after signed classes and keep the class lists aligned
+            int typeIdx = m_classGuids.IndexOf(guid);
+            return typeIdx != -1 ? typeIdx : AddTypeRefClass(guid);
+        }
+
+        private int AddTypeRefClass(Guid guid)
+        {
+            // Append TypeRef-only GUIDs after signed classes and keep the class lists aligned
             m_classGuids.Add(guid);
             m_classTypes.Add(default(EbxClass));
             m_typesToProcess.Add(null);

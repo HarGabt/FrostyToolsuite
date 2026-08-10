@@ -441,18 +441,20 @@ namespace Frosty.ModSupport
                                 {
                                     ChunkAssetEntry entry = parent.m_modifiedChunks[name];
 
+                                    byte[] fullData = parent.m_archiveData[entry.Sha1].Data;
+
                                     // get next cas (if one hasnt been obtained or the current one will exceed 1gb)
-                                    if (casWriter == null || casWriter.Length + parent.m_archiveData[entry.Sha1].Data.Length > 1073741824)
+                                    if (casWriter == null || casWriter.Length + fullData.Length > 1073741824)
                                     {
                                         casWriter?.Close();
                                         casWriter = GetNextCas(catalog, out casFileIndex);
                                     }
 
-                                    byte[] data = parent.m_archiveData[entry.Sha1].Data;
+                                    byte[] data = fullData;
                                     if (entry.LogicalOffset != 0)
                                     {
                                         data = new byte[entry.RangeEnd - entry.RangeStart];
-                                        Array.Copy(parent.m_archiveData[entry.Sha1].Data, entry.RangeStart, data, 0, data.Length);
+                                        Buffer.BlockCopy(fullData, (int)entry.RangeStart, data, 0, data.Length);
                                     }
 
                                     DbObject chunk = new DbObject();
@@ -483,6 +485,35 @@ namespace Frosty.ModSupport
                                     casWriter.Write(data);
 
                                     bundleObj.GetValue<DbObject>("chunks").Add(chunk);
+                                    // Added chunks must have a full-data entry in the superbundle TOC
+                                    if (!chunks.ContainsKey(name))
+                                    {
+                                        if (casWriter == null || casWriter.Length + fullData.Length > 1073741824)
+                                        {
+                                            casWriter?.Close();
+                                            casWriter = GetNextCas(catalog, out casFileIndex);
+                                        }
+
+                                        uint fullChunkOffset = (uint)casWriter.Position;
+
+                                        chunks.Add(name, new ChunkInfo
+                                        {
+                                            Guid = name,
+                                            SplitIndex = bundleInfo.SplitIndex,
+                                            SbName = bundleInfo.SbName,
+                                            IsPatch = true,
+                                            CasFileInfo = new CasFileInfo
+                                            {
+                                                IsPatch = parent.m_hasPatchFolder,
+                                                CatalogIndex = catalogIndex,
+                                                CasIndex = (byte)casFileIndex,
+                                                Offset = fullChunkOffset,
+                                                Size = (uint)fullData.Length
+                                            }
+                                        });
+
+                                        casWriter.Write(fullData);
+                                    }
                                 }
 
                                 bundleInfo.Offset = modWriter.Position;
@@ -688,6 +719,12 @@ namespace Frosty.ModSupport
                             }
                             foreach (Guid chunkId in bundleInfo.Add.Chunks)
                             {
+                                // Skip chunks that already have a full-data TOC entry
+                                if (chunks.ContainsKey(chunkId))
+                                {
+                                    continue;
+                                }
+
                                 ChunkInfo chunkInfo = new ChunkInfo()
                                 {
                                     Guid = chunkId,
