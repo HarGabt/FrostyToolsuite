@@ -480,13 +480,34 @@ namespace MeshSetPlugin.Resources
         private byte[] m_unknownBytesSection = new byte[0x10];
         public byte BonesPerVertex
         {
-            get => m_bonesPerVertex;
+            get
+            {
+                if (ProfilesLibrary.IsLoaded(ProfileVersion.Madden22, ProfileVersion.Fifa22, ProfileVersion.Battlefield2042,
+                    ProfileVersion.Madden23, ProfileVersion.Fifa23, ProfileVersion.NeedForSpeedUnbound,
+                    ProfileVersion.DeadSpace))
+                {
+                    return (byte)(m_bonesPerVertex & 0x0F);
+                }
+
+                return m_bonesPerVertex;
+            }
             set
             {
-                m_bonesPerVertex = value;
-                if (m_bonesPerVertex > 8)
+                byte bonesPerVertex = value;
+                if (bonesPerVertex > 8)
                 {
-                    m_bonesPerVertex = 8;
+                    bonesPerVertex = 8;
+                }
+
+                if (ProfilesLibrary.IsLoaded(ProfileVersion.Madden22, ProfileVersion.Fifa22, ProfileVersion.Battlefield2042,
+                    ProfileVersion.Madden23, ProfileVersion.Fifa23, ProfileVersion.NeedForSpeedUnbound,
+                    ProfileVersion.DeadSpace))
+                {
+                    m_bonesPerVertex = (byte)((m_bonesPerVertex & 0xF0) | bonesPerVertex);
+                }
+                else
+                {
+                    m_bonesPerVertex = bonesPerVertex;
                 }
             }
         }
@@ -843,6 +864,18 @@ namespace MeshSetPlugin.Resources
             {
                 //if ((boneId & 0x8000) == 0)
                 m_boneList.Add(boneId);
+            }
+        }
+
+        /// <summary>
+        /// Sets Veilguard's per-section start index for the padding needed to keep each
+        /// section's 16-bit index range aligned to four bytes.
+        /// </summary>
+        public void SetPaddedStartIndex(uint startIndex)
+        {
+            if (ProfilesLibrary.IsLoaded(ProfileVersion.DragonAgeVeilguard))
+            {
+                m_unknownHash1 = startIndex;
             }
         }
 
