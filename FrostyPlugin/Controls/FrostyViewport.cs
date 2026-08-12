@@ -328,8 +328,14 @@ namespace Frosty.Core.Controls
             if (backBuffer != null)
                 return;
 
-            viewportWidth = (ActualWidth < 1.0) ? 1 : (int)ActualWidth;
-            viewportHeight = (ActualHeight < 1.0) ? 1 : (int)ActualHeight;
+            double fwWidth = ActualWidth;
+            double fwHeight = ActualHeight;
+            float renderScale = Config.Get<float>("RenderRenderScale", 100f) / 100f;
+            fwWidth = fwWidth * renderScale;
+            fwHeight = fwHeight * renderScale;
+
+            viewportWidth = (fwWidth < 1.0) ? 1 : (int)fwWidth;
+            viewportHeight = (fwHeight < 1.0) ? 1 : (int)fwHeight;
 
             backBuffer = new D3D11.Texture2D(Device, new D3D11.Texture2DDescription
             {
