@@ -339,17 +339,55 @@ namespace MeshSetPlugin
         /// </summary>
         private FbxNode FBXCreateSkeleton(FbxScene scene, dynamic meshAsset, string skeleton, ref List<FbxNode> boneNodes)
         {
+            // RiggingOffsetJointComponent
+            Dictionary<int, Vector3> jointOffsets = new Dictionary<int, Vector3>();
+            if (ProfilesLibrary.IsLoaded(ProfileVersion.NeedForSpeedHeat, ProfileVersion.NeedForSpeedUnbound)) //Was initally made for Heat, I added Unbound here. Report if broken pls
+            {
+                string meshName = meshAsset.Name;
+                string blueprintName = meshName.Substring(0, meshName.Length - 5);
+
+                dynamic objectBlueprint = App.AssetManager.GetEbx(App.AssetManager.GetEbxEntry(blueprintName)).RootObject;
+                if (objectBlueprint != null)
+                {
+                    dynamic obj = objectBlueprint.Object.Internal;
+                    if (obj.GetType().Name == "StaticModelEntityData")
+                    {
+                        foreach (dynamic component in obj.Components)
+                        {
+                            if (component.Internal.GetType().Name == "RiggingOffsetJointComponentData")
+                            {
+                                foreach (dynamic jointOffset in component.Internal.OffsetJointData)
+                                {
+                                    jointOffsets.Add((int)jointOffset.Index, new Vector3(jointOffset.Local.x, jointOffset.Local.y, jointOffset.Local.z));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
             dynamic skeletonAsset = App.AssetManager.GetEbx(App.AssetManager.GetEbxEntry(skeleton)).RootObject;
             m_boneCount = skeletonAsset.BoneNames.Count;
 
             for (int boneIdx = 0; boneIdx < m_boneCount; boneIdx++)
             {
                 dynamic pose = skeletonAsset.LocalPose;
+                Vector3 boneTrans = new Vector3(pose[boneIdx].trans.x, pose[boneIdx].trans.y, pose[boneIdx].trans.z);
+
+                //RiggingOffsetJointComponent
+                if (ProfilesLibrary.IsLoaded(ProfileVersion.NeedForSpeedHeat, ProfileVersion.NeedForSpeedUnbound) && jointOffsets.Count > 0)
+                {
+                    Vector3 offset = new Vector3();
+                    if (jointOffsets.TryGetValue(boneIdx, out offset))
+                    {
+                        boneTrans = offset;
+                    }
+                }
+
                 Matrix boneMatrix = new Matrix(
                     pose[boneIdx].right.x, pose[boneIdx].right.y, pose[boneIdx].right.z, 0.0f,
                     pose[boneIdx].up.x, pose[boneIdx].up.y, pose[boneIdx].up.z, 0.0f,
                     pose[boneIdx].forward.x, pose[boneIdx].forward.y, pose[boneIdx].forward.z, 0.0f,
-                    pose[boneIdx].trans.x, pose[boneIdx].trans.y, pose[boneIdx].trans.z, 1.0f
+                    boneTrans.X, boneTrans.Y, boneTrans.Z, 1.0f
                     );
 
                 Vector3 scale = boneMatrix.ScaleVector;
