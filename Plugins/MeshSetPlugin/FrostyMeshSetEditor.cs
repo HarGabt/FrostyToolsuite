@@ -1522,13 +1522,7 @@ namespace MeshSetPlugin
                     if (settings.ExportAdditionalMeshes)
                     {
                         // collect all additional meshes added to the viewport
-                        foreach (var previewMesh in m_previewSettings.PreviewMeshes)
-                        {
-                            if (previewMesh.MeshId != -1)
-                            {
-                                meshSets.Add(m_screen.GetMesh(previewMesh.MeshId));
-                            }
-                        }
+                        meshSets = m_screen.GetAllMeshes(meshSets);
                     }
 
                     // fbx/obj exporting

@@ -51,14 +51,14 @@ namespace MeshSetPlugin.Screens
         {
         }
 
-        public MeshSet GetMesh(int meshId)
+        public List<MeshSet> GetAllMeshes(List<MeshSet> meshSets)
         {
-            if (meshId >= renderMeshes.Count)
+            foreach (MeshAndPreviewContainer renderMesh in renderMeshes)
             {
-                return null;
+                if (renderMesh.MeshId > 0)
+                    meshSets.Add(renderMesh.Mesh);
             }
-
-            return renderMeshes[meshId].Mesh;
+            return meshSets;
         }
 
         public int AddMesh(MeshSet mesh, MeshMaterialCollection materials, Matrix transform, MeshRenderSkeleton skeleton = null)
