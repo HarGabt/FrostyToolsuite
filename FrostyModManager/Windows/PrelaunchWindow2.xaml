@@ -10,7 +10,7 @@
       Loaded="Window_Loaded"
       Height="600" Width="1000"
       WindowStartupLocation="CenterScreen" ResizeMode="NoResize"
-      Title="Frosty Mod Manager">
+      Title="{DynamicResource mm_AppTitle}">
 
     <Grid Background="{StaticResource ControlBackground}">
         <Grid Margin="2">
@@ -23,7 +23,7 @@
                 <ListView.View>
                     <ctrl:FrostyAutoSizedGridView>
                         <GridView.Columns>
-                            <GridViewColumn Header="Name">
+                            <GridViewColumn Header="{DynamicResource mm_Col_Name}">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal" Height="48">
@@ -33,7 +33,7 @@
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
-                            <GridViewColumn Header="Path">
+                            <GridViewColumn Header="{DynamicResource mm_Col_Path}">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal" Height="48">
@@ -48,11 +48,11 @@
             </ListView>
 
             <Grid Grid.Row="1" Background="{StaticResource ListBackground}">
-                <Button x:Name="NewConfigButton" Content="New" HorizontalAlignment="Right" Padding="12,0" Margin="0,6,66,6" Click="NewConfigButton_Click"/>
-                <Button x:Name="RemoveConfigButton" Content="Remove" HorizontalAlignment="Right" Padding="12,0" Margin="0,6,119,6" Click="RemoveConfigButton_Click"/>
-                <Button x:Name="LaunchConfigButton" Content="Select" HorizontalAlignment="Right" Padding="12,0" Margin="0,6,6,6" Click="LaunchConfigButton_Click"/>
+                <Button x:Name="NewConfigButton" Content="{DynamicResource mm_Btn_New}" HorizontalAlignment="Right" Padding="12,0" Margin="0,6,66,6" Click="NewConfigButton_Click"/>
+                <Button x:Name="RemoveConfigButton" Content="{DynamicResource mm_Btn_Remove}" HorizontalAlignment="Right" Padding="12,0" Margin="0,6,119,6" Click="RemoveConfigButton_Click"/>
+                <Button x:Name="LaunchConfigButton" Content="{DynamicResource mm_Btn_Select}" HorizontalAlignment="Right" Padding="12,0" Margin="0,6,6,6" Click="LaunchConfigButton_Click"/>
 
-                <Button Content="Scan for games" HorizontalAlignment="Left" Padding="12,0" Margin="6,6,0,6" Click="ScanForGamesButton_Click"/>
+                <Button Content="{DynamicResource mm_Btn_ScanGames}" HorizontalAlignment="Left" Padding="12,0" Margin="6,6,0,6" Click="ScanForGamesButton_Click"/>
             </Grid>
         </Grid>
     </Grid>

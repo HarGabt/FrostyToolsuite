@@ -15,7 +15,7 @@
         </Grid.RowDefinitions>
 
         <Grid Background="{StaticResource ListBackground}">
-            <TextBlock Text="Some options will require a restart of Frosty before becoming active" DockPanel.Dock="Bottom" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3" Foreground="{StaticResource FontColor}" FontSize="16" FontFamily="Global User Interface"/>
+            <TextBlock Text="Some options will require a restart of Frosty before becoming active" DockPanel.Dock="Bottom" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="3" Foreground="{StaticResource FontColor}" FontSize="16"/>
         </Grid>
 
         <ctrl:FrostyTabControl x:Name="optionsTabControl" Grid.Row="1"/>

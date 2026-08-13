@@ -239,6 +239,10 @@
     <Resource Include="AppIcon.ico" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Localization\Strings.en-US.xaml" />
+    <Resource Include="Localization\Strings.ru-RU.xaml" />
+  </ItemGroup>
+  <ItemGroup>
     <Resource Include="Images\AddMod.png" />
   </ItemGroup>
   <ItemGroup>

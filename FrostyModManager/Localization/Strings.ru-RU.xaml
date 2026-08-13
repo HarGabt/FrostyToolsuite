@@ -1,0 +1,161 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <!-- Frosty Mod Manager — Русский (ru-RU)-->
+
+    <!-- Dynamic fonts (override per language) -->
+    <FontFamily x:Key="DefaultFontFamily">Segoe UI Variable Text, Global User Interface</FontFamily>
+    <FontFamily x:Key="ReferenceFontFamily">MS Reference Sans Serif, Global User Interface</FontFamily>
+    <FontFamily x:Key="MonoFontFamily">Consolas, Global User Interface</FontFamily>
+    <FontFamily x:Key="BrandFontFamily">OCR A Extended, Global User Interface</FontFamily>
+
+    <!-- Right-to-left layout -->
+    <sys:Boolean x:Key="IsRightToLeft">false</sys:Boolean>
+
+    <!-- App / Window titles -->
+    <sys:String x:Key="mm_AppTitle">Frosty Mod Manager</sys:String>
+    <sys:String x:Key="mm_About_Title">О программе (Frosty Mod Manager)</sys:String>
+    <sys:String x:Key="mm_AddProfile_Title">Добавить профиль</sys:String>
+    <sys:String x:Key="mm_Config_Title">Конфигурация модификации</sys:String>
+    <sys:String x:Key="mm_Collection_Title">Экспорт коллекции</sys:String>
+    <sys:String x:Key="mm_Errors_Title">Ошибка установки</sys:String>
+    <sys:String x:Key="mm_LaunchOpts_Title">Параметры запуска</sys:String>
+    <sys:String x:Key="mm_ModData_Title">Настройка папки ModData</sys:String>
+
+    <!-- Main menu -->
+    <sys:String x:Key="mm_Menu_File">Файл</sys:String>
+    <sys:String x:Key="mm_Menu_Pack">Набор</sys:String>
+    <sys:String x:Key="mm_Menu_Tools">Инструменты</sys:String>
+    <sys:String x:Key="mm_Menu_Help">Справка</sys:String>
+    <sys:String x:Key="mm_Menu_Language">Язык (Language)</sys:String>
+
+    <!-- Menu items -->
+    <sys:String x:Key="mm_MenuItem_Rename">Переименовать</sys:String>
+    <sys:String x:Key="mm_MenuItem_Duplicate">Дублировать</sys:String>
+    <sys:String x:Key="mm_MenuItem_Export">Экспорт</sys:String>
+    <sys:String x:Key="mm_MenuItem_Import">Импорт</sys:String>
+    <sys:String x:Key="mm_MenuItem_CreateCollection">Создать коллекцию</sys:String>
+    <sys:String x:Key="mm_MenuItem_SelectGame">Выберите игру</sys:String>
+    <sys:String x:Key="mm_MenuItem_Exit">Выход</sys:String>
+    <sys:String x:Key="mm_MenuItem_ManageModData">Настройка папки ModData</sys:String>
+    <sys:String x:Key="mm_MenuItem_About">О программе (Frosty Mod Manager)</sys:String>
+    <sys:String x:Key="mm_MenuItem_Options">Настройки</sys:String>
+
+    <!-- Toolbar / Pack strip -->
+    <sys:String x:Key="mm_Pack_Label">Набор: </sys:String>
+    <sys:String x:Key="mm_Tip_AddPack">Добавить набор</sys:String>
+    <sys:String x:Key="mm_Tip_RemovePack">Удалить набор</sys:String>
+    <sys:String x:Key="mm_Tip_ImportPack">Импорт набора</sys:String>
+
+    <!-- Launch  buttons -->
+    <sys:String x:Key="mm_Btn_Compile">Запустить игру</sys:String>
+    <sys:String x:Key="mm_Tip_LaunchGame">Запустить игру с выбранными модификациями</sys:String>
+
+    <!-- Tab headers -->
+    <sys:String x:Key="mm_Tab_AvailableMods">Доступные модификации</sys:String>
+    <sys:String x:Key="mm_Tab_AvailableModsFmt">Доступные модификации ({0})</sys:String>
+    <sys:String x:Key="mm_Tab_InstalledPlugins">Установленные плагины</sys:String>
+    <sys:String x:Key="mm_Tab_Log">Журнал</sys:String>
+    <sys:String x:Key="mm_Tab_AppliedMods">Установленные модификации</sys:String>
+    <sys:String x:Key="mm_Tab_AppliedModsFmt">Установленные модификации: ({0})</sys:String>
+    <sys:String x:Key="mm_Tab_Description">Описание</sys:String>
+    <sys:String x:Key="mm_Tab_Resources">Ресурсы</sys:String>
+
+    <!-- Mod-Beschreibungs-Panel -->
+    <sys:String x:Key="mm_AffectedFiles">Изменяемые файлы</sys:String>
+    <sys:String x:Key="mm_Loading">Загрузка...</sys:String>
+
+    <!-- Available mods toolbar -->
+    <sys:String x:Key="mm_Btn_AddMods">Добавить мод(ы)</sys:String>
+    <sys:String x:Key="mm_Tip_ImportMods">Импортировать мод(ы) из файла</sys:String>
+    <sys:String x:Key="mm_Btn_RemoveMods">Удалить мод(ы)</sys:String>
+    <sys:String x:Key="mm_Tip_RemoveMods">Удалить выбранный(-е) мод(ы)</sys:String>
+    <sys:String x:Key="mm_Btn_ApplyMods">Применить мод(ы)</sys:String>
+    <sys:String x:Key="mm_Tip_ApplyMods">Добавить мод(ы) в список установленных модификаций</sys:String>
+    <sys:String x:Key="mm_Tip_ShowApplied">Показать установленный(-е) мод(ы)</sys:String>
+    <sys:String x:Key="mm_Tip_HideApplied">Скрыть установленный(-е) мод(ы)</sys:String>
+    <sys:String x:Key="mm_Filter_Watermark">Фильтр</sys:String>
+
+    <!-- ListView / GridView column headers -->
+    <sys:String x:Key="mm_Col_Title">Название</sys:String>
+    <sys:String x:Key="mm_Col_Version">Версия</sys:String>
+    <sys:String x:Key="mm_Col_Applied">Установлено</sys:String>
+    <sys:String x:Key="mm_Col_Name">Название</sys:String>
+    <sys:String x:Key="mm_Col_Author">Автор</sys:String>
+    <sys:String x:Key="mm_Col_Path">Путь</sys:String>
+    <sys:String x:Key="mm_Col_Filename">Название файла</sys:String>
+    <sys:String x:Key="mm_Col_Status">Состояние</sys:String>
+
+    <!-- Applied mods toolbar tooltips -->
+    <sys:String x:Key="mm_Tip_DeselectAll">Снять выбор со всех модификаций</sys:String>
+    <sys:String x:Key="mm_Tip_MoveDown">Переместить мод(ы) вниз по списку.&#x0A;Удерживайте клавишу Shift, чтобы при нажатии переместить на 5 позиций вниз.&#x0A;Удерживайте комбинацию Ctrl+Shift, чтобы при нажатии переместить в окончание списка.</sys:String>
+    <sys:String x:Key="mm_Tip_MoveUp">Переместить мод(ы) вверх по списку.&#x0A;Удерживайте клавишу Shift, чтобы при нажатии переместить на 5 позиций вверх.&#x0A;Удерживайте комбинацию Ctrl+Shift, чтобы при нажатии переместить в начало списка.</sys:String>
+    <sys:String x:Key="mm_Tip_RemoveMod">Удалить мод из списка</sys:String>
+
+    <!-- Resources (conflicts) tab -->
+    <sys:String x:Key="mm_Chk_ShowConflicts">Показать только конфликтующие</sys:String>
+
+    <!-- About window -->
+    <sys:String x:Key="mm_About_Copyright">Copyright© 2017-2020</sys:String>
+    <sys:String x:Key="mm_About_Authors">derwangler, Cade и benji</sys:String>
+    <sys:String x:Key="mm_About_OriginalCreator">Оригинальная задумка: GalaxyMan2015</sys:String>
+    <sys:String x:Key="mm_About_Website">Веб-сайт: </sys:String>
+    <sys:String x:Key="mm_About_Support">Поддержка: </sys:String>
+
+    <!-- Add Profile window -->
+    <sys:String x:Key="mm_AddProfile_NameLabel">Название профиля:</sys:String>
+
+    <!-- Collection Settings window labels -->
+    <sys:String x:Key="mm_Label_Title">Название </sys:String>
+    <sys:String x:Key="mm_Label_Author">Автор </sys:String>
+    <sys:String x:Key="mm_Label_Version">Версия </sys:String>
+    <sys:String x:Key="mm_Label_Category">Категория </sys:String>
+    <sys:String x:Key="mm_Label_Link">Ссылка </sys:String>
+
+    <!-- Launch Options window -->
+    <sys:String x:Key="mm_LaunchOpts_CmdArgs">Параметры запуска:</sys:String>
+
+    <!-- Manage ModData window -->
+    <sys:String x:Key="mm_ModData_PacksLabel">Наборы в папке ModData:</sys:String>
+    <sys:String x:Key="mm_ModData_PathLabel">Путь к директории ModData:</sys:String>
+    <sys:String x:Key="mm_Tip_LaunchExisting">Попытка запустить игру с существующим ModData</sys:String>
+    <sys:String x:Key="mm_Tip_OpenFolder">Открывает папку</sys:String>
+    <sys:String x:Key="mm_Tip_DeleteFolder">Удаляет папку</sys:String>
+
+    <!-- Prelaunch window -->
+    <sys:String x:Key="mm_Btn_ScanGames">Автопоиск игр</sys:String>
+
+    <!-- Status bar -->
+    <sys:String x:Key="mm_Status_AvailableMods">Доступных модификаций: {0}</sys:String>
+    <sys:String x:Key="mm_Status_FilteredMods">Отсеянных модификаций: {0}</sys:String>
+    <sys:String x:Key="mm_Status_AppliedMods">Установленных модификаций: {0}</sys:String>
+    <sys:String x:Key="mm_Status_NotAppliedMods">Неустановленных модификаций: {0}</sys:String>
+
+    <!-- Dynamic filter-button tooltips -->
+    <sys:String x:Key="mm_Tip_ShowAvailable">Показать доступные модификации</sys:String>
+
+    <!-- Message box text -->
+    <sys:String x:Key="mm_Msg_AtLeastOnePack">Должен быть как минимум один активный набор</sys:String>
+    <sys:String x:Key="mm_Msg_ConfirmDeletePack">Вы действительно хотите удалить этот набор?</sys:String>
+    <sys:String x:Key="mm_Msg_PackExists">Уже существует набор с этим названием</sys:String>
+    <sys:String x:Key="mm_Msg_ModsUninstalled">Выбранные модификации были успешно удалены</sys:String>
+    <sys:String x:Key="mm_Msg_PackImported">Успешный импорт набора</sys:String>
+    <sys:String x:Key="mm_Msg_PackFileExists">Уже существует файл с этим названием</sys:String>
+    <sys:String x:Key="mm_Msg_ShowAllResources">Вы действительно хотите показать все изменяемые файлы?&#x0A;&#x0A;Это может занять продолжительное время, особенно при большом количестве установленных модификаций.</sys:String>
+
+    <!-- File dialog titles -->
+    <sys:String x:Key="mm_DlgTitle_InstallMod">Установить модификацию</sys:String>
+    <sys:String x:Key="mm_DlgTitle_ImportPack">Импорт набора</sys:String>
+
+    <!-- Common buttons -->
+    <sys:String x:Key="mm_Btn_OK">ОК</sys:String>
+    <sys:String x:Key="mm_Btn_Cancel">Отмена</sys:String>
+    <sys:String x:Key="mm_Btn_Save">Сохранить</sys:String>
+    <sys:String x:Key="mm_Btn_Close">Закрыть</sys:String>
+    <sys:String x:Key="mm_Btn_Add">Добавить</sys:String>
+    <sys:String x:Key="mm_Btn_New">Новый</sys:String>
+    <sys:String x:Key="mm_Btn_Remove">Удалить</sys:String>
+    <sys:String x:Key="mm_Btn_Select">Выбрать</sys:String>
+
+</ResourceDictionary>

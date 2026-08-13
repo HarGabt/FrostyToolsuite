@@ -103,7 +103,7 @@
                                 </Grid.ColumnDefinitions>
                                 <Image x:Name="imageRect"  Grid.Column="0" Width="16" Height="16" Source="{Binding Path=., Converter={StaticResource AssetEntryToBitmapSourceConverter}}"/>
 
-                                <TextBlock x:Name="displayName" Grid.Column="1" Margin="6,0,0,0" Text="{Binding Path=DisplayName}" VerticalAlignment="Center" FontFamily="MS Reference Sans Serif" FontWeight="Normal"/>
+                                <TextBlock x:Name="displayName" Grid.Column="1" Margin="6,0,0,0" Text="{Binding Path=DisplayName}" VerticalAlignment="Center" FontFamily="{DynamicResource ReferenceFontFamily}" FontWeight="Normal"/>
                             </Grid>
                             <DataTemplate.Triggers>
                                 <DataTrigger Binding="{Binding Path=IsModified}" Value="True">
@@ -113,7 +113,7 @@
                         </DataTemplate>
                         <DataTemplate x:Key="TypeCellTemplate">
                             <Grid Height="22">
-                                <TextBlock Text="{Binding Path=Type}" VerticalAlignment="Center" FontFamily="MS Reference Sans Serif"/>
+                                <TextBlock Text="{Binding Path=Type}" VerticalAlignment="Center" FontFamily="{DynamicResource ReferenceFontFamily}"/>
                             </Grid>
                         </DataTemplate>
                         <Style x:Key="DetailViewItemContainerStyle" TargetType="{x:Type ListViewItem}" BasedOn="{StaticResource baseListViewItemStyle}">
@@ -214,7 +214,7 @@
                                                 <ImageBrush ImageSource="/FrostyEditor;component/Images/CloseFolder.png"/>
                                             </Rectangle.OpacityMask>
                                         </Rectangle>
-                                        <TextBlock Text="{Binding Path=DisplayName}" Foreground="{StaticResource FontColor}" FontFamily="MS Reference Sans Serif" VerticalAlignment="Center" Margin="8,0,3,0"/>
+                                        <TextBlock Text="{Binding Path=DisplayName}" Foreground="{StaticResource FontColor}" FontFamily="{DynamicResource ReferenceFontFamily}" VerticalAlignment="Center" Margin="8,0,3,0"/>
                                     </StackPanel>
                                     <HierarchicalDataTemplate.Triggers>
                                         <DataTrigger Binding="{Binding Path=IsExpanded}" Value="True">
@@ -515,7 +515,7 @@
 
                                 <Grid Grid.Column="2">
                                     <ContentControl x:Name="PART_Name" Margin="2,0,2,0" VerticalAlignment="Center" HorizontalAlignment="Stretch" Padding="{Binding Path=Padding, RelativeSource={RelativeSource AncestorType={x:Type ContentControl}}}" Focusable="False">
-                                        <local:FrostyHightlightTextBlock Text="{Binding Path=DisplayName}" HighlightText="{Binding Path=FilterText, RelativeSource={RelativeSource AncestorType={x:Type local:FrostyPropertyGrid}}}" FontFamily="Global User Interface" FontWeight="{Binding Path=IsModified, Converter={StaticResource FrostyValueModifiedConverter}}" Foreground="#DADADA"/>
+                                        <local:FrostyHightlightTextBlock Text="{Binding Path=DisplayName}" HighlightText="{Binding Path=FilterText, RelativeSource={RelativeSource AncestorType={x:Type local:FrostyPropertyGrid}}}" FontWeight="{Binding Path=IsModified, Converter={StaticResource FrostyValueModifiedConverter}}" Foreground="#DADADA"/>
                                     </ContentControl>
                                 </Grid>
 
@@ -564,7 +564,7 @@
 
                                 <Grid Grid.Column="2">
                                     <ContentControl Margin="2,0,2,0" VerticalAlignment="Center" HorizontalAlignment="Stretch" Padding="{Binding Path=Padding, RelativeSource={RelativeSource AncestorType={x:Type ContentControl}}}" Focusable="False">
-                                        <TextBlock Text="{Binding Path=DisplayName}" FontFamily="Global User Interface" Foreground="#DADADA" FontWeight="Bold"/>
+                                        <TextBlock Text="{Binding Path=DisplayName}" Foreground="#DADADA" FontWeight="Bold"/>
                                     </ContentControl>
                                 </Grid>
                             </Grid>
@@ -681,7 +681,7 @@
                                 </local:FrostyPropertyGridTreeView>
                                 <Border x:Name="PART_FilterInProgresBorder" Background="{StaticResource ControlBackground}" Opacity="0.25" Visibility="Collapsed">
                                     <Grid>
-                                        <TextBlock Text="Filter in progress" FontFamily="Global User Interface" FontSize="70" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        <TextBlock Text="Filter in progress" FontSize="70" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                     </Grid>
                                 </Border>
                             </Grid>
@@ -794,8 +794,8 @@
                                             <ColumnDefinition MinWidth="260"/>
                                         </Grid.ColumnDefinitions>
 
-                                        <TextBlock Grid.Column="0" Text="{Binding Path=., Converter={StaticResource classTypeToStringConverter}, ConverterParameter=Name}" Foreground="{StaticResource FontColor}" VerticalAlignment="Center" FontFamily="MS Reference Sans Serif" TextTrimming="CharacterEllipsis"/>
-                                        <TextBlock Grid.Column="1" Text="{Binding Path=., Converter={StaticResource classTypeToStringConverter}, ConverterParameter=Guid}" Foreground="{StaticResource FontColor}" VerticalAlignment="Center" FontFamily="Consolas" HorizontalAlignment="Right"/>
+                                        <TextBlock Grid.Column="0" Text="{Binding Path=., Converter={StaticResource classTypeToStringConverter}, ConverterParameter=Name}" Foreground="{StaticResource FontColor}" VerticalAlignment="Center" FontFamily="{DynamicResource ReferenceFontFamily}" TextTrimming="CharacterEllipsis"/>
+                                        <TextBlock Grid.Column="1" Text="{Binding Path=., Converter={StaticResource classTypeToStringConverter}, ConverterParameter=Guid}" Foreground="{StaticResource FontColor}" VerticalAlignment="Center" FontFamily="{DynamicResource MonoFontFamily}" HorizontalAlignment="Right"/>
                                     </Grid>
                                 </DataTemplate>
                             </ComboBox.ItemTemplate>
@@ -818,10 +818,10 @@
                                             <Border x:Name="dropDownBorder" Width="{Binding ActualWidth, RelativeSource={RelativeSource TemplatedParent}}" BorderBrush="{StaticResource ControlBackground}" BorderThickness="1">
                                                 <Grid>
                                                     <StackPanel Grid.Row="0" Orientation="Vertical" MaxHeight="330" Background="{StaticResource ListBackground}">
-                                                        <Button x:Name="PART_ClearButton" Content="Clear assigned object" Style="{StaticResource MenuButtonStyle}" FontFamily="MS Reference Sans Serif" Height="22"/>
-                                                        <Button x:Name="PART_OpenButton" Content="Open asset" Style="{StaticResource MenuButtonStyle}" FontFamily="MS Reference Sans Serif" Height="22"/>
-                                                        <Button x:Name="PART_FindButton" Content="Find in data explorer" Style="{StaticResource MenuButtonStyle}" FontFamily="MS Reference Sans Serif" Height="22"/>
-                                                        <Button x:Name="PART_CreateButton" Content="Create new ..." Style="{StaticResource MenuButtonStyle}" FontFamily="MS Reference Sans Serif" Height="22"/>
+                                                        <Button x:Name="PART_ClearButton" Content="Clear assigned object" Style="{StaticResource MenuButtonStyle}" FontFamily="{DynamicResource ReferenceFontFamily}" Height="22"/>
+                                                        <Button x:Name="PART_OpenButton" Content="Open asset" Style="{StaticResource MenuButtonStyle}" FontFamily="{DynamicResource ReferenceFontFamily}" Height="22"/>
+                                                        <Button x:Name="PART_FindButton" Content="Find in data explorer" Style="{StaticResource MenuButtonStyle}" FontFamily="{DynamicResource ReferenceFontFamily}" Height="22"/>
+                                                        <Button x:Name="PART_CreateButton" Content="Create new ..." Style="{StaticResource MenuButtonStyle}" FontFamily="{DynamicResource ReferenceFontFamily}" Height="22"/>
                                                         
                                                         <Border x:Name="PART_Separator" Height="22">
                                                             <Separator Margin="1,0,1,0"/>
@@ -830,7 +830,7 @@
                                                         <ctrl:FrostyWatermarkTextBox x:Name="PART_FilterTextBox" Height="24" Margin="2,-8,1,2" WatermarkText="Filter" VerticalContentAlignment="Center" BorderThickness="1"/>
 
                                                         <Border x:Name="PART_TBBorder" Height="22">
-                                                            <TextBlock x:Name="PART_TextBlock" VerticalAlignment="Center" Text="Select Class" Margin="4,0,0,0" Foreground="{StaticResource FontColor}" Opacity="0.5" FontFamily="MS Reference Sans Serif"/>
+                                                            <TextBlock x:Name="PART_TextBlock" VerticalAlignment="Center" Text="Select Class" Margin="4,0,0,0" Foreground="{StaticResource FontColor}" Opacity="0.5" FontFamily="{DynamicResource ReferenceFontFamily}"/>
                                                         </Border>
 
                                                         <ScrollViewer x:Name="DropDownScrollViewer" MaxHeight="198">
@@ -1192,13 +1192,13 @@
                                                 <ImageBrush ImageSource="/FrostyEditor;component/Images/CloseFolder.png"/>
                                             </Rectangle.OpacityMask>
                                         </Rectangle>
-                                        <TextBlock Text="{Binding Path=Name}" Foreground="{StaticResource FontColor}" FontFamily="Global User Interface" Margin="6,0,0,0" VerticalAlignment="Center"/>
+                                        <TextBlock Text="{Binding Path=Name}" Foreground="{StaticResource FontColor}" Margin="6,0,0,0" VerticalAlignment="Center"/>
                                     </StackPanel>
                                     <HierarchicalDataTemplate.ItemTemplate>
                                         <DataTemplate>
                                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Height="22">
                                                 <Image x:Name="imageRect"  Grid.Column="0" Width="16" Height="16" Source="{Binding Path=Name, Converter={StaticResource StringToBitmapSourceConverter}}" Margin="3 0 0 0"/>
-                                                <TextBlock x:Name="name" Text="{Binding Path=Name}" Foreground="{StaticResource FontColor}" FontFamily="Global User Interface" Margin="6 0 0 0" VerticalAlignment="Center"/>
+                                                <TextBlock x:Name="name" Text="{Binding Path=Name}" Foreground="{StaticResource FontColor}" Margin="6 0 0 0" VerticalAlignment="Center"/>
                                             </StackPanel>
                                         </DataTemplate>
                                     </HierarchicalDataTemplate.ItemTemplate>
@@ -1279,8 +1279,8 @@
                                             <DataTemplate>
                                                 <StackPanel Orientation="Horizontal" Height="22">
                                                     <Image x:Name="imageRect" Width="16" Height="16" Source="{Binding Path=., Converter={StaticResource AssetEntryToBitmapSourceConverter}}"/>
-                                                    <TextBlock x:Name="displayName" Margin="6,0,0,0" Text="{Binding Path=DisplayName}" VerticalAlignment="Center" FontFamily="MS Reference Sans Serif" FontWeight="Normal"/>
-                                                    <TextBlock x:Name="displayPath" Margin="6,0,0,0" VerticalAlignment="Center" FontFamily="MS Reference Sans Serif" FontWeight="Normal" Opacity="0.5">
+                                                    <TextBlock x:Name="displayName" Margin="6,0,0,0" Text="{Binding Path=DisplayName}" VerticalAlignment="Center" FontFamily="{DynamicResource ReferenceFontFamily}" FontWeight="Normal"/>
+                                                    <TextBlock x:Name="displayPath" Margin="6,0,0,0" VerticalAlignment="Center" FontFamily="{DynamicResource ReferenceFontFamily}" FontWeight="Normal" Opacity="0.5">
                                                         <TextBlock.Text>
                                                             <Binding Path="Path" StringFormat="({0})"/>
                                                         </TextBlock.Text>
@@ -1301,7 +1301,7 @@
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
                                                 <Grid Height="22">
-                                                    <TextBlock Text="{Binding Path=Type}" VerticalAlignment="Center" FontFamily="MS Reference Sans Serif"/>
+                                                    <TextBlock Text="{Binding Path=Type}" VerticalAlignment="Center" FontFamily="{DynamicResource ReferenceFontFamily}"/>
                                                 </Grid>
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
@@ -1423,17 +1423,17 @@
 
                         <!-- Header -->
                         <StackPanel Grid.Row="0" Margin="5,5,5,0">
-                            <TextBlock Margin="2" Text="An unhandled exception has occurred" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="{StaticResource FontColor}" FontFamily="Global User Interface" FontSize="16"/>
-                            <TextBlock Margin="2,0,2,2" Text="{Binding ExceptionMessageText, RelativeSource={RelativeSource AncestorType={x:Type local:FrostyExceptionBox}}}" TextWrapping="WrapWithOverflow" TextTrimming="None" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="{StaticResource FontColor}" FontFamily="Global User Interface"/>
+                            <TextBlock Margin="2" Text="An unhandled exception has occurred" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="{StaticResource FontColor}" FontSize="16"/>
+                            <TextBlock Margin="2,0,2,2" Text="{Binding ExceptionMessageText, RelativeSource={RelativeSource AncestorType={x:Type local:FrostyExceptionBox}}}" TextWrapping="WrapWithOverflow" TextTrimming="None" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="{StaticResource FontColor}"/>
                         </StackPanel>
                         
                         <!-- Text -->
                         <TabControl Grid.Row="1" Margin="8,0,8,0">
                             <TabItem Header="Exception">
-                                <TextBox BorderThickness="1" Padding="4" Text="{Binding ExceptionText, RelativeSource={RelativeSource AncestorType={x:Type local:FrostyExceptionBox}}}" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" IsReadOnly="True" FontFamily="Consolas"/>
+                                <TextBox BorderThickness="1" Padding="4" Text="{Binding ExceptionText, RelativeSource={RelativeSource AncestorType={x:Type local:FrostyExceptionBox}}}" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" IsReadOnly="True" FontFamily="{DynamicResource MonoFontFamily}"/>
                             </TabItem>
                             <TabItem Header="Log">
-                                <TextBox BorderThickness="1" Padding="4" Text="{Binding LogText, RelativeSource={RelativeSource AncestorType={x:Type local:FrostyExceptionBox}}}" FontFamily="Consolas" IsReadOnly="True" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"/>
+                                <TextBox BorderThickness="1" Padding="4" Text="{Binding LogText, RelativeSource={RelativeSource AncestorType={x:Type local:FrostyExceptionBox}}}" FontFamily="{DynamicResource MonoFontFamily}" IsReadOnly="True" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"/>
                             </TabItem>
                         </TabControl>
 
@@ -1469,10 +1469,10 @@
                             <RowDefinition Height="38"/>
                         </Grid.RowDefinitions>
                         <!-- Warning text -->
-                        <TextBlock Grid.Row="0" Text="Warning" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="{StaticResource FontColor}" FontFamily="Global User Interface" FontSize="14" FontWeight="Bold"/>
+                        <TextBlock Grid.Row="0" Text="Warning" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="{StaticResource FontColor}" FontSize="14" FontWeight="Bold"/>
                         <!-- Crash text -->
                         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Margin="8,0,8,0" BorderThickness="1" Padding="4">
-                            <TextBlock Text="{Binding WarningText, RelativeSource={RelativeSource AncestorType={x:Type local:FrostyHandledExceptionBox}}}" TextWrapping="Wrap" Foreground="White" FontFamily="Global User Interface" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBlock Text="{Binding WarningText, RelativeSource={RelativeSource AncestorType={x:Type local:FrostyHandledExceptionBox}}}" TextWrapping="Wrap" Foreground="White" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </ScrollViewer>
                         <!-- Ok button -->
                         <StackPanel Grid.Row="2" Margin="8" FlowDirection="RightToLeft" Orientation="Horizontal">
