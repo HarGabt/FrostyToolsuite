@@ -467,6 +467,9 @@
     <EmbeddedResource Include="Sdk\Bf2042-Strings.txt" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Sdk\Bf6-Strings.txt" />
+  </ItemGroup>
+  <ItemGroup>
     <Resource Include="AppIcon.ico" />
   </ItemGroup>
   <ItemGroup>

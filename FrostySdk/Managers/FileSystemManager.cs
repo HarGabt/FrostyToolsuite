@@ -187,7 +187,7 @@ namespace FrostySdk
             int endCount = paths.Count;
 
             if (filename.StartsWith("native_data/") && paths.Count > 1)
-                startCount = 1;
+                startCount = 0; // HACK for BF6
             else if (filename.StartsWith("native_patch/"))
                 endCount = 1;
 

@@ -407,9 +407,7 @@ namespace Frosty.Core.Sdk.Bf2042
             }
             
             long current = reader.Position;
-            //reader.Position = TypeOffset + 8;
-            reader.Position = TypeOffset;
-            reader.Position = reader.ReadLong() + 8;
+            reader.Position = TypeOffset + 8;
             TypeGuid = reader.ReadGuid();
                 
             reader.Position = current;

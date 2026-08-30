@@ -1045,7 +1045,7 @@ namespace Frosty.Core.Viewport
                     else if (paramName.Contains("normal")) { NormTexture = state.TextureLibrary.LoadTextureAsset(value.External.FileGuid); }
                 }
 
-                else if (ProfilesLibrary.IsLoaded(ProfileVersion.Battlefield2042))
+                else if (ProfilesLibrary.IsLoaded(ProfileVersion.Battlefield2042, ProfileVersion.Battlefield6))
                 {
                     if (paramName.StartsWith("_CS") || paramName.Contains("Color")) { DiffuseTexture = state.TextureLibrary.LoadTextureAsset(value.External.FileGuid); }
                     else if (paramName.Contains("NX") || paramName.Contains("NMT") || paramName.Contains("Normal"))

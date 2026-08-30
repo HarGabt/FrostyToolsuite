@@ -1,10 +1,13 @@
 ﻿using Frosty.Core.IO;
+using Frosty.Core.Sdk.AnthemDemo;
+using Frosty.Core.Sdk.Bf2042;
 using Frosty.Core.Windows;
 using FrostySdk;
 using FrostySdk.Attributes;
 using FrostySdk.Ebx;
 using FrostySdk.IO;
 using FrostySdk.Managers;
+using FrostySdk.Managers.Entries;
 using Microsoft.CSharp;
 using System;
 using System.CodeDom.Compiler;
@@ -14,8 +17,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using Frosty.Core.Sdk.Bf2042;
-using FrostySdk.Managers.Entries;
 
 namespace Frosty.Core.Sdk
 {
@@ -464,7 +465,7 @@ namespace Frosty.Core.Sdk
 
                 if (/*parent == "" &&*/ type == EbxFieldType.Pointer)
                 {
-                    if (parent == "DataContainer")
+                    if (parent == "DataContainer" || parentDataContainer != 0)
                     {
                         // add Id field to non asset types
                         sb.AppendLine("[" + typeof(IsTransientAttribute).Name + "]");
@@ -540,7 +541,7 @@ namespace Frosty.Core.Sdk
                     }
                 }
 
-                if ((parent == "DataContainer") && !addedGetId)
+                if ((parent == "DataContainer" || parentDataContainer != 0) && !addedGetId)
                 {
                     Type tmpType = typeof(EbxClassMetaAttribute);
                     string namespaceName = tmpType.GetProperties()[4].Name;
@@ -1343,10 +1344,12 @@ namespace Frosty.Core.Sdk
                     }
                 }
             }
-            else if (ProfilesLibrary.IsLoaded(ProfileVersion.Battlefield2042))
+            else if (ProfilesLibrary.IsLoaded(ProfileVersion.Battlefield2042, ProfileVersion.Battlefield6))
             {
-                // read in strings which were manually created (since Battlefield2042 has stripped all strings)
-                using (NativeReader reader = new NativeReader(Assembly.GetExecutingAssembly().GetManifestResourceStream("Frosty.Core.Sdk.Bf2042-Strings.txt")))
+                // read in strings which were manually created (since Battlefield 2042 and Battlefield 6 have stripped all strings)
+                string namesResource = ProfilesLibrary.IsLoaded(ProfileVersion.Battlefield2042) ? "Frosty.Core.Sdk.Bf2042-Strings.txt" : "Frosty.Core.Sdk.Bf6-Strings.txt";
+
+                using (NativeReader reader = new NativeReader(Assembly.GetExecutingAssembly().GetManifestResourceStream(namesResource)))
                 {
                     int count = int.Parse(reader.ReadLine());
                     for (int i = 0; i < count; i++)
@@ -1741,11 +1744,16 @@ namespace Frosty.Core.Sdk
             if (parent != "")
             {
                 Tuple<EbxClass, DbObject> p = m_values.Find((Tuple<EbxClass, DbObject> a) => { return a.Item1.Name == parent; });
-                offset = ProcessClass(p.Item1, p.Item2, m_fieldMappings[p.Item1.Name], outList, ref offset, ref fieldIndex);
+                if (p != null) //@HACK fix BF6
 
-                if (p.Item1.Name == "DataContainer" && pclass.Name != "Asset")
+
                 {
-                    pobj.SetValue("isData", true);
+                    offset = ProcessClass(p.Item1, p.Item2, m_fieldMappings[p.Item1.Name], outList, ref offset, ref fieldIndex);
+
+                    if (p.Item1.Name == "DataContainer" && pclass.Name != "Asset")
+                    {
+                        pobj.SetValue("isData", true);
+                    }
                 }
             }
 
@@ -1906,7 +1914,7 @@ namespace Frosty.Core.Sdk
                             {
                                 fieldObj.AddValue("baseType", m_values[idx].Item1.Name);
                             }
-                            
+
                             fieldObj.AddValue("arrayFlags", (int)m_values[idx].Item1.Type);
                         }
                         else
@@ -2084,7 +2092,7 @@ namespace Frosty.Core.Sdk
                     next = reader.ReadLong();
                 }
             }
-            
+
             NextOffset = origOffset;
             int count = 0;
             

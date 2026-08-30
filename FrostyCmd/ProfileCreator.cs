@@ -1226,13 +1226,13 @@ namespace FrostyCmd
                 writer.WriteObfuscatedString("bf6");
                 writer.WriteObfuscatedString(typeof(NullDeobfuscator).Name);
                 writer.WriteObfuscatedString(AssetManager.GetLoaderName("CasAssetLoader"));
-                writer.Write(CreateSources("Update\\Patch\\Data;false", "Update;true", "Data;false"));
+                writer.Write(CreateSources("Patch;false", "Update;true", "Data;false"));
                 writer.WriteObfuscatedString("BF6SDK");
                 writer.Write(CreateBanner("bf6"));
-                writer.WriteObfuscatedString("Common/Shaders/Textures/Debug/T_Debug_Black");
-                writer.WriteObfuscatedString("Common/Shaders/Textures/Debug/T_Debug_D");
-                writer.WriteObfuscatedString("Common/Shaders/Textures/Debug/T_Debug_N");
-                writer.WriteObfuscatedString("Common/Shaders/Textures/Debug/T_Debug_R");
+                writer.WriteObfuscatedString("Common/Shaders/Textures/Debug/Debug_D");
+                writer.WriteObfuscatedString("Common/Shaders/Textures/Debug/Debug_N");
+                writer.WriteObfuscatedString("Common/Shaders/Textures/Debug/Debug_R");
+                writer.WriteObfuscatedString("Common/Shaders/Textures/Debug/Debug_SRM");
                 writer.Write(0); // shared bundle names
                 writer.Write(0); // ignored res types
 
