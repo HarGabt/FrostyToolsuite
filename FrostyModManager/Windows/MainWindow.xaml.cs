@@ -681,6 +681,11 @@ namespace FrostyModManager
                 Frosty.Core.App.FileSystemManager.AddSource(source.Path, source.SubDirs);
             Frosty.Core.App.FileSystemManager.Initialize(KeyManager.Instance.GetKey("Key1"));
 
+            // re-run hard-link/symlink capability detection against the actual game
+            // path now that it's known, instead of relying on the empty-path probe
+            // done at startup (which can never confirm hard link support)
+            SymLinkHelper.Initialize(fs.BasePath);
+
             // Set selected pack
             App.SelectedPack = selectedPack.Name;
 

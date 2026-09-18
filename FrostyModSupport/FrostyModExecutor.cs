@@ -220,7 +220,11 @@ namespace Frosty.ModSupport
         private string m_patchPath = "Patch";
         private bool m_hasPatchFolder = true;
         private bool m_hasUpdateFolder = true;
-        private bool m_useAltSymLink = Config.Get<bool>("UseAltSymLink", false);
+        // UseAltSymLink shells out to "cmd.exe /c mklink" with the "runas" elevation verb, which
+        // isn't compatible with Wine (Process.Start throws a Win32Exception attempting to elevate).
+        // Under Wine, always fall through to the SymLinkHelper-routed path instead, regardless of
+        // this legacy setting.
+        private bool m_useAltSymLink = Config.Get<bool>("UseAltSymLink", false) && !OperatingSystemHelper.IsWine();
 
         public ILogger Logger { get => m_logger; set => m_logger = value; }
 
@@ -1728,17 +1732,36 @@ namespace Frosty.ModSupport
                     if (newInstallation)
                         reason = "New installation detected.";
 
-                    FrostyMessageBox.Show(reason + "\r\n\r\nShortly you will be prompted for elevated privileges, this is required to create symbolic links between the original data and the new modified data. Please ensure that you accept this to avoid any issues.", "Frosty Toolsuite");
+                    if (OperatingSystemHelper.IsWine())
+                    {
+                        FrostyMessageBox.Show(reason + "\r\n\r\nGenerating symbolic/hard links between the original data and the new modified data.", "Frosty Toolsuite");
+                    }
+                    else
+                    {
+                        FrostyMessageBox.Show(reason + "\r\n\r\nShortly you will be prompted for elevated privileges, this is required to create symbolic links between the original data and the new modified data. Please ensure that you accept this to avoid any issues.", "Frosty Toolsuite");
+                    }
+
                     if (!RunSymbolicLinkProcess(cmdArgs))
                     {
-                        FrostyMessageBox.Show("Frosty needs to generate symbolic links, please ensure that you accept this so you don't have to regenerate ModData.", "Frosty Editor");
+                        if (!OperatingSystemHelper.IsWine())
+                        {
+                            FrostyMessageBox.Show("Frosty needs to generate symbolic links, please ensure that you accept this so you don't have to regenerate ModData.", "Frosty Editor");
+                        }
+
                         if (!RunSymbolicLinkProcess(cmdArgs))
                         {
                             SymLinkHelper.DeleteDirectorySafe(modDataPath);
-                            FrostyMessageBox.Show("One ore more symbolic links could not be created, please restart tool as Administrator and ensure your storage drive is formatted to NTFS (not exFAT).", "Frosty Editor");
+
+                            if (OperatingSystemHelper.IsWine())
+                            {
+                                FrostyMessageBox.Show("One or more symbolic/hard links could not be created. Check 'executor.log' next to FrostyModManager for the specific reason (e.g. missing wine-symlink support, or a permissions issue with the game directory).", "Frosty Mod Manager");
+                            }
+                            else
+                            {
+                                FrostyMessageBox.Show("One ore more symbolic links could not be created, please restart tool as Administrator and ensure your storage drive is formatted to NTFS (not exFAT).", "Frosty Editor");
+                            }
+
                             return -1;
-
-
                         }
                     }
                 }
