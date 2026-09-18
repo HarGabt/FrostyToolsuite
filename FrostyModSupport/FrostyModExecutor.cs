@@ -1543,7 +1543,18 @@ namespace Frosty.ModSupport
                 bool newInstallation = false;
 
                 m_fs.ResetManifest();
-                if (!DeleteSelectFiles(modDataPath + m_patchPath))
+                bool modDataPresent = DeleteSelectFiles(modDataPath + m_patchPath);
+                if (modDataPresent && !IsModDataComplete(modDataPath + m_patchPath))
+                {
+                    // a previous run that failed halfway leaves ModData without its cas links, and an
+                    // existing folder is otherwise assumed to be complete, so rebuild it from scratch
+                    Logger.Log("ModData is incomplete, rebuilding it");
+                    FileLogger.Info("ModData is incomplete, rebuilding it.");
+                    SymLinkHelper.DeleteDirectorySafe(modDataPath);
+                    modDataPresent = false;
+                }
+
+                if (!modDataPresent)
                 {
                     if (!Directory.Exists(modDataPath))
                     {
@@ -2927,6 +2938,30 @@ namespace Frosty.ModSupport
                     writer.Write(ms.ToArray());
                 }
             }
+        }
+
+        private bool IsModDataComplete(string modPath)
+        {
+            foreach (string catalog in m_fs.Catalogs)
+            {
+                string baseCatalog = m_fs.ResolvePath((m_hasPatchFolder ? "native_patch/" : "native_data/") + catalog);
+                if (string.IsNullOrEmpty(baseCatalog) || !Directory.Exists(baseCatalog))
+                    continue;
+
+                int baseCount = Directory.GetFiles(baseCatalog, "*.cas").Length;
+                if (baseCount == 0)
+                    continue;
+
+                string modCatalog = $"{modPath}/{catalog}";
+                int modCount = Directory.Exists(modCatalog) ? Directory.GetFiles(modCatalog, "*.cas").Length : 0;
+                if (modCount < baseCount)
+                {
+                    FileLogger.Info($"ModData catalog '{catalog}' has {modCount} of {baseCount} cas files.");
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         private bool DeleteSelectFiles(string modPath)
