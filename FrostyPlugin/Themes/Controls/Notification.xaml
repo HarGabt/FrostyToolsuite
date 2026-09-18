@@ -8,6 +8,8 @@
     </ResourceDictionary.MergedDictionaries>
 
     <Style TargetType="{x:Type local:FrostyNotification}" BasedOn="{StaticResource {x:Type Window}}">
+        <Setter Property="FontFamily" Value="{DynamicResource DefaultFontFamily}" />
+        <Setter Property="FlowDirection" Value="{DynamicResource FlowDirection}" />
         <Setter Property="ContentTemplate">
             <Setter.Value>
                 <DataTemplate>

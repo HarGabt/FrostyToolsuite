@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Windows;
 using System.Windows.Media.Imaging;
 
 namespace FrostyEditor.Windows
@@ -41,7 +42,7 @@ namespace FrostyEditor.Windows
         private void ModSettingsWindow_Loaded(object sender, System.Windows.RoutedEventArgs e)
         {
             modCategoryComboBox.ItemsSource = categories;
-            
+
             modTitleTextBox.Text = ModSettings.Title;
             modAuthorTextBox.Text = ModSettings.Author;
             modCategoryComboBox.SelectedIndex = ModSettings.SelectedCategory;
@@ -81,7 +82,7 @@ namespace FrostyEditor.Windows
 
             if (string.IsNullOrWhiteSpace(mTTB) || string.IsNullOrWhiteSpace(mATB) || string.IsNullOrWhiteSpace(mCTB) || string.IsNullOrWhiteSpace(mVTB))
             {
-                FrostyMessageBox.Show("Title, Author, Category and Version are mandatory fields", "Frosty Editor");
+                FrostyMessageBox.Show(Application.Current.TryFindResource("fe_Msg_ModSettingsRequired") as string ?? "Title, Author, Category and Version are mandatory fields", "Frosty Editor");
                 return;
             }
 
@@ -89,7 +90,7 @@ namespace FrostyEditor.Windows
 
             if (invalidChars.Any(mTTB.Contains) || invalidChars.Any(mATB.Contains) || invalidChars.Any(mCTB.Contains) || invalidChars.Any(mVTB.Contains))
             {
-                FrostyMessageBox.Show("Invalid Characters: {, }", "Frosty Editor");
+                FrostyMessageBox.Show(Application.Current.TryFindResource("fe_Msg_InvalidChars") as string ?? "Invalid Characters: {, }", "Frosty Editor");
                 return;
             }
 
@@ -116,7 +117,7 @@ namespace FrostyEditor.Windows
             {
                 if (bimage.PixelWidth > 128 || bimage.PixelHeight > 128)
                 {
-                    FrostyMessageBox.Show("Icon cannot be larger than 128x128");
+                    FrostyMessageBox.Show(Application.Current.TryFindResource("fe_Msg_IconTooLarge") as string ?? "Icon cannot be larger than 128x128", "Frosty Editor");
                     return false;
                 }
             }
@@ -124,7 +125,7 @@ namespace FrostyEditor.Windows
             {
                 if (fi.Length > (5 * 1024 * 1024))
                 {
-                    FrostyMessageBox.Show("Screenshots cannot be larger than 5mb each");
+                    FrostyMessageBox.Show(Application.Current.TryFindResource("fe_Msg_ScreenshotTooLarge") as string ?? "Screenshots cannot be larger than 5mb each", "Frosty Editor");
                     return false;
                 }
             }

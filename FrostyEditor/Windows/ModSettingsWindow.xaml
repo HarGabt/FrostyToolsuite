@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:FrostyEditor.Windows"
         xmlns:ctrl="clr-namespace:Frosty.Controls;assembly=FrostyControls"
         mc:Ignorable="d"
-        Title="Export Mod" Height="530" Width="600"
+        Title="{DynamicResource fe_ModSettings_Title}" Height="530" Width="600"
         ResizeMode="NoResize" WindowStartupLocation="CenterScreen" SnapsToDevicePixels="True">
 
     <Window.Resources>
@@ -18,7 +18,7 @@
             </Style.Triggers>
         </Style>
     </Window.Resources>
-    
+
     <Grid Background="{StaticResource WindowBackground}">
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -30,19 +30,19 @@
                 <Grid DockPanel.Dock="Top" Margin="5">
                     <StackPanel>
                         <DockPanel LastChildFill="True">
-                            <Label Content="Title " FontFamily="Global User Interface" Width="75"/>
+                            <Label Content="{DynamicResource fe_ModSettings_LabelTitle}" Width="75"/>
                             <TextBox x:Name="modTitleTextBox" VerticalContentAlignment="Center" Text="Testing" Margin="1" BorderThickness="1" Style="{StaticResource TextBoxValidate}"/>
                         </DockPanel>
                         <DockPanel LastChildFill="True">
-                            <Label Content="Author " FontFamily="Global User Interface" Width="75"/>
+                            <Label Content="{DynamicResource fe_ModSettings_LabelAuthor}" Width="75"/>
                             <TextBox x:Name="modAuthorTextBox" VerticalContentAlignment="Center" Text="Testing" Margin="1" BorderThickness="1" Style="{StaticResource TextBoxValidate}"/>
                         </DockPanel>
                         <DockPanel LastChildFill="True">
-                            <Label Content="Version " FontFamily="Global User Interface" Width="75"/>
+                            <Label Content="{DynamicResource fe_ModSettings_LabelVersion}" Width="75"/>
                             <TextBox Grid.Column="1" x:Name="modVersionTextBox" VerticalContentAlignment="Center" Text="Testing" Margin="1" BorderThickness="1" Style="{StaticResource TextBoxValidate}"/>
                         </DockPanel>
                         <DockPanel LastChildFill="True">
-                            <Label Content="Category " FontFamily="Global User Interface" Width="75"/>
+                            <Label Content="{DynamicResource fe_ModSettings_LabelCategory}" Width="75"/>
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="0.5*"/>
@@ -54,12 +54,12 @@
                             </Grid>
                         </DockPanel>
                         <DockPanel LastChildFill="True">
-                            <Label Content="Link " FontFamily="Global User Interface" Width="75"/>
+                            <Label Content="{DynamicResource fe_ModSettings_LabelLink}" Width="75"/>
                             <TextBox Grid.Column="1" x:Name="modPageLinkTextBox" VerticalContentAlignment="Center" Text="" Margin="1" BorderThickness="1"/>
                         </DockPanel>
                     </StackPanel>
                 </Grid>
-                
+
                 <Grid DockPanel.Dock="Top" Margin="5">
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                         <ctrl:FrostyImageButton x:Name="iconImageButton" Title="ICON" OnValidate="FrostyImageButton_OnValidate" Margin="0,0,4,0"/>
@@ -70,7 +70,7 @@
                         <ctrl:FrostyImageButton x:Name="ssImageButton4" Title="IMAGE" OnValidate="FrostyImageButton_OnValidate" Margin="0"/>
                     </StackPanel>
                 </Grid>
-                
+
                 <TextBox x:Name="modDescriptionTextBox" Margin="5" BorderThickness="1" AcceptsReturn="True" AcceptsTab="True" VerticalScrollBarVisibility="Auto" TextWrapping="Wrap"/>
             </DockPanel>
         </Grid>
@@ -78,8 +78,8 @@
         <Border Grid.Row="1">
             <Grid Margin="8">
                 <DockPanel LastChildFill="False">
-                    <Button x:Name="cancelButton" Content="Cancel" DockPanel.Dock="Left" Width="75" Click="cancelButton_Click"/>
-                    <Button x:Name="saveButton" Content="Save" DockPanel.Dock="Right" Width="75" Click="saveButton_Click"/>
+                    <Button x:Name="cancelButton" Content="{DynamicResource fe_Btn_Cancel}" DockPanel.Dock="Left" Width="75" Click="cancelButton_Click"/>
+                    <Button x:Name="saveButton" Content="{DynamicResource fe_Btn_Save}" DockPanel.Dock="Right" Width="75" Click="saveButton_Click"/>
                 </DockPanel>
             </Grid>
         </Border>
