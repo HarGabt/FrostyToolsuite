@@ -1261,6 +1261,27 @@ namespace Frosty.ModSupport
             }
         }
 
+        private bool m_installOnly = false;
+
+        /// <summary>
+        /// Applies the mods and prepares ModData exactly like <see cref="Run"/>, but doesn't start the game.
+        /// Used under Wine/Proton, where the game has to be started by Steam/EA App itself (inside the
+        /// game's own prefix) with launch options pointing at the generated ModData.
+        /// </summary>
+        public int Install(FileSystemManager inFs, CancellationToken cancelToken, ILogger inLogger, string rootPath, string modPackName, params string[] modPaths)
+        {
+            m_installOnly = true;
+
+            try
+            {
+                return Run(inFs, cancelToken, inLogger, rootPath, modPackName, string.Empty, modPaths);
+            }
+            finally
+            {
+                m_installOnly = false;
+            }
+        }
+
         public int Run(FileSystemManager inFs, CancellationToken cancelToken, ILogger inLogger, string rootPath, string modPackName, string additionalArgs, params string[] modPaths)
         {
             m_modDirName = "ModData\\" + modPackName;
@@ -2451,6 +2472,15 @@ namespace Frosty.ModSupport
                 }
 
                 CopyFileIfRequired("thirdparty/fifaconfig.exe", m_fs.BasePath + "FIFASetup\\fifaconfig.exe");
+            }
+
+            if (m_installOnly)
+            {
+                Logger.Log("Mods installed.");
+                App.Logger.Log("Mods installed.");
+
+                GC.Collect();
+                return 0;
             }
 
             // launch the game (redirecting to the modPath directory)

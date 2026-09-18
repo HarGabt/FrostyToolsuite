@@ -705,11 +705,20 @@ namespace FrostyModManager
             CancellationTokenSource cancelToken = new CancellationTokenSource();
 
             // launch
-            // under Wine/Proton, Frosty doesn't launch the game itself (that's done via Steam
-            // separately), so the platform auto-launch integration is skipped in that case.
-            PluginManagerType launchPluginType = OperatingSystemHelper.IsWine() ? PluginManagerType.InstallOnly : PluginManagerType.ModManager;
+            // under Wine/Proton, Frosty can't start the game itself: the game exe would run inside
+            // Frosty's own prefix, which has no Steam/EA App, so it fails to start. Instead mods are
+            // only installed, and the user starts the game from Steam/EA App with launch options.
+            bool installOnly = OperatingSystemHelper.IsWine();
+            PluginManagerType launchPluginType = installOnly ? PluginManagerType.InstallOnly : PluginManagerType.ModManager;
+
+            if (installOnly && selectedPack.Name.Any(char.IsWhiteSpace))
+            {
+                FrostyMessageBox.Show($"The mod pack name '{selectedPack.Name}' contains whitespace, which breaks the Steam/EA App launch options. Please rename the pack.", "Mods installation failed");
+                return;
+            }
+
             int retCode = 0;
-            FrostyTaskWindow.Show("Launching", "", (task) =>
+            FrostyTaskWindow.Show(installOnly ? "Installing mods" : "Launching", "", (task) =>
             {
                 try
                 {
@@ -717,7 +726,10 @@ namespace FrostyModManager
                         executionAction.PreLaunchAction(task.TaskLogger, launchPluginType, cancelToken.Token);
 
                     FrostyModExecutor modExecutor = new FrostyModExecutor();
-                    retCode = modExecutor.Run(fs, cancelToken.Token, task.TaskLogger, $"Mods/{ProfilesLibrary.ProfileName}/", App.SelectedPack, additionalArgs.Trim(), modPaths.ToArray());
+                    if (installOnly)
+                        retCode = modExecutor.Install(fs, cancelToken.Token, task.TaskLogger, $"Mods/{ProfilesLibrary.ProfileName}/", App.SelectedPack, modPaths.ToArray());
+                    else
+                        retCode = modExecutor.Run(fs, cancelToken.Token, task.TaskLogger, $"Mods/{ProfilesLibrary.ProfileName}/", App.SelectedPack, additionalArgs.Trim(), modPaths.ToArray());
 
                     foreach (var executionAction in App.PluginManager.ExecutionActions)
                         executionAction.PostLaunchAction(task.TaskLogger, launchPluginType, cancelToken.Token);
@@ -736,7 +748,7 @@ namespace FrostyModManager
 
                     if (Directory.Exists(modDataPath))
                     {
-                        Directory.Delete(modDataPath, true);
+                        SymLinkHelper.DeleteDirectorySafe(modDataPath);
                     }
 
                     if (ex is SymbolicLinkException symEx)
@@ -754,14 +766,64 @@ namespace FrostyModManager
 
             }, showCancelButton: true, cancelCallback: (task) => cancelToken.Cancel());
 
-            if (retCode != -1)
+            if (installOnly)
+            {
+                if (retCode == 0)
+                    ShowLinuxLaunchOptions(additionalArgs.Trim());
+            }
+            else if (retCode != -1)
+            {
                 WindowState = WindowState.Minimized;
+            }
 
             // kill the application if launched from the command line
             if (App.LaunchGameImmediately)
                 Close();
 
             GC.Collect();
+        }
+
+        private void ShowLinuxLaunchOptions(string additionalArgs)
+        {
+            string arguments = $"-dataPath ModData/{App.SelectedPack}";
+            if (!string.IsNullOrWhiteSpace(additionalArgs))
+                arguments += $" {additionalArgs}";
+
+            string gamePath = SymLinkHelper.GetLinuxPath(fs.BasePath).Replace('\\', '/');
+            bool isSteam = gamePath.IndexOf("steamapps/common", StringComparison.OrdinalIgnoreCase) >= 0;
+
+            // dinput8 has to be loaded from the game folder (the mod loader proxy), not the wine builtin
+            string launchOptions = isSteam ? $"WINEDLLOVERRIDES=\"dinput8=n,b\" %command% {arguments}" : arguments;
+
+            StringBuilder sb = new StringBuilder();
+            sb.Append(isSteam
+                ? "Mods installed. To launch the game with mods, set these Launch Options for the game in Steam:\r\n\r\n"
+                : "Mods installed. To launch the game with mods, add these arguments to the game's advanced launch options in the EA App:\r\n\r\n");
+            sb.Append(launchOptions);
+
+            bool copied = false;
+            for (int i = 0; i < 4 && !copied; i++)
+            {
+                try
+                {
+                    Clipboard.SetDataObject(launchOptions);
+                    copied = true;
+                }
+                catch (Exception ex)
+                {
+                    FileLogger.Info($"Failed to copy launch options to clipboard (attempt {i + 1}). Details: {ex.Message}");
+                }
+            }
+
+            sb.Append(copied
+                ? "\r\n\r\nThe launch options were copied to your clipboard."
+                : "\r\n\r\nCould not copy to the clipboard, please copy the launch options manually.");
+
+            if (!SymLinkHelper.AreSymLinksSupported)
+                sb.Append("\r\n\r\nNote: symbolic links weren't available, so hard links were used for the installation.");
+
+            FileLogger.Info($"Mods installed. Launch options: {launchOptions}");
+            FrostyMessageBox.Show(sb.ToString(), "Mods installed successfully");
         }
 
         private void FrostyWindow_Closing(object sender, CancelEventArgs e)
