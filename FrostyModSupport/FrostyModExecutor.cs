@@ -2,6 +2,7 @@
 using Frosty.Core;
 using Frosty.Core.Mod;
 using Frosty.Hash;
+using FrostyModManager;
 using FrostySdk;
 using FrostySdk.Interfaces;
 using FrostySdk.IO;
@@ -1733,7 +1734,7 @@ namespace Frosty.ModSupport
                         FrostyMessageBox.Show("Frosty needs to generate symbolic links, please ensure that you accept this so you don't have to regenerate ModData.", "Frosty Editor");
                         if (!RunSymbolicLinkProcess(cmdArgs))
                         {
-                            Directory.Delete(modDataPath, true);
+                            SymLinkHelper.DeleteDirectorySafe(modDataPath);
                             FrostyMessageBox.Show("One ore more symbolic links could not be created, please restart tool as Administrator and ensure your storage drive is formatted to NTFS (not exFAT).", "Frosty Editor");
                             return -1;
 
@@ -2887,9 +2888,9 @@ namespace Frosty.ModSupport
                             FileInfo fi = new FileInfo(filename);
 
                             // delete if cas does not exist in base patch OR is not a symbolic link
-                            if (!File.Exists(basePatchCatalog + "/" + fi.Name) || (fi.Attributes & FileAttributes.ReparsePoint) == 0)
+                            if (!File.Exists(basePatchCatalog + "/" + fi.Name) || !SymLinkHelper.IsSymbolicLink(fi.FullName))
                             {
-                                File.Delete(fi.FullName);
+                                SymLinkHelper.DeleteFileSafe(fi.FullName);
                             }
                         }
                     }
@@ -2935,14 +2936,14 @@ namespace Frosty.ModSupport
                 if (patchHead == 0xBDFB3 && modHead != patchHead)
                 {
                     // SWBF2 new layout requires completely rebuilding ModData from scratch
-                    Directory.Delete(modPath + "../", true);
+                    SymLinkHelper.DeleteDirectorySafe(modPath + "../");
                     return false;
                 }
             }
 
             if (modHead != patchHead)
             {
-                Directory.Delete(modPath + "../", true);
+                SymLinkHelper.DeleteDirectorySafe(modPath + "../");
                 return false;
             }
 
@@ -2964,7 +2965,7 @@ namespace Frosty.ModSupport
                     if (fi.Name.ToLower() == "layout.toc")
                         continue;
 
-                    fi.Delete();
+                    SymLinkHelper.DeleteFileSafe(fi.FullName);
                 }
             }
 
@@ -2976,6 +2977,68 @@ namespace Frosty.ModSupport
         }
 
         private bool RunSymbolicLinkProcess(List<SymLinkStruct> cmdArgs)
+        {
+            return RunSymbolicLinkProcess(cmdArgs, ShouldUseHardLink());
+        }
+
+        private bool RunSymbolicLinkProcess(List<SymLinkStruct> cmdArgs, bool shouldUseHardLink)
+        {
+            DeleteLinkDestinations(cmdArgs);
+
+            if (shouldUseHardLink)
+            {
+                CreateHardLinksStructure(cmdArgs);
+            }
+            else if (OperatingSystemHelper.IsWine())
+            {
+                CreateSymbolicLinksStructureLinux(cmdArgs);
+            }
+            else
+            {
+                CreateSymbolicLinksStructureWindows(cmdArgs);
+            }
+
+            // validate
+            foreach (SymLinkStruct arg in cmdArgs)
+            {
+                if ((arg.isFolder && !Directory.Exists(arg.dest)) || (!arg.isFolder && !File.Exists(arg.dest)))
+                    return false;
+            }
+
+            return true;
+        }
+
+        private bool ShouldUseHardLink()
+        {
+            if (!SymLinkHelper.AreHardLinksSupported)
+            {
+                return false;
+            }
+
+            if (Config.Get<bool>("UseHardLink", true))
+            {
+                return true;
+            }
+
+            return !SymLinkHelper.AreSymLinksSupported;
+        }
+
+        private void DeleteLinkDestinations(List<SymLinkStruct> cmdArgs)
+        {
+            foreach (SymLinkStruct arg in cmdArgs)
+            {
+                if (arg.isFolder)
+                {
+                    SymLinkHelper.DeleteDirectorySafe(arg.dest);
+                }
+                else
+                {
+                    SymLinkHelper.DeleteFileSafe(arg.dest);
+                }
+            }
+        }
+
+        private void CreateSymbolicLinksStructureWindows(List<SymLinkStruct> cmdArgs)
         {
             using (TextWriter writer = new StreamWriter(new FileStream(AppDomain.CurrentDomain.BaseDirectory + "\\run.bat", FileMode.Create)))
             {
@@ -2991,15 +3054,61 @@ namespace Frosty.ModSupport
             {
                 File.Delete("run.bat");
             }
+        }
 
-            // validate
+        private void CreateSymbolicLinksStructureLinux(List<SymLinkStruct> cmdArgs)
+        {
+            var batches = BatchesHelper.Split(cmdArgs, SymLinkHelper.BatchSize);
+
+            foreach (var batch in batches)
+            {
+                var symTasks = batch.Select(c => Task.Run(() => SymLinkHelper.CreateSymlinkLinux(c.src, c.dest))).ToArray();
+
+                try
+                {
+                    Task.WaitAll(symTasks);
+                }
+                catch (AggregateException ax)
+                {
+                    SymLinkHelper.HandleAggregateException(ax);
+                }
+            }
+        }
+
+        private void CreateHardLinksStructure(List<SymLinkStruct> cmdArgs)
+        {
             foreach (SymLinkStruct arg in cmdArgs)
             {
-                if ((arg.isFolder && !Directory.Exists(arg.dest)) || (!arg.isFolder && !File.Exists(arg.dest)))
-                    return false;
+                try
+                {
+                    if (arg.isFolder)
+                    {
+                        CloneDirectoryWithHardLinks(arg.src, arg.dest);
+                    }
+                    else
+                    {
+                        SymLinkHelper.CreateHardLink(arg.src, arg.dest);
+                    }
+                }
+                catch { }
+            }
+        }
+
+        private static void CloneDirectoryWithHardLinks(string root, string dest)
+        {
+            Directory.CreateDirectory(dest);
+
+            foreach (var directory in Directory.GetDirectories(root))
+            {
+                var newDirectory = Path.Combine(dest, Path.GetFileName(directory));
+                Directory.CreateDirectory(newDirectory);
+                CloneDirectoryWithHardLinks(directory, newDirectory);
             }
 
-            return true;
+            foreach (var file in Directory.GetFiles(root))
+            {
+                SymLinkHelper.CreateHardLink(file, Path.Combine(dest, Path.GetFileName(file)));
+            }
         }
 
         public static void ExecuteProcess(string processName, string args = "", bool waitForExit = false, bool asAdmin = false, Dictionary<string, string> env = null)

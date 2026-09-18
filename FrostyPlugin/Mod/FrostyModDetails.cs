@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -58,16 +59,35 @@ namespace Frosty.Core.Mod
                 return null;
 
             BitmapImage image = new BitmapImage();
-            using (MemoryStream ms = new MemoryStream(buffer))
+
+            try
             {
-                image.BeginInit();
-                image.CreateOptions = BitmapCreateOptions.PreservePixelFormat;
-                image.CacheOption = BitmapCacheOption.OnLoad;
-                image.UriSource = null;
-                image.StreamSource = ms;
-                image.EndInit();
+                using (MemoryStream ms = new MemoryStream(buffer))
+                {
+                    image.BeginInit();
+                    image.CreateOptions = BitmapCreateOptions.PreservePixelFormat;
+                    image.CacheOption = BitmapCacheOption.OnLoad;
+                    image.UriSource = null;
+                    image.StreamSource = ms;
+                    image.EndInit();
+                }
             }
-            image.Freeze();
+            catch (Exception ex)
+            {
+                FileLogger.Info($"Encountered exception when loading mod image. Details: {ex.Message}");
+                return null;
+            }
+
+            try
+            {
+                image.Freeze();
+            }
+            catch (Exception ex)
+            {
+                FileLogger.Info($"Encountered exception when freezing mod image. Details: {ex.Message}");
+                return null;
+            }
+
             return image;
         }
     }
