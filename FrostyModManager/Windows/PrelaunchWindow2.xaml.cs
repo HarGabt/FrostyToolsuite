@@ -379,7 +379,10 @@ namespace FrostyModManager.Windows
                 return false;
             }
 
-            if (dirTempName.StartsWith(".") && dirTempName != ".local" && dirTempName != ".var")
+            // .steam is where distro-packaged Steam (e.g. Debian/Ubuntu's steam package)
+            // keeps its real steamapps directory, not just a symlink shim like upstream
+            // Steam installs use, so it needs to stay scannable alongside .local/.var.
+            if (dirTempName.StartsWith(".") && dirTempName != ".local" && dirTempName != ".var" && dirTempName != ".steam")
             {
                 return false;
             }
