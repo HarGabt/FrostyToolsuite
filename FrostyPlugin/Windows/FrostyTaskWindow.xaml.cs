@@ -1,4 +1,5 @@
-﻿using FrostySdk.Converters;
+﻿using FrostyModManager;
+using FrostySdk.Converters;
 using FrostySdk.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -79,16 +80,19 @@ namespace Frosty.Core.Windows
             TaskLogger = new FrostyTaskLogger(this);
             Loaded += FrostyTaskWindow_Loaded;
 
-            Application.Current.MainWindow.TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
-
-            BindingOperations.SetBinding(Application.Current.MainWindow.TaskbarItemInfo, TaskbarItemInfo.ProgressValueProperty, new Binding("Progress")
+            if (!OperatingSystemHelper.IsWine())
             {
-                Converter = new DelegateBasedValueConverter(),
-                ConverterParameter = new Func<object, object>(delegate (object value) {
-                    return (double)value / 100.0;
-                }),
-                Source = this,
-            });
+                Application.Current.MainWindow.TaskbarItemInfo.ProgressState = TaskbarItemProgressState.Normal;
+
+                BindingOperations.SetBinding(Application.Current.MainWindow.TaskbarItemInfo, TaskbarItemInfo.ProgressValueProperty, new Binding("Progress")
+                {
+                    Converter = new DelegateBasedValueConverter(),
+                    ConverterParameter = new Func<object, object>(delegate (object value) {
+                        return (double)value / 100.0;
+                    }),
+                    Source = this,
+                });
+            }
 
             if (showCancelButton)
             {
@@ -97,11 +101,14 @@ namespace Frosty.Core.Windows
                 {
                     cancelButton.Click += CancelButton_Click;
 
-                    // register the "Esc" keybinding to the cancel button click event
-                    CommandBindings.RegisterKeyBindings(new Dictionary<KeyGesture, ExecutedRoutedEventHandler>
+                    if (!OperatingSystemHelper.IsWine())
                     {
-                        { new KeyGesture(Key.Escape), CancelButton_Click }
-                    });
+                        // register the "Esc" keybinding to the cancel button click event
+                        CommandBindings.RegisterKeyBindings(new Dictionary<KeyGesture, ExecutedRoutedEventHandler>
+                        {
+                            { new KeyGesture(Key.Escape), CancelButton_Click }
+                        });
+                    }
                 }
             }
         }
@@ -119,7 +126,10 @@ namespace Frosty.Core.Windows
                 _callback(this);
             });
 
-            Application.Current.MainWindow.TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
+            if (!OperatingSystemHelper.IsWine())
+            {
+                Application.Current.MainWindow.TaskbarItemInfo.ProgressState = TaskbarItemProgressState.None;
+            }
 
             Close();
         }
@@ -140,6 +150,11 @@ namespace Frosty.Core.Windows
 
         public void SetIndeterminate(bool newIndeterminate)
         {
+            if (OperatingSystemHelper.IsWine())
+            {
+                return;
+            }
+
             Application.Current.Dispatcher.Invoke(() =>
             {
                 taskProgressBar.IsIndeterminate = newIndeterminate;

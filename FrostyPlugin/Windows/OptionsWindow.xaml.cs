@@ -371,20 +371,28 @@ namespace Frosty.Core.Windows
         [EbxFieldMeta(EbxFieldType.Boolean)]
         public string CommandLineArgs { get; set; } = "";
 
+        [Category("Manager")]
+        [DisplayName("Use Hard Links")]
+        [Description("Use Hard Links for mod installation. Safer, but requires more space.")]
+        [EbxFieldMeta(EbxFieldType.Boolean)]
+        public bool UseHardLink { get; set; } = false;
+
         public override void Load()
         {
             base.Load();
-            
+
             RememberChoice = Config.Get<bool>("UseDefaultProfile", false);
             CommandLineArgs = Config.Get<string>("CommandLineArgs", "", ConfigScope.Game);
+            UseHardLink = Config.Get<bool>("UseHardLink", true);
         }
 
         public override void Save()
         {
             base.Save();
-            
+
             Config.Add("UseDefaultProfile", RememberChoice);
             Config.Add("CommandLineArgs", CommandLineArgs, ConfigScope.Game);
+            Config.Add("UseHardLink", UseHardLink);
 
             if (RememberChoice)
                 Config.Add("DefaultProfile", ProfilesLibrary.ProfileName);

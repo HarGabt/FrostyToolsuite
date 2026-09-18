@@ -12,6 +12,7 @@ using FrostySdk;
 using Microsoft.Win32;
 using Frosty.Controls;
 using Frosty.Core;
+using Frosty.Core.Windows;
 using FrostySdk.IO;
 using FrostySdk.Managers;
 
