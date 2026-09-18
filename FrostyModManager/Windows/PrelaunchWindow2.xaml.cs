@@ -240,26 +240,55 @@ namespace FrostyModManager.Windows
             {
                 task.TaskLogger.Log("Scanning registry...");
 
-                using (RegistryKey lmKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\\WOW6432Node"))
+                try
                 {
-                    int totalCount = 0;
+                    using (RegistryKey lmKey = Registry.LocalMachine.OpenSubKey("SOFTWARE\\WOW6432Node"))
+                    {
+                        if (lmKey == null)
+                        {
+                            FileLogger.Info("Registry scan: 'SOFTWARE\\WOW6432Node' could not be opened, skipping registry scan.");
+                        }
+                        else
+                        {
+                            int totalCount = 0;
 
-                    var regGames = IterateSubKeys(lmKey, ref totalCount);
+                            var regGames = IterateSubKeys(lmKey, ref totalCount);
 
-                    games.AddRange(regGames);
+                            FileLogger.Info($"Registry scan found {regGames.Count} game candidate(s).");
+
+                            games.AddRange(regGames);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    FileLogger.Info($"Registry scan failed with exception:\n{ex}");
                 }
 
                 if (OperatingSystemHelper.IsWine())
                 {
                     task.TaskLogger.Log("Scanning Z: drive...");
 
-                    games.AddRange(ScanZDirectory(cancelToken));
+                    try
+                    {
+                        var zGames = ScanZDirectory(cancelToken);
+
+                        FileLogger.Info($"Z: drive scan found {zGames.Count} game candidate(s).");
+
+                        games.AddRange(zGames);
+                    }
+                    catch (Exception ex)
+                    {
+                        FileLogger.Info($"Z: drive scan failed with exception:\n{ex}");
+                    }
                 }
             }, showCancelButton: true, cancelCallback: (task) => cancelToken.Cancel());
 
             games = games.Select(x => x.Trim()).Distinct().ToList();
 
             games.Sort((x, y) => string.Compare(x, y, true) * -1);
+
+            FileLogger.Info($"Scan finished with {games.Count} total candidate(s).");
 
             foreach (var game in games)
             {
@@ -301,15 +330,18 @@ namespace FrostyModManager.Windows
 
             string[] files;
             string[] dirs;
+            int dirsVisited = 0;
 
             while (queue.Count > 0)
             {
                 if (cancelToken.IsCancellationRequested)
                 {
+                    FileLogger.Info($"Z: drive scan cancelled after visiting {dirsVisited} directories.");
                     return res;
                 }
 
                 var item = queue.Dequeue();
+                dirsVisited++;
 
                 if (!Directory.Exists(item.Path))
                 {
@@ -320,8 +352,9 @@ namespace FrostyModManager.Windows
                 {
                     files = Directory.GetFiles(item.Path, "*.exe");
                 }
-                catch
+                catch (Exception ex)
                 {
+                    FileLogger.Info($"Could not list files under '{item.Path}': {ex.Message}");
                     continue;
                 }
 
@@ -344,8 +377,9 @@ namespace FrostyModManager.Windows
                 {
                     dirs = Directory.GetDirectories(item.Path).Where(d => IsDirectoryScanValid(d)).ToArray();
                 }
-                catch
+                catch (Exception ex)
                 {
+                    FileLogger.Info($"Could not list subdirectories under '{item.Path}': {ex.Message}");
                     continue;
                 }
 
@@ -354,6 +388,8 @@ namespace FrostyModManager.Windows
                     queue.Enqueue(new PathItem { Path = dir, Depth = item.Depth + 1 });
                 }
             }
+
+            FileLogger.Info($"Z: drive scan visited {dirsVisited} directories, found {res.Count} candidate(s).");
 
             return res;
         }
@@ -387,9 +423,18 @@ namespace FrostyModManager.Windows
                 return false;
             }
 
-            if (SymLinkHelper.IsSymbolicLink(dir))
+            try
             {
-                return false;
+                if (SymLinkHelper.IsSymbolicLink(dir))
+                {
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                // Don't let a single symlink-check failure abort scanning the rest of
+                // this directory's siblings - just log it and treat this one as valid.
+                FileLogger.Info($"Symbolic link check failed for '{dir}', treating it as a regular directory. Details: {ex.Message}");
             }
 
             return true;
