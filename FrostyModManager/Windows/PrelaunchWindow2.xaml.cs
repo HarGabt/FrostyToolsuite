@@ -226,13 +226,28 @@ namespace FrostyModManager.Windows
             ConfigList.SelectedIndex = -1;
         }
 
-        private async void ScanForGamesButton_Click(object sender, RoutedEventArgs e)
+        private void ScanForGamesButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Log unconditionally, first thing, so we can tell from executor.log
+            // whether this handler even ran, independent of anything below.
+            FileLogger.Info($"Scan for games button clicked. IsWine={OperatingSystemHelper.IsWine()}.");
+
+            try
+            {
+                ScanForGames();
+            }
+            catch (Exception ex)
+            {
+                FileLogger.Info($"Scan for games failed with an unhandled exception:\n{ex}");
+                FrostyMessageBox.Show($"Scanning for games failed with an error:\n\n{ex.Message}\n\nSee executor.log for details.", "Frosty Mod Manager");
+            }
+        }
+
+        private void ScanForGames()
         {
             TryShowFlatpakMessage();
 
             var games = new List<string>();
-
-            await Task.Delay(1);
 
             CancellationTokenSource cancelToken = new CancellationTokenSource();
 
