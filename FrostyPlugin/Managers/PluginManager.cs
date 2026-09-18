@@ -252,6 +252,7 @@ namespace Frosty.Core
                     {
                         statusText += fi.Name + " - Failed (" + e.Message + ")";
                         logger.Log(statusText);
+                        FileLogger.Info($"Caught exception while loading plugin '{fi.FullName}'. Exception:\n{e}");
                     }
                 }
             }
