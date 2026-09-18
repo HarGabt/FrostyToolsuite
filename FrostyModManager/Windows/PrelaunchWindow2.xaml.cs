@@ -228,8 +228,12 @@ namespace FrostyModManager.Windows
 
         private void ScanForGamesButton_Click(object sender, RoutedEventArgs e)
         {
-            // Log unconditionally, first thing, so we can tell from executor.log
-            // whether this handler even ran, independent of anything below.
+            // Unconditional, file-I/O-independent confirmation that the click handler
+            // actually ran, and exactly where executor.log should be, since logging
+            // itself has been reported as seemingly not happening.
+            string logPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "executor.log");
+            FrostyMessageBox.Show($"Scan button clicked. IsWine={OperatingSystemHelper.IsWine()}.\n\nLog file: {logPath}", "Frosty Mod Manager - Debug");
+
             FileLogger.Info($"Scan for games button clicked. IsWine={OperatingSystemHelper.IsWine()}.");
 
             try

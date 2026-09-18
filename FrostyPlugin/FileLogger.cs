@@ -1,12 +1,12 @@
-﻿using System;
+using System;
 using System.IO;
 
 namespace Frosty.Core
 {
     public static class FileLogger
     {
-        private static object locks = new object();
-        private const string logName = "executor.log";
+        private static readonly object locks = new object();
+        private static readonly string logPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "executor.log");
         private static bool IsLogInit = false;
 
         public static void Init()
@@ -16,9 +16,16 @@ namespace Frosty.Core
                 return;
             }
 
-            lock(locks)
+            lock (locks)
             {
-                File.WriteAllText(logName, $"[{DateTime.Now}] Logger started\n");
+                try
+                {
+                    File.WriteAllText(logPath, $"[{DateTime.Now}] Logger started\n");
+                }
+                catch
+                {
+                    // logging must never be able to crash the app
+                }
 
                 IsLogInit = true;
             }
@@ -31,11 +38,18 @@ namespace Frosty.Core
                 Init();
             }
 
-            lock(locks)
+            lock (locks)
             {
-                using (var stream = File.AppendText(logName))
+                try
                 {
-                    stream.WriteLine($"[{DateTime.Now}] {message}");
+                    using (var stream = File.AppendText(logPath))
+                    {
+                        stream.WriteLine($"[{DateTime.Now}] {message}");
+                    }
+                }
+                catch
+                {
+                    // logging must never be able to crash the app
                 }
             }
         }
