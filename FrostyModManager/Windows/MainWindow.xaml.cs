@@ -700,26 +700,29 @@ namespace FrostyModManager
             CancellationTokenSource cancelToken = new CancellationTokenSource();
 
             // launch
+            // under Wine/Proton, Frosty doesn't launch the game itself (that's done via Steam
+            // separately), so the platform auto-launch integration is skipped in that case.
+            PluginManagerType launchPluginType = OperatingSystemHelper.IsWine() ? PluginManagerType.InstallOnly : PluginManagerType.ModManager;
             int retCode = 0;
             FrostyTaskWindow.Show("Launching", "", (task) =>
             {
                 try
                 {
                     foreach (var executionAction in App.PluginManager.ExecutionActions)
-                        executionAction.PreLaunchAction(task.TaskLogger, PluginManagerType.ModManager, cancelToken.Token);
+                        executionAction.PreLaunchAction(task.TaskLogger, launchPluginType, cancelToken.Token);
 
                     FrostyModExecutor modExecutor = new FrostyModExecutor();
                     retCode = modExecutor.Run(fs, cancelToken.Token, task.TaskLogger, $"Mods/{ProfilesLibrary.ProfileName}/", App.SelectedPack, additionalArgs.Trim(), modPaths.ToArray());
 
                     foreach (var executionAction in App.PluginManager.ExecutionActions)
-                        executionAction.PostLaunchAction(task.TaskLogger, PluginManagerType.ModManager, cancelToken.Token);
+                        executionAction.PostLaunchAction(task.TaskLogger, launchPluginType, cancelToken.Token);
                 }
                 catch (Exception ex) when (ex is OperationCanceledException || ex is SymbolicLinkException)
                 {
                     retCode = -1;
 
                     foreach (var executionAction in App.PluginManager.ExecutionActions)
-                        executionAction.PostLaunchAction(task.TaskLogger, PluginManagerType.ModManager, cancelToken.Token);
+                        executionAction.PostLaunchAction(task.TaskLogger, launchPluginType, cancelToken.Token);
 
                     // process was cancelled
                     App.Logger.Log("Launch Cancelled");

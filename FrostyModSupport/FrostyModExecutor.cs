@@ -2392,8 +2392,19 @@ namespace Frosty.ModSupport
                 if (File.Exists(m_fs.BasePath + "bcrypt.dll"))
                     File.Delete(m_fs.BasePath + "bcrypt.dll");
 
-                // copy over new CryptBase
-                CopyFileIfRequired("ThirdParty/CryptBase.dll", m_fs.BasePath + "CryptBase.dll");
+                if (OperatingSystemHelper.IsWine())
+                {
+                    // under Wine/Proton, CryptBase's DLL-injection approach doesn't reliably
+                    // hook the game process; use the winmm/dinput8 proxy + crypthook instead
+                    CopyFileIfRequired("ThirdParty/winmm.dll", m_fs.BasePath + "winmm.dll");
+                    CopyFileIfRequired("ThirdParty/dinput8.dll", m_fs.BasePath + "dinput8.dll");
+                    CopyFileIfRequired("ThirdParty/crypthook.dll", m_fs.BasePath + "crypthook.dll");
+                }
+                else
+                {
+                    // copy over new CryptBase
+                    CopyFileIfRequired("ThirdParty/CryptBase.dll", m_fs.BasePath + "CryptBase.dll");
+                }
             }
             CopyFileIfRequired(m_fs.BasePath + "user.cfg", modDataPath + "user.cfg");
 

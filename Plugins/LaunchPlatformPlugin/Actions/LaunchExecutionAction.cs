@@ -83,7 +83,7 @@ namespace LaunchPlatformPlugin.Actions
         public override Action<ILogger, PluginManagerType, CancellationToken> PreLaunchAction => new Action<ILogger, PluginManagerType, CancellationToken>((ILogger logger, PluginManagerType type, CancellationToken cancelToken) =>
         {
             // only run platform launch system when PlatformLaunchingEnabled is true
-            if (Config.Get("PlatformLaunchingEnabled", false, ConfigScope.Game))
+            if (Config.Get("PlatformLaunchingEnabled", false, ConfigScope.Game) && type != PluginManagerType.InstallOnly)
             {
                 LaunchPlatform platform = (LaunchPlatform)Enum.Parse(typeof(LaunchPlatform), Config.Get("Platform", "Origin", ConfigScope.Game));
                 selectedPlatform = platforms[platform];
@@ -121,7 +121,7 @@ namespace LaunchPlatformPlugin.Actions
         public override Action<ILogger, PluginManagerType, CancellationToken> PostLaunchAction => new Action<ILogger, PluginManagerType, CancellationToken>((ILogger logger, PluginManagerType type, CancellationToken cancelToken) =>
         {
             // only run platform launch system when PlatformLaunchingEnabled is true
-            if (Config.Get("PlatformLaunchingEnabled", false, ConfigScope.Game))
+            if (Config.Get("PlatformLaunchingEnabled", false, ConfigScope.Game) && type != PluginManagerType.InstallOnly)
             {
                 LaunchPlatform platform = (LaunchPlatform)Enum.Parse(typeof(LaunchPlatform), Config.Get("Platform", "Origin", ConfigScope.Game));
 

@@ -46,7 +46,13 @@ namespace Frosty.Core
         /// <summary>
         /// The plugin is loading for both the editor and mod manager.
         /// </summary>
-        Both
+        Both,
+
+        /// <summary>
+        /// Mods are being installed without launching the game (e.g. under Wine/Proton,
+        /// where the game is launched separately by Steam rather than by Frosty).
+        /// </summary>
+        InstallOnly
     }
 
     /// <summary>
