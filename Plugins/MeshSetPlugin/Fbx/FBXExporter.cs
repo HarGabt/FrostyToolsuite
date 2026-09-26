@@ -983,8 +983,31 @@ namespace MeshSetPlugin
                             }
                             else if (elem.Usage == VertexElementUsage.RadiosityTexCoord)
                             {
-                                // ignore (unused)
-                                reader.Position += elem.Size;
+                                if (!uvMapping.ContainsKey(elem.Usage))
+                                {
+                                    layerElemUV[uvChannelIndex] = new FbxLayerElementUV(fmesh, "RadiosityTexCoord")
+                                    {
+                                        MappingMode = EMappingMode.eByControlPoint,
+                                        ReferenceMode = EReferenceMode.eDirect
+                                    };
+
+                                    uvMapping.Add(elem.Usage, uvChannelIndex);
+                                    uvChannelIndex++;
+                                }
+
+                                float x, y;
+                                if (elem.Format == VertexElementFormat.Float2)
+                                {
+                                    x = reader.ReadFloat();
+                                    y = 1.0f - reader.ReadFloat();
+                                }
+                                else
+                                {
+                                    x = HalfUtils.Unpack(reader.ReadUShort());
+                                    y = 1.0f - HalfUtils.Unpack(reader.ReadUShort());
+                                }
+
+                                layerElemUV[uvMapping[elem.Usage]].DirectArray.Add(x, y);
                             }
                             else if (elem.Usage == VertexElementUsage.DisplacementMapTexCoord)
                             {

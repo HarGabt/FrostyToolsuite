@@ -1179,6 +1179,20 @@ namespace MeshSetPlugin
                                 case VertexElementUsage.TangentSpace:
                                 case VertexElementUsage.TexCoord0:
                                 case VertexElementUsage.RadiosityTexCoord:
+                                    {
+                                        FbxLayerElementUV layerUV = fmesh.GetElementUV("RadiosityTexCoord");
+                                        if (layerUV != null)
+                                        {
+                                            int mappingIndex = (layerUV.MappingMode == EMappingMode.eByControlPoint) ? vertexIndex : (i * 3) + j;
+                                            int actualIndex = mappingIndex;
+                                            if (layerUV.ReferenceMode != EReferenceMode.eDirect)
+                                                layerUV.IndexArray.GetAt(mappingIndex, out actualIndex);
+
+                                            layerUV.DirectArray.GetAt(actualIndex, out Vector2 uv);
+                                            vertex.SetValue("RadiosityTexCoord", uv);
+                                        }
+                                    }
+                                    break;
                                 case VertexElementUsage.DisplacementMapTexCoord:
                                 case VertexElementUsage.BoneIndices2:
                                 case VertexElementUsage.BoneWeights2:
@@ -1541,35 +1555,16 @@ namespace MeshSetPlugin
 
                                         case VertexElementUsage.RadiosityTexCoord:
                                             {
-                                                switch (elem.Format)
+                                                if (vertex.HasValue("RadiosityTexCoord"))
                                                 {
-                                                    case VertexElementFormat.Float3:
-                                                        chunkWriter.Write(0.0f);
-                                                        chunkWriter.Write(0.0f);
-                                                        chunkWriter.Write(0.0f);
-                                                        break;
-
-                                                    case VertexElementFormat.Float2:
-                                                        chunkWriter.Write(0.0f);
-                                                        chunkWriter.Write(0.0f);
-                                                        break;
-
-                                                    case VertexElementFormat.Half2:
-                                                        chunkWriter.Write(HalfUtils.Pack(0.0f));
-                                                        chunkWriter.Write(HalfUtils.Pack(0.0f));
-                                                        break;
-
-                                                    case VertexElementFormat.Half3:
-                                                        chunkWriter.Write(HalfUtils.Pack(0.0f));
-                                                        chunkWriter.Write(HalfUtils.Pack(0.0f));
-                                                        chunkWriter.Write(HalfUtils.Pack(0.0f));
-                                                        break;
-
-                                                    default:
-                                                        // Fallback: pad with zeros to preserve alignment.
-                                                        for (int k = 0; k < elem.Size; k++)
-                                                            chunkWriter.Write((byte)0);
-                                                        break;
+                                                    Vector2 uv = vertex.GetValue<Vector2>("RadiosityTexCoord");
+                                                    chunkWriter.Write(HalfUtils.Pack(uv.X));
+                                                    chunkWriter.Write(HalfUtils.Pack(1.0f - uv.Y));
+                                                }
+                                                else
+                                                {
+                                                    chunkWriter.Write((ushort)0);
+                                                    chunkWriter.Write((ushort)0);
                                                 }
                                             }
                                             break;
