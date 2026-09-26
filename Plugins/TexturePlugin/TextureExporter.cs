@@ -4,6 +4,7 @@ using FrostySdk.Ebx;
 using FrostySdk.IO;
 using FrostySdk.Resources;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using D3D11 = SharpDX.Direct3D11;
 
@@ -67,7 +68,7 @@ namespace TexturePlugin
 
     public class TextureExporter
     {
-        public void Export(Texture textureAsset, string filename, string filterType)
+        public void Export(Texture textureAsset, string filename, string filterType, bool exportAsStrip)
         {
             byte[] ddsData = WriteToDDS(textureAsset);
 
@@ -122,13 +123,46 @@ namespace TexturePlugin
                     BlobData[] blobs = new BlobData[numSlices];
                     FrostyTextureEditor.ConvertDDSToImages(ddsData, ddsData.Length, format, ref blobs, numSlices);
 
+                    Bitmap combinedSliceAtlas = new Bitmap(textureAsset.Width * textureAsset.SliceCount, textureAsset.Height);
+
                     for (int i = 0; i < numSlices; i++)
                     {
-                        using (NativeWriter writer = new NativeWriter(new FileStream(filenames[i], FileMode.Create)))
+                        if (exportAsStrip && format == ImageFormat.PNG)
                         {
-                            writer.Write(blobs[i].Data);
-                            FrostyTextureEditor.ReleaseBlob(blobs[i]);
+                            Bitmap slice;
+
+                            int sliceWidthOffset = textureAsset.Width * i;
+
+                            using (var ms = new MemoryStream(blobs[i].Data))
+                            {
+                                slice = new Bitmap(ms);
+
+                                for (int xPos = 0; xPos < slice.Width; xPos++)
+                                {
+                                    for (int yPos = 0; yPos < slice.Height; yPos++)
+                                    {
+                                        combinedSliceAtlas.SetPixel(xPos + sliceWidthOffset, yPos, slice.GetPixel(xPos, yPos));
+                                    }
+                                }
+                            }
+
+                            slice.Dispose();
                         }
+                        else
+                        {
+                            using (NativeWriter writer = new NativeWriter(new FileStream(filenames[i], FileMode.Create)))
+                            {
+                                writer.Write(blobs[i].Data);
+                            }
+                        }
+
+                        FrostyTextureEditor.ReleaseBlob(blobs[i]);
+                    }
+
+                    if (exportAsStrip && format == ImageFormat.PNG)
+                    {
+                        combinedSliceAtlas.Save(filename);
+                        combinedSliceAtlas.Dispose();
                     }
                 }
             }
