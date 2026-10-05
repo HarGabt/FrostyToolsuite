@@ -386,7 +386,7 @@ namespace MeshSetPlugin
                     {
                         depthSections.Add(meshSection);
                     }
-                    else
+                    if (meshLod.IsSectionInCategory(meshSection, MeshSubsetCategory.MeshSubsetCategory_Shadow))
                     {
                         shadowSections.Add(meshSection);
                     }
