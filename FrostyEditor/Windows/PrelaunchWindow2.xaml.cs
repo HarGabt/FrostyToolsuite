@@ -32,7 +32,7 @@ namespace FrostyEditor.Windows
             // load profiles
             if (!ProfilesLibrary.SelectProfile(profile))
             {
-                FrostyMessageBox.Show("There was an error when trying to load game using specified profile.", "Frosty Editor");
+                FrostyMessageBox.Show(Application.Current.TryFindResource("fe_Msg_ProfileError") as string ?? "There was an error when trying to load game using specified profile.", "Frosty Editor");
                 Close();
                 return;
             }
@@ -119,12 +119,12 @@ namespace FrostyEditor.Windows
             OpenFileDialog ofd = new OpenFileDialog
             {
                 Filter = "*.exe (Game Executable)|*.exe",
-                Title = "Choose Game Executable"
+                Title = Application.Current.TryFindResource("fe_DlgTitle_ChooseExe") as string ?? "Choose Game Executable"
             };
 
             if (ofd.ShowDialog() == false)
             {
-                FrostyMessageBox.Show("No game executable chosen.", "Frosty Editor");
+                FrostyMessageBox.Show(Application.Current.TryFindResource("fe_Msg_NoGameChosen") as string ?? "No game executable chosen.", "Frosty Editor");
                 return;
             }
             FileInfo fi = new FileInfo(ofd.FileName);
@@ -132,7 +132,7 @@ namespace FrostyEditor.Windows
             // try to load game profile
             if (!ProfilesLibrary.HasProfile(fi.Name.Remove(fi.Name.Length - 4)))
             {
-                FrostyMessageBox.Show("There was an error when trying to load game using specified profile.", "Frosty Editor");
+                FrostyMessageBox.Show(Application.Current.TryFindResource("fe_Msg_ProfileError") as string ?? "There was an error when trying to load game using specified profile.", "Frosty Editor");
                 return;
             }
 
@@ -141,13 +141,13 @@ namespace FrostyEditor.Windows
             {
                 if (configuration.ProfileName == fi.Name.Remove(fi.Name.Length - 4))
                 {
-                    FrostyMessageBox.Show(configuration.GameName + " already has a profile.", "Frosty Editor");
+                    FrostyMessageBox.Show(string.Format(Application.Current.TryFindResource("fe_Msg_ProfileExists") as string ?? "{0} already has a profile.", configuration.GameName), "Frosty Editor");
                     return;
                 }
             }
 
             if (ProfilesLibrary.ContainsEAC)
-                FrostyMessageBox.Show("This game contains EasyAntiCheat and cannot automatically generate an sdk. We will not support nor assist anyone who attempts to bypass it.", "Warning");
+                FrostyMessageBox.Show(Application.Current.TryFindResource("fe_Msg_EasyAntiCheat") as string ?? "This game contains EasyAntiCheat and cannot automatically generate an sdk. We will not support nor assist anyone who attempts to bypass it.", "Warning");
 
             // create
             Config.AddGame(fi.Name.Remove(fi.Name.Length - 4), fi.DirectoryName);
@@ -218,7 +218,7 @@ namespace FrostyEditor.Windows
 
         private void RemoveConfigurationButton_OnClick(object sender, RoutedEventArgs e)
         {
-            if (FrostyMessageBox.Show("Are you sure you want to remove this profile?", "Frosty Editor", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            if (FrostyMessageBox.Show(Application.Current.TryFindResource("fe_Msg_ConfirmRemoveProfile") as string ?? "Are you sure you want to remove this profile?", "Frosty Editor", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
                 FrostyConfiguration selectedItem = ConfigurationListView.SelectedItem as FrostyConfiguration;
 

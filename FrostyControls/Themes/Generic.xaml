@@ -34,6 +34,13 @@
     <SolidColorBrush x:Key="ListBackground"
                      Color="#292929" />
 
+    <!-- Dynamic font placeholder -->
+    <FontFamily x:Key="DefaultFontFamily">Segoe UI Variable Text, Global User Interface</FontFamily>
+    <FontFamily x:Key="ReferenceFontFamily">MS Reference Sans Serif, Global User Interface</FontFamily>
+    <FontFamily x:Key="MonoFontFamily">Consolas, Global User Interface</FontFamily>
+    <FontFamily x:Key="IconFontFamily">Segoe Fluent Icons, Segoe MDL2 Assets</FontFamily>
+    <FontFamily x:Key="BrandFontFamily">OCR A Extended, Global User Interface</FontFamily>
+
     <!-- Frosty Logo -->
     <Path x:Key="Icon"
           Data="M 66.669922 4.7421875 L 53.285156 18.126953 L 57.832031 35.804688 L 43.941406 28.482422 L 44.699219 43.380859 L 31.0625 30.501953 L 13.132812 35.046875 L 17.929688 54.494141 L 35.355469 58.533203 L 22.476562 67.119141 L 34.849609 74.443359 L 17.425781 79.494141 L 13.384766 97.171875 L 32.830078 102.98047 L 44.699219 90.353516 L 45.457031 105.75781 L 57.578125 99.193359 L 53.791016 117.62695 L 67.427734 129.49609 L 80.306641 115.10156 L 76.771484 98.181641 L 90.662109 104.74805 L 90.408203 91.869141 L 104.04492 104.24414 L 121.4707 99.697266 L 116.92578 80.503906 L 98.490234 75.201172 L 111.11719 67.119141 L 98.742188 59.796875 L 117.42969 54.746094 L 121.97656 37.068359 L 102.7832 30.753906 L 89.904297 43.634766 L 89.146484 27.976562 L 76.519531 34.542969 L 80.560547 17.117188 L 66.669922 4.7421875 z M 66.658203 25.910156 L 73.65625 37.314453 L 66.580078 62.201172 L 60.175781 37.300781 L 66.658203 25.910156 z M 31.072266 45.349609 L 44.464844 45.794922 L 63.214844 65.169922 L 38.125 58.027344 L 31.072266 45.349609 z M 88.75 46.509766 L 102.76758 47.3125 L 95.892578 58.384766 L 70.892578 64.455078 L 88.75 46.509766 z M 63.035156 68.830078 L 45.177734 87.3125 L 30.714844 87.3125 L 37.677734 75.349609 L 63.035156 68.830078 z M 71.160156 69.277344 L 95.982422 76.242188 L 103.48242 88.294922 L 89.822266 88.5625 L 71.160156 69.277344 z M 66.785156 71.419922 L 73.839844 96.330078 L 66.607422 108.02734 L 59.910156 95.974609 L 66.785156 71.419922 z" />
@@ -90,6 +97,8 @@
     <Style TargetType="{x:Type ToolTip}">
         <Setter Property="OverridesDefaultStyle"
                 Value="True" />
+        <Setter Property="FontFamily"
+                Value="{DynamicResource DefaultFontFamily}" />
         <Setter Property="HasDropShadow"
                 Value="True" />
         <Setter Property="Template">
@@ -912,6 +921,8 @@
     <Style TargetType="{x:Type Menu}">
         <Setter Property="Foreground"
                 Value="{StaticResource FontColor}" />
+        <Setter Property="FontFamily"
+                Value="{DynamicResource DefaultFontFamily}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Menu}">
@@ -927,6 +938,8 @@
     <Style TargetType="{x:Type ContextMenu}">
         <Setter Property="Foreground"
                 Value="{StaticResource FontColor}" />
+        <Setter Property="FontFamily"
+                Value="{DynamicResource DefaultFontFamily}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ContextMenu}">
@@ -951,6 +964,8 @@
     <Style TargetType="{x:Type MenuItem}">
         <Setter Property="OverridesDefaultStyle"
                 Value="True" />
+        <Setter Property="FontFamily"
+                Value="{DynamicResource DefaultFontFamily}" />
         <Style.Triggers>
             <!-- Window Menu Items -->
             <Trigger Property="Role"
@@ -1875,6 +1890,8 @@
 
     <!-- FrostyWindow -->
     <Style TargetType="{x:Type ctrl:FrostyWindow}">
+        <Setter Property="FontFamily" Value="{DynamicResource DefaultFontFamily}" />
+        <Setter Property="FlowDirection" Value="{DynamicResource FlowDirection}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ctrl:FrostyWindow}">
@@ -1948,7 +1965,6 @@
                                                VerticalAlignment="Center"
                                                Margin="3,0,3,0"
                                                FontSize="13"
-                                               FontFamily="Segoe UI"
                                                FontWeight="DemiBold" />
                                 </StackPanel>
                                 <Label x:Name="dragLabel" 
@@ -1965,7 +1981,7 @@
                                             ToolTip="Minimize">
                                         <Button.Content>
                                             <TextBlock Text="&#xE949;" 
-                                                       FontFamily="Segoe MDL2 Assets" FontSize="10px" 
+                                                       FontFamily="{DynamicResource IconFontFamily}" FontSize="10px" 
                                                        RenderOptions.ClearTypeHint="Auto" 
                                                        TextOptions.TextRenderingMode="Aliased" 
                                                        TextOptions.TextFormattingMode="Display"/>
@@ -1980,7 +1996,7 @@
                                             ToolTip="Maximize">
                                         <Button.Content>
                                             <TextBlock Text="&#xE739;" 
-                                                       FontFamily="Segoe MDL2 Assets" FontSize="10px" 
+                                                       FontFamily="{DynamicResource IconFontFamily}" FontSize="10px" 
                                                        RenderOptions.ClearTypeHint="Auto" 
                                                        TextOptions.TextRenderingMode="Aliased" 
                                                        TextOptions.TextFormattingMode="Display"/>
@@ -1996,7 +2012,7 @@
                                             ToolTip="Restore Down">
                                         <Button.Content>
                                             <TextBlock Text="&#xE923;" 
-                                                       FontFamily="Segoe MDL2 Assets" FontSize="10px" 
+                                                       FontFamily="{DynamicResource IconFontFamily}" FontSize="10px" 
                                                        RenderOptions.ClearTypeHint="Auto" 
                                                        TextOptions.TextRenderingMode="Aliased" 
                                                        TextOptions.TextFormattingMode="Display"/>
@@ -2010,7 +2026,7 @@
                                             ToolTip="Close">
                                         <Button.Content>
                                             <TextBlock Text="&#xE106;" 
-                                                       FontFamily="Segoe MDL2 Assets" FontSize="10px" 
+                                                       FontFamily="{DynamicResource IconFontFamily}" FontSize="10px" 
                                                        RenderOptions.ClearTypeHint="Auto" 
                                                        TextOptions.TextRenderingMode="Aliased" 
                                                        TextOptions.TextFormattingMode="Display"/>
@@ -2069,6 +2085,10 @@
 
     <!-- FrostyDockableWindow -->
     <Style TargetType="{x:Type ctrl:FrostyDockableWindow}">
+        <Setter Property="FontFamily"
+                Value="{DynamicResource DefaultFontFamily}" />
+        <Setter Property="FlowDirection"
+                Value="{DynamicResource FlowDirection}" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ctrl:FrostyDockableWindow}">
@@ -2115,7 +2135,7 @@
                                                            Margin="5,0,0,0"
                                                            Foreground="{StaticResource FontColor}"
                                                            FontSize="13"
-                                                           FontFamily="Segoe UI" />
+                                                           />
                                             </StackPanel>
                                             <Label x:Name="dragLabel"
                                                    Margin="0"
@@ -3170,13 +3190,11 @@
                                                                    ContentStringFormat="NO {0}"
                                                                    VerticalAlignment="Center"
                                                                    HorizontalAlignment="Center"
-                                                                   FontFamily="Global User Interface"
                                                                    FontWeight="Bold"
                                                                    Opacity="0.5" />
                                                             <Label Content="Click to import"
                                                                    VerticalAlignment="Center"
                                                                    HorizontalAlignment="Center"
-                                                                   FontFamily="Global User Interface"
                                                                    FontSize="10"
                                                                    Opacity="0.5"
                                                                    Margin="0,-10,0,0" />
