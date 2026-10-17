@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -18,7 +18,6 @@ using FrostyEditor;
 using FrostySdk;
 using FrostySdk.Ebx;
 using FrostySdk.IO;
-using FrostySdk.Managers;
 using FrostySdk.Managers.Entries;
 using Prism.Commands;
 
@@ -58,7 +57,6 @@ namespace BlueprintEditorPlugin.Editors.BlueprintEditor.NodeWrangler
                 {
                     if (InternalNodeCache.ContainsKey(entityNode.InternalGuid))
                     {
-                        App.Logger.LogError("An item with the AssetClassGuid {0} has already been added!", entityNode.InternalGuid.ToString());
                         return;
                     }
                     InternalNodeCache.Add(entityNode.InternalGuid, entityNode);
@@ -67,7 +65,6 @@ namespace BlueprintEditorPlugin.Editors.BlueprintEditor.NodeWrangler
                 {
                     if (ExternalNodeCache.ContainsKey((entityNode.FileGuid, entityNode.ClassGuid)))
                     {
-                        App.Logger.LogError("Multiple imported items with the same guids detected!");
                         return;
                     }
                     ExternalNodeCache.Add((entityNode.FileGuid, entityNode.ClassGuid), entityNode);

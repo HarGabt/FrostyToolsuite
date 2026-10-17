@@ -16,7 +16,6 @@ using FrostyEditor;
 using FrostySdk;
 using FrostySdk.Ebx;
 using FrostySdk.IO;
-using FrostySdk.Managers;
 using FrostySdk.Managers.Entries;
 
 namespace BlueprintEditorPlugin.Editors.ComponentEditor
@@ -435,14 +434,18 @@ namespace BlueprintEditorPlugin.Editors.ComponentEditor
 
             #endregion
 
-            if (!LayoutManager.LayoutExists($"{assetEntry.Name}.lyt"))
+            // Layout loading must run on the UI thread to ensure all vertex dispatches are complete
+            Application.Current.Dispatcher.Invoke(() =>
             {
-                LayoutManager.SortLayout();
-            }
-            else
-            {
-                LayoutManager.LoadLayoutRelative($"{assetEntry.Name}.lyt");
-            }
+                if (!LayoutManager.LayoutExists($"{assetEntry.Name}.lyt"))
+                {
+                    LayoutManager.SortLayout();
+                }
+                else
+                {
+                    LayoutManager.LoadLayoutRelative($"{assetEntry.Name}.lyt");
+                }
+            });
         }
 
         protected override void NodePropertyGrid_OnOnModified(object sender, ItemModifiedEventArgs e)

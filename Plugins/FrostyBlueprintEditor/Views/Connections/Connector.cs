@@ -241,6 +241,9 @@ namespace BlueprintEditorPlugin.Views.Connections
 
         private void OnViewportUpdated(object sender, RoutedEventArgs args)
         {
+            if (Editor?.IsPanning == true)
+                return;
+            
             if (Container != null && !Container.IsPreviewingLocation && _lastUpdatedContainerPosition != Container.Location)
             {
                 UpdateAnchorOptimized(Container.Location);

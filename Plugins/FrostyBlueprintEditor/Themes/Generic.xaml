@@ -19,13 +19,15 @@
     xmlns:editor="clr-namespace:BlueprintEditorPlugin.Views.Editor"
     xmlns:buttons="clr-namespace:BlueprintEditorPlugin.Views.Buttons"
     xmlns:treeViews="clr-namespace:BlueprintEditorPlugin.Views.TreeViews"
+    xmlns:helpers="clr-namespace:BlueprintEditorPlugin.Views.Helpers"
     xmlns:converters="clr-namespace:Frosty.Core.Converters;assembly=FrostyCore">
 
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="/FrostyControls;component/Themes/Generic.xaml"/>
         <ResourceDictionary Source="/BlueprintEditorPlugin;component/Views/Themes/Styles/Controls.xaml"/>
+        <ResourceDictionary Source="pack://application:,,,/Nodify;component/Themes/Styles/Controls.xaml"/>
     </ResourceDictionary.MergedDictionaries>
-    
+
     <BooleanToVisibilityConverter x:Key="BoolToVis" />
     <converters:StringToBitmapSourceConverter x:Key="StringToBitmapSourceConverter"/>
     
@@ -49,6 +51,23 @@
     <SolidColorBrush x:Key="NodeSelectedColor"
                      Color="#EEE8AB" 
                      presentationOptions:Freeze="True" />
+    
+    <DropShadowEffect x:Key="WireStatusFlawedEffect"
+                      RenderingBias="Performance"
+                      Color="Goldenrod"
+                      Direction="315" />
+    <DropShadowEffect x:Key="WireStatusBrokenEffect"
+                      RenderingBias="Performance"
+                      Color="Red"
+                      Direction="315" />
+    <DropShadowEffect x:Key="WireHasPlayerEffect"
+                      RenderingBias="Performance"
+                      Color="#5FD95F"
+                      Direction="315" />
+    <DropShadowEffect x:Key="WireInterfacePropertyEffect"
+                      RenderingBias="Performance"
+                      Color="#2D9B2D"
+                      Direction="315" />
     
     <!--Blueprint Editor-->
     <Style TargetType="{x:Type blueprintEditor:BlueprintEditor}">

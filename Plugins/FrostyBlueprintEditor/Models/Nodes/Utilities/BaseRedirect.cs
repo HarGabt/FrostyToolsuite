@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -40,15 +41,71 @@ namespace BlueprintEditorPlugin.Models.Nodes.Utilities
             }
         }
         private bool _isSelected;
+        private static bool _isPropagating;
 
         public bool IsSelected
         {
             get => _isSelected;
             set
             {
+                if (_isSelected == value)
+                    return;
+
                 _isSelected = value;
                 NotifyPropertyChanged(nameof(IsSelected));
+
+                if (!_isPropagating)
+                {
+                    _isPropagating = true;
+                    try
+                    {
+                        PropagateSelectionToChain(new HashSet<IRedirect>());
+                    }
+                    finally
+                    {
+                        _isPropagating = false;
+                    }
+                }
             }
+        }
+
+        private void PropagateSelectionToChain(HashSet<IRedirect> visited)
+        {
+            if (!visited.Add(this))
+                return;
+
+            PropagateToPartner(SourceRedirect, visited);
+            PropagateToPartner(TargetRedirect, visited);
+
+            if (Outputs.Count > 0)
+            {
+                foreach (IConnection conn in NodeWrangler.GetConnections(Outputs[0]))
+                {
+                    if (conn.Source == Outputs[0] && conn.Target?.Node is IRedirect redirect)
+                        PropagateToPartner(redirect, visited);
+                }
+            }
+
+            if (Inputs.Count > 0)
+            {
+                foreach (IConnection conn in NodeWrangler.GetConnections(Inputs[0]))
+                {
+                    if (conn.Target == Inputs[0] && conn.Source?.Node is IRedirect redirect)
+                        PropagateToPartner(redirect, visited);
+                }
+            }
+        }
+
+        private void PropagateToPartner(IRedirect redirect, HashSet<IRedirect> visited)
+        {
+            if (redirect == null || redirect == this)
+                return;
+            if (!(redirect is BaseRedirect other) || other._isSelected == _isSelected)
+                return;
+
+            other._isSelected = _isSelected;
+            other.NotifyPropertyChanged(nameof(IsSelected));
+            other.PropagateSelectionToChain(visited);
         }
         public INodeWrangler NodeWrangler { get; protected set; }
 
@@ -86,7 +143,7 @@ namespace BlueprintEditorPlugin.Models.Nodes.Utilities
                 foreach (IConnection connection in NodeWrangler.GetConnections(Inputs[0]))
                 {
                     if (connection.Target != Inputs[0])
-                        return;
+                        continue;
                     
                     connection.Target = RedirectTarget;
                 }

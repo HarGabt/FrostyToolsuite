@@ -42,7 +42,14 @@ namespace BlueprintEditorPlugin.Editors.GraphEditor.NodeWrangler
             }
 
             vertex.OnDestruction();
-            
+
+            if (vertex is INode deadNode)
+            {
+                List<IConnection> dangling = GetConnections(deadNode).ToList();
+                foreach (IConnection conn in dangling)
+                    RemoveConnection(conn);
+            }
+
             // TODO: Stupid threading bullshit won't let me access this because it's on a UI thread
             // Asshole!
             Application.Current.Dispatcher.Invoke(() =>
