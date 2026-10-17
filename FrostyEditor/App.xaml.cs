@@ -1,22 +1,18 @@
-﻿using System;
-using System.IO;
-using System.Reflection;
-using System.Windows;
-using FrostySdk.Managers;
-using FrostySdk;
-using FrostyEditor.Windows;
-using Frosty.Controls;
-using FrostySdk.Interfaces;
-using FrostySdk.IO;
+﻿using Frosty.Controls;
 using Frosty.Core;
 using Frosty.Core.Controls;
 using Frosty.Core.Managers;
 using FrostyCore;
-using System.Text;
-using System.Linq;
-using Newtonsoft.Json;
-using System.Collections.Generic;
+using FrostyEditor.Windows;
+using FrostySdk;
+using FrostySdk.Interfaces;
+using FrostySdk.Managers;
 using FrostySdk.Managers.Entries;
+using System;
+using System.Globalization;
+using System.IO;
+using System.Reflection;
+using System.Windows;
 
 namespace FrostyEditor
 {
@@ -53,6 +49,10 @@ namespace FrostyEditor
         {
             Assembly entryAssembly = Assembly.GetEntryAssembly();
             Frosty.Core.App.Version = entryAssembly.GetName().Version + " — HarGabt's Fork" + Frosty.Core.App.AlphaVersion;
+
+            CultureInfo defaultCulture = CultureInfo.InvariantCulture;
+            CultureInfo.DefaultThreadCurrentCulture = defaultCulture;
+            CultureInfo.DefaultThreadCurrentUICulture = defaultCulture;
 
             Environment.CurrentDirectory = AppDomain.CurrentDomain.BaseDirectory;
 
@@ -118,13 +118,13 @@ namespace FrostyEditor
                 FileInfo fi = new FileInfo(Assembly.GetExecutingAssembly().FullName);
                 return Assembly.LoadFile(fi.DirectoryName + "/Profiles/" + ProfilesLibrary.SDKFilename + ".dll");
             }
-            
+
             if (dllName.Equals("AssetBankClasses"))
             {
                 FileInfo fi = new FileInfo(Assembly.GetExecutingAssembly().FullName);
                 return Assembly.LoadFile(fi.DirectoryName + "/AssetBankProfiles/" + ProfilesLibrary.SDKFilename + ".dll");
             }
-            
+
             if (PluginManager != null)
             {
                 if (PluginManager.IsThirdPartyDll(dllName))
@@ -227,9 +227,10 @@ namespace FrostyEditor
             }
 
             //check args to see if it is loading a project
-            if (e.Args.Length > 0) {
+            if (e.Args.Length > 0)
+            {
                 string arg = e.Args[0];
-                
+
                 if (arg.Contains(".fbproject"))
                 {
                     m_openProject = true;
@@ -267,7 +268,8 @@ namespace FrostyEditor
             }
             catch (Exception e)
             {
-                System.Threading.Tasks.Task.Run(() => {
+                System.Threading.Tasks.Task.Run(() =>
+                {
                     FrostyMessageBox.Show("Frosty Update Checker returned with an error:" + Environment.NewLine + e.Message, "Frosty Editor", MessageBoxButton.OK);
                 });
             }
