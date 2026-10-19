@@ -36,7 +36,7 @@ If you are to ask for help with Frosty Tool Suite 1.0.7, create an `Issue` so ~w
 
 ## LINUX/WINE SUPPORT
 
-If you're looking for a way to run mods on Linux, then you can use this version of Frosty 1.0.7 [based on maniman's work]():
+If you're looking for a way to run mods on Linux, then you can use this version of Frosty 1.0.7 [based on maniman's work](https://github.com/maniman303/FrostyToolsuite):
 <br>https://github.com/PHD4/FrostyToolsuite/tree/proton-compat
 
 ## Setup
