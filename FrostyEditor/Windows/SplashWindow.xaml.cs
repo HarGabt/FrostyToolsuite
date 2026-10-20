@@ -143,7 +143,7 @@ namespace FrostyEditor.Windows
                     KeyPromptWindow keyPromptWin = new KeyPromptWindow();
                     if (keyPromptWin.ShowDialog() == false)
                     {
-                        FrostyMessageBox.Show("Encryption key not entered. Unable to load profile.", "Frosty Editor");
+                        FrostyMessageBox.Show(Application.Current.TryFindResource("fe_Msg_EncryptionKeyEmpty") as string ?? "Encryption key not entered. Unable to load profile.", "Frosty Editor");
                         Close();
                         return;
                     }
@@ -169,7 +169,7 @@ namespace FrostyEditor.Windows
                 catch
                 {
                     File.Delete(ProfilesLibrary.CacheName + ".key");
-                    FrostyMessageBox.Show("Encryption key is invalid. Unable to load profile.", "Frosty Editor");
+                    FrostyMessageBox.Show(Application.Current.TryFindResource("fe_Msg_EncryptionKeyInvalid") as string ?? "Encryption key is invalid. Unable to load profile.", "Frosty Editor");
                     Close();
                     return;
                 }
@@ -190,7 +190,7 @@ namespace FrostyEditor.Windows
                     catch
                     {
                         File.Delete(ProfilesLibrary.CacheName + ".key");
-                        FrostyMessageBox.Show("Encryption key is invalid. Unable to load profile.", "Frosty Editor");
+                        FrostyMessageBox.Show(Application.Current.TryFindResource("fe_Msg_EncryptionKeyInvalid") as string ?? "Encryption key is invalid. Unable to load profile.", "Frosty Editor");
                         Close();
                         return;
                     }
@@ -324,17 +324,17 @@ namespace FrostyEditor.Windows
                 TypeLibrary.Initialize();
                 App.PluginManager.Initialize();
 
-            // load legacy asset manager if profile uses legacy system
+                // load legacy asset manager if profile uses legacy system
 
-            if (ProfilesLibrary.IsLoaded(ProfileVersion.Fifa17,
-                    ProfileVersion.Fifa18,
-                    ProfileVersion.Madden19,
-                    ProfileVersion.Fifa19,
-                    ProfileVersion.Madden20,
-                    ProfileVersion.Fifa20,
-                    ProfileVersion.PlantsVsZombiesBattleforNeighborville))
-            {
-                App.AssetManager.RegisterCustomAssetManager("legacy", typeof(LegacyFileManager));
+                if (ProfilesLibrary.IsLoaded(ProfileVersion.Fifa17,
+                        ProfileVersion.Fifa18,
+                        ProfileVersion.Madden19,
+                        ProfileVersion.Fifa19,
+                        ProfileVersion.Madden20,
+                        ProfileVersion.Fifa20,
+                        ProfileVersion.PlantsVsZombiesBattleforNeighborville))
+                {
+                    App.AssetManager.RegisterCustomAssetManager("legacy", typeof(LegacyFileManager));
                 }
                 else if (ProfilesLibrary.IsLoaded(ProfileVersion.Fifa21, ProfileVersion.Madden22, ProfileVersion.Fifa22,
                     ProfileVersion.Madden23, ProfileVersion.Fifa23))
@@ -395,7 +395,7 @@ namespace FrostyEditor.Windows
             {
                 return true;
             }
-            
+
             if (TypeLibrary.GetSdkVersion() == 0)
             {
                 MessageBoxResult result = FrostyMessageBox.Show("Missing SDK.\nPlease generate a SDK for this game.", "Frosty", MessageBoxButton.OK);

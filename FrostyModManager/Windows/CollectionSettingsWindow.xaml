@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:FrostyModManager.Windows"
         xmlns:ctrl="clr-namespace:Frosty.Controls;assembly=FrostyControls"
         mc:Ignorable="d"
-        Title="Export Collection" Height="500" Width="600"
+        Title="{DynamicResource mm_Collection_Title}" Height="500" Width="600"
         WindowStartupLocation="CenterScreen" SnapsToDevicePixels="True">
 
     <Window.Resources>
@@ -30,19 +30,19 @@
                 <Grid DockPanel.Dock="Top" Margin="5">
                     <StackPanel>
                         <DockPanel LastChildFill="True">
-                            <Label Content="Title " FontFamily="Global User Interface" Width="75"/>
+                            <Label Content="{DynamicResource mm_Label_Title}" Width="75"/>
                             <TextBox x:Name="modTitleTextBox" VerticalContentAlignment="Center" Text="" Margin="1" BorderThickness="1" Style="{StaticResource TextBoxValidate}"/>
                         </DockPanel>
                         <DockPanel LastChildFill="True">
-                            <Label Content="Author " FontFamily="Global User Interface" Width="75"/>
+                            <Label Content="{DynamicResource mm_Label_Author}" Width="75"/>
                             <TextBox x:Name="modAuthorTextBox" VerticalContentAlignment="Center" Text="" Margin="1" BorderThickness="1" Style="{StaticResource TextBoxValidate}"/>
                         </DockPanel>
                         <DockPanel LastChildFill="True">
-                            <Label Content="Version " FontFamily="Global User Interface" Width="75"/>
+                            <Label Content="{DynamicResource mm_Label_Version}" Width="75"/>
                             <TextBox Grid.Column="1" x:Name="modVersionTextBox" VerticalContentAlignment="Center" Text="" Margin="1" BorderThickness="1" Style="{StaticResource TextBoxValidate}"/>
                         </DockPanel>
                         <DockPanel LastChildFill="True">
-                            <Label Content="Category " FontFamily="Global User Interface" Width="75"/>
+                            <Label Content="{DynamicResource mm_Label_Category}" Width="75"/>
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="0.5*"/>
@@ -54,7 +54,7 @@
                             </Grid>
                         </DockPanel>
                         <DockPanel LastChildFill="True">
-                            <Label Content="Link " FontFamily="Global User Interface" Width="75"/>
+                            <Label Content="{DynamicResource mm_Label_Link}" Width="75"/>
                             <TextBox x:Name="modLinkTextBox" VerticalContentAlignment="Center" Text="" Margin="1" BorderThickness="1"/>
                         </DockPanel>
                     </StackPanel>
@@ -78,8 +78,8 @@
         <Border Grid.Row="1">
             <Grid Margin="8">
                 <DockPanel LastChildFill="False">
-                    <Button x:Name="cancelButton" Content="Cancel" DockPanel.Dock="Left" Width="75" Click="cancelButton_Click"/>
-                    <Button x:Name="saveButton" Content="Save" DockPanel.Dock="Right" Width="75" Click="saveButton_Click"/>
+                    <Button x:Name="cancelButton" Content="{DynamicResource mm_Btn_Cancel}" DockPanel.Dock="Left" Width="75" Click="cancelButton_Click"/>
+                    <Button x:Name="saveButton" Content="{DynamicResource mm_Btn_Save}" DockPanel.Dock="Right" Width="75" Click="saveButton_Click"/>
                 </DockPanel>
             </Grid>
         </Border>

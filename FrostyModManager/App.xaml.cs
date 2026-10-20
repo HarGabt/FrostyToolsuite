@@ -29,8 +29,8 @@ namespace FrostyModManager
 
         public static string SelectedPack { get => Frosty.Core.App.SelectedPack; set => Frosty.Core.App.SelectedPack = value; }
 
-        public static bool LaunchGameImmediately 
-        { 
+        public static bool LaunchGameImmediately
+        {
             get => launchGameImmediately;
             set => launchGameImmediately = value;
         }
@@ -119,6 +119,16 @@ namespace FrostyModManager
             }
 
             Config.Load();
+
+            string language = Config.Get<string>("Language", "");
+            if (string.IsNullOrEmpty(language))
+            {
+                // First run: Set language based on user's Windows language
+                language = LocalizationManager.GetBestLocale();
+                Config.Add("Language", language);
+                Config.Save();
+            }
+            LocalizationManager.SetLanguage("FrostyModManager", language);
 
             if (Config.Get<bool>("UpdateCheck", true) || Config.Get<bool>("UpdateCheckPrerelease", false))
             {

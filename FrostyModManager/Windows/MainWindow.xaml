@@ -8,7 +8,7 @@
         xmlns:localctrl="clr-namespace:FrostyModManager.Controls"
         xmlns:conv="clr-namespace:Frosty.Core.Converters;assembly=FrostyCore"
         mc:Ignorable="d"
-        Title="Frosty Mod Manager" Height="750" Width="1000"
+        Title="{DynamicResource mm_AppTitle}" Height="750" Width="1000"
         Icon="/FrostyModManager;component/AppIcon.ico"
         FrostyLoaded="FrostyWindow_FrostyLoaded" Closing="FrostyWindow_Closing" AllowDrop="True" Drop="FrostyWindow_Drop">
 
@@ -150,22 +150,31 @@
 
             <!-- Menu -->
             <Menu x:Name="menu" Grid.Row="0">
-                <MenuItem Header="File" Height="22">
-                    <MenuItem Header="Pack">
-                        <MenuItem x:Name="packRename" Header="Rename" Click="packRename_Click"/>
-                        <MenuItem x:Name="packDuplicate" Header="Duplicate" Click="packDuplicate_Click"/>
-                        <MenuItem x:Name="packExport" Header="Export" Click="packExport_Click"/>
-                        <MenuItem x:Name="packImport" Header="Import" Click="packImport_Click"/>
+                <MenuItem Header="{DynamicResource mm_Menu_File}" Height="22">
+                    <MenuItem Header="{DynamicResource mm_Menu_Pack}">
+                        <MenuItem x:Name="packRename" Header="{DynamicResource mm_MenuItem_Rename}" Click="packRename_Click"/>
+                        <MenuItem x:Name="packDuplicate" Header="{DynamicResource mm_MenuItem_Duplicate}" Click="packDuplicate_Click"/>
+                        <MenuItem x:Name="packExport" Header="{DynamicResource mm_MenuItem_Export}" Click="packExport_Click"/>
+                        <MenuItem x:Name="packImport" Header="{DynamicResource mm_MenuItem_Import}" Click="packImport_Click"/>
                     </MenuItem>
-                    <MenuItem x:Name="collectionExport" Header="Create Collection" Click="collectionExport_Click"/>
-                    <MenuItem x:Name="launchConfigurationWindow" Header="Select Game" Click="launchConfigurationWindow_Click"/>
-                    <MenuItem x:Name="exitMenuItem" Header="Exit" Click="exitMenuItem_Click"/>
+                    <MenuItem x:Name="collectionExport" Header="{DynamicResource mm_MenuItem_CreateCollection}" Click="collectionExport_Click"/>
+                    <MenuItem x:Name="launchConfigurationWindow" Header="{DynamicResource mm_MenuItem_SelectGame}" Click="launchConfigurationWindow_Click"/>
+                    <MenuItem x:Name="exitMenuItem" Header="{DynamicResource mm_MenuItem_Exit}" Click="exitMenuItem_Click"/>
                 </MenuItem>
-                <MenuItem x:Name="toolsMenuItem" Header="Tools" Height="22">
-                    <MenuItem x:Name="manageModData" Header="Manage ModData" Click="modDataMenuItem_Click"/>
+                <MenuItem x:Name="toolsMenuItem" Header="{DynamicResource mm_Menu_Tools}" Height="22">
+                    <MenuItem x:Name="manageModData" Header="{DynamicResource mm_MenuItem_ManageModData}" Click="modDataMenuItem_Click"/>
+                    <MenuItem x:Name="langMenuItem" Header="{DynamicResource mm_Menu_Language}">
+                        <MenuItem Header="English (United States)" IsCheckable="True" Click="langMenuItem_Click" Tag="en-US"/>
+                        <MenuItem Header="Русский (Россия)" IsCheckable="True" Click="langMenuItem_Click" Tag="ru-RU"/>
+                    </MenuItem>
+                    <MenuItem x:Name="optionsMenuItem" Header="{DynamicResource mm_MenuItem_Options}" Click="optionsMenuItem_Click">
+                        <MenuItem.Icon>
+                            <Image Source="/FrostyCore;component/Images/Settings.png" RenderOptions.BitmapScalingMode="Fant"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
                 </MenuItem>
-                <MenuItem Header="Help" Height="22">
-                    <MenuItem x:Name="aboutMenuItem" Header="About Frosty Mod Manager" Click="aboutMenuItem_Click"/>
+                <MenuItem Header="{DynamicResource mm_Menu_Help}" Height="22">
+                    <MenuItem x:Name="aboutMenuItem" Header="{DynamicResource mm_MenuItem_About}" Click="aboutMenuItem_Click"/>
                 </MenuItem>
             </Menu>
 
@@ -182,7 +191,7 @@
                         <Border Background="{StaticResource ControlBackground}" HorizontalAlignment="Left" DockPanel.Dock="Left" RenderOptions.EdgeMode="Aliased">
                             <StackPanel Orientation="Horizontal" Margin="6,0,6,0">
                                 <!-- Deco -->
-                                <TextBlock Text="Pack: " VerticalAlignment="Center" Foreground="{StaticResource FontColor}"/>
+                                <TextBlock Text="{DynamicResource mm_Pack_Label}" VerticalAlignment="Center" Foreground="{StaticResource FontColor}"/>
                                 <!-- Profiles ComboBox -->
                                 <ComboBox x:Name="packsComboBox" Width="150" Height="22" Margin="4,0,0,0" SelectionChanged="packsComboBox_SelectionChanged" Padding="4,2,4,2">
                                     <ComboBox.ItemTemplate>
@@ -192,15 +201,15 @@
                                     </ComboBox.ItemTemplate>
                                 </ComboBox>
                                 <!-- Add Pack Button -->
-                                <Button x:Name="addProfileButton" Width="20" Height="20" Margin="4,0,0,0" ToolTip="Add Pack" Click="addProfileButton_Click">
+                                <Button x:Name="addProfileButton" Width="20" Height="20" Margin="4,0,0,0" ToolTip="{DynamicResource mm_Tip_AddPack}" Click="addProfileButton_Click">
                                     <Image Source="/FrostyModManager;component/Images/Plus.png"/>
                                 </Button>
                                 <!-- Remove Pack Button -->
-                                <Button x:Name="removeProfileButton" Width="20" Height="20" Margin="4,0,0,0" ToolTip="Remove Pack" Click="removeProfileButton_Click">
+                                <Button x:Name="removeProfileButton" Width="20" Height="20" Margin="4,0,0,0" ToolTip="{DynamicResource mm_Tip_RemovePack}" Click="removeProfileButton_Click">
                                     <Image Source="/FrostyModManager;component/Images/Minus.png"/>
                                 </Button>
                                 <!-- Import Button -->
-                                <Button x:Name="importPackButton" Width="20" Height="20" Margin="4,0,0,0" ToolTip="Import Pack" Click="packImport_Click">
+                                <Button x:Name="importPackButton" Width="20" Height="20" Margin="4,0,0,0" ToolTip="{DynamicResource mm_Tip_ImportPack}" Click="packImport_Click">
                                     <Image Source="/FrostyModManager;component/Images/Import.png"/>
                                 </Button>
                             </StackPanel>
@@ -208,10 +217,10 @@
                         <!-- Launch -->
                         <Border Background="{StaticResource ControlBackground}" Margin="1 0 0 0" DockPanel.Dock="Left" RenderOptions.EdgeMode="Aliased">
                             <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Margin="6,0,6,0">
-                                <Button x:Name="launchButton" Height="20" ToolTip="Launch game with selected mods applied" Click="launchButton_Click">
+                                <Button x:Name="launchButton" Height="20" ToolTip="{DynamicResource mm_Tip_LaunchGame}" Click="launchButton_Click">
                                     <StackPanel Orientation="Horizontal">
                                         <Image Source="/FrostyModManager;component/Images/Play.png"/>
-                                        <TextBlock Margin="2,0,3,2" Text="Launch" VerticalAlignment="Center"/>
+                                        <TextBlock Margin="2,0,3,2" Text="{DynamicResource mm_Btn_Compile}" VerticalAlignment="Center"/>
                                     </StackPanel>
                                 </Button>
                             </StackPanel>
@@ -371,7 +380,7 @@
                             </ctrl:FrostyTabControl.Style>
 
                             <!-- Available Mods -->
-                            <ctrl:FrostyTabItem Header="Available Mods" x:Name="availableModsTabHeaderThing">
+                            <ctrl:FrostyTabItem Header="{DynamicResource mm_Tab_AvailableMods}" x:Name="availableModsTabHeaderThing">
                                 <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="26"/>
@@ -386,17 +395,17 @@
                                             <Border Background="{StaticResource ControlBackground}" DockPanel.Dock="Left" RenderOptions.EdgeMode="Aliased">
                                                 <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Margin="6,0,6,0">
                                                     <!-- Install Mod Button -->
-                                                    <Button x:Name="installModButton" Height="20" IsEnabled="True" ToolTip="Import mod(s) from file" Click="installModButton_Click">
+                                                    <Button x:Name="installModButton" Height="20" IsEnabled="True" ToolTip="{DynamicResource mm_Tip_ImportMods}" Click="installModButton_Click">
                                                         <StackPanel Orientation="Horizontal">
                                                             <Image Source="/FrostyModManager;component/Images/AddMod.png" Margin="0,0,2,0"/>
-                                                            <TextBlock Margin="2,0,3,2" Text="Add Mod(s)" VerticalAlignment="Center"/>
+                                                            <TextBlock Margin="2,0,3,2" Text="{DynamicResource mm_Btn_AddMods}" VerticalAlignment="Center"/>
                                                         </StackPanel>
                                                     </Button>
                                                     <!-- Uninstall Mod Button -->
-                                                    <Button x:Name="uninstallModButton" Height="20" Click="uninstallModButton_Click" IsEnabled="False" ToolTip="Remove selected mod(s)" Margin="4,0,0,0">
+                                                    <Button x:Name="uninstallModButton" Height="20" Click="uninstallModButton_Click" IsEnabled="False" ToolTip="{DynamicResource mm_Tip_RemoveMods}" Margin="4,0,0,0">
                                                         <StackPanel Orientation="Horizontal">
                                                             <Image Source="/FrostyModManager;component/Images/RemoveMod.png" Margin="0,0,2,0"/>
-                                                            <TextBlock Text="Remove Mod(s)" Margin="2,0,3,2" VerticalAlignment="Center"/>
+                                                            <TextBlock Text="{DynamicResource mm_Btn_RemoveMods}" Margin="2,0,3,2" VerticalAlignment="Center"/>
                                                         </StackPanel>
                                                     </Button>
                                                 </StackPanel>
@@ -405,14 +414,14 @@
                                             <Border Background="{StaticResource ControlBackground}" DockPanel.Dock="Right" RenderOptions.EdgeMode="Aliased">
                                                 <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Margin="6,0,6,0">
                                                     <!-- Apply Mod Button -->
-                                                    <Button x:Name="addModButton" Height="20" Click="addModButton_Click" IsEnabled="False" ToolTip="Add mod(s) to applied list">
+                                                    <Button x:Name="addModButton" Height="20" Click="addModButton_Click" IsEnabled="False" ToolTip="{DynamicResource mm_Tip_ApplyMods}">
                                                         <StackPanel Orientation="Horizontal">
                                                             <Image Source="/FrostyModManager;component/Images/Up.png" Margin="0,0,4,0">
                                                                 <Image.RenderTransform>
                                                                     <RotateTransform Angle="90" CenterX="10" CenterY="10"/>
                                                                 </Image.RenderTransform>
                                                             </Image>
-                                                            <TextBlock Text="Apply Mod(s)" Margin="2,0,3,2" VerticalAlignment="Center"/>
+                                                            <TextBlock Text="{DynamicResource mm_Btn_ApplyMods}" Margin="2,0,3,2" VerticalAlignment="Center"/>
                                                         </StackPanel>
                                                     </Button>
                                                 </StackPanel>
@@ -429,7 +438,7 @@
                                         <!-- J-Lyt | Changed ToolTip Text -->
                                         <ToggleButton x:Name="appliedModsFilterButton"
                                                       Click="appliedModsFilterButton_Click"
-                                                      ToolTip="Show Applied Mod(s)">
+                                                      ToolTip="{DynamicResource mm_Tip_ShowApplied}">
                                             <Image Source="/FrostyModManager;component/Images/CircleCheck.png"
                                                    Height="16"
                                                    Width="16"
@@ -438,14 +447,14 @@
                                         <!-- J-Lyt | Changed ToolTip Text -->
                                         <ToggleButton x:Name="notAppliedModsFilterButton"
                                                       Click="notAppliedModsFilterButton_Click"
-                                                      ToolTip="Hide Applied Mod(s)">
+                                                      ToolTip="{DynamicResource mm_Tip_HideApplied}">
                                             <Image Source="/FrostyModManager;component/Images/CircleX.png"
                                                    Height="16"
                                                    Width="16"
                                                    Margin="0,0,2,0" />
                                         </ToggleButton>
                                         <ctrl:FrostyWatermarkTextBox x:Name="availableModsFilterTextBox"
-                                                                     WatermarkText="Filter"
+                                                                     WatermarkText="{DynamicResource mm_Filter_Watermark}"
                                                                      BorderThickness="1"
                                                                      Margin="1,1,1,0"
                                                                      VerticalContentAlignment="Center"
@@ -457,7 +466,7 @@
                                         <ListView.View>
                                             <GridView ScrollViewer.CanContentScroll="False">
                                                 <GridView.Columns>
-                                                    <GridViewColumn Header="Title" Width="410">
+                                                    <GridViewColumn Header="{DynamicResource mm_Col_Title}" Width="410">
                                                         <GridViewColumn.CellTemplate>
                                                             <DataTemplate>
                                                                 <Grid Margin="0,0,16,0">
@@ -472,7 +481,7 @@
                                                                                             </Style>
                                                                                         </GridView.ColumnHeaderContainerStyle>
                                                                                         <GridView.Columns>
-                                                                                            <GridViewColumn Header="Title" Width="382">
+                                                                                            <GridViewColumn Header="{DynamicResource mm_Col_Title}" Width="382">
                                                                                                 <GridViewColumn.CellTemplate>
                                                                                                     <DataTemplate>
                                                                                                         <Grid Height="40" Margin="-2,0,16,0">
@@ -508,7 +517,7 @@
                                                                                                     </DataTemplate>
                                                                                                 </GridViewColumn.CellTemplate>
                                                                                             </GridViewColumn>
-                                                                                            <GridViewColumn Header="Version" Width="74">
+                                                                                            <GridViewColumn Header="{DynamicResource mm_Col_Version}" Width="74">
                                                                                                 <GridViewColumn.CellTemplate>
                                                                                                     <DataTemplate>
                                                                                                         <Grid Height="32">
@@ -566,7 +575,7 @@
                                                             </DataTemplate>
                                                         </GridViewColumn.CellTemplate>
                                                     </GridViewColumn>
-                                                    <GridViewColumn Header="Version" Width="75">
+                                                    <GridViewColumn Header="{DynamicResource mm_Col_Version}" Width="75">
                                                         <GridViewColumn.CellTemplate>
                                                             <DataTemplate>
                                                                 <Grid Height="32">
@@ -575,7 +584,7 @@
                                                             </DataTemplate>
                                                         </GridViewColumn.CellTemplate>
                                                     </GridViewColumn>
-                                                    <GridViewColumn Header="Applied"
+                                                    <GridViewColumn Header="{DynamicResource mm_Col_Applied}"
                                                                     Width="74">
                                                         <!-- GridViewColumn.CellTemplate created in code -->
                                                     </GridViewColumn>
@@ -589,12 +598,12 @@
                                 </Grid>
                             </ctrl:FrostyTabItem>
                             <!-- Installed Plugins -->
-                            <ctrl:FrostyTabItem Header="Installed Plugins">
+                            <ctrl:FrostyTabItem Header="{DynamicResource mm_Tab_InstalledPlugins}">
                                 <ListView x:Name="LoadedPluginsList">
                                     <ListView.View>
                                         <ctrl:FrostyAutoSizedGridView>
                                             <GridView.Columns>
-                                                <GridViewColumn Header="Name">
+                                                <GridViewColumn Header="{DynamicResource mm_Col_Name}">
                                                     <GridViewColumn.CellTemplate>
                                                         <DataTemplate>
                                                             <StackPanel Orientation="Horizontal" Height="24">
@@ -603,7 +612,7 @@
                                                         </DataTemplate>
                                                     </GridViewColumn.CellTemplate>
                                                 </GridViewColumn>
-                                                <GridViewColumn Header="Author">
+                                                <GridViewColumn Header="{DynamicResource mm_Col_Author}">
                                                     <GridViewColumn.CellTemplate>
                                                         <DataTemplate>
                                                             <StackPanel Orientation="Horizontal" Height="24">
@@ -612,7 +621,7 @@
                                                         </DataTemplate>
                                                     </GridViewColumn.CellTemplate>
                                                 </GridViewColumn>
-                                                <GridViewColumn Header="Version">
+                                                <GridViewColumn Header="{DynamicResource mm_Col_Version}">
                                                     <GridViewColumn.CellTemplate>
                                                         <DataTemplate>
                                                             <StackPanel Orientation="Horizontal" Height="24">
@@ -627,10 +636,10 @@
                                 </ListView>
                             </ctrl:FrostyTabItem>
                             <!-- Log -->
-                            <ctrl:FrostyTabItem Header="Log">
+                            <ctrl:FrostyTabItem Header="{DynamicResource mm_Tab_Log}">
                                 <Grid>
                                     <Border BorderBrush="{StaticResource ControlBackground}" RenderOptions.EdgeMode="Aliased" BorderThickness="0,2,0,0">
-                                        <TextBox x:Name="tb" FontFamily="Consolas" IsReadOnly="True" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Background="{StaticResource ListBackground}" TextChanged="logTextBox_TextChanged"/>
+                                        <TextBox x:Name="tb" FontFamily="{DynamicResource MonoFontFamily}" IsReadOnly="True" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" Background="{StaticResource ListBackground}" TextChanged="logTextBox_TextChanged"/>
                                     </Border>
                                 </Grid>
                             </ctrl:FrostyTabItem>
@@ -797,7 +806,7 @@
                             </ctrl:FrostyTabControl.Style>
 
                             <!-- Applied Mods -->
-                            <ctrl:FrostyTabItem x:Name="appliedModsTabItem" Header="Applied Mods">
+                            <ctrl:FrostyTabItem x:Name="appliedModsTabItem" Header="{DynamicResource mm_Tab_AppliedMods}">
                                 <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="26"/>
@@ -809,19 +818,19 @@
                                             <Border Background="{StaticResource ControlBackground}" DockPanel.Dock="Left" RenderOptions.EdgeMode="Aliased">
                                                 <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Margin="6,0,6,0">
                                                     <!-- Uncheck All Button -->
-                                                    <Button x:Name="uncheckAllButton" Margin="4,0,0,0" IsEnabled="True" Click="uncheckAllButton_Click" ToolTip="Deselect all mods">
+                                                    <Button x:Name="uncheckAllButton" Margin="4,0,0,0" IsEnabled="True" Click="uncheckAllButton_Click" ToolTip="{DynamicResource mm_Tip_DeselectAll}">
                                                         <Image Source="/FrostyModManager;component/Images/Cross.png" Margin="0,0,2,0"/>
                                                     </Button>
                                                     <!-- Down Button -->
-                                                    <Button x:Name="downButton" Margin="4,0,0,0" IsEnabled="False" Click="downButton_Click" ToolTip="Move mod down in list &#x0a;Shift click to move down 5 spaces &#x0a;Ctrl Shift click to move to bottom">
+                                                    <Button x:Name="downButton" Margin="4,0,0,0" IsEnabled="False" Click="downButton_Click" ToolTip="{DynamicResource mm_Tip_MoveDown}">
                                                         <Image Source="/FrostyModManager;component/Images/Down.png" Margin="0,0,2,0"/>
                                                     </Button>
                                                     <!-- Up Button -->
-                                                    <Button x:Name="upButton" IsEnabled="False" Click="upButton_Click" ToolTip="Move mod up in list &#x0a;Shift click to move up 5 spaces &#x0a;Ctrl Shift click to move to top">
+                                                    <Button x:Name="upButton" IsEnabled="False" Click="upButton_Click" ToolTip="{DynamicResource mm_Tip_MoveUp}">
                                                         <Image Source="/FrostyModManager;component/Images/Up.png" Margin="0,0,2,0"/>
                                                     </Button>
                                                     <!-- Remove Button -->
-                                                    <Button x:Name="removeButton" Margin="4,0,0,0" IsEnabled="False" Click="removeButton_Click" ToolTip="Remove mod from list">
+                                                    <Button x:Name="removeButton" Margin="4,0,0,0" IsEnabled="False" Click="removeButton_Click" ToolTip="{DynamicResource mm_Tip_RemoveMod}">
                                                         <Image Source="/FrostyModManager;component/Images/Remove.png" Margin="0,0,2,0"/>
                                                     </Button>
                                                 </StackPanel>
@@ -851,9 +860,9 @@
                                 </Grid>
                             </ctrl:FrostyTabItem>
                             <!-- Mod Description -->
-                            <ctrl:FrostyTabItem x:Name="modDescTabItem" Header="Description" Visibility="Collapsed"/>
+                            <ctrl:FrostyTabItem x:Name="modDescTabItem" Header="{DynamicResource mm_Tab_Description}" Visibility="Collapsed"/>
                             <!-- Conflicts -->
-                            <ctrl:FrostyTabItem x:Name="conflictsTabItem" Header="Resources" Visibility="Collapsed">
+                            <ctrl:FrostyTabItem x:Name="conflictsTabItem" Header="{DynamicResource mm_Tab_Resources}" Visibility="Collapsed">
                                 <Grid>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="26"/>
@@ -865,7 +874,7 @@
                                             <Border Background="{StaticResource ControlBackground}" DockPanel.Dock="Left" RenderOptions.EdgeMode="Aliased">
                                                 <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Margin="6,0,6,0">
                                                     <CheckBox x:Name="showOnlyReplacementsCheckBox" VerticalAlignment="Center" Margin="0,0,0,0" Checked="PART_ShowOnlyReplacementsCheckBox_Checked" Unchecked="PART_ShowOnlyReplacementsCheckBox_Unchecked" IsChecked="False" ToolTip="Filter the list so only resources with conflicts are shown." Foreground="{StaticResource FontColor}">
-                                                        <TextBlock Text="Show conflicts only" Margin="4,-1,0,0" VerticalAlignment="Center" Foreground="{StaticResource FontColor}"/>
+                                                        <TextBlock Text="{DynamicResource mm_Chk_ShowConflicts}" Margin="4,-1,0,0" VerticalAlignment="Center" Foreground="{StaticResource FontColor}"/>
                                                     </CheckBox>
                                                 </StackPanel>
                                             </Border>
@@ -888,9 +897,9 @@
                                                     <StackPanel Height="22" Orientation="Horizontal">
                                                         <Grid Height="18" Margin="0,0,4,2">
                                                             <Rectangle Width="35" Height="15" RadiusY="3" RadiusX="3" Fill="#FFFFFFFF" />
-                                                            <TextBlock x:Name="typeName" Text="{Binding Path=Type}" Foreground="Black" FontFamily="Segoe UI" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="9"/>
+                                                            <TextBlock x:Name="typeName" Text="{Binding Path=Type}" Foreground="Black" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="9"/>
                                                         </Grid>
-                                                        <TextBlock Text="{Binding Path=Name}" FontFamily="Consolas" VerticalAlignment="Center"/>
+                                                        <TextBlock Text="{Binding Path=Name}" FontFamily="{DynamicResource MonoFontFamily}" VerticalAlignment="Center"/>
                                                     </StackPanel>
 
                                                     <!-- Custom Names for Types with long Names -->

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:ctrl="clr-namespace:Frosty.Controls;assembly=FrostyControls"
         mc:Ignorable="d"
-        Title="Mod Configuration" Height="408" Width="500">
+        Title="{DynamicResource mm_Config_Title}" Height="408" Width="500">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -30,10 +30,10 @@
         <Border Grid.Row="1" Background="{StaticResource ListBackground}">
             <Grid Margin="8">
                 <DockPanel LastChildFill="False">
-                    <Button x:Name="saveButton" Content="Save" DockPanel.Dock="Right" Width="75" Click="Button_Click"/>
+                    <Button x:Name="saveButton" Content="{DynamicResource mm_Btn_Save}" DockPanel.Dock="Right" Width="75" Click="Button_Click"/>
                 </DockPanel>
             </Grid>
         </Border>
-        
+
     </Grid>
 </ctrl:FrostyDockableWindow>
