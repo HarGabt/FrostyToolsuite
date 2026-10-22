@@ -1,0 +1,309 @@
+﻿<ResourceDictionary 
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:EffectBlueprintEditorPlugin"
+    xmlns:core="clr-namespace:Frosty.Core.Controls;assembly=FrostyCore"
+    xmlns:ctrl="clr-namespace:Frosty.Controls;assembly=FrostyControls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:fdev="FrostyDeveloper">
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/FrostyControls;component/Themes/Generic.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+
+    <!-- EmitterDocumentEditor -->
+    <Style TargetType="{x:Type local:EffectBlueprintEditor}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:EffectBlueprintEditor}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition x:Name="PART_EmitterStackColumn"/>
+                            <ColumnDefinition Width="4*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <ctrl:FrostyDockablePanel x:Name="PART_EmitterStackPanel" Grid.Row="1" Grid.Column="0" TitleBarVisible="False" Margin="0" BorderVisible="True">
+
+                            <Border Background="#FF141414">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="26"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                    <Border Margin="1">
+                                        <DockPanel>
+                                            <Border Background="{StaticResource ControlBackground}" Margin="0,0,0,0">
+                                                <Grid>
+                                                    <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Margin="4,0,4,0">
+                                                        <ToggleButton x:Name="PART_ShowEM" IsChecked="True" Width="22" Margin="1" ToolTip="Show Emitters" Style="{StaticResource {x:Type ToggleButton}}">
+                                                            <ToggleButton.Content>
+                                                                <Image Width="16" Source="/FrostyCore;component/Images/Assets/EmitterFileType.png"/>
+                                                            </ToggleButton.Content>
+                                                        </ToggleButton>
+
+                                                        <ToggleButton x:Name="PART_ShowEG" IsChecked="True" Width="22" Margin="1" ToolTip="Show EmitterGraphs" Style="{StaticResource {x:Type ToggleButton}}">
+                                                            <ToggleButton.Content>
+                                                                <Image Width="16" Source="/EffectBlueprintEditorPlugin;component/Images/EffectEditor.png"/>
+                                                            </ToggleButton.Content>
+                                                        </ToggleButton>
+
+                                                        <ToggleButton x:Name="PART_ShowLE" IsChecked="True" Width="22" Margin="1" ToolTip="Show LightEffects" Style="{StaticResource {x:Type ToggleButton}}">
+                                                            <ToggleButton.Content>
+                                                                <Image Width="16" Source="/EffectBlueprintEditorPlugin;component/Images/Light.png"/>
+                                                            </ToggleButton.Content>
+                                                        </ToggleButton>
+
+                                                        <Border BorderThickness="0.5" Margin="2" BorderBrush="{StaticResource ListBackground}"/>
+
+                                                        <ToggleButton x:Name="PART_ShowTransforms" IsChecked="True" Width="22" Margin="1" ToolTip="Show Transforms" Style="{StaticResource {x:Type ToggleButton}}">
+                                                            <ToggleButton.Content>
+                                                                <Image Width="16" Source="/EffectBlueprintEditorPlugin;component/Images/Axis.png"/>
+                                                            </ToggleButton.Content>
+                                                        </ToggleButton>
+
+                                                        <ToggleButton x:Name="PART_ShowDelay" IsChecked="False" Width="22" Margin="1" ToolTip="Show Start Delay" Style="{StaticResource {x:Type ToggleButton}}">
+                                                            <ToggleButton.Content>
+                                                                <Image Width="16" Source="/EffectBlueprintEditorPlugin;component/Images/Time.png"/>
+                                                            </ToggleButton.Content>
+                                                        </ToggleButton>
+
+                                                        <ToggleButton x:Name="PART_ShowGrOverrides" IsChecked="False" Width="22" Margin="1" ToolTip="Show Emitter Graph Overrides" Style="{StaticResource {x:Type ToggleButton}}">
+                                                            <ToggleButton.Content>
+                                                                <Image Width="16" Source="/EffectBlueprintEditorPlugin;component/Images/Particle.png"/>
+                                                            </ToggleButton.Content>
+                                                        </ToggleButton>
+
+                                                        <ToggleButton x:Name="PART_ShowAttr" IsChecked="True" Width="22" Margin="1" ToolTip="Show Attributes" Style="{StaticResource {x:Type ToggleButton}}">
+                                                            <ToggleButton.Content>
+                                                                <Image Width="16" Source="/FrostyEditor;component/Images/ClassRef.png"/>
+                                                            </ToggleButton.Content>
+                                                        </ToggleButton>
+
+                                                        <ToggleButton x:Name="PART_ShowUnknown" Width="22" Margin="1" ToolTip="Show Unknown Properties" Style="{StaticResource {x:Type ToggleButton}}">
+                                                            <ToggleButton.Content>
+                                                                <Image Width="16" Source="/EffectBlueprintEditorPlugin;component/Images/Question.png"/>
+                                                            </ToggleButton.Content>
+                                                        </ToggleButton>
+                                                    </StackPanel>
+
+                                                    <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Margin="4,0,4,0" HorizontalAlignment="Right">
+                                                        <ToggleButton x:Name="PART_AutoRefresh" Visibility="Collapsed" IsChecked="True" Width="22" Margin="1" ToolTip="Automatically Refresh Editor" Style="{StaticResource {x:Type ToggleButton}}">
+                                                            <ToggleButton.Content>
+                                                                <Image Width="16" Source="/FrostyEditor;component/Images/Compile.png"/>
+                                                            </ToggleButton.Content>
+                                                        </ToggleButton>
+
+                                                        <Button x:Name="PART_Refresh" Width="22" Height="22" Margin="1" ToolTip="Refresh Property Grid" Style="{StaticResource {x:Type Button}}">
+                                                            <Button.Content>
+                                                                <Image Width="16" Source="/EffectBlueprintEditorPlugin;component/Images/Refresh.png"/>
+                                                            </Button.Content>
+                                                        </Button>
+                                                    </StackPanel>
+                                                </Grid>
+
+
+                                            </Border>
+                                        </DockPanel>
+                                    </Border>
+
+
+                                    <Grid HorizontalAlignment="Stretch" Grid.Row="1">
+                                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                            <ItemsControl x:Name="PART_EmitterStack">
+                                                <ItemsControl.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Grid>
+                                                            <local:EffectStackItem Panel.ZIndex="1"/>
+                                                        </Grid>
+                                                    </DataTemplate>
+                                                </ItemsControl.ItemTemplate>
+                                                <ItemsControl.ItemsPanel>
+                                                    <ItemsPanelTemplate>
+                                                        <VirtualizingStackPanel Orientation="Vertical"/>
+                                                    </ItemsPanelTemplate>
+                                                </ItemsControl.ItemsPanel>
+                                            </ItemsControl>
+                                        </ScrollViewer>
+                                    </Grid>
+
+                                    <Grid VerticalAlignment="Bottom" HorizontalAlignment="Right">
+                                        <TextBlock x:Name="PART_RefreshTime"/>
+                                    </Grid>
+                                </Grid>
+                            </Border>
+
+                        </ctrl:FrostyDockablePanel>
+
+                        <GridSplitter Margin="2,0,0,0" Background="Transparent" VerticalAlignment="Stretch" Width="3" ResizeDirection="Columns"/>
+
+                        <Border Grid.Column="1" Background="{StaticResource ControlBackground}">
+                            <Grid Margin="2" Background="{StaticResource ListBackground}">
+
+                                <ctrl:FrostyDockablePanel TitleBarVisible="True" Title="Properties" BorderVisible="false" Icon="/FrostyEditor;component/Images/Properties.png">
+                                    <core:FrostyPropertyGrid x:Name="PART_AssetPropertyGrid" Grid.Row="1" Asset="{Binding Asset, RelativeSource={RelativeSource TemplatedParent}}" Modified="{Binding AssetModified, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"/>
+                                </ctrl:FrostyDockablePanel>
+
+                            </Grid>
+                        </Border>
+
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- EmitterStackItem -->
+    <Style TargetType="{x:Type local:EffectStackItem}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:EffectStackItem}">
+                    <Grid Margin="1" HorizontalAlignment="Center" ToolTip="{Binding Path=ItemToolTip}">
+                        <UniformGrid>
+
+                            <!-- Header -->
+                            <StackPanel Orientation="Horizontal"  Width="420" Margin="0 8 0 0" Visibility="{Binding Path=HeaderVisiblity, Mode=TwoWay}" >
+                                <CheckBox IsChecked="{Binding Path=ComponentEnabled, Mode=TwoWay}" Margin="0 2 4 0"/>
+                                <TextBlock Text="{Binding Path=HeaderText}" HorizontalAlignment="Left">
+                                    <TextBlock.ContextMenu>
+                                        <ContextMenu>
+                                            <MenuItem Header="Copy Component" Command="{Binding Path=CopyCommand, Mode=TwoWay}"/>
+                                            <MenuItem Header="Paste Component" Command="{Binding Path=PasteCommand, Mode=TwoWay}"/>
+                                        </ContextMenu>
+                                    </TextBlock.ContextMenu>
+                                </TextBlock>
+                            </StackPanel>
+
+                            <!-- Values -->
+                            <Grid Background="#373737" HorizontalAlignment="Center" Visibility="{Binding Path=ValuesVisiblity, Mode=TwoWay}" Width="420">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="{Binding Path=WWidth, Mode=TwoWay}"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <StackPanel Grid.Column="0" Orientation="Vertical" Margin="2">
+                                        <TextBlock Text="{Binding Path=XName}" ToolTip="{Binding Path=XName}" HorizontalAlignment="Left" IsHitTestVisible="False"/>
+                                        <TextBox Text="{Binding Path=XValue, Mode=TwoWay}"/>
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Column="1" Orientation="Vertical" Margin="0 2 2 2">
+                                        <TextBlock Text="{Binding Path=YName}" ToolTip="{Binding Path=YName}" HorizontalAlignment="Left" IsHitTestVisible="False"/>
+                                        <TextBox Text="{Binding Path=YValue, Mode=TwoWay}"/>
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Column="2" Orientation="Vertical" Margin="0 2 2 2">
+                                        <TextBlock Text="{Binding Path=ZName}" ToolTip="{Binding Path=ZName}" HorizontalAlignment="Left" IsHitTestVisible="False"/>
+                                        <TextBox Text="{Binding Path=ZValue, Mode=TwoWay}"/>
+                                    </StackPanel>
+
+                                    <StackPanel Grid.Column="3" Orientation="Vertical" Margin="0 2 2 2">
+                                        <TextBlock Text="{Binding Path=WName}" ToolTip="{Binding Path=WName}" HorizontalAlignment="Left" IsHitTestVisible="False"/>
+                                        <TextBox Text="{Binding Path=WValue, Mode=TwoWay}"/>
+                                    </StackPanel>
+                                </Grid>
+                                <TextBlock Text="{Binding Path=SingleName}" ToolTip="{Binding Path=SingleName}" HorizontalAlignment="Left" Margin="2" IsHitTestVisible="False"/>
+
+                                <Grid.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="Copy Values" Command="{Binding Path=CopyCommand, Mode=TwoWay}"/>
+                                        <MenuItem Header="Paste Values" Command="{Binding Path=PasteCommand, Mode=TwoWay}"/>
+                                    </ContextMenu>
+                                </Grid.ContextMenu>
+                            </Grid>
+
+                            <!-- Transform -->
+                            <Grid Background="#373737" HorizontalAlignment="Center" Visibility="{Binding Path=TransformVisiblity, Mode=TwoWay}" Width="420">
+                                <StackPanel Margin="2">
+                                    <TextBlock Text="Transforms" HorizontalAlignment="Left" IsHitTestVisible="False"/>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBox Grid.Column="0" Text="{Binding Path=XLoc, Mode=TwoWay}" />
+                                        <TextBox Grid.Column="1" Text="{Binding Path=YLoc, Mode=TwoWay}" Margin="2 0 0 0"/>
+                                        <TextBox Grid.Column="2" Text="{Binding Path=ZLoc, Mode=TwoWay}" Margin="2 0 0 0"/>
+                                    </Grid>
+                                    <Grid Height="2"/>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBox Grid.Column="0" Text="{Binding Path=XRot, Mode=TwoWay}" />
+                                        <TextBox Grid.Column="1" Text="{Binding Path=YRot, Mode=TwoWay}" Margin="2 0 0 0"/>
+                                        <TextBox Grid.Column="2" Text="{Binding Path=ZRot, Mode=TwoWay}" Margin="2 0 0 0"/>
+                                    </Grid>
+                                    <Grid Height="2"/>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBox Grid.Column="0" Text="{Binding Path=XScale, Mode=TwoWay}" />
+                                        <TextBox Grid.Column="1" Text="{Binding Path=YScale, Mode=TwoWay}" Margin="2 0 0 0"/>
+                                        <TextBox Grid.Column="2" Text="{Binding Path=ZScale, Mode=TwoWay}" Margin="2 0 0 0"/>
+                                    </Grid>
+                                </StackPanel>
+
+                                <Grid.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="Copy Values" Command="{Binding Path=CopyCommand, Mode=TwoWay}"/>
+                                        <MenuItem Header="Paste Values" Command="{Binding Path=PasteCommand, Mode=TwoWay}"/>
+                                    </ContextMenu>
+                                </Grid.ContextMenu>
+                            </Grid>
+
+                            <!-- Single Value -->
+                            <Grid Background="#373737" HorizontalAlignment="Center" Visibility="{Binding Path=SingleVisiblity, Mode=TwoWay}" Width="420">
+                                <StackPanel Orientation="Vertical" Margin="2">
+                                    <TextBlock Text="{Binding Path=SingleName}" ToolTip="{Binding Path=SingleName}" HorizontalAlignment="Left" IsHitTestVisible="False"/>
+                                    <TextBox Text="{Binding Path=SingleValue, Mode=TwoWay}"/>
+                                </StackPanel>
+                            </Grid>
+
+                            <!-- New Property Button -->
+                            <Grid HorizontalAlignment="Center" Visibility="{Binding Path=NewPropVisiblity, Mode=TwoWay}" Height="18" Width="420">
+                                <Button Command="{Binding Path=ButtonClickedCommand, Mode=TwoWay}" ToolTip="Add New Property">
+                                    <Button.Content>
+                                        <Image Source="/FrostyEditor;component/Images/Add.png" Width="12"/>
+                                    </Button.Content>
+                                    <Button.Style>
+                                        <Style TargetType="{x:Type Button}">
+                                            <Setter Property="Background" Value="#404040"/>
+                                            <Setter Property="Foreground" Value="{StaticResource FontColor}"/>
+                                            <Setter Property="Cursor" Value="Hand"/>
+                                            <Style.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter Property="Background" Value="#575757"/>
+                                                </Trigger>
+                                                <Trigger Property="IsPressed" Value="True">
+                                                    <Setter Property="Background" Value="#525252"/>
+                                                </Trigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                    <Button.Template>
+                                        <ControlTemplate TargetType="{x:Type Button}">
+                                            <Border Background="{TemplateBinding Background}">
+                                                <ContentPresenter VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
+                            </Grid>
+
+                        </UniformGrid>
+
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

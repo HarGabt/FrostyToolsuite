@@ -1,0 +1,168 @@
+﻿<ResourceDictionary 
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:ScalableEmitterEditorPlugin"
+    xmlns:core="clr-namespace:Frosty.Core.Controls;assembly=FrostyCore"
+    xmlns:ctrl="clr-namespace:Frosty.Controls;assembly=FrostyControls"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:fdev="FrostyDeveloper">
+
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/FrostyControls;component/Themes/Generic.xaml"/>
+    </ResourceDictionary.MergedDictionaries>
+
+    <local:BoolToVisibilityHiddenConverter x:Key="BooleanToVisibilityConverter"/>
+    
+    <!-- EmitterDocumentEditor -->
+    <Style TargetType="{x:Type local:EmitterDocumentEditor}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:EmitterDocumentEditor}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition x:Name="PART_EmitterStackColumn"/>
+                            <ColumnDefinition Width="4*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <ctrl:FrostyDockablePanel x:Name="PART_EmitterStackPanel" Grid.Row="1" Grid.Column="0" TitleBarVisible="False" Margin="0" BorderVisible="True">
+                            <Border Background="#FF141414">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="26"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                    <Border Margin="1">
+                                        <DockPanel>
+                                            <Border Background="{StaticResource ControlBackground}" Margin="0,0,0,0">
+                                                <StackPanel VerticalAlignment="Center" Orientation="Horizontal" Margin="6,0,6,0">
+
+                                                    <RadioButton Width="22" Height="22" x:Name="PART_EmitterQualityLow" Margin="0" ToolTip="Low" Style="{StaticResource {x:Type ToggleButton}}" IsChecked="True">
+                                                        <RadioButton.Content>
+                                                            <Grid>
+                                                                <Rectangle RadiusY="2" RadiusX="2" Fill="White" Width="14" Height="14"/>
+                                                                <TextBlock x:Name="PART_EmitterQualityLowText" Text="L" Foreground="{StaticResource ControlBackground}" FontFamily="Segoe UI" FontWeight="Black" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                                            </Grid>
+                                                        </RadioButton.Content>
+                                                    </RadioButton>
+
+                                                    <RadioButton Width="22" x:Name="PART_EmitterQualityMedium" Margin="0" ToolTip="Medium" Style="{StaticResource {x:Type ToggleButton}}">
+                                                        <RadioButton.Content>
+                                                            <Grid>
+                                                                <Rectangle RadiusY="2" RadiusX="2" Fill="White" Width="14" Height="14"/>
+                                                                <TextBlock Text="M" Foreground="{StaticResource ControlBackground}" FontFamily="Segoe UI" FontWeight="Black" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                                            </Grid>
+                                                        </RadioButton.Content>
+                                                    </RadioButton>
+
+                                                    <RadioButton Width="22" x:Name="PART_EmitterQualityHigh" Margin="0" ToolTip="High" Style="{StaticResource {x:Type ToggleButton}}">
+                                                        <RadioButton.Content>
+                                                            <Grid>
+                                                                <Rectangle RadiusY="2" RadiusX="2" Fill="White" Width="14" Height="14"/>
+                                                                <TextBlock Text="H" Foreground="{StaticResource ControlBackground}" FontFamily="Segoe UI" FontWeight="Black" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                                            </Grid>
+                                                        </RadioButton.Content>
+                                                    </RadioButton>
+
+                                                    <RadioButton Width="22" x:Name="PART_EmitterQualityUltra" Margin="0" ToolTip="Ultra" Style="{StaticResource {x:Type ToggleButton}}">
+                                                        <RadioButton.Content>
+                                                            <Grid>
+                                                                <Rectangle RadiusY="2" RadiusX="2" Fill="White" Width="14" Height="14"/>
+                                                                <TextBlock Text="U" Foreground="{StaticResource ControlBackground}" FontFamily="Segoe UI" FontWeight="Black" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                                            </Grid>
+                                                        </RadioButton.Content>
+                                                    </RadioButton>
+                                                </StackPanel>
+                                            </Border>
+                                        </DockPanel>
+                                    </Border>
+
+                                    <Grid HorizontalAlignment="Center" Grid.Row="1">
+                                        <ItemsControl x:Name="PART_EmitterStack">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Grid>
+                                                        <local:EmitterStackItem Panel.ZIndex="1"/>
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                            <ItemsControl.ItemsPanel>
+                                                <ItemsPanelTemplate>
+                                                    <VirtualizingStackPanel Orientation="Vertical"/>
+                                                </ItemsPanelTemplate>
+                                            </ItemsControl.ItemsPanel>
+                                        </ItemsControl>
+                                    </Grid>
+                                </Grid>
+                            </Border>
+                        </ctrl:FrostyDockablePanel>
+
+                        <GridSplitter Margin="2,0,0,0" Background="Transparent" VerticalAlignment="Stretch" Width="3" ResizeDirection="Columns"/>
+
+                        <Border Grid.Column="1" Background="{StaticResource ControlBackground}">
+                            <Grid Margin="2" Background="{StaticResource ListBackground}">
+
+                                <ctrl:FrostyDockablePanel TitleBarVisible="True" Title="Properties" BorderVisible="false" Icon="/FrostyEditor;component/Images/Properties.png">
+                                    <core:FrostyPropertyGrid x:Name="PART_AssetPropertyGrid" Grid.Row="1" Asset="{Binding Asset, RelativeSource={RelativeSource TemplatedParent}}" Modified="{Binding AssetModified, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"/>
+                                </ctrl:FrostyDockablePanel>
+
+                            </Grid>
+                        </Border>
+
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- EmitterStackItem -->
+    <Style TargetType="{x:Type local:EmitterStackItem}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:EmitterStackItem}">
+                    <Grid Margin="0,0,0,-22" HorizontalAlignment="Center">
+                        <UniformGrid>
+                            <Grid>
+                                <Border x:Name="PART_EvaluatorBox" BorderBrush="Transparent" BorderThickness="1" MinWidth="145" Height="21" Background="#FF454545" HorizontalAlignment="Right"
+                                Visibility="{Binding Path=EvaluatorVisible, Converter={StaticResource BooleanToVisibilityConverter}}" Panel.ZIndex="0">
+                                    <DockPanel>
+                                        <Polygon Points="0,0 10,9.5 0,19" Stroke="Transparent" Fill="White" DockPanel.Dock="Right"/>
+                                        <TextBlock x:Name="PART_EvaluatorText" Margin="25,0,25,0" Text="{Binding Path=EvaluatorText, Mode=TwoWay}" 
+                                           HorizontalAlignment="Left" VerticalAlignment="Center" DockPanel.Dock="Right" TextAlignment="Center"/>
+                                    </DockPanel>
+                                </Border>
+
+                                <!-- Evaluator selection border -->
+                                <Border x:Name="evalSelect" BorderBrush="White" BorderThickness="1" Background="Transparent" Width="{Binding ElementName=PART_EvaluatorBox, Path=ActualWidth}" 
+                                    Height="21" HorizontalAlignment="Right" Visibility="{Binding Path=EvaluatorSelected, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                    IsHitTestVisible="False">
+                                </Border>
+                            </Grid>
+
+                            <Grid Margin="-1,0,0,0">
+                                <Border x:Name="PART_ProcessorBox" BorderBrush="Transparent" BorderThickness="1" MinWidth="145" Height="21" Background="#FF454545" HorizontalAlignment="Left">
+                                    <TextBlock x:Name="PART_ProcessorText" Margin="25,0,25,0" Text="{Binding Path=ProcessorText, Mode=TwoWay}" 
+                                           HorizontalAlignment="Left" VerticalAlignment="Center" TextAlignment="Center"/>
+                                    <Border.ContextMenu>
+                                        <ContextMenu>
+                                            <MenuItem Header="Copy" Command="{Binding Path=CopyCommand, Mode=TwoWay}"/>
+                                            <MenuItem Header="Paste Insert (Below)" Command="{Binding Path=InsertPasteCommand, Mode=TwoWay}"/>
+                                            <MenuItem Header="Delete" Command="{Binding Path=DeleteCommand, Mode=TwoWay}"/>
+                                        </ContextMenu>
+                                    </Border.ContextMenu>
+                                </Border>
+
+                                <!-- Processor selection border -->
+                                <Border x:Name="procSelect" BorderBrush="White" BorderThickness="1" Background="Transparent" Width="{Binding ElementName=PART_ProcessorBox, Path=ActualWidth}" 
+                                    Height="21" HorizontalAlignment="Left" Visibility="{Binding Path=ProcessorSelected, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                    IsHitTestVisible="False">
+                                </Border>
+                            </Grid>
+                        </UniformGrid>
+                        
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>
