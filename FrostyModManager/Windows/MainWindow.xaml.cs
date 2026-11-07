@@ -700,6 +700,13 @@ namespace FrostyModManager
             CancellationTokenSource cancelToken = new CancellationTokenSource();
 
             // launch
+
+            if (selectedPack.Name.Any(char.IsWhiteSpace))
+            {
+                FrostyMessageBox.Show($"The mod pack name '{selectedPack.Name}' contains whitespace, which breaks the Steam/EA App launch options. Please rename the pack.", "Frosty Mod Manager");
+                return;
+            }
+
             int retCode = 0;
             FrostyTaskWindow.Show("Launching", "", (task) =>
             {
