@@ -6,7 +6,7 @@
                     xmlns:localctrl="clr-namespace:FrostyModManager.Controls">
 
     <Path x:Key="Icon" Data="M 851.52344 31.251953 C 847.27589 31.25985 842.90039 31.5 838.40039 32 C 780.80039 38.399999 748.80078 51.199219 748.80078 51.199219 L 748.80078 108.80078 C 748.80078 108.80078 793.60946 82.40542 825.59961 83.199219 C 854.38532 83.913504 869.70704 101.13176 870.40039 121.59961 C 870.70817 130.68531 867.90459 141.11595 860.20703 153.59961 L 883.19922 153.59961 L 883.19922 216.31641 C 902.5387 198.20244 922.0897 178.22102 928 166.40039 C 946.51428 139.01468 949.31787 107.52263 940.80078 83.199219 C 933.87642 63.424385 901.64449 31.15877 851.52344 31.251953 z M 883.19922 216.31641 C 860.65509 237.43194 838.40039 256 838.40039 256 L 883.19922 256 L 883.19922 216.31641 z M 883.19922 256 L 883.19922 307.19922 L 953.59961 307.19922 L 953.59961 256 L 883.19922 256 z M 883.19922 307.19922 L 742.40039 307.19922 L 742.40039 262.40039 C 742.40039 262.40039 768.00079 243.20078 812.80078 204.80078 C 836.56622 184.43042 851.51012 167.70399 860.20703 153.59961 L 665.59961 153.59961 L 505.59961 524.80078 L 339.19922 153.59961 L 115.19922 153.59961 L 115.19922 896 L 307.19922 896 L 307.19922 422.40039 L 435.19922 716.80078 L 563.19922 716.80078 L 691.19922 422.40039 L 691.19922 896 L 883.19922 896 L 883.19922 307.19922 z"/>
-    
+
     <Style TargetType="{x:Type localctrl:FrostyModDescription}">
         <Style.Resources>
             <conv:BooleanToVisibilityConverter x:Key="booleanToVisibilityConverter"/>
@@ -55,7 +55,7 @@
 
                                 <Grid Grid.Row="1">
                                     <TextBox Text="{Binding Path=Mod, RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay, Converter={StaticResource modDescriptionConverter}}" IsReadOnly="True"
-                                             FontFamily="MS Reference Sans Serif" Padding="4" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"/>
+                                             FontFamily="{DynamicResource ReferenceFontFamily}" Padding="4" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"/>
                                 </Grid>
 
                                 <Grid Grid.Row="2">
@@ -74,7 +74,7 @@
 
                         <GridSplitter Grid.Row="0" VerticalAlignment="Bottom" HorizontalAlignment="Stretch" Height="3" Background="Transparent"/>
 
-                        <ctrl:FrostyDockablePanel Grid.Row="2" Title="Affected Files" CloseButtonVisible="False">
+                        <ctrl:FrostyDockablePanel Grid.Row="2" Title="{DynamicResource mm_AffectedFiles}" CloseButtonVisible="False">
                             <Grid>
                                 <ListBox x:Name="PART_ModFilesListBox" VirtualizingStackPanel.IsVirtualizing="True">
                                     <ListBox.ItemTemplate>
@@ -82,11 +82,11 @@
                                             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Height="22">
                                                 <Grid Height="18" Margin="0,0,4,2">
                                                     <Rectangle Width="35" Height="15" RadiusY="3" RadiusX="3" Fill="#FFFFFFFF" />
-                                                    <TextBlock x:Name="typeName" Text="{Binding Path=Type}" Foreground="Black" FontFamily="Segoe UI" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="9"/>
+                                                    <TextBlock x:Name="typeName" Text="{Binding Path=Type}" Foreground="Black" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="9"/>
                                                 </Grid>
-                                                <TextBlock Text="{Binding Path=Name}" FontFamily="Consolas" VerticalAlignment="Center"/>
+                                                <TextBlock Text="{Binding Path=Name}" FontFamily="{DynamicResource MonoFontFamily}" VerticalAlignment="Center"/>
                                             </StackPanel>
-                                            
+
                                             <!-- Custom Names for Types with long Names -->
                                             <DataTemplate.Triggers>
                                                 <DataTrigger Binding="{Binding Path=Type}" Value="CHUNK">
@@ -99,12 +99,12 @@
                                                     <Setter TargetName="typeName" Property="Text" Value="FSF"/>
                                                 </DataTrigger>
                                             </DataTemplate.Triggers>
-                                            
+
                                         </DataTemplate>
                                     </ListBox.ItemTemplate>
                                 </ListBox>
 
-                                <TextBlock x:Name="PART_LoadingText" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{StaticResource FontColor}" Text="Loading..."/>
+                                <TextBlock x:Name="PART_LoadingText" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{StaticResource FontColor}" Text="{DynamicResource mm_Loading}"/>
                             </Grid>
                         </ctrl:FrostyDockablePanel>
 
@@ -114,5 +114,5 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+
 </ResourceDictionary>

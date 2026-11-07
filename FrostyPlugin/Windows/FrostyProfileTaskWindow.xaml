@@ -4,7 +4,8 @@
         xmlns:ctrl2="clr-namespace:Frosty.Controls;assembly=FrostyControls"
         Title="" Height="200" Width="600" WindowStyle="None" AllowsTransparency="True"
         WindowStartupLocation="CenterOwner" ResizeMode="NoResize" Background="Transparent"
-        Loaded="Window_Loaded" ShowInTaskbar="False">
+        Loaded="Window_Loaded" ShowInTaskbar="False"
+        FontFamily="{DynamicResource DefaultFontFamily}" FlowDirection="{DynamicResource FlowDirection}">
     
     <Grid>
         <Border Background="{StaticResource WindowBackground}" BorderThickness="1" BorderBrush="{StaticResource ListBackground}">
@@ -47,7 +48,7 @@
 
                         <Grid Grid.Row="1">
                             <StackPanel Orientation="Vertical" Margin="10" HorizontalAlignment="Left" VerticalAlignment="Bottom">
-                                <TextBlock x:Name="versionTextBlock" Text="Version" Foreground="#C0C0C0" Margin="0" FontFamily="Segoe UI" FontSize="12" />
+                                <TextBlock x:Name="versionTextBlock" Text="Version" Foreground="#C0C0C0" Margin="0" FontSize="12" />
                                 <TextBlock x:Name="profileTextBlock" Text="Profile" Foreground="#C0C0C0" Margin="0,5,0,5" FontSize="12" />
                             </StackPanel>
                         </Grid>
@@ -62,7 +63,7 @@
 
                     <ProgressBar x:Name="progressBar" Grid.ColumnSpan="2" Minimum="0" MaxHeight="100" Value="0" Background="Transparent" BorderBrush="Transparent" Foreground="{StaticResource ListBackground}"/>
                     <ctrl2:FrostySpinner Width="20" Height="20"/>
-                    <TextBlock x:Name="logTextBox" Grid.Column="1" Background="Transparent" Text="" Padding="4,5,4,0" Foreground="{StaticResource FontColor}" FontFamily="Global User Interface" TextTrimming="CharacterEllipsis"/>
+                    <TextBlock x:Name="logTextBox" Grid.Column="1" Background="Transparent" Text="" Padding="4,5,4,0" Foreground="{StaticResource FontColor}" TextTrimming="CharacterEllipsis"/>
                 </Grid>
             </Grid>
         </Border>

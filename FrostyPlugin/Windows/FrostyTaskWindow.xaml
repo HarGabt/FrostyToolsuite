@@ -7,6 +7,8 @@
         xmlns:ctrl2="clr-namespace:Frosty.Controls;assembly=FrostyControls"
         mc:Ignorable="d"
         Title=""
+        FontFamily="{DynamicResource DefaultFontFamily}"
+        FlowDirection="{DynamicResource FlowDirection}"
         Height="150"
         Width="400"
         AllowsTransparency="True"
@@ -45,7 +47,6 @@
                                Text="Header Text"
                                Foreground="{StaticResource FontColor}"
                                Margin="0,0,0,0"
-                               FontFamily="Global User Interface"
                                FontSize="18"
                                FontWeight="Bold"
                                VerticalAlignment="Center"
@@ -76,7 +77,6 @@
                                Text="{Binding Path=Status, RelativeSource={RelativeSource AncestorType={x:Type local:FrostyTaskWindow}, Mode=FindAncestor}}"
                                Padding="4,5,4,0"
                                Foreground="{StaticResource FontColor}"
-                               FontFamily="Global User Interface"
                                TextTrimming="CharacterEllipsis" />
 
                     <Button x:Name="cancelButton"

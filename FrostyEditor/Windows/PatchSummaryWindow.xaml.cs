@@ -2,9 +2,9 @@
 using System.Windows;
 using System.Windows.Controls;
 using Frosty.Controls;
+using Frosty.Core.Controls;
 using FrostySdk.IO;
 using System.IO;
-using Frosty.Core.Controls;
 using FrostySdk.Managers.Entries;
 
 namespace FrostyEditor.Windows
@@ -27,7 +27,7 @@ namespace FrostyEditor.Windows
 
         private void PatchSummaryWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            totalTextBlock.Text = "Total: " + addedAssetsList.Items.Count;
+            totalTextBlock.Text = string.Format(Application.Current.TryFindResource("fe_Total_Fmt") as string ?? "Total: {0}", addedAssetsList.Items.Count);
         }
 
         private void okayButton_Click(object sender, RoutedEventArgs e)
@@ -37,7 +37,7 @@ namespace FrostyEditor.Windows
 
         private void exportButton_Click(object sender, RoutedEventArgs e)
         {
-            FrostySaveFileDialog sfd = new FrostySaveFileDialog("Save Patch Summary", "*.txt (Text File)|*.txt", "Patch");
+            FrostySaveFileDialog sfd = new FrostySaveFileDialog(Application.Current.TryFindResource("fe_DlgTitle_SavePatchSummary") as string ?? "Save Patch Summary", "*.txt (Text File)|*.txt", "Patch");
             if (sfd.ShowDialog())
             {
                 using (NativeWriter writer = new NativeWriter(new FileStream(sfd.FileName, FileMode.Create)))
@@ -53,7 +53,7 @@ namespace FrostyEditor.Windows
                         writer.WriteLine(entry.Name);
                 }
 
-                FrostyMessageBox.Show("Successfully exported Patch Summary", "Frosty Editor");
+                FrostyMessageBox.Show(Application.Current.TryFindResource("fe_Msg_PatchSummaryExported") as string ?? "Successfully exported Patch Summary", "Frosty Editor");
             }
         }
 
@@ -71,7 +71,7 @@ namespace FrostyEditor.Windows
             else if (header.Contains("Modified")) totalCount = modifiedAssetsList.Items.Count;
             else totalCount = removedAssetsList.Items.Count;
 
-            totalTextBlock.Text = "Total: " + totalCount;
+            totalTextBlock.Text = string.Format(Application.Current.TryFindResource("fe_Total_Fmt") as string ?? "Total: {0}", totalCount);
         }
     }
 }

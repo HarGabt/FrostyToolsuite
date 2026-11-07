@@ -10,7 +10,7 @@
         xmlns:local="clr-namespace:FrostyModManager"
         xmlns:ctrl="clr-namespace:Frosty.Controls;assembly=FrostyControls"
         mc:Ignorable="d"
-        Title="Manage ModData" SizeToContent="Height" Width="400" Height="Auto" MaxHeight="250"
+        Title="{DynamicResource mm_ModData_Title}" SizeToContent="Height" Width="400" Height="Auto" MaxHeight="250"
         ResizeMode="NoResize" WindowStartupLocation="CenterOwner">
     <Grid Background="{StaticResource ListBackground}">
         <Grid.RowDefinitions>
@@ -18,7 +18,7 @@
             <RowDefinition Height="0"/>
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Orientation="Vertical" Margin="8">
-            <TextBlock Grid.Column="0" Text="Packs in ModData:" Foreground="{StaticResource FontColor}" HorizontalAlignment="Left" VerticalAlignment="Center" Height="16" Margin="0,0,0,1"/>
+            <TextBlock Grid.Column="0" Text="{DynamicResource mm_ModData_PacksLabel}" Foreground="{StaticResource FontColor}" HorizontalAlignment="Left" VerticalAlignment="Center" Height="16" Margin="0,0,0,1"/>
             <ListBox x:Name="modDataList" Grid.Column="1" HorizontalContentAlignment="Stretch" ScrollViewer.HorizontalScrollBarVisibility="Disabled" MinHeight="32" MaxHeight="128" BorderBrush="{StaticResource ControlBackground}" BorderThickness="1" Background="{StaticResource WindowBackground}" Padding="0">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
@@ -33,13 +33,13 @@
                             </Grid.ColumnDefinitions>
 
                             <TextBlock Grid.Column="0" Text="{Binding Name}" VerticalAlignment="Center"/>
-                            <Button x:Name="launchModData" Grid.Column="1" Click="launchModData_Click" ToolTip="Attempts to launch game with existing ModData">
+                            <Button x:Name="launchModData" Grid.Column="1" Click="launchModData_Click" ToolTip="{DynamicResource mm_Tip_LaunchExisting}">
                                 <Image Source="/FrostyModManager;component/Images/Play.png" Margin="-2"/>
                             </Button>
-                            <Button x:Name="openModData" Grid.Column="3" Click="openModData_Click" ToolTip="Opens Folder">
+                            <Button x:Name="openModData" Grid.Column="3" Click="openModData_Click" ToolTip="{DynamicResource mm_Tip_OpenFolder}">
                                 <Image Source="/FrostyModManager;component/Images/Open.png" Margin="-1"/>
                             </Button>
-                            <Button x:Name="deleteModData" Grid.Column="5" Click="deleteModData_Click" ToolTip="Deletes Folder">
+                            <Button x:Name="deleteModData" Grid.Column="5" Click="deleteModData_Click" ToolTip="{DynamicResource mm_Tip_DeleteFolder}">
                                 <Image Source="/FrostyModManager;component/Images/Remove.png" Margin="-2"/>
                             </Button>
                         </Grid>
@@ -60,7 +60,7 @@
                 </ListBox.ItemContainerStyle>
             </ListBox>
 
-            <TextBlock Grid.Column="2" Text="ModData Path:" Foreground="{StaticResource FontColor}" HorizontalAlignment="Left" VerticalAlignment="Center" Height="16" Margin="0,8,0,1"/>
+            <TextBlock Grid.Column="2" Text="{DynamicResource mm_ModData_PathLabel}" Foreground="{StaticResource FontColor}" HorizontalAlignment="Left" VerticalAlignment="Center" Height="16" Margin="0,8,0,1"/>
             <TextBox IsReadOnly="True" Grid.Column="3" x:Name="modDataNameTextBox" BorderThickness="1" VerticalContentAlignment="Center" Height="22"/>
         </StackPanel>
 
@@ -70,7 +70,7 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
 
-            <Button Grid.Column="0" x:Name="closeButton" Content="Close" Width="50" Height="22" HorizontalAlignment="Left" Click="closeButton_Click"/>
+            <Button Grid.Column="0" x:Name="closeButton" Content="{DynamicResource mm_Btn_Close}" Width="50" Height="22" HorizontalAlignment="Left" Click="closeButton_Click"/>
         </Grid>
     </Grid>
 </ctrl:FrostyDockableWindow>
