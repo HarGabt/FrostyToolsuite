@@ -1734,7 +1734,7 @@ namespace Frosty.ModSupport
                         if (!RunSymbolicLinkProcess(cmdArgs))
                         {
                             Directory.Delete(modDataPath, true);
-                            FrostyMessageBox.Show("One ore more symbolic links could not be created, please restart tool as Administrator and ensure your storage drive is formatted to NTFS (not exFAT).", "Frosty Editor");
+                            FrostyMessageBox.Show("One ore more symbolic links could not be created, please restart tool as Administrator and ensure your storage drive is formatted to NTFS (not exFAT).\r\nIf you're still having this error, enable \"Alternate SymLink Method\" by going to Tools ➡️ Options ", "Frosty Toolsuite");
                             return -1;
 
 
