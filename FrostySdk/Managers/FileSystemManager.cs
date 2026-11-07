@@ -176,6 +176,7 @@ namespace FrostySdk
             else if (filename.StartsWith("native_patch/"))
                 endCount = 1;
 
+            string cacheKey = filename;
             filename = filename.Replace("native_data/", string.Empty);
             filename = filename.Replace("native_patch/", string.Empty);
             filename = filename.Trim('/');
@@ -186,7 +187,7 @@ namespace FrostySdk
                 {
                     {
                         var path = (BasePath + paths[i] + filename).Replace("\\\\", "\\");
-                        m_cachedPaths[filename] = path;
+                        m_cachedPaths[cacheKey] = path;
                         return path;
                     }
                 }
