@@ -1964,8 +1964,8 @@
                                             Height="32" 
                                             ToolTip="Minimize">
                                         <Button.Content>
-                                            <TextBlock Text="&#xE949;" 
-                                                       FontFamily="Segoe MDL2 Assets" FontSize="10px" 
+                                            <TextBlock Text="_"
+                                                       FontSize="10px"
                                                        RenderOptions.ClearTypeHint="Auto" 
                                                        TextOptions.TextRenderingMode="Aliased" 
                                                        TextOptions.TextFormattingMode="Display"/>
@@ -1979,8 +1979,8 @@
                                             Height="32" 
                                             ToolTip="Maximize">
                                         <Button.Content>
-                                            <TextBlock Text="&#xE739;" 
-                                                       FontFamily="Segoe MDL2 Assets" FontSize="10px" 
+                                            <TextBlock Text="▢"
+                                                       FontSize="10px"
                                                        RenderOptions.ClearTypeHint="Auto" 
                                                        TextOptions.TextRenderingMode="Aliased" 
                                                        TextOptions.TextFormattingMode="Display"/>
@@ -2009,8 +2009,8 @@
                                             Height="32" 
                                             ToolTip="Close">
                                         <Button.Content>
-                                            <TextBlock Text="&#xE106;" 
-                                                       FontFamily="Segoe MDL2 Assets" FontSize="10px" 
+                                            <TextBlock Text="X"
+                                                       FontSize="10px"
                                                        RenderOptions.ClearTypeHint="Auto" 
                                                        TextOptions.TextRenderingMode="Aliased" 
                                                        TextOptions.TextFormattingMode="Display"/>

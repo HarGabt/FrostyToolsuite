@@ -2,6 +2,7 @@
 using Frosty.Core;
 using Frosty.Core.Mod;
 using Frosty.Hash;
+using FrostyModManager;
 using FrostySdk;
 using FrostySdk.Interfaces;
 using FrostySdk.IO;
@@ -219,7 +220,11 @@ namespace Frosty.ModSupport
         private string m_patchPath = "Patch";
         private bool m_hasPatchFolder = true;
         private bool m_hasUpdateFolder = true;
-        private bool m_useAltSymLink = Config.Get<bool>("UseAltSymLink", false);
+        // UseAltSymLink shells out to "cmd.exe /c mklink" with the "runas" elevation verb, which
+        // isn't compatible with Wine (Process.Start throws a Win32Exception attempting to elevate).
+        // Under Wine, always fall through to the SymLinkHelper-routed path instead, regardless of
+        // this legacy setting.
+        private bool m_useAltSymLink = Config.Get<bool>("UseAltSymLink", false) && !OperatingSystemHelper.IsWine();
 
         public ILogger Logger { get => m_logger; set => m_logger = value; }
 
@@ -1256,6 +1261,27 @@ namespace Frosty.ModSupport
             }
         }
 
+        private bool m_installOnly = false;
+
+        /// <summary>
+        /// Applies the mods and prepares ModData exactly like <see cref="Run"/>, but doesn't start the game.
+        /// Used under Wine/Proton, where the game has to be started by Steam/EA App itself (inside the
+        /// game's own prefix) with launch options pointing at the generated ModData.
+        /// </summary>
+        public int Install(FileSystemManager inFs, CancellationToken cancelToken, ILogger inLogger, string rootPath, string modPackName, params string[] modPaths)
+        {
+            m_installOnly = true;
+
+            try
+            {
+                return Run(inFs, cancelToken, inLogger, rootPath, modPackName, string.Empty, modPaths);
+            }
+            finally
+            {
+                m_installOnly = false;
+            }
+        }
+
         public int Run(FileSystemManager inFs, CancellationToken cancelToken, ILogger inLogger, string rootPath, string modPackName, string additionalArgs, params string[] modPaths)
         {
             m_modDirName = "ModData\\" + modPackName;
@@ -1517,7 +1543,18 @@ namespace Frosty.ModSupport
                 bool newInstallation = false;
 
                 m_fs.ResetManifest();
-                if (!DeleteSelectFiles(modDataPath + m_patchPath))
+                bool modDataPresent = DeleteSelectFiles(modDataPath + m_patchPath);
+                if (modDataPresent && !IsModDataComplete(modDataPath + m_patchPath))
+                {
+                    // a previous run that failed halfway leaves ModData without its cas links, and an
+                    // existing folder is otherwise assumed to be complete, so rebuild it from scratch
+                    Logger.Log("ModData is incomplete, rebuilding it");
+                    FileLogger.Info("ModData is incomplete, rebuilding it.");
+                    SymLinkHelper.DeleteDirectorySafe(modDataPath);
+                    modDataPresent = false;
+                }
+
+                if (!modDataPresent)
                 {
                     if (!Directory.Exists(modDataPath))
                     {
@@ -1727,17 +1764,36 @@ namespace Frosty.ModSupport
                     if (newInstallation)
                         reason = "New installation detected.";
 
-                    FrostyMessageBox.Show(reason + "\r\n\r\nShortly you will be prompted for elevated privileges, this is required to create symbolic links between the original data and the new modified data. Please ensure that you accept this to avoid any issues.", "Frosty Toolsuite");
+                    if (OperatingSystemHelper.IsWine())
+                    {
+                        FrostyMessageBox.Show(reason + "\r\n\r\nGenerating symbolic/hard links between the original data and the new modified data.", "Frosty Toolsuite");
+                    }
+                    else
+                    {
+                        FrostyMessageBox.Show(reason + "\r\n\r\nShortly you will be prompted for elevated privileges, this is required to create symbolic links between the original data and the new modified data. Please ensure that you accept this to avoid any issues.", "Frosty Toolsuite");
+                    }
+
                     if (!RunSymbolicLinkProcess(cmdArgs))
                     {
-                        FrostyMessageBox.Show("Frosty needs to generate symbolic links, please ensure that you accept this so you don't have to regenerate ModData.", "Frosty Editor");
+                        if (!OperatingSystemHelper.IsWine())
+                        {
+                            FrostyMessageBox.Show("Frosty needs to generate symbolic links, please ensure that you accept this so you don't have to regenerate ModData.", "Frosty Editor");
+                        }
+
                         if (!RunSymbolicLinkProcess(cmdArgs))
                         {
-                            Directory.Delete(modDataPath, true);
-                            FrostyMessageBox.Show("One ore more symbolic links could not be created, please restart tool as Administrator and ensure your storage drive is formatted to NTFS (not exFAT).\r\nIf you're still having this error, enable \"Alternate SymLink Method\" by going to Tools ➡️ Options ", "Frosty Toolsuite");
+                            SymLinkHelper.DeleteDirectorySafe(modDataPath);
+
+                            if (OperatingSystemHelper.IsWine())
+                            {
+                                FrostyMessageBox.Show("One or more symbolic/hard links could not be created. Check 'executor.log' next to FrostyModManager for the specific reason (e.g. missing wine-symlink support, or a permissions issue with the game directory).", "Frosty Mod Manager");
+                            }
+                            else
+                            {
+                                FrostyMessageBox.Show("One ore more symbolic links could not be created, please restart tool as Administrator and ensure your storage drive is formatted to NTFS (not exFAT).", "Frosty Editor");
+                            }
+
                             return -1;
-
-
                         }
                     }
                 }
@@ -2391,8 +2447,19 @@ namespace Frosty.ModSupport
                 if (File.Exists(m_fs.BasePath + "bcrypt.dll"))
                     File.Delete(m_fs.BasePath + "bcrypt.dll");
 
-                // copy over new CryptBase
-                CopyFileIfRequired("ThirdParty/CryptBase.dll", m_fs.BasePath + "CryptBase.dll");
+                if (OperatingSystemHelper.IsWine())
+                {
+                    // under Wine/Proton, CryptBase's DLL-injection approach doesn't reliably
+                    // hook the game process; use the winmm/dinput8 proxy + crypthook instead
+                    CopyFileIfRequired("ThirdParty/winmm.dll", m_fs.BasePath + "winmm.dll");
+                    CopyFileIfRequired("ThirdParty/dinput8.dll", m_fs.BasePath + "dinput8.dll");
+                    CopyFileIfRequired("ThirdParty/crypthook.dll", m_fs.BasePath + "crypthook.dll");
+                }
+                else
+                {
+                    // copy over new CryptBase
+                    CopyFileIfRequired("ThirdParty/CryptBase.dll", m_fs.BasePath + "CryptBase.dll");
+                }
             }
             CopyFileIfRequired(m_fs.BasePath + "user.cfg", modDataPath + "user.cfg");
 
@@ -2416,6 +2483,15 @@ namespace Frosty.ModSupport
                 }
 
                 CopyFileIfRequired("thirdparty/fifaconfig.exe", m_fs.BasePath + "FIFASetup\\fifaconfig.exe");
+            }
+
+            if (m_installOnly)
+            {
+                Logger.Log("Mods installed.");
+                App.Logger.Log("Mods installed.");
+
+                GC.Collect();
+                return 0;
             }
 
             // launch the game (redirecting to the modPath directory)
@@ -2864,6 +2940,30 @@ namespace Frosty.ModSupport
             }
         }
 
+        private bool IsModDataComplete(string modPath)
+        {
+            foreach (string catalog in m_fs.Catalogs)
+            {
+                string baseCatalog = m_fs.ResolvePath((m_hasPatchFolder ? "native_patch/" : "native_data/") + catalog);
+                if (string.IsNullOrEmpty(baseCatalog) || !Directory.Exists(baseCatalog))
+                    continue;
+
+                int baseCount = Directory.GetFiles(baseCatalog, "*.cas").Length;
+                if (baseCount == 0)
+                    continue;
+
+                string modCatalog = $"{modPath}/{catalog}";
+                int modCount = Directory.Exists(modCatalog) ? Directory.GetFiles(modCatalog, "*.cas").Length : 0;
+                if (modCount < baseCount)
+                {
+                    FileLogger.Info($"ModData catalog '{catalog}' has {modCount} of {baseCount} cas files.");
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
         private bool DeleteSelectFiles(string modPath)
         {
             DirectoryInfo di = new DirectoryInfo(modPath);
@@ -2887,9 +2987,9 @@ namespace Frosty.ModSupport
                             FileInfo fi = new FileInfo(filename);
 
                             // delete if cas does not exist in base patch OR is not a symbolic link
-                            if (!File.Exists(basePatchCatalog + "/" + fi.Name) || (fi.Attributes & FileAttributes.ReparsePoint) == 0)
+                            if (!File.Exists(basePatchCatalog + "/" + fi.Name) || !SymLinkHelper.IsSymbolicLink(fi.FullName))
                             {
-                                File.Delete(fi.FullName);
+                                SymLinkHelper.DeleteFileSafe(fi.FullName);
                             }
                         }
                     }
@@ -2935,14 +3035,14 @@ namespace Frosty.ModSupport
                 if (patchHead == 0xBDFB3 && modHead != patchHead)
                 {
                     // SWBF2 new layout requires completely rebuilding ModData from scratch
-                    Directory.Delete(modPath + "../", true);
+                    SymLinkHelper.DeleteDirectorySafe(modPath + "../");
                     return false;
                 }
             }
 
             if (modHead != patchHead)
             {
-                Directory.Delete(modPath + "../", true);
+                SymLinkHelper.DeleteDirectorySafe(modPath + "../");
                 return false;
             }
 
@@ -2964,7 +3064,7 @@ namespace Frosty.ModSupport
                     if (fi.Name.ToLower() == "layout.toc")
                         continue;
 
-                    fi.Delete();
+                    SymLinkHelper.DeleteFileSafe(fi.FullName);
                 }
             }
 
@@ -2976,6 +3076,68 @@ namespace Frosty.ModSupport
         }
 
         private bool RunSymbolicLinkProcess(List<SymLinkStruct> cmdArgs)
+        {
+            return RunSymbolicLinkProcess(cmdArgs, ShouldUseHardLink());
+        }
+
+        private bool RunSymbolicLinkProcess(List<SymLinkStruct> cmdArgs, bool shouldUseHardLink)
+        {
+            DeleteLinkDestinations(cmdArgs);
+
+            if (shouldUseHardLink)
+            {
+                CreateHardLinksStructure(cmdArgs);
+            }
+            else if (OperatingSystemHelper.IsWine())
+            {
+                CreateSymbolicLinksStructureLinux(cmdArgs);
+            }
+            else
+            {
+                CreateSymbolicLinksStructureWindows(cmdArgs);
+            }
+
+            // validate
+            foreach (SymLinkStruct arg in cmdArgs)
+            {
+                if ((arg.isFolder && !Directory.Exists(arg.dest)) || (!arg.isFolder && !File.Exists(arg.dest)))
+                    return false;
+            }
+
+            return true;
+        }
+
+        private bool ShouldUseHardLink()
+        {
+            if (!SymLinkHelper.AreHardLinksSupported)
+            {
+                return false;
+            }
+
+            if (Config.Get<bool>("UseHardLink", true))
+            {
+                return true;
+            }
+
+            return !SymLinkHelper.AreSymLinksSupported;
+        }
+
+        private void DeleteLinkDestinations(List<SymLinkStruct> cmdArgs)
+        {
+            foreach (SymLinkStruct arg in cmdArgs)
+            {
+                if (arg.isFolder)
+                {
+                    SymLinkHelper.DeleteDirectorySafe(arg.dest);
+                }
+                else
+                {
+                    SymLinkHelper.DeleteFileSafe(arg.dest);
+                }
+            }
+        }
+
+        private void CreateSymbolicLinksStructureWindows(List<SymLinkStruct> cmdArgs)
         {
             using (TextWriter writer = new StreamWriter(new FileStream(AppDomain.CurrentDomain.BaseDirectory + "\\run.bat", FileMode.Create)))
             {
@@ -2991,15 +3153,61 @@ namespace Frosty.ModSupport
             {
                 File.Delete("run.bat");
             }
+        }
 
-            // validate
+        private void CreateSymbolicLinksStructureLinux(List<SymLinkStruct> cmdArgs)
+        {
+            var batches = BatchesHelper.Split(cmdArgs, SymLinkHelper.BatchSize);
+
+            foreach (var batch in batches)
+            {
+                var symTasks = batch.Select(c => Task.Run(() => SymLinkHelper.CreateSymlinkLinux(c.src, c.dest))).ToArray();
+
+                try
+                {
+                    Task.WaitAll(symTasks);
+                }
+                catch (AggregateException ax)
+                {
+                    SymLinkHelper.HandleAggregateException(ax);
+                }
+            }
+        }
+
+        private void CreateHardLinksStructure(List<SymLinkStruct> cmdArgs)
+        {
             foreach (SymLinkStruct arg in cmdArgs)
             {
-                if ((arg.isFolder && !Directory.Exists(arg.dest)) || (!arg.isFolder && !File.Exists(arg.dest)))
-                    return false;
+                try
+                {
+                    if (arg.isFolder)
+                    {
+                        CloneDirectoryWithHardLinks(arg.src, arg.dest);
+                    }
+                    else
+                    {
+                        SymLinkHelper.CreateHardLink(arg.src, arg.dest);
+                    }
+                }
+                catch { }
+            }
+        }
+
+        private static void CloneDirectoryWithHardLinks(string root, string dest)
+        {
+            Directory.CreateDirectory(dest);
+
+            foreach (var directory in Directory.GetDirectories(root))
+            {
+                var newDirectory = Path.Combine(dest, Path.GetFileName(directory));
+                Directory.CreateDirectory(newDirectory);
+                CloneDirectoryWithHardLinks(directory, newDirectory);
             }
 
-            return true;
+            foreach (var file in Directory.GetFiles(root))
+            {
+                SymLinkHelper.CreateHardLink(file, Path.Combine(dest, Path.GetFileName(file)));
+            }
         }
 
         public static void ExecuteProcess(string processName, string args = "", bool waitForExit = false, bool asAdmin = false, Dictionary<string, string> env = null)

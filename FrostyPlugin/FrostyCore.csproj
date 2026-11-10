@@ -112,6 +112,11 @@
   <ItemGroup>
     <Compile Include="App.cs" />
     <Compile Include="AssetDefinition.cs" />
+    <Compile Include="BatchesHelper.cs" />
+    <Compile Include="DriveHelper.cs" />
+    <Compile Include="FileLogger.cs" />
+    <Compile Include="OperatingSystemHelper.cs" />
+    <Compile Include="SymLinkHelper.cs" />
     <Compile Include="Attributes\PluginAuthorAttribute.cs" />
     <Compile Include="Attributes\PluginDisplayNameAttribute.cs" />
     <Compile Include="Attributes\PluginNotValidForProfileAttribute.cs" />
