@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
+using BlueprintEditorPlugin.Editors.BlueprintEditor.Nodes.Utilities;
 using BlueprintEditorPlugin.Models.Nodes;
 using BlueprintEditorPlugin.Models.Nodes.Ports;
 using BlueprintEditorPlugin.Models.Status;
@@ -36,6 +37,7 @@ namespace BlueprintEditorPlugin.Models.Connections
                 _source = value;
                 _source.IsConnected = true;
                 NotifyPropertyChanged(nameof(Source));
+                NotifyPropertyChanged(nameof(SourceExitRight));
             }
         }
 
@@ -64,10 +66,31 @@ namespace BlueprintEditorPlugin.Models.Connections
                 _target = value;
                 _target.IsConnected = true;
                 NotifyPropertyChanged(nameof(Target));
+                NotifyPropertyChanged(nameof(TargetEnterRight));
             }
         }
         
         public bool IsSelected { get; set; }
+
+        public bool SourceExitRight
+        {
+            get
+            {
+                if (Source?.Node is WranglerNode wrangler)
+                    return !wrangler.IsFlipped;
+                return true;
+            }
+        }
+
+        public bool TargetEnterRight
+        {
+            get
+            {
+                if (Target?.Node is WranglerNode wrangler)
+                    return wrangler.IsFlipped;
+                return false;
+            }
+        }
 
         #region Property changing
 
@@ -90,6 +113,11 @@ namespace BlueprintEditorPlugin.Models.Connections
                 {
                     IsSelected = Source.Node.IsSelected || Target.Node.IsSelected;
                     NotifyPropertyChanged(nameof(IsSelected));
+                } break;
+                case "IsFlipped":
+                {
+                    NotifyPropertyChanged(nameof(SourceExitRight));
+                    NotifyPropertyChanged(nameof(TargetEnterRight));
                 } break;
             }
         }

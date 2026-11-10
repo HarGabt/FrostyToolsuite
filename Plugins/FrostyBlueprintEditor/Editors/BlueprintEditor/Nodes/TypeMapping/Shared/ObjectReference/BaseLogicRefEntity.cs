@@ -9,7 +9,6 @@ using BlueprintEditorPlugin.Models.Nodes.Ports;
 using FrostyEditor;
 using FrostySdk.Ebx;
 using FrostySdk.IO;
-using FrostySdk.Managers;
 using FrostySdk.Managers.Entries;
 
 namespace BlueprintEditorPlugin.Editors.BlueprintEditor.Nodes.TypeMapping.Shared.ObjectReference

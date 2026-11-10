@@ -100,9 +100,13 @@
                                                 IsItemsHost="True"
                                                 Extent="{Binding ItemsExtent, Mode=OneWayToSource, RelativeSource={RelativeSource TemplatedParent}}" />
 
-                            <ItemsControl ItemsSource="{TemplateBinding Connections}"
+                            <ItemsControl x:Name="PART_ConnectionsHost"
+                                          ItemsSource="{TemplateBinding Connections}"
                                           ItemTemplate="{TemplateBinding ConnectionTemplate}"
                                           IsTabStop="False">
+                                <ItemsControl.CacheMode>
+                                    <BitmapCache />
+                                </ItemsControl.CacheMode>
                                 <ItemsControl.Style>
                                     <Style TargetType="ItemsControl">
                                         <Setter Property="Panel.ZIndex"
@@ -122,6 +126,24 @@
                                     </ItemsPanelTemplate>
                                 </ItemsControl.ItemsPanel>
                             </ItemsControl>
+
+                            <wires:ConnectionsBubbleOverlay x:Name="PART_ConnectionsBubbleOverlay"
+                                                             Width="1"
+                                                             Height="1">
+                                <wires:ConnectionsBubbleOverlay.Style>
+                                    <Style TargetType="wires:ConnectionsBubbleOverlay">
+                                        <Setter Property="Panel.ZIndex"
+                                                Value="-1" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding DisplayConnectionsOnTop, RelativeSource={RelativeSource AncestorType=local:NodifyEditor}}"
+                                                         Value="True">
+                                                <Setter Property="Panel.ZIndex"
+                                                        Value="0" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </wires:ConnectionsBubbleOverlay.Style>
+                            </wires:ConnectionsBubbleOverlay>
 
                             <ContentPresenter ContentSource="PendingConnection" />
 

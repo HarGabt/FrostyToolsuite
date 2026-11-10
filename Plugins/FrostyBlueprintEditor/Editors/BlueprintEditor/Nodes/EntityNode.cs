@@ -86,7 +86,16 @@ namespace BlueprintEditorPlugin.Editors.BlueprintEditor.Nodes
 
         #region Positional data
 
-        public Size Size { get; set; }
+        private Size _size;
+        public Size Size
+        {
+            get => _size;
+            set
+            {
+                _size = value;
+                NotifyPropertyChanged(nameof(Size));
+            }
+        }
 
         private bool _selected;
         public bool IsSelected

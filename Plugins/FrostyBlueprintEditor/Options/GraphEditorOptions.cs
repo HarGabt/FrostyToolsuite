@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
 using BlueprintEditorPlugin.Editors.GraphEditor;
@@ -96,6 +97,11 @@ namespace BlueprintEditorPlugin.Options
         [Description("Whether or not to display connections on top of nodes")]
         public bool WiresOverVerts { get; set; }
         
+        [Category("Connections")]
+        [DisplayName("Animated Directional Bubbles")]
+        [Description("Animates directional bubbles along connection wires. Disabling this can significantly improve performance on large graphs.")]
+        public bool AnimatedDirectionalBubbles { get; set; }
+        
         [Category("Ports")]
         [DisplayName("Size")]
         [Description("How large a port should be")]
@@ -170,6 +176,7 @@ namespace BlueprintEditorPlugin.Options
 
             WireThickness = Config.Get("WireThickness", 4.0f);
             WiresOverVerts = Config.Get("WireOverVert", false);
+            AnimatedDirectionalBubbles = Config.Get("AnimatedDirectionalBubbles", false);
             
             PortSize = Config.Get("PortSize", 6.0f);
             PortPosition = Config.Get("PortPos", 0.0f);
@@ -212,6 +219,7 @@ namespace BlueprintEditorPlugin.Options
             
             Config.Add("WireThickness", WireThickness);
             Config.Add("WireOverVert", WiresOverVerts);
+            Config.Add("AnimatedDirectionalBubbles", AnimatedDirectionalBubbles);
             
             Config.Add("PortSize", PortSize);
             Config.Add("PortPos", PortPosition);
@@ -277,6 +285,7 @@ namespace BlueprintEditorPlugin.Options
         public static ConnectionStyle WireStyle { get; internal set; }
         public static double WireThickness { get; internal set; }
         public static bool WiresOververts { get; internal set; }
+        public static bool AnimatedDirectionalBubbles { get; internal set; }
         
         public static double PortSize { get; internal set; }
         public static double InputPos { get; internal set; }
@@ -289,6 +298,8 @@ namespace BlueprintEditorPlugin.Options
         public static bool SaveOnExit { get; internal set; }
         
         public static bool LoadBeforeOpen { get; internal set; }
+
+        public static event Action Updated;
 
         public static void Update()
         {
@@ -310,6 +321,7 @@ namespace BlueprintEditorPlugin.Options
             
             WireThickness = Config.Get("WireThickness", 4.0f);
             WiresOververts = Config.Get("WireOverVert", false);
+            AnimatedDirectionalBubbles = Config.Get("AnimatedDirectionalBubbles", false);
             
             PortSize = (Config.Get("PortSize", 6.0f) * 0.1) * 15;
             OutputPos = Config.Get("PortPos", 0.0f);
@@ -321,6 +333,8 @@ namespace BlueprintEditorPlugin.Options
             SaveOnExit = Config.Get("SaveLayoutOnExit", true);
 
             LoadBeforeOpen = Config.Get("LoadBeforeOpen", false);
+            
+            Updated?.Invoke();
         }
     }
 }

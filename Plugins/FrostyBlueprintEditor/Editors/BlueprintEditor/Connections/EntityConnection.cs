@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Input;
 using BlueprintEditorPlugin.Editors.BlueprintEditor.Nodes;
@@ -85,28 +86,43 @@ namespace BlueprintEditorPlugin.Editors.BlueprintEditor.Connections
 
             ((EntityNodeWrangler)Target.Node.NodeWrangler).ModifyAsset();
         }
-        
+
         public ICommand RemoveCommand => new DelegateCommand(Remove);
 
         protected virtual void Remove()
         {
             if (Source.Node is IRedirect || Target.Node is IRedirect)
                 return;
-            
+
             Target.Node.NodeWrangler.RemoveConnection(this);
         }
-        
+
+        public ICommand RedirectSourceCommand => new DelegateCommand(RedirectSource);
+        public ICommand RedirectTargetCommand => new DelegateCommand(RedirectTarget);
+
+        private void RedirectSource()
+        {
+            if (Source is EntityPort port)
+                port.Redirect();
+        }
+
+        private void RedirectTarget()
+        {
+            if (Target is EntityPort port)
+                port.Redirect();
+        }
+
         public ICommand FixCommand => new DelegateCommand(UserFix);
 
         public void UserFix()
         {
             EntityPort target = (EntityPort)Target;
             EntityPort source = (EntityPort)Source;
-            
+
             FrostyTaskWindow.Show("Fixing problems...", "", task =>
             {
                 bool synced = false; // Whether or not we have tried syncing the node to fix the problem
-                
+
                 // We get 16 attempts to solve all problems... Hopefully they work!
                 for (int i = 0; i < 16; i++)
                 {
@@ -115,7 +131,7 @@ namespace BlueprintEditorPlugin.Editors.BlueprintEditor.Connections
                         task.Update(null, 100.0);
                         break; // Yay!
                     }
-                    
+
                     switch (CurrentStatus.ToolTip)
                     {
                         case "A connection cannot have its realm set to any":
@@ -134,15 +150,17 @@ namespace BlueprintEditorPlugin.Editors.BlueprintEditor.Connections
                                 target.ForceFixRealm();
                                 ForceFixRealm();
                             }
-                        } break;
+                        }
+                            break;
                         case "Connection source or target is not an EntityPort. Please use EntityPorts for Blueprints.":
                         {
                             Target.Node.NodeWrangler.RemoveConnection(this); // Fuck you
-                            
-                            #if DEVELOPER___DEBUG
+
+#if DEVELOPER___DEBUG
                             App.Logger.LogError("Fuck you");
-                            #endif
-                        } break;
+#endif
+                        }
+                            break;
                         case "Connection realm should be the same as target realm":
                         {
                             if (target.Realm != Realm.Any || target.Realm != Realm.Invalid)
@@ -153,13 +171,17 @@ namespace BlueprintEditorPlugin.Editors.BlueprintEditor.Connections
                             {
                                 target.ForceFixRealm();
                             }
-                        } break;
-                        case "Cannot implicitly determine the realms of this connection based on ports. Please manually set realms":
+                        }
+                            break;
+                        case
+                            "Cannot implicitly determine the realms of this connection based on ports. Please manually set realms"
+                            :
                         {
                             source.ForceFixRealm();
                             target.ForceFixRealm();
                             ForceFixRealm();
-                        } break;
+                        }
+                            break;
                         case "Property type is invalid":
                         {
                             if (target.IsInterface)
@@ -170,11 +192,13 @@ namespace BlueprintEditorPlugin.Editors.BlueprintEditor.Connections
                             {
                                 PropType = PropertyType.Default;
                             }
-                        } break;
+                        }
+                            break;
                         case "Property type is set to interface, despite not plugging into an interface":
                         {
                             PropType = PropertyType.Default;
-                        } break;
+                        }
+                            break;
                         case "Connection realm is invalid!":
                         {
                             if (source.Realm != Realm.Any && source.Realm != Realm.Invalid)
@@ -191,54 +215,66 @@ namespace BlueprintEditorPlugin.Editors.BlueprintEditor.Connections
                                 target.ForceFixRealm();
                                 ForceFixRealm();
                             }
-                        } break;
+                        }
+                            break;
                         default:
                         {
-                            if (!synced && CurrentStatus.ToolTip == "Client to Server is not a valid combination of realms" && Type == ConnectionType.Event)
+                            if (!synced && CurrentStatus.ToolTip ==
+                                "Client to Server is not a valid combination of realms" && Type == ConnectionType.Event)
                             {
-                                EntityNode node = EntityNode.GetNodeFromEntity(TypeLibrary.CreateObject("EventSyncEntityData"), Source.Node.NodeWrangler, true);
-                                node.Location = new Point(Source.Node.Location.X + Source.Node.Size.Width, Source.Node.Location.Y);
+                                EntityNode node = EntityNode.GetNodeFromEntity(
+                                    TypeLibrary.CreateObject("EventSyncEntityData"), Source.Node.NodeWrangler, true);
+                                node.Location = new Point(Source.Node.Location.X + Source.Node.Size.Width,
+                                    Source.Node.Location.Y);
                                 Source.Node.NodeWrangler.AddVertex(node);
 
                                 // We need to get the EventSync's output regardless of if an NMC exists
                                 EntityOutput output = node.GetOutput("Out", ConnectionType.Event);
 
                                 EntityInput input = node.GetInput("Client", ConnectionType.Event);
-                                
-                                EventConnection eventConnection = new EventConnection((EventOutput)output, (EventInput)Target);
-                                
+
+                                EventConnection eventConnection =
+                                    new EventConnection((EventOutput)output, (EventInput)Target);
+
                                 Source.Node.NodeWrangler.AddConnection(eventConnection);
                                 synced = true;
 
                                 Target = input;
                                 target = input;
-                                
+
                                 UpdateTargetRef(); // Make sure the update is synced in the ebx
 
                                 break;
                             }
-                            
-                            if (CurrentStatus.ToolTip == $"{source.Realm} to {target.Realm} is not a valid combination of realms")
+
+                            if (CurrentStatus.ToolTip ==
+                                $"{source.Realm} to {target.Realm} is not a valid combination of realms")
                             {
                                 source.ForceFixRealm();
                                 target.ForceFixRealm();
                             }
+
                             ForceFixRealm();
-                        } break;
+                        }
+                            break;
                     }
-                    
+
                     task.Update(null, i / 16.0);
                     UpdateStatus();
                 }
 
                 if (CurrentStatus.Status == EditorStatus.Flawed || CurrentStatus.Status == EditorStatus.Broken)
                 {
-                    if (CurrentStatus.ToolTip == $"{source.Realm} to {target.Realm} is not a valid combination of realms")
+                    if (CurrentStatus.ToolTip ==
+                        $"{source.Realm} to {target.Realm} is not a valid combination of realms")
                     {
-                        App.Logger.LogError($"Unable to implicitly determine intended realms for {source} to {target}, please manually update their realms.");
+                        App.Logger.LogError(
+                            $"Unable to implicitly determine intended realms for {source} to {target}, please manually update their realms.");
                         return;
                     }
-                    App.Logger.LogError("Unable to solve all problems with this connection. Please either manually solve issues, or try again.");
+
+                    App.Logger.LogError(
+                        "Unable to solve all problems with this connection. Please either manually solve issues, or try again.");
                 }
             });
         }
@@ -251,22 +287,20 @@ namespace BlueprintEditorPlugin.Editors.BlueprintEditor.Connections
         public object Object { get; set; }
 
         private bool _hasPlayer;
-        public bool HasPlayer
-        {
+
+        public bool HasPlayer {
             get => _hasPlayer;
-            set
-            {
+            set {
                 _hasPlayer = value;
                 NotifyPropertyChanged(nameof(HasPlayer));
-            } 
+            }
         }
 
         private PropertyType _propType;
-        public PropertyType PropType
-        {
+
+        public PropertyType PropType {
             get => _propType;
-            set
-            {
+            set {
                 _propType = value;
                 ((dynamic)Object).Flags = PropertyFlagsHelper.GetAsFlags(Realm, PropType);
                 NotifyPropertyChanged(nameof(PropType));
@@ -396,7 +430,7 @@ namespace BlueprintEditorPlugin.Editors.BlueprintEditor.Connections
                 {
                     source.FixRealm();
                     target.FixRealm();
-                
+
                     if (target.Realm != Realm.Any && target.Realm != Realm.Invalid)
                     {
                         realm = target.Realm;
@@ -406,7 +440,7 @@ namespace BlueprintEditorPlugin.Editors.BlueprintEditor.Connections
 
             return realm;
         }
-        
+
         public void FixRealm()
         {
             Realm = DetermineRealm();
@@ -421,10 +455,131 @@ namespace BlueprintEditorPlugin.Editors.BlueprintEditor.Connections
 
         #endregion
 
+        #region Selection propagation through redirect/wrangler chains
+
+        /// <summary>
+        /// Re-evaluates <see cref="BaseConnection.IsSelected"/> by walking through any
+        /// intermediate redirect/wrangler nodes so the whole logical connection lights up.
+        /// </summary>
+        protected override void NotifyPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == "IsSelected")
+            {
+                bool isSelected = IsLogicalSourceSelected(Source) || IsLogicalTargetSelected(Target);
+                PropagateChainSelection(isSelected, new HashSet<EntityConnection>());
+            }
+            else
+            {
+                base.NotifyPropertyChanged(sender, e);
+            }
+        }
+
+        /// <summary>
+        /// Gets the <see cref="IRedirect"/> that owns the supplied <paramref name="port"/>.
+        /// For redirect ports whose <see cref="IPort.Node"/> points at the redirect target,
+        /// this returns <see cref="IPort.RedirectNode"/>.
+        /// </summary>
+        private static IRedirect GetRedirectFromPort(IPort port)
+        {
+            if (port?.Node == null)
+                return null;
+
+            if (port.Node is IRedirect nodeRedirect)
+                return nodeRedirect;
+
+            return port.RedirectNode;
+        }
+
+        private static bool IsLogicalSourceSelected(IPort port, HashSet<IRedirect> visited = null)
+        {
+            IRedirect redirect = GetRedirectFromPort(port);
+            if (redirect == null)
+                return port?.Node?.IsSelected ?? false;
+
+            visited = visited ?? new HashSet<IRedirect>();
+            if (!visited.Add(redirect))
+                return false;
+
+            if ((port.Node?.IsSelected ?? false) || redirect.IsSelected)
+                return true;
+
+            if (redirect.Inputs.Count > 0)
+            {
+                foreach (IConnection conn in redirect.NodeWrangler.GetConnections(redirect.Inputs[0]))
+                {
+                    if (conn.Target == redirect.Inputs[0] && IsLogicalSourceSelected(conn.Source, visited))
+                        return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static bool IsLogicalTargetSelected(IPort port, HashSet<IRedirect> visited = null)
+        {
+            IRedirect redirect = GetRedirectFromPort(port);
+            if (redirect == null)
+                return port?.Node?.IsSelected ?? false;
+
+            visited = visited ?? new HashSet<IRedirect>();
+            if (!visited.Add(redirect))
+                return false;
+
+            if ((port.Node?.IsSelected ?? false) || redirect.IsSelected)
+                return true;
+
+            if (redirect.Outputs.Count > 0)
+            {
+                foreach (IConnection conn in redirect.NodeWrangler.GetConnections(redirect.Outputs[0]))
+                {
+                    if (conn.Source == redirect.Outputs[0] && IsLogicalTargetSelected(conn.Target, visited))
+                        return true;
+                }
+            }
+
+            return false;
+        }
+
+        private void PropagateChainSelection(bool isSelected, HashSet<EntityConnection> visited)
+        {
+            if (!visited.Add(this))
+                return;
+
+            if (IsSelected != isSelected)
+            {
+                IsSelected = isSelected;
+                NotifyPropertyChanged(nameof(IsSelected));
+            }
+
+            // Propagate forward through the target redirect/wrangler node's output
+            IRedirect targetRedirect = GetRedirectFromPort(Target);
+            if (targetRedirect != null && targetRedirect.Outputs.Count > 0)
+            {
+                foreach (IConnection conn in targetRedirect.NodeWrangler.GetConnections(targetRedirect.Outputs[0]))
+                {
+                    if (conn.Source == targetRedirect.Outputs[0] && conn is EntityConnection entityConn)
+                        entityConn.PropagateChainSelection(isSelected, visited);
+                }
+            }
+
+            // Propagate backward through the source redirect/wrangler node's input
+            IRedirect sourceRedirect = GetRedirectFromPort(Source);
+            if (sourceRedirect != null && sourceRedirect.Inputs.Count > 0)
+            {
+                foreach (IConnection conn in sourceRedirect.NodeWrangler.GetConnections(sourceRedirect.Inputs[0]))
+                {
+                    if (conn.Target == sourceRedirect.Inputs[0] && conn is EntityConnection entityConn)
+                        entityConn.PropagateChainSelection(isSelected, visited);
+                }
+            }
+        }
+
+        #endregion
+
         public override void UpdateStatus()
         {
             SetStatus(EditorStatus.Alright, "");
-            
+
             if (Realm == Realm.Invalid)
             {
                 SetStatus(EditorStatus.Broken, "Connection realm is invalid!");
@@ -436,20 +591,24 @@ namespace BlueprintEditorPlugin.Editors.BlueprintEditor.Connections
 
             if (source == null || target == null)
             {
-                SetStatus(EditorStatus.Broken, "Connection source or target is not an EntityPort. Please use EntityPorts for Blueprints.");
-                
-                #if DEVELOPER___DEBUG
-                App.Logger.LogError("HEY DUMBASS YOU'RE USING THE WRONG TYPES FOR CONNECTION {0} USE ENTITYPORTS INSTEAD GOD DAMMIT", ToString());
-                #endif
+                SetStatus(EditorStatus.Broken,
+                    "Connection source or target is not an EntityPort. Please use EntityPorts for Blueprints.");
+
+#if DEVELOPER___DEBUG
+                App.Logger.LogError(
+                    "HEY DUMBASS YOU'RE USING THE WRONG TYPES FOR CONNECTION {0} USE ENTITYPORTS INSTEAD GOD DAMMIT",
+                    ToString());
+#endif
                 return;
             }
-            
+
             if (source.Realm == Realm.Any && target.Realm == Realm.Any)
             {
                 // If this is the case that means the realm can be determined
                 if (source.DetermineRealm() == Realm.Any && target.DetermineRealm() == Realm.Any)
                 {
-                    SetStatus(EditorStatus.Flawed, "Cannot implicitly determine the realms of this connection based on ports. Please manually set realms");
+                    SetStatus(EditorStatus.Flawed,
+                        "Cannot implicitly determine the realms of this connection based on ports. Please manually set realms");
                 }
             }
 
@@ -460,9 +619,11 @@ namespace BlueprintEditorPlugin.Editors.BlueprintEditor.Connections
                 return;
             }
 
-            if (source.Realm != target.Realm && !ImplicitConnectionCombos.Contains((source.Realm, target.Realm)) && (source.Realm != Realm.Any && target.Realm != Realm.Any))
+            if (source.Realm != target.Realm && !ImplicitConnectionCombos.Contains((source.Realm, target.Realm)) &&
+                (source.Realm != Realm.Any && target.Realm != Realm.Any))
             {
-                SetStatus(EditorStatus.Flawed, $"{source.Realm} to {target.Realm} is not a valid combination of realms");
+                SetStatus(EditorStatus.Flawed,
+                    $"{source.Realm} to {target.Realm} is not a valid combination of realms");
             }
         }
 
@@ -472,7 +633,7 @@ namespace BlueprintEditorPlugin.Editors.BlueprintEditor.Connections
         {
             Object = obj;
         }
-        
+
         public EntityConnection(IPort source, IPort target) : base(source, target)
         {
         }

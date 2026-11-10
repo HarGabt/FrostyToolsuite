@@ -8,6 +8,45 @@ selphea's changes:
 
 Changes in my fork:
 
+(2026.10.12)
+--------
+- NewWaveAsset import
+- Opus codec support included, meaning `LocalizedWaveAsset` assets in Dead Space now can finally be opened
+**NOTE!** Opening `LocalizedWaveAsset` assets in NFS Unbound is currently broken (except for MenuNarration ones). Music replacement is still impossible, soz.
+- Reworked project saving: now game profiles that utilise EBX RIFF format (i.e. NFS Unbound, Dead Space, and newer) will save projects using EBX RIFF instead of generic EBX.
+- Fixed the issue with Reflection ID read and write, meaning RimeWidgetBlueprint asset modding should be safer. Now you can safely save projects and open them back without workarounds. SoundPatchAsset modding is still broken, soz
+- New Plugin: *Font Plugin* — enables easier fonts replacement, courtesy of WiiExpertise
+- New Plugin: *Blueprint Editor Plugin* — allows visual editing of blueprints, both logic and rime. Have fun, kids!
+- Implemented Viewport's render scale setting
+- Added basic support for exporting textures as a strip, courtesy of CosmicDreamsOfCode
+- Fixed Mod Manager crashing when applying mods made with Localized String Editor plugin
+- Fixed Editor crashing after opening projects with modified InitFS. I hope.
+- Alternative method of creating symlinks. If you're experiencing file system error during launching the game from Frosty, try alternative one in Frosty's settings.
+- Mesh import improvements, courtesy of J-Lyt, CosmicDreamsOfCode and others
+- Attempt to optimise cache generation process, courtesy of WiiExpertise
+- Marked Assets/Bundles feature from J-Lyt's fork
+- Added 'Open Unmodified' asset option. Now you can see the original asset and modified asset side-by-side
+- Improved IterateSubKeys error crash workaround
+- Some other backend changes, refer to commits history in the source repository
+
+
+(2026.01.10)
+--------
+- Reflection ID read and write
+- Fixed custom strings.txt loading
+- Reworked Steam Protocol launch. End user should not be affected by this, the change has been made in an attempt to make Dead Space load custom data, considering white spaces in the way.
+- Improved mesh import for Dead Space (2023). InitFS for this game is now moddable as well.
+- Fixed issue where Editor would crash if selection with missing `EbxClassMetaAttribute` was copied
+- Added NFS Edge profile. SDK cannot be generated due to game's executable being 32-bit and not 64-bit
+- IES profile exporting to DDS
+- Fixed issue where assets with multiple TypeInfoGuid attributes would fail to duplicate
+- Added FbxLODGroup class & Add LOD Index to MeshSetLod class, although it feels more like a stub
+- File logging during SDK generation, something Frosty v2 has
+- Fixed a possible crash due to an issue with DiscordRPC when retrieving the filename from a null ebx asset
+- Some other backend changes, refer to commits history in the source repository
+
+
+
 (2025.07.19)
 --------
 - Recent Projects feature ported from 1.0.6.3! (NOTE: due to the nature of the feature port, some configurations may reset)
@@ -16,7 +55,7 @@ Changes in my fork:
 - Added CopyFilePath plugin - now you can copy file's path without opening it. Courtesy of @AdamRaichu, ported by me
 - Frosty can now kill the game process if you forgot to do so before running the game with new changes
 - Nightly builds are now available on my GitHub repository, but without vital plugins yet
-- Some other backend changes, refer to commits history in the repository
+- Some other backend changes, refer to commits history in the repository in the source repository
 
 (2025.06.17)
 --------

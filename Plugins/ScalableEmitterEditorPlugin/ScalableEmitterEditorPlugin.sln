@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31112.23
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ScalableEmitterEditorPlugin", "ScalableEmitterEditorPlugin.csproj", "{6B52D81D-E2F4-40C4-97FD-7D154F224D4F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Developer - Debug|x64 = Developer - Debug|x64
+		Release - Alpha|x64 = Release - Alpha|x64
+		Release - Beta|x64 = Release - Beta|x64
+		Release - Final|x64 = Release - Final|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6B52D81D-E2F4-40C4-97FD-7D154F224D4F}.Developer - Debug|x64.ActiveCfg = Developer - Debug|x64
+		{6B52D81D-E2F4-40C4-97FD-7D154F224D4F}.Developer - Debug|x64.Build.0 = Developer - Debug|x64
+		{6B52D81D-E2F4-40C4-97FD-7D154F224D4F}.Release - Alpha|x64.ActiveCfg = Release - Alpha|x64
+		{6B52D81D-E2F4-40C4-97FD-7D154F224D4F}.Release - Alpha|x64.Build.0 = Release - Alpha|x64
+		{6B52D81D-E2F4-40C4-97FD-7D154F224D4F}.Release - Beta|x64.ActiveCfg = Release - Beta|x64
+		{6B52D81D-E2F4-40C4-97FD-7D154F224D4F}.Release - Beta|x64.Build.0 = Release - Beta|x64
+		{6B52D81D-E2F4-40C4-97FD-7D154F224D4F}.Release - Final|x64.ActiveCfg = Release - Final|x64
+		{6B52D81D-E2F4-40C4-97FD-7D154F224D4F}.Release - Final|x64.Build.0 = Release - Final|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9B29A0B1-698B-484F-93CD-B3D2F367F8AC}
+	EndGlobalSection
+EndGlobal

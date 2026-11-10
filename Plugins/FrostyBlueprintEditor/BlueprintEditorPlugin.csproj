@@ -18,6 +18,7 @@
         <Costura>
           <IncludeAssemblies>
             Prism
+			Nodify
           </IncludeAssemblies>
         </Costura>
       </Weavers>
@@ -78,6 +79,7 @@
     <PackageReference Include="Costura.Fody" Version="5.7.0">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+	<PackageReference Include="Nodify" Version="7.3.0" />
     <PackageReference Include="Prism.Core" Version="8.1.97" />
   </ItemGroup>
 
@@ -184,6 +186,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Page Update="Models\Editors\BlueprintGraphEditor.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <XamlRuntime>Wpf</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Editors\BlueprintEditor\BlueprintGraphEditor.xaml">
       <Generator>MSBuild:Compile</Generator>
       <XamlRuntime>Wpf</XamlRuntime>

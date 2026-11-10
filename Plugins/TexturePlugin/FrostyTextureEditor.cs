@@ -153,7 +153,8 @@ namespace TexturePlugin
         public override List<ToolbarItem> RegisterToolbarItems()
         {
             List<ToolbarItem> toolbarItems = base.RegisterToolbarItems();
-            toolbarItems.Add(new ToolbarItem("Export", "Export Texture", "FrostyEditor;component/Images/Export.png", new RelayCommand((object state) => { ExportButton_Click(this, new RoutedEventArgs()); })));
+            toolbarItems.Add(new ToolbarItem("Export", "Export Texture", "FrostyEditor;component/Images/Export.png", new RelayCommand((object state) => { ExportButton_Click(this, new RoutedEventArgs(),false); })));
+            toolbarItems.Add(new ToolbarItem("Export as Strip", "Export Texture", "FrostyEditor;component/Images/Export.png", new RelayCommand((object state) => { ExportButton_Click(this, new RoutedEventArgs(), true); })));
             toolbarItems.Add(new ToolbarItem("Import", "Import Texture", "FrostyEditor;component/Images/Import.png", new RelayCommand((object state) => { ImportButton_Click(this, new RoutedEventArgs()); }), IsNotReadOnly));
             return toolbarItems;
         }
@@ -613,7 +614,7 @@ namespace TexturePlugin
             }
         }
 
-        private void ExportButton_Click(object sender, RoutedEventArgs e)
+        private void ExportButton_Click(object sender, RoutedEventArgs e, bool exportAsStrip)
         {
             ImageFormat format = ImageFormat.PNG;
             bool bResult = false;
@@ -682,7 +683,7 @@ namespace TexturePlugin
                 string[] filters = new string[] { "*.png", "*.tga", "*.hdr", "*.dds" };
 
                 TextureExporter exporter = new TextureExporter();
-                exporter.Export(m_textureAsset, sfd.FileName, filters[sfd.FilterIndex - 1]);
+                exporter.Export(m_textureAsset, sfd.FileName, filters[sfd.FilterIndex - 1], exportAsStrip);
             });
             logger.Log("Texture successfully exported to " + sfd.FileName);
         }
