@@ -372,7 +372,7 @@
 	<Content Include="ThirdParty\winmm.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-	<Content Include="ThirdParty\global.dll">
+	<Content Include="ThirdParty\global.ini">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="ThirdParty\GFSDK_SSAO_D3D11.win64.dll" CopyToOutputDirectory="PreserveNewest" />

@@ -295,7 +295,7 @@
 	<Content Include="ThirdParty\winmm.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-	<Content Include="ThirdParty\global.dll">
+	<Content Include="ThirdParty\global.ini">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
