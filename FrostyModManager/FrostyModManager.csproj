@@ -292,8 +292,11 @@
     <Content Include="ThirdParty\UnRAR.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-	<Content Include="ThirdParty\dpapi.dll">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	<Content Include="ThirdParty\winmm.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+	<Content Include="ThirdParty\global.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
