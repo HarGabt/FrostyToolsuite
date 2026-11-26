@@ -2433,10 +2433,13 @@ namespace Frosty.ModSupport
             }
             CopyFileIfRequired(m_fs.BasePath + "user.cfg", modDataPath + "user.cfg");
 
-            // Dead Space dataPath argument hijack
+            // Dead Space dataPath argument workaround using ThirteenAG's Ultimate ASI Loader's FileLoader function
+            // спасибо, деда
+
             if (ProfilesLibrary.IsLoaded(ProfileVersion.DeadSpace))
             {
-                CopyFileIfRequired("ThirdParty/dpapi.dll", m_fs.BasePath + "dpapi.dll");
+                CopyFileIfRequired("ThirdParty/winmm.dll", m_fs.BasePath + "winmm.dll");
+                CopyFileIfRequired("ThirdParty/global.ini", m_fs.BasePath + "global.ini");
             }
 
             // FIFA games require a fifaconfig workaround
@@ -2458,17 +2461,13 @@ namespace Frosty.ModSupport
             // launch the game (redirecting to the modPath directory)
             Logger.Log("Launching Game");
 
-            string args = $"-dataPath \"{modDataPath.Trim('\\')}\" {additionalArgs}";
+            // Dead Space doesn't give any fucks about -dataPath argument, thank to dolboyobs from Motive Studios
+            // so we use winmm.dll to workaround this shit by overwriting some of them files and making the game load them
+            // Քունեմ լավդ
             if (ProfilesLibrary.IsLoaded(ProfileVersion.DeadSpace))
             {
-                // Dead Space doesn't give a single one about -dataPath argument. dpapi.dll takes care of it by making the game look at the datapath file.
-                File.WriteAllText(m_fs.BasePath + "datapath", modDataPath.Trim('\\'));
-                args = "";
-            }
-
-            if (ProfilesLibrary.IsLoaded(ProfileVersion.DeadSpace))
-            {
-                ExecuteProcess($"{m_fs.BasePath + ProfilesLibrary.ProfileName}.exe", args);
+                // run the game executable without arguments, since we don't need them for this game
+                ExecuteProcess($"{m_fs.BasePath + ProfilesLibrary.ProfileName}.exe");
             }
             else try
             {
@@ -3022,6 +3021,7 @@ namespace Frosty.ModSupport
 
             // create data and update symbolic links
             ExecuteProcess("cmd.exe", "/C \"" + AppDomain.CurrentDomain.BaseDirectory + "\\run.bat\"", true, true);
+            
 
             // delete batch
             if (File.Exists("run.bat"))
