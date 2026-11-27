@@ -33,8 +33,8 @@
 
 ## ПОДДЕРЖКА LINUX
 
-Если вы хотите запускать моды на Linux, для этого есть отдельная версия Frosty 1.0.7, которую вы можете найти здесь:
-<br>https://github.com/PHD4/FrostyToolsuite/tree/proton-compat
+Совместимость с Linux теперь сопровождается в этом репозитории в ветке [1.0.7-proton-compat](https://github.com/HarGabt/FrostyToolsuite/tree/1.0.7-proton-compat). Инструкция по установке модов на Linux (на английском) находится [здесь](https://docs.google.com/document/d/1fC_EwE34aEciDvstk8dagIKRXI9pooinnsdumiaNY8Q/)
+Благодарности за реализацию поддержки идут [PHD4](https://github.com/PHD4).
 
 
 # FrostyToolsuite

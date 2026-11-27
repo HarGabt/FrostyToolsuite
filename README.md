@@ -36,8 +36,8 @@ If you are to ask for help with Frosty Tool Suite 1.0.7, create an `Issue` so ~w
 
 ## LINUX/WINE SUPPORT
 
-If you're looking for a way to run mods on Linux, then you can use this version of Frosty 1.0.7 [based on maniman's work](https://github.com/maniman303/FrostyToolsuite):
-<br>https://github.com/PHD4/FrostyToolsuite/tree/proton-compat
+Linux compatibility is now maintained at this repository in [1.0.7-proton-compat](https://github.com/HarGabt/FrostyToolsuite/tree/1.0.7-proton-compat) branch. A usage guide can be found [here](https://docs.google.com/document/d/1fC_EwE34aEciDvstk8dagIKRXI9pooinnsdumiaNY8Q/)
+Credits to [PHD4](https://github.com/PHD4) for implementing the support.
 
 ## Setup
 
